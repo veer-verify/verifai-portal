@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="45" height="45" viewBox="0 0 45 45">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#d34124"/>
+      <stop offset="1" stop-color="#084982"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_88" data-name="Group 88" transform="translate(-1150 -28)">
+    <circle id="Ellipse_10" data-name="Ellipse 10" cx="22.5" cy="22.5" r="22.5" transform="translate(1150 28)" fill="#fff"/>
+    <path id="Union_5" data-name="Union 5" d="M-1982.667-2389a1.333,1.333,0,0,1-1.333-1.334v-3.506a1.331,1.331,0,0,1,.36-.913,11.437,11.437,0,0,1,8.31-3.578,11.439,11.439,0,0,1,8.31,3.578,1.333,1.333,0,0,1,.353.913v3.506A1.333,1.333,0,0,1-1968-2389Zm0-4.846v3.513H-1968v-3.513a10.112,10.112,0,0,0-7.333-3.149A10.112,10.112,0,0,0-1982.667-2393.847Zm2.666-10.487a4.667,4.667,0,0,1,4.666-4.667,4.667,4.667,0,0,1,4.667,4.667,4.667,4.667,0,0,1-4.667,4.666A4.667,4.667,0,0,1-1980-2404.333Zm1.333,0a3.333,3.333,0,0,0,3.333,3.333,3.333,3.333,0,0,0,3.333-3.333,3.333,3.333,0,0,0-3.333-3.333A3.333,3.333,0,0,0-1978.667-2404.333Z" transform="translate(3148 2449)" fill="url(#linear-gradient)"/>
+  </g>
+</svg>

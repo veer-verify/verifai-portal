@@ -1,0 +1,47 @@
+<div class="sub-header">
+    <div class="site-info">
+        <a class="mx-2" (click)="openSitesMenu()">
+            <img src="icons/site-image.svg" alt="" width="14px" class="me-2">
+            <img src="icons/arrow-ios-downward-outline.svg" alt="" width="14px">
+        </a>
+
+        @if(showSiteMenu) {
+        <div class="site-menu">
+            <div class="search-bar">
+                <input type="text" placeholder="Search" [(ngModel)]="searchText">
+                <span class="search-icon"><img src="icons/search.svg" alt=""></span>
+            </div>
+
+            <div class="site-accordian">
+                @for (site of sitesList | search: searchText; track $index) {
+                    <div class="sites-list-items">
+                        <div class="d-flex justify-content-between align-items-center pointer" (click)="getCamerasForSite(site)">
+                            <div class="d-flex">
+                                <!-- <span class="mx-1"><img src="icons/ivisEye.png" width="16" alt=""></span> -->
+                                <span class="site-name">{{site.siteName}}</span>
+                            </div>
+                            <!-- <span>
+                                <img src="icons/arrow.svg" width="18"
+                                    [ngStyle]="{'transform': site.siteId === currentSite?.siteId ? 'rotate(90deg)' : 'rotate(270deg)'}"
+                                    alt="">
+                            </span> -->
+                        </div>
+        
+                        @if (site.siteId === currentSite?.siteId) {
+                        <ng-container>
+                            @for (cam of camerasList; track $index ; let i = $index) {
+                            <div class="d-flex justify-content-start align-items-center">
+                                <span class="dot"></span>
+                                <span class="cam-name">{{ cam.name }}</span>
+                            </div>
+                            }
+                        </ng-container>
+                        }
+                    </div>
+                    }
+            </div>
+        </div>
+        }
+        <a class="site-name d-none d-lg-flex me-2" (click)="openSitesMenu()">{{currentSite?.siteName}}</a>
+    </div>
+</div>

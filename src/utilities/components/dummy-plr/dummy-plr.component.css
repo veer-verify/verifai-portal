@@ -1,0 +1,17 @@
+video {
+    object-fit: fill;
+}
+
+.video-player {
+    border: 1px solid #666666;
+    height: 50vh;
+    position: relative;
+}
+
+.eye-logo {
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    /* background-size: cover; */
+}

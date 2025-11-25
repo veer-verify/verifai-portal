@@ -1,0 +1,103 @@
+.login-container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* Left side (image + overlay) */
+.left-panel {
+  flex: 2;
+  background: url('../../../../public/themes/verifai/background.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+    .left-panel {
+        display: none;
+    }
+}
+
+.left-panel .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* Right side (login form) */
+.right-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 16px;
+}
+
+.login-box {
+  width: 320px;
+  text-align: center;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 50px;
+}
+
+.login-box p {
+  font-size: 20px;
+  font-weight: 400;
+  margin-bottom: 20px !important;
+  opacity: 0.5;
+}
+
+.form-group {
+  position: relative;
+  text-align: left;
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #eeeeee;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 26px 0;
+  font-size: 13px;
+  user-select: none;
+}
+
+.options a {
+  color: #d62828;
+  text-decoration: none;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #d62828;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.login-btn:hover {
+  background-color: #b71c1c;
+}

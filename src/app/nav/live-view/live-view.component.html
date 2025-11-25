@@ -1,0 +1,65 @@
+<section class="sub-header">
+    <div class="site-info d-flex w-25">
+        <select class="w-100">
+            <option value="All">All</option>
+        </select>
+    </div>
+
+    <div class="d-inline-flex align-items-center gap-3 pointer">
+        @for (item of gridTypes; track $index) {
+        <a class="grid-highlight">
+            <img [src]="item.path" width="16px" [ngClass]="selectedGrid == item.noOfItems ? 'grid-highlight-active': ''"
+                alt="">
+        </a>
+        }
+    </div>
+
+    <div>
+        camera info
+    </div>
+</section>
+
+<section class="grid-container" #gridContainer appGlobalClick>
+    @for(cam of newCamerasList; track $index) {
+    <div class="grid-item" (dblclick)="playCurrentCam(cam)">
+        <ng-container>
+            <app-video-plr [videoData]="cam?.videoUrl"></app-video-plr>
+        </ng-container>
+
+        @if(cam.videoUrl && selectedGrid === 10) {
+        <ng-container>
+            <div class="d-flex align-items-center justify-content-around h-100">
+                <a class="first-arrow" (click)="loadPrevCam()">
+                    <img src="icons/arrow-down-short-orange.svg" alt="">
+                </a>
+
+                <div>
+                    <ng-container>
+                        <!-- <app-video-plr [videoData]="currentCam?.videoUrl"></app-video-plr> -->
+                        <iframe class="iframe" [src]="currentCam?.httpUrl | sanitize" frameborder="0"></iframe>
+                    </ng-container>
+
+                    <div class="camera-tile-list">
+                        @for (item of camerasList; track $index) {
+                        <!-- <iframe class="d-none" (load)="getUrl(item?.httpUrl, item)"></iframe> -->
+                        <div class=" d-flex flex-column">
+                            <div [ngClass]="currentCam.cameraId == item.cameraId ? 'camera-tile tile-active' : 'camera-tile'"
+                                (click)="playCurrentCam(item)">
+                                <img [src]="item.snapshotUrl" width="100%" height="100%" alt="">
+                                <!-- <img src="icons/camera-grey (2).svg" alt=""> -->
+                            </div>
+                            <p class="tile-name">{{item.name}}</p>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <a class="second-arrow" (click)="loadNextCam()">
+                    <img src="icons/arrow-down-short-orange.svg" alt="">
+                </a>
+            </div>
+        </ng-container>
+        }
+    </div>
+    }
+</section>

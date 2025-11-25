@@ -1,0 +1,207 @@
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+  font-family: 'Neometric Regular';
+  src: url('../public/fonts/neometric-2/Neometric-Regular.otf');
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+font-family: 'Neometric Regular', sans-serif !important;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e7dcdc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #084982;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #084982ef;
+}
+
+
+
+p {
+  margin: 0 !important;
+}
+
+.material-symbols-outlined {
+  cursor: pointer;
+}
+
+.required {
+  font-size: 12px;
+  color: #d62828;
+  position: absolute;
+  left: 6px;
+  top: 70px;
+}
+
+.custom-form-control {
+  border: none !important;
+  padding: 0 !important;
+  font-size: 12px !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.row {
+  margin: 0 !important;
+}
+
+.pointer {
+  cursor: pointer !important;
+}
+
+
+.table-container {
+  max-height: 70vh;
+  overflow-y: auto;
+  /* max-width: 80vw; */
+}
+
+.table thead tr th {
+  position: sticky;
+  top: 0px;
+  font-size: 12px;
+  font-weight: 100;
+  background-color: #084982;
+
+
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.table tbody tr td {
+  font-size: 12px;
+  font-weight: 100;
+}
+
+.dialog-content {
+  padding: 10px 20px;
+  /* max-width: 80vw;
+  max-height: 80vh; */
+  height: 60vh;
+  width: 80vw;
+  overflow-y: auto;
+}
+
+/* new-dialog */
+.new-dialog {
+  display: none;
+  position: fixed;
+  z-index: 99;
+  left: 50%;
+  bottom: 50%;
+  transform: translate(-50%, 50%);
+  background-color: #ffffff;
+}
+
+.dialog-content {
+  padding: 5px;
+  max-width: 800px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+
+.dialog-header {
+  background-color: #FD6327;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.dialog-header p {
+  font-size: 14px;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+
+
+/** Toggle Switch **/
+.on-off-toggle {
+  width: 55px;
+  height: 24px;
+  position: relative;
+  /* display: inline-block; */
+}
+
+.on-off-toggle__slider {
+  width: 55px;
+  height: 23px;
+  display: block;
+  border-radius: 34px;
+  /* background-color: #fff; */
+  border: 1px solid #00573c;
+  transition: background-color 0.4s;
+  cursor: pointer;
+}
+
+.on-off-toggle__slider:before {
+  content: '';
+  display: block;
+  background-color: #D34124;
+  /* box-shadow: 0 0 0 1px #949494; */
+  bottom: 5px;
+  height: 15px;
+  left: 3px;
+  position: absolute;
+  transition: .4s;
+  width: 16px;
+  z-index: 5;
+  border-radius: 100%;
+}
+
+.on-off-toggle__slider:after {
+  display: block;
+  line-height: 24px;
+  text-transform: lowercase;
+  font-size: 12px;
+  font-weight: bold;
+  content: 'No';
+  color: #D34124;
+  padding-left: 26px;
+  transition: all 0.4s;
+}
+
+
+.on-off-toggle__input {
+  position: absolute;
+  opacity: 0;
+}
+
+.on-off-toggle__input:checked+.on-off-toggle__slider {
+  background-color: #fff;
+  border: 1px solid #00573c;
+}
+
+.on-off-toggle__input+.on-off-toggle__slider {
+  background-color: #F8F8F8;
+  border: 1px solid #D34124;
+}
+
+.on-off-toggle__input:checked+ :before {
+  transform: translateX(35px);
+  background-color: #00573c;
+}
+
+.on-off-toggle__input:checked+ :after {
+  content: 'Yes';
+  color: #00573c;
+  padding-left: 8px;
+}
