@@ -3,6 +3,14 @@
         <img src="/themes/verifai/logo-black.png" alt="" width="100px">
     </div>
 
+    <div class="w-25">
+        <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
+            @for (item of sitesList; track $index) {
+            <option [value]="item.siteId">{{item.siteName}}</option>
+            }
+        </select>
+    </div>
+
     <div class="nav-items">
         <a class="list-group-item " routerLink="/dashboard/live-view" routerLinkActive="active">live view</a>
         <a class="list-group-item" routerLink="/dashboard/alerts" routerLinkActive="active">Alerts</a>

@@ -35,8 +35,8 @@
 
                 <div>
                     <ng-container>
-                        <!-- <app-video-plr [videoData]="currentCam?.videoUrl"></app-video-plr> -->
-                        <iframe class="iframe" [src]="currentCam?.httpUrl | sanitize" frameborder="0"></iframe>
+                        <app-video-plr [videoData]="currentCam?.httpUrl"></app-video-plr>
+                        <!-- <iframe class="iframe" [src]="currentCam?.httpUrl | sanitize" frameborder="0"></iframe> -->
                     </ng-container>
 
                     <div class="camera-tile-list">

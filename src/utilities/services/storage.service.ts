@@ -14,6 +14,7 @@ export class StorageService {
 
   private _siteData = new BehaviorSubject([]);
   public siteData$ = this._siteData.asObservable();
+  public currentSite$ = new BehaviorSubject(null);
 
   public show(): void {
     this._loader.next(true);

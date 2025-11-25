@@ -77,9 +77,6 @@ export class LiveViewComponent implements OnInit, OnDestroy {
     .pipe(takeUntil(this.destroy$))
     .subscribe({
       next: (res: any) => {
-        // setInterval(() => {
-        //   console.log(Math.random())
-        // }, 1000)
         console.log(res);
         this.sitesList = res.sites
       }
