@@ -1,6 +1,6 @@
 .header-container {
-background: #FFFFFF 0% 0% no-repeat padding-box;
-border-bottom: 1px solid #eeeeee;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border-bottom: 1px solid #eeeeee;
     opacity: 1;
     height: 60px;
     /* width: 100%; */
@@ -62,37 +62,84 @@ border-bottom: 1px solid #eeeeee;
 }
 
 .profile-image {
-font: normal normal normal 9px/11px Montserrat;
-letter-spacing: 0px;
-color: #FD6327;
-text-transform: uppercase;
-opacity: 1;
-}
-.profile-key {
-font: normal normal normal 9px/11px Montserrat;
-letter-spacing: 0px;
-color: #989FB4;
-text-transform: uppercase;
-opacity: 1;
-}
-.profile-terms {
-text-align: left;
-font: normal normal normal 9px/11px Montserrat;
-letter-spacing: 0px;
-text-decoration: none;
-color: #989FB4;
-text-transform: uppercase;
-opacity: 1;
-}
-.profile-logout {
-font: normal normal medium 9px/11px Montserrat;
-letter-spacing: 0px;
-color: #989FB4;
-text-transform: uppercase;
-opacity: 1;
-text-decoration: none;
+    font: normal normal normal 9px/11px Montserrat;
+    letter-spacing: 0px;
+    color: #FD6327;
+    text-transform: uppercase;
+    opacity: 1;
 }
 
-::ng-deep.mat-mdc-menu-panel  {
+.profile-key {
+    font: normal normal normal 9px/11px Montserrat;
+    letter-spacing: 0px;
+    color: #989FB4;
+    text-transform: uppercase;
+    opacity: 1;
+}
+
+.profile-terms {
+    text-align: left;
+    font: normal normal normal 9px/11px Montserrat;
+    letter-spacing: 0px;
+    text-decoration: none;
+    color: #989FB4;
+    text-transform: uppercase;
+    opacity: 1;
+}
+
+.profile-logout {
+    font: normal normal medium 9px/11px Montserrat;
+    letter-spacing: 0px;
+    color: #989FB4;
+    text-transform: uppercase;
+    opacity: 1;
+    text-decoration: none;
+}
+
+/* new */
+
+.site-accordian {
+    cursor: pointer;
+    user-select: none;
+    background-color: #ed3237;
+    padding: 4px;
+    border-radius: 5px;
+    color: #ffffff;
+    width: 300px;
+}
+
+.site-accordian a {
+    display: block;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.site-dropdown {
+    position: absolute;
+    top: 50px;
+    height: 50vh;
+    overflow-y: auto;
+    width: 300px;
+    background-color: #ffffff;
+    z-index: 99;
+}
+
+.site-dropdown p {
+    background-color: #ff3a3a;
+    margin: 2px 0 !important;
+    padding: 4px;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+::ng-deep.mat-mdc-menu-panel {
     background-color: #FFFFFF !important;
 }

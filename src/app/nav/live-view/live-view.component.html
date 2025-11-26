@@ -1,5 +1,5 @@
 <section class="sub-header">
-    <div class="site-info d-flex w-25">
+    <div class="site-info">
         <select class="w-100">
             <option value="All">All</option>
         </select>
@@ -7,9 +7,8 @@
 
     <div class="d-inline-flex align-items-center gap-3 pointer">
         @for (item of gridTypes; track $index) {
-        <a class="grid-highlight">
-            <img [src]="item.path" width="16px" [ngClass]="selectedGrid == item.noOfItems ? 'grid-highlight-active': ''"
-                alt="">
+        <a class="grid-highlight" (click)="adjustGrid(item.noOfItems)">
+            <img [src]="item.path" width="16px" [ngClass]="selectedGrid == item.noOfItems ? 'grid-highlight-active': ''" alt="">
         </a>
         }
     </div>
@@ -23,7 +22,8 @@
     @for(cam of newCamerasList; track $index) {
     <div class="grid-item" (dblclick)="playCurrentCam(cam)">
         <ng-container>
-            <app-video-plr [videoData]="cam?.videoUrl"></app-video-plr>
+            <!-- <app-video-plr [videoData]="cam?.httpUrl + '/'"></app-video-plr> -->
+             <iframe class="iframe" [src]="cam?.httpUrl | sanitize" frameborder="0"></iframe>
         </ng-container>
 
         @if(cam.videoUrl && selectedGrid === 10) {
@@ -35,7 +35,7 @@
 
                 <div>
                     <ng-container>
-                        <app-video-plr [videoData]="currentCam?.httpUrl"></app-video-plr>
+                        <app-video-plr [videoData]="cam?.httpUrl + '/'"></app-video-plr>
                         <!-- <iframe class="iframe" [src]="currentCam?.httpUrl | sanitize" frameborder="0"></iframe> -->
                     </ng-container>
 

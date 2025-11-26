@@ -2,13 +2,23 @@
     <div>
         <img src="/themes/verifai/logo-black.png" alt="" width="100px">
     </div>
-
-    <div class="w-25">
-        <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
+    
+    <div class="site-accordian" >
+        <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
             @for (item of sitesList; track $index) {
-            <option [value]="item.siteId">{{item.siteName}}</option>
+            <option [value]="item.siteId">
+                <p>{{item.siteName}}</p>
+            </option>
             }
-        </select>
+        </select> -->
+        <a (click)="showSite = !showSite">{{currentSite?.siteName}}</a>
+        @if (showSite) {
+        <div class="site-dropdown">
+            @for (item of sitesList; track $index) {
+            <p (click)="set(item)">{{item.siteName}}</p>
+            }
+        </div>
+        }
     </div>
 
     <div class="nav-items">

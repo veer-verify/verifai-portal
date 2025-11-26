@@ -29,23 +29,25 @@ export class HeaderComponent {
 
     sitesList!: Array<any>;
     ngOnInit() {
-        // this.getSites();
         this.storage_service.siteData$
             .pipe(takeUntil(this.destroy$))
             .subscribe({
                 next: (res: any) => {
-                    this.sitesList = res.sites
+                    if(res.length === 0) return;
+                    this.sitesList = res.sites;
+                    this.currentSite = this.sitesList[0]
                 }
             })
     }
 
     currentSite: any;
-    set() {
-        console.log(this.currentSite);
+    showSite: boolean = false
+    set(site: any) {
+        this.showSite = !this.showSite;
+        this.currentSite = site;
         this.storage_service.currentSite$.next(this.currentSite);
+        // console.log(this.storage_service.currentSite$.getValue());
     }
-
-
 
     logout() {
         this.router.navigate(['/login'])
