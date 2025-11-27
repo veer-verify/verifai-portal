@@ -7,6 +7,11 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { loaderInterceptor } from '../utilities/interceptors/loader.interceptor';
+import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
+
+
+ModuleRegistry.registerModules([AllCommunityModule]);
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,6 +20,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([loaderInterceptor])),
     provideNativeDateAdapter(),
-    provideAnimations()
+    provideAnimations(),
   ]
 };

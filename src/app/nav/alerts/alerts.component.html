@@ -1,128 +1,22 @@
-<!-- <app-sub-header></app-sub-header> -->
-<hr class="m-0"/>
+<main >
 
-<div class="container-fluid">
-  <!-- <div class="row m-0 mt-3">
-     <div class="col-lg-3">
-                <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>siteId</mat-label>
-                  <mat-select>
-                    @for (item of sitesList; track $index) {
-                    <mat-option [value]="item.siteId">{{item.siteId}} - {{item.siteName}}</mat-option>
-                    }
-                  </mat-select>
-                  <mat-error>siteId is required</mat-error>
-                </mat-form-field>
-              </div>
-    <div class="col-2">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Camera</mat-label>
-        <mat-select>
-          @for (item of getType(3); track $index) {
-            <mat-option>{{item.value}}</mat-option>
-          }
-        </mat-select>
-        <mat-error>category is required</mat-error>
-      </mat-form-field>
-    </div>
-    <div class="col-2">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Action tag</mat-label>
-        <mat-select>
-          @for (item of getType(2); track $index) {
-            <mat-option>{{item.value}}</mat-option>
-          }
-        </mat-select>
-        <mat-error>category is required</mat-error>
-      </mat-form-field>
-    </div>
-    <div class="col-lg-2">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker1">
-  
-        <mat-datepicker-toggle matIconSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1></mat-datepicker>
-      </mat-form-field>
-    </div>
-    <div class="col-lg-2">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Choose a date</mat-label>
-        <input matInput [matDatepicker]="picker2">
-        <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker #picker2></mat-datepicker>
-      </mat-form-field>
-   </div>
-  </div> -->
+  <div class="p-1 d-flex">
+    <mat-form-field appearance="outline">
+    <mat-label>Select Cameras</mat-label>
+    <mat-select>
 
+    </mat-select>
+  </mat-form-field>
 
-  
-  <div class="table-container mt-5">
-      <table class="table" >
-          <thead>
-            <tr>
-              <th>
-                <img (click)="sort('name')" class="pointer ms-1" src="icons/swap_vert_24dp_F3F3F3_FILL0_wght400_GRAD0_opsz24.svg" matTooltip="filter"
-                matTooltipPosition="right" width="15px">
-                Camera</th>
-              <th>
-                <img (click)="sort('eventFromTime')" class="pointer ms-1" src="icons/swap_vert_24dp_F3F3F3_FILL0_wght400_GRAD0_opsz24.svg" matTooltip="filter"
-                matTooltipPosition="right" width="15px">Start Time</th>
-              <th>
-                <img (click)="sort('eventToTime')" class="pointer ms-1" src="icons/swap_vert_24dp_F3F3F3_FILL0_wght400_GRAD0_opsz24.svg" matTooltip="filter"
-                matTooltipPosition="right" width="15px">End Time</th>
-              <th>
-                <img (click)="sort('eventFromTime')" class="pointer ms-1" src="icons/swap_vert_24dp_F3F3F3_FILL0_wght400_GRAD0_opsz24.svg" matTooltip="filter"
-                matTooltipPosition="right" width="15px">
-                Duration</th>
-              <th>
-                <img (click)="sort('objectName')" class="pointer ms-1" src="icons/swap_vert_24dp_F3F3F3_FILL0_wght400_GRAD0_opsz24.svg" matTooltip="filter"
-                matTooltipPosition="right" width="15px">
-                Object Identified</th>
-              <th>  <img (click)="sort('actionTag')" class="pointer ms-1" src="icons/swap_vert_24dp_F3F3F3_FILL0_wght400_GRAD0_opsz24.svg" matTooltip="filter"
-                matTooltipPosition="right" width="15px">
-                Action Tag</th>
-              <th>Event Clip</th>
-            </tr>
-          </thead>
-          <tbody>
-              @for (item of newIncidentListData; track $index) {
-                  <tr>
-                    <td>{{item.name}}</td>
-                    <td>{{item?.eventFromTime | date: 'short'}}</td>
-                    <td>{{item?.eventToTime | date: 'short'}}</td>
-                    <td>{{item.eventFromTime}}</td>
-                    <td>{{item?.objectName | titlecase}}</td>
-                    <td [style.color]="item.actionTag == 'Suspicious' ? '#f65b08' : item.actionTag == 'Police Visit' ? '#f65b08': ''">{{item.actionTag}}</td>
-                    <td (click)="openVideoData(item)">View</td>
-                  </tr>
-              }  
-        
-          </tbody>
-        </table>
-  </div>
-  
-</div>
+   <mat-form-field appearance="outline">
+    <mat-label>All Action Tags</mat-label>
+    <mat-select>
 
+    </mat-select>
+  </mat-form-field>
 
-<div class="new-dialog" id="playModel">
-  <div class="dialog-header">
-    <p>{{currentItem?.siteName}} - {{currentItem?.name}}</p>
-  </div>
-  <div class="dialog-content">
-    <div class="d-flex justify-content-between align-items-center my-1">
-      <div class="dialog-title">{{ currentItem?.eventFromTime | date: 'mediumDate'}}</div>
-      <div class="dialog-title">{{currentItem?.actionTag | uppercase}}</div>
-      <div class="dialog-title">{{currentItem?.eventFromTime | date: 'shortTime'}} to {{currentItem?.eventToTime | date: 'shortTime'}}</div>
-    </div>
-    <div class="file-images mt-3">
-      <div *ngFor="let fileUrl of currentItem?.fullFileUrls">
-        <img [src]="fileUrl" alt="Event Image" class="img-fluid" style="max-width: 100%; height: auto; margin-top: 10px;">
-      </div>
-    </div>
-  </div>
-  <div class="dialog-actions d-flex justify-content-end align-items-center mt-2">
-    <button class="btn btn-secondary" mat-button (click)="closeDialog()">Close</button>
   </div>
 
-</div>
+<app-table></app-table>
+</main>
+

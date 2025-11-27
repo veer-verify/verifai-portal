@@ -1,1 +1,7 @@
-<p>table works!</p>
+<div style="height: calc(100vh - 145px); display: flex; flex-direction: column">
+  <div style="flex: 1 1 0%">
+    <ag-grid-angular style="height: 100%;" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [rowData]="rowData"
+      [theme]="theme"   [pagination]="true"
+    [paginationPageSizeSelector]="paginationPageSizeSelector"  [paginationPageSize]="paginationPageSize" [cacheBlockSize]="cacheBlockSize" />
+  </div>
+</div>
