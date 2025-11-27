@@ -41,8 +41,12 @@ export class ConfigService {
   }
 
   public getCamerasForSiteId(payload: any): Observable<any> {
-    let url = `${environment.sitesUrl}/getCamerasForSiteId_1_0/${payload?.siteId}`;
-    return this.http.get(url);
+    const url = `${environment.sitesUrl}/getCamerasForSiteId_1_0/${payload?.siteId}`;
+        const user = this.storageSrvc.getData('user');
+    const headers = new HttpHeaders({
+      "Authorization": `Bearer ${user.AccessToken}`
+    })
+    return this.http.get(url, {headers});
   }
 
 

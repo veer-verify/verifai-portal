@@ -1,8 +1,8 @@
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from '../../header/header.component';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatInputModule} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -14,21 +14,21 @@ import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { Subject, takeUntil } from 'rxjs';
 @Component({
-    selector: 'app-live-view',
-    imports: [
-        MatGridListModule,
-        MatMenuModule,
-        MatInputModule,
-        SanitizePipe,
-        FormsModule,
-        ReactiveFormsModule,
-        VideoPlrComponent,
-        CommonModule,
-        DummyPlrComponent,
-        GlobalClickDirective
-    ],
-    templateUrl: './live-view.component.html',
-    styleUrl: './live-view.component.css'
+  selector: 'app-live-view',
+  imports: [
+    MatGridListModule,
+    MatMenuModule,
+    MatInputModule,
+    SanitizePipe,
+    FormsModule,
+    ReactiveFormsModule,
+    VideoPlrComponent,
+    CommonModule,
+    DummyPlrComponent,
+    GlobalClickDirective
+  ],
+  templateUrl: './live-view.component.html',
+  styleUrl: './live-view.component.css'
 })
 export class LiveViewComponent implements OnInit, OnDestroy {
 
@@ -37,7 +37,7 @@ export class LiveViewComponent implements OnInit, OnDestroy {
   //   this.opensiteDialog == true ? this.opensiteDialog = false : null;
   // }
 
-    gridTypes = [
+  gridTypes = [
     {
       label: '1*1',
       noOfItems: 1,
@@ -62,79 +62,70 @@ export class LiveViewComponent implements OnInit, OnDestroy {
 
   constructor(
     public configSrvc: ConfigService,
-    private http: HttpClient,
     private storage_service: StorageService
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
 
-  searchText:any;
+  searchText: any;
   data: any;
   @ViewChild('gridContainer') gridContainer!: ElementRef;
   ngOnInit() {
-    // this.getSites();
     this.storage_service.siteData$
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (res: any) => {
-        // setInterval(() => {
-        //   console.log(Math.random())
-        // }, 1000)
-        console.log(res);
-        this.sitesList = res.sites
-      }
-    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res: any) => {
+          console.log(res);
+          this.sitesList = res.sites
+        }
+      })
   }
-  
-  // gridData: any;
+
   selectedGrid!: number;
   camerasList: any = [];
   newCamerasList: any = [];
   ngAfterViewInit() {
-    this.configSrvc.numberFromSub.subscribe({
-      next:(res) => {
-        if(res) {
-          this.selectedGrid = res.noOfItems;
-          this.gridContainer.nativeElement.style.gridTemplateColumns = `repeat(${Math.sqrt(res.noOfItems)}, 1fr)`;
-        }
-      }
-    });
+    // this.configSrvc.numberFromSub.subscribe({
+    //   next: (res) => {
+    //     if (res) {
+    //       this.selectedGrid = res.noOfItems;
+    //       this.gridContainer.nativeElement.style.gridTemplateColumns = `repeat(${Math.sqrt(res.noOfItems)}, 1fr)`;
+    //     }
+    //   }
+    // });
 
-    this.configSrvc.paginated_cam_sub.subscribe((res) => {
-      // if(res) {
-        // console.log(res);
-        this.newCamerasList = res;
-      // }
+    this.storage_service.currentSite$.subscribe((res) => {
+      this.getCamerasForSiteId(res)
     });
   }
-  
+
+  getCamerasForSiteId(data: any) {
+    this.newCamerasList = [];
+    this.configSrvc.getCamerasForSiteId(data).subscribe({
+      next: (res: any) => {
+        this.camerasList = res;
+        this.newCamerasList = this.camerasList;
+      }
+    })
+  }
+
+  adjustGrid(count: number): void {
+    this.selectedGrid = count;
+    this.gridContainer.nativeElement.style.gridTemplateColumns = `repeat(${Math.sqrt(count)}, 1fr)`;
+  }
+
+
+
   opensiteDialog: boolean = false;
   openSites() {
     this.opensiteDialog = !this.opensiteDialog
   }
 
   sitesList!: Array<any>;
-  getSites() {
-    this.configSrvc.getSitesListForUserName().subscribe({
-      next: (res: any) => {
-        this.sitesList = res.sites;
-
-        // this.configSrvc.dataFromSubheader.subscribe({
-        //   next: (res: any) => {
-        //     this.camerasList = [];
-        //     setTimeout(() => {
-        //       this.camerasList = res;
-        //       this.currentCam = this.camerasList[0];
-        //     }, 100)
-        //   }
-        // })
-      }
-    })
-  }
 
   currentCam: any;
-  playCurrentCam(item:any) {
-    this.configSrvc.numberFromSub.next({noOfItems: 1});
+  playCurrentCam(item: any) {
+    this.configSrvc.numberFromSub.next({ noOfItems: 1 });
     this.currentCam = item;
   }
 

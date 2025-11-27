@@ -131,3 +131,7 @@
     height: 60vh;
     pointer-events: none;
 }
+
+.site-info {
+    width: 300px;
+}
