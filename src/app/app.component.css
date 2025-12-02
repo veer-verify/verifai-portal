@@ -1,0 +1,96 @@
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper .mat-mdc-form-field-flex .mat-mdc-floating-label {
+    top: 20px !important;
+    font-size: 14px !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+    min-height: 40px !important;
+}
+
+::ng-deep div.mat-mdc-select-panel {
+    padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-select-arrow {
+    top: 3px !important;
+}
+
+::ng-deep .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above {
+    top: 28px !important;
+}
+
+::ng-deep .mat-mdc-select-value {
+    position: relative !important;
+    top: 3px !important;
+    font-size: 14px !important;
+}
+
+::ng-deep .mat-mdc-form-field-error-wrapper {
+    top: -3px !important;
+}
+
+::ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+    border-bottom-left-radius: 0px !important;
+}
+
+::ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 8px !important;
+}
+
+/* mat-form auto-complete */
+::ng-deep .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+    height: 40px !important;
+}
+
+::ng-deep div.mat-mdc-autocomplete-panel {
+    padding: 0 !important;
+}
+
+::ng-deep .mat-mdc-form-field-icon-suffix {
+    top: -3px !important;
+}
+
+::ng-deep .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mdc-text-field__input {
+    position: relative !important;
+    top: 3px !important;
+    font-size: 14px !important;
+}
+
+::ng-deep .mat-mdc-option .mdc-list-item__primary-text {
+    font-size: 14px !important;
+}
+
+/* mat-disable */
+::ng-deep .mdc-text-field--outlined.mdc-text-field--disabled .mdc-text-field__input {
+    color: #000000 !important;
+}
+
+::ng-deep .mat-mdc-select-disabled {
+    color: #000000 !important;
+}
+
+::ng-deep .mdc-text-field--outlined.mdc-text-field--disabled .mdc-floating-label, .mdc-text-field--outlined.mdc-text-field--disabled .mdc-floating-label--float-above {
+    color: #000000 !important;
+}
+
+
+/* mat-menu */
+::ng-deep .mat-mdc-menu-content {
+    padding: 0 !important;
+}
+
+::ng-deep .mat-button-toggle-label-content {
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
+    font-size: 14px !important;
+}

@@ -1,3 +1,132 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 12px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 12px;
+}
+
+/* left section */
+.left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.all-label {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.tag-select {
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 11px;
+  background-color: #fafafa;
+}
+
+/* center section (start/end) */
+.center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #777;
+}
+
+.date-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  border: 1px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+/* make CoreUI date range input small and flat */
+c-date-range-picker {
+  font-size: 11px;
+
+  input {
+    border: none;
+    background: transparent;
+    padding: 0;
+    height: 18px;
+    min-width: 120px;
+  }
+}
+
+.date-time input[type='time'] {
+  border: none;
+  background: transparent;
+  font-size: 11px;
+  width: 70px;
+  padding: 0;
+}
+
+/* right section (analytics + toggle) */
+.right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* toggle switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 18px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background-color: #cccccc;
+  border-radius: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 2px;
+  top: 2px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
+}
+
+.switch input:checked + .slider {
+  background-color: #ff3b30; /* red like recording */
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(16px);
+}
 
 
 

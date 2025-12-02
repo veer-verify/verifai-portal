@@ -1,22 +1,35 @@
-<main >
+<main>
+  <form [formGroup]="rangeForm">
+    <div class="toolbar">
+      <div class="left">
+        <span class="all-label">ALL (12)</span>
+        <select class="tag-select">
+          <option>All Action Tags</option>
+        </select>
+      </div>
 
-  <div class="p-1 d-flex">
-    <mat-form-field appearance="outline">
-    <mat-label>Select Cameras</mat-label>
-    <mat-select>
+      <div class="center">
+        <span class="label">START</span>
+        <div class="date-time">
 
-    </mat-select>
-  </mat-form-field>
+        </div>
 
-   <mat-form-field appearance="outline">
-    <mat-label>All Action Tags</mat-label>
-    <mat-select>
+        <span class="label">END</span>
+        <div class="date-time">
 
-    </mat-select>
-  </mat-form-field>
 
-  </div>
+        </div>
+      </div>
 
-<app-table></app-table>
+      <div class="right">
+        <span class="label">ANALYTICS</span>
+        <label class="switch">
+          <input type="checkbox" />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <app-table></app-table>
+  </form>
 </main>
-

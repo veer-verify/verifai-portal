@@ -15,7 +15,7 @@ import {
 })
 export class TableComponent {
 
- paginationPageSize = 10;
+ paginationPageSize = 20;
  paginationPageSizeSelector = [10, 20, 50, 100];
  theme:Theme = myTheme;
  cacheBlockSize = 10;
