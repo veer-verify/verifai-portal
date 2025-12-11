@@ -12,14 +12,14 @@ export class MetadataService {
   ) { }
 
   getMetadata() {
-    let url = `${environment.metadataUrl}/common/getValuesListByType_1_0`;
+    let url = `${environment.metadataUrl}/getValuesListByType_1_0`;
     return this.http.get(url);
   }
 
   getMetadataByType(payload: any) {
-    let url = `${environment.metadataUrl}/common/getValuesListByType_1_0`;
+    let url = `${environment.metadataUrl}/getValuesListByType_1_0`;
     let params = new HttpParams().set('type', payload);
     return this.http.get(url, {params: params});
   }
- 
+
 }

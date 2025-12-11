@@ -1,9 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from './login/login.component';
 import { StorageService } from '../../utilities/services/storage.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private storage_service: StorageService
+    private storage_service: StorageService,
+      private router: Router
   ) { }
 
   // private storage_service = inject(StorageService);
@@ -25,5 +27,16 @@ export class AuthService {
     }
     return this.http.post(url, user)
   }
-  
+
+    getAccessforRefreshToken(payload: any): Observable<any> {
+    let url = `${environment.authUrl}/getAccessforRefreshToken`;
+    let params = new HttpParams().set('refresh_token', payload?.RefreshToken).set('modifiedBy', payload?.UserId);
+    return this.http.post(url, null, { params: params });
+  }
+
+    logout() {
+    this.storage_service.clearData();
+    this.router.navigate(['./login']);
+  }
+
 }

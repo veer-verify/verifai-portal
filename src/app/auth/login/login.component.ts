@@ -23,7 +23,7 @@ export interface User {
     standalone: true
 })
 export class LoginComponent implements OnInit {
-  
+
   constructor(
     private router: Router,
     private fb: FormBuilder,
@@ -61,8 +61,8 @@ export class LoginComponent implements OnInit {
     this.auth.login(this.loginForm.value).subscribe({
      next: (res) => {
       if(res.Status === 'Success') {
-        // this.saveMetaData();
         this.storageSrvc.saveData('user', res);
+        this.saveMetaData();
         this.router.navigate(['/dashboard']);
       }
      },

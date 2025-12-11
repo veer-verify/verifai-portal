@@ -1,0 +1,19 @@
+<div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
+  <div style="flex: 1 1 0%">
+    <ag-grid-angular
+      style="height: 100%;"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [theme]="theme"
+
+      rowModelType="infinite"
+      [datasource]="datasource"
+
+      [pagination]="true"
+      [paginationPageSize]="paginationPageSize"
+      [paginationPageSizeSelector]="paginationPageSizeSelector"
+      [cacheBlockSize]="cacheBlockSize"
+      (gridReady)="onGridReady($event)"
+    ></ag-grid-angular>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable,signal  } from '@angular/core';
 import { AES } from 'crypto-js';
 import { BehaviorSubject } from 'rxjs';
 
@@ -15,6 +15,9 @@ export class StorageService {
   private _siteData = new BehaviorSubject([]);
   public siteData$ = this._siteData.asObservable();
   public currentSite$ = new BehaviorSubject(null);
+
+
+
 
   public show(): void {
     this._loader.next(true);
@@ -37,7 +40,7 @@ export class StorageService {
   }
 
   getType(type: any) {
-    let data: any[] = this.getData('metaData');
+    let data: any[] = this.getData('metaData')|| [];
     return data.filter((item: any) => item.type == type);
   }
 
@@ -46,6 +49,8 @@ export class StorageService {
     // localStorage.setItem(name, x);
     localStorage.setItem(name, JSON.stringify(data));
   }
+
+
 
   public getData(data: any) {
     // let x: any = localStorage.getItem(data);

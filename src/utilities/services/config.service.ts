@@ -34,34 +34,19 @@ export class ConfigService {
     const url = `${environment.sitesUrl}/getSitesListForUserName_1_0/`;
     const user = this.storageSrvc.getData('user');
     const params = new HttpParams().set('userName', user?.UserName);
-    const headers = new HttpHeaders({
-      "Authorization": `Bearer ${user.AccessToken}`
-    })
-    return this.http.get(url, { params, headers});
+
+    return this.http.get(url, { params});
   }
 
   public getCamerasForSiteId(payload: any): Observable<any> {
+    
     const url = `${environment.sitesUrl}/getCamerasForSiteId_1_0/${payload?.siteId}`;
         const user = this.storageSrvc.getData('user');
-    const headers = new HttpHeaders({
-      "Authorization": `Bearer ${user.AccessToken}`
-    })
-    return this.http.get(url, {headers});
+
+    return this.http.get(url);
   }
 
 
-  incidentList(payload: any) {
-    let url = `${environment.incidentUrl}/incidents/incidentList_1_0`;
-    let params = new HttpParams();
-    // if(payload?.siteId) {
-    params = params.set('siteId', 36337)
-    // }
-    // if(payload?.fromDate) {
-    params = params.set('fromDate', '2024-9-10')
-    // }
-
-    return this.http.get(url, { params: params })
-  }
 
 
 

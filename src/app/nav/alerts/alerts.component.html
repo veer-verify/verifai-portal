@@ -1,10 +1,18 @@
 <main>
-  <form [formGroup]="rangeForm">
+  <div>
     <div class="toolbar">
       <div class="left">
-        <span class="all-label">ALL (12)</span>
+        <select class="tag-select" [(ngModel)]="cameraId" (change)="onFilterChange()">
+          <option value="">ALL({{this.camerasList?.length}})</option>
+          @for (item of camerasList; track $index) {
+          <option [value]="item?.cameraId">{{item.name}}</option>
+          }
+        </select>
         <select class="tag-select">
           <option>All Action Tags</option>
+          @for (item of actionTags; track $index) {
+          <option>{{item.value}}</option>
+          }
         </select>
       </div>
 
@@ -22,14 +30,17 @@
       </div>
 
       <div class="right">
-        <span class="label">ANALYTICS</span>
+        <span class="label" [class.analyticsred]="isChecked">ANALYTICS</span>
         <label class="switch">
-          <input type="checkbox" />
+          <input type="checkbox" [(ngModel)]="isChecked" />
           <span class="slider"></span>
         </label>
       </div>
     </div>
+  </div>
 
-    <app-table></app-table>
-  </form>
+
+  <app-table [fields]="fields" [datasource]="gridDatasource" (gridReady)="onGridReady($event)"></app-table>
+
+
 </main>
