@@ -1,4 +1,4 @@
-import { Injectable,signal  } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { AES } from 'crypto-js';
 import { BehaviorSubject } from 'rxjs';
 
@@ -9,27 +9,37 @@ export class StorageService {
 
   private readonly key = "verifai";
 
-  private _loader = new BehaviorSubject(false);
-  public loader$ = this._loader.asObservable();
+  // private _loader = new BehaviorSubject(false);
+  public loader$ = new BehaviorSubject(false);
 
-  private _siteData = new BehaviorSubject([]);
-  public siteData$ = this._siteData.asObservable();
+  // private _siteData = new BehaviorSubject([]);
+  public siteData$ = new BehaviorSubject([]);
+
+  // private _currentSite = new BehaviorSubject(null);
   public currentSite$ = new BehaviorSubject(null);
 
 
 
 
-  public show(): void {
-    this._loader.next(true);
-  }
+  // public show(): void {
+  //   this._loader.next(true);
+  // }
 
-  public hide(): void {
-    this._loader.next(false);
-  }
+  // public hide(): void {
+  //   this._loader.next(false);
+  // }
 
-  public saveSites(data: any): void {
-    this._siteData.next(data);
-  }
+  // public saveSites(data: any): void {
+  //   this._siteData.next(data);
+  // }
+
+  // public saveSite(data: any): void {
+  //   this._currentSite.next(data);
+  // }
+
+  // public getSite(): any {
+  //   return this._currentSite.getValue()
+  // }
 
   public encrypt(txt: string): string {
     return AES.encrypt(txt, this.key).toString();
@@ -40,7 +50,7 @@ export class StorageService {
   }
 
   getType(type: any) {
-    let data: any[] = this.getData('metaData')|| [];
+    let data: any[] = this.getData('metaData') || [];
     return data.filter((item: any) => item.type == type);
   }
 

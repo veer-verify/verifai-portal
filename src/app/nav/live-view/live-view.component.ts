@@ -1,9 +1,14 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   HostListener,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { HeaderComponent } from '../../header/header.component';
@@ -20,6 +25,7 @@ import { GlobalClickDirective } from '../../../utilities/directives/global-click
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { StreamComponent } from "../../../utilities/components/stream/stream.component";
 @Component({
   selector: 'app-live-view',
   imports: [
@@ -33,11 +39,12 @@ import { filter, Subject, takeUntil } from 'rxjs';
     CommonModule,
     DummyPlrComponent,
     GlobalClickDirective,
-  ],
+    StreamComponent
+],
   templateUrl: './live-view.component.html',
   styleUrl: './live-view.component.css',
 })
-export class LiveViewComponent implements OnInit, OnDestroy {
+export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   // @HostListener('click', ['$event'])
   // onClick() {
   //   this.opensiteDialog == true ? this.opensiteDialog = false : null;
@@ -45,95 +52,102 @@ export class LiveViewComponent implements OnInit, OnDestroy {
 
   gridTypes = [
     {
-      label: '1*1',
+      label: '1X1',
       noOfItems: 1,
       path: 'icons/dot-1.svg',
     },
     {
-      label: '2*2',
+      label: '2X2',
       noOfItems: 4,
       path: 'icons/dot-2.svg',
     },
     {
-      label: '3*3',
+      label: '3X3',
       noOfItems: 9,
       path: 'icons/grid.svg',
     },
     {
-      label: '4*4',
+      label: '4X4',
       noOfItems: 16,
+      path: 'icons/dot4.svg',
+    },
+        {
+      label: '4X5',
+      noOfItems: 20,
       path: 'icons/dot4.svg',
     },
   ];
 
   constructor(
     public configSrvc: ConfigService,
-    private storage_service: StorageService
+    private storage_service: StorageService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   private destroy$ = new Subject<void>();
-
+  
+  isChecked: boolean = false;
   searchText: any;
-  data: any;
+  sitesList = [];
   @ViewChild('gridContainer') gridContainer!: ElementRef;
-  ngOnInit() {
+  ngOnInit(): void {
     this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.sitesList = res.sites;
       },
     });
   }
 
-  selectedGrid!: number;
-  camerasList: any = [];
-  newCamerasList: any = [];
-  ngAfterViewInit() {
-    this.storage_service.currentSite$
-      .pipe(filter((site) => !!site),takeUntil(this.destroy$))
-      .subscribe((res) => {
-        this.getCamerasForSiteId(res);
-      });
+  ngOnChanges(changes: SimpleChanges): void {
+    
   }
 
+  camList = [];
+  tempCamList = [];
+  ngAfterViewInit(): void {
+    this.storage_service.currentSite$
+    .pipe(filter((site) => !!site), takeUntil(this.destroy$))
+    .subscribe((res) => {
+      this.getCamerasForSiteId(res);
+    });
+  }
+  
   getCamerasForSiteId(data: any) {
-    this.newCamerasList = [];
+    this.tempCamList = [];
     this.configSrvc.getCamerasForSiteId(data).subscribe({
       next: (res: any) => {
-        this.camerasList = res;
-        this.newCamerasList = this.camerasList;
+        this.camList = res;
+        this.tempCamList = this.camList;
+        this.adjustGrid(this.itemsPerPage);
       },
     });
   }
+  
+  currentPage: number = 1;
+  itemsPerPage: number = 4;
+  totalPages: number = 0;
+  getPaginatedList(): Array<any> {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.tempCamList.slice(start, end);
+  }
 
   adjustGrid(count: number): void {
-    this.selectedGrid = count;
-    this.gridContainer.nativeElement.style.gridTemplateColumns = `repeat(${Math.sqrt(
-      count
-    )}, 1fr)`;
+    const el = this.gridContainer.nativeElement;
+
+    this.currentPage = 1;
+    this.itemsPerPage = count;
+    this.totalPages = Math.ceil(this.tempCamList.length / this.itemsPerPage);
+    el.style.gridTemplateColumns = `repeat(${Math.ceil(Math.sqrt(count))}, 1fr)`;
   }
 
-  opensiteDialog: boolean = false;
-  openSites() {
-    this.opensiteDialog = !this.opensiteDialog;
-  }
-
-  sitesList!: Array<any>;
-
-  currentCam: any;
-  playCurrentCam(item: any) {
-    this.configSrvc.numberFromSub.next({ noOfItems: 1 });
-    this.currentCam = item;
-  }
-
-  loadPrevCam() {
-    let index: number = this.camerasList.indexOf(this.currentCam);
-    this.currentCam = this.camerasList[index - 1];
-  }
-
-  loadNextCam() {
-    let index: number = this.camerasList.indexOf(this.currentCam);
-    this.currentCam = this.camerasList[index + 1];
+  change = true;
+  navigate(type: string) {
+    this.change = false;
+    setTimeout(() => {
+      this.change = true;
+      type === 'next' ? this.currentPage++ : this.currentPage--
+    }, 1000)
   }
 
   ngOnDestroy(): void {

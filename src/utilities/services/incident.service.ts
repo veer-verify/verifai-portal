@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { StorageService } from './storage.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ export class IncidentService {
     private storageService: StorageService
   ) {}
 
-  incidentList(payload?: any) {
+  incidentList(payload?: any): Observable<any> {
 
     let url = `${environment.incidentsUrl}/incidentList_1_0`;
     let params = new HttpParams();

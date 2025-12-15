@@ -8,8 +8,9 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { GridApi, IServerSideDatasource } from 'ag-grid-community';
+import { GridApi, GridReadyEvent, IServerSideDatasource } from 'ag-grid-community';
 import { handleResponse } from '../../../utilities/components/table/tableconfig';
+import { AgGridAngular } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-alerts',
@@ -20,6 +21,7 @@ import { handleResponse } from '../../../utilities/components/table/tableconfig'
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
+    AgGridAngular
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
@@ -47,14 +49,14 @@ export class AlertsComponent {
   gridApi!: GridApi;
 
   constructor(
-    private storage: StorageService,
-    private config: ConfigService,
-    private incident: IncidentService
+    private storage_service: StorageService,
+    private config_service: ConfigService,
+    private incident_service: IncidentService
   ) {}
 
   ngOnInit() {
     this.getTypes();
-    this.storage.currentSite$
+    this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
         takeUntil(this.destroy$)
@@ -63,33 +65,37 @@ export class AlertsComponent {
         this.currentSite = site;
         this.getcamerasForSiteId();
         this.gridDatasource = this.createDatasource();
-        this.gridApi.refreshServerSide({ purge: true });
+        // this.gridApi.refreshServerSide({ purge: true });
       });
   }
+
+  // rowData = []
+  //   onGridReady(params: GridReadyEvent) {
+  //   this.incident.incidentList().subscribe((data) => this.rowData = data);
+  // }
 
   onGridReady(api: GridApi) {
     this.gridApi = api;
   }
 
   getcamerasForSiteId() {
-    this.config.getCamerasForSiteId(this.currentSite).subscribe((res: any) => {
+    this.config_service.getCamerasForSiteId(this.currentSite).subscribe((res: any) => {
       this.camerasList = res;
     });
   }
 
   getTypes() {
-    let res = this.storage.getType(36);
+    let res = this.storage_service.getType(36);
     this.actionTags = res[0]?.metadata;
   }
 
-  /** Create AG Grid datasource */
   createDatasource() {
     return {
       getRows: (params: any) => {
         const pageSize = params.request.endRow - params.request.startRow;
         const pageNumber = params.request.startRow / pageSize + 1;
 
-        this.incident
+        this.incident_service
           .incidentList({
             ...this.currentSite,
             page: pageNumber,
@@ -104,6 +110,7 @@ export class AlertsComponent {
       },
     };
   }
+  
   onFilterChange() {
     if (!this.gridApi) return;
     const ds = this.createDatasource();

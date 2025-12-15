@@ -38,22 +38,16 @@ export class TableComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.datasource)
     this.mapFieldsToColumnDefs();
 
     if (this.gridApi && this.datasource) {
-
       this.gridApi.setGridOption('serverSideDatasource', this.datasource);
     }
   }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-
     this.gridReady.emit(this.gridApi);
-
-
-
 
     if (this.datasource) {
       this.gridApi.setGridOption('serverSideDatasource', this.datasource);

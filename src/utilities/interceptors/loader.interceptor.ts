@@ -6,10 +6,10 @@ import { finalize } from 'rxjs';
 export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   const storage_service = inject(StorageService);
 
-  storage_service.show();
+  storage_service.loader$.next(true);
   return next(req).pipe(
     finalize(() => {
-      storage_service.hide();
+      storage_service.loader$.next(false);
     })
   );
 };
