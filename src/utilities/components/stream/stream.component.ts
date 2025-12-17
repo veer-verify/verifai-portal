@@ -1,41 +1,49 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 
 @Component({
-    selector: 'app-video-plr',
-    imports: [],
-    templateUrl: './video-plr.component.html',
-    styleUrl: './video-plr.component.css'
+  selector: 'app-stream',
+  imports: [],
+  templateUrl: './stream.component.html',
+  styleUrl: './stream.component.css',
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VideoPlrComponent {
+export class StreamComponent {
+
   @Input() videoData: any;
-  @Input() camerasForPage: any;
 
   constructor(
-    // private camSer: CameraService,
-    // private alertSrvc: AlertService,
+    private cdr: ChangeDetectorRef
   ) { }
-  
+
   @ViewChild('video') video!: ElementRef;
   @ViewChild('canvas') canvas!: ElementRef;
-  @ViewChild('image') image!: ElementRef;
-  
+
+  // ngOnChanges(): void {
+  //   // console.log(this.videoData);
+  //   this.requestICEServers();
+  // }
+
+
   peerConnection!: RTCPeerConnection;
   restartTimeout: any = null;
   sessionUrl: string = '';
   queuedCandidates: RTCIceCandidate[] = [];
   offerData: any;
 
-
   hitStream: boolean = false;
+  encoded: any;
   ngOnInit(): void {
-    console.log(this.videoData)
+    const username = "admin";
+    const password = "verifai123789";
+    let credentails = `${username}:${password}`;
+    this.encoded = btoa(credentails);
+
     this.hitStream = true;
     this.requestICEServers();
   }
-  
+
   ngAfterViewInit() {
     this.video.nativeElement.controls = false;
-    this.video.nativeElement.muted = true;
     this.video.nativeElement.autoplay = true;
     this.video.nativeElement.playsInline = true;
   }
@@ -44,10 +52,13 @@ export class VideoPlrComponent {
   requestICEServers() {
     if (this.hitStream) {
       this.showLoader = true;
-      fetch(this.videoData + "whep", {
+      fetch(`${this.videoData?.httpUrl}/whep`, {
         method: 'OPTIONS',
+        headers: {
+          'Authorization': `Basic ${this.encoded}`
+        }
       }).then((res) => {
-        this.showLoader = false
+        this.showLoader = false;
         this.peerConnection = new RTCPeerConnection({
           iceServers: this.linkToIceServers(res.headers.get('Link')),
         });
@@ -56,13 +67,16 @@ export class VideoPlrComponent {
         this.peerConnection.addTransceiver('audio', { direction });
         this.peerConnection.onicecandidate = (evt: RTCPeerConnectionIceEvent) => this.onLocalCandidate(evt);
         this.peerConnection.oniceconnectionstatechange = () => this.onConnectionState();
-        this.peerConnection.ontrack = (evt: RTCTrackEvent) => this.onTrack(evt);
+        this.peerConnection.ontrack = (evt: RTCTrackEvent) => {
+          this.onTrack(evt)
+        };
         this.createOffer();
       }).catch((err) => {
-          this.hitStream = false;
-          this.showLoader = false;
-          this.onError(err.toString());
-        });
+        // this.video.nativeElement.src = '/assets/Screen Recording 2024-12-07 102136.mp4';
+        // this.hitStream = false;
+        this.showLoader = false;
+        this.onError(err.toString());
+      });
     }
   }
 
@@ -81,7 +95,6 @@ export class VideoPlrComponent {
             ic.username = JSON.parse(`"${m[3]}"`)
             ic.credential = JSON.parse(`"${m[4]}"`)
           }
-
           ics.push(ic)
         }
       })
@@ -91,15 +104,12 @@ export class VideoPlrComponent {
 
   onError(err: any) {
     if (this.restartTimeout === null) {
-      // if (this.peerConnection !== null) {
       this.peerConnection?.close();
-      // this.peerConnection = null;
-      // }
 
-      this.restartTimeout = window.setTimeout(() => {
-        this.restartTimeout = null;
-        this.requestICEServers();
-      }, 2000);
+      // this.restartTimeout = window.setTimeout(() => {
+      //   this.restartTimeout = null;
+      //   this.requestICEServers();
+      // }, 2000);
 
       if (this.sessionUrl) {
         fetch(this.sessionUrl, {
@@ -213,10 +223,11 @@ export class VideoPlrComponent {
 
   sendOffer(offer: RTCSessionDescriptionInit) {
     this.showLoader = true;
-    fetch(this.videoData + "whep", {
+    fetch(`${this.videoData?.httpUrl}/whep`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/sdp',
+        'Authorization': `Basic ${this.encoded}`
       },
       body: offer.sdp,
     }).then((res: any) => {
@@ -229,24 +240,23 @@ export class VideoPlrComponent {
         default:
           throw new Error(`bad status code ${res.status}`);
       }
-      this.sessionUrl = new URL(res.headers.get('location'), this.videoData).toString();
+      this.sessionUrl = new URL(res.headers.get('location'), this.videoData?.httpUrl).toString();
       return res.text();
     }).then((sdp) => this.onRemoteAnswer(sdp)).catch((err) => {
-      this.hitStream = false;
       this.showLoader = false;
       this.onError(err.toString());
     });
   };
 
   onRemoteAnswer(sdp: string) {
-    if (this.restartTimeout !== null) {
-      return;
-    }
+    if (this.restartTimeout !== null) return;
 
-    this.peerConnection!.setRemoteDescription(new RTCSessionDescription({
-      type: 'answer',
-      sdp,
-    }));
+    if (this.peerConnection?.signalingState !== 'closed') {
+      this.peerConnection!.setRemoteDescription(new RTCSessionDescription({
+        type: 'answer',
+        sdp,
+      }));
+    }
 
     if (this.queuedCandidates.length !== 0) {
       this.sendLocalCandidates(this.queuedCandidates);
@@ -274,9 +284,9 @@ export class VideoPlrComponent {
           throw new Error(`bad status code ${res.status}`);
       }
     }).catch((err) => {
-        this.showLoader = false;
-        this.onError(err.toString());
-      });
+      this.showLoader = false;
+      this.onError(err.toString());
+    });
   };
 
   generateSdpFragment(od: any, candidates: RTCIceCandidate[]) {
@@ -304,11 +314,21 @@ export class VideoPlrComponent {
     return frag;
   };
 
+  plainCapture(camera: any) {
+    let finalWidth = 1280;
+    let finalHeight = 720;
+    this.canvas.nativeElement.getContext("2d").drawImage(this.video.nativeElement, 0, 0, finalWidth, finalHeight);
+
+    const screenshotDataUrl = this.canvas.nativeElement.toDataURL('image/png');
+    const link = document.createElement('a');
+    link.href = screenshotDataUrl;
+    link.download = `${camera?.cameraId}-${camera?.name}-${new Date()}.png`
+    link.click();
+  }
 
   ngOnDestroy() {
     this.hitStream = false;
-    // this.peerConnection?.close();
+    this.peerConnection?.close();
     // this.peerConnection = null;
   }
-
 }

@@ -9,11 +9,12 @@ import { loaderInterceptor } from '../utilities/interceptors/loader.interceptor'
 import { TokenInterceptor } from '../utilities/interceptors/token.interceptor';
 
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import { ServerSideRowModelModule } from 'ag-grid-enterprise';
+import { ServerSideRowModelApiModule, ServerSideRowModelModule } from 'ag-grid-enterprise';
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
-  ServerSideRowModelModule
+  ServerSideRowModelModule,
+  ServerSideRowModelApiModule
 ]);
 
 export const appConfig: ApplicationConfig = {

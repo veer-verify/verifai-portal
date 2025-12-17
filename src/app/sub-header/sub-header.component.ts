@@ -15,34 +15,32 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCard } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { CountPipe } from '../../utilities/pipes/count.pipe';
-import { SearchPipe } from '../../utilities/pipes/search.pipe copy';
 import { ConfigService } from '../../utilities/services/config.service';
 import { StorageService } from '../../utilities/services/storage.service';
 
 @Component({
-    selector: 'app-sub-header',
-    imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        SearchPipe,
-        MatSelectModule,
-        MatOptionModule,
-        MatAutocompleteModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        AsyncPipe,
-        MatIconModule,
-        CommonModule,
-        CountPipe,
-        MatPaginatorModule,
-        MatExpansionModule,
-        MatCard,
-        MatMenuModule
-    ],
-    templateUrl: './sub-header.component.html',
-    styleUrl: './sub-header.component.css',
-        standalone: true,
+  selector: 'app-sub-header',
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatAutocompleteModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    AsyncPipe,
+    MatIconModule,
+    CommonModule,
+    CountPipe,
+    MatPaginatorModule,
+    MatExpansionModule,
+    MatCard,
+    MatMenuModule
+  ],
+  templateUrl: './sub-header.component.html',
+  styleUrl: './sub-header.component.css',
+  standalone: true,
 })
 export class SubHeaderComponent {
 

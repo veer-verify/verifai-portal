@@ -1,33 +1,51 @@
 <section class="sub-header">
-    <div class="site-info">
+    @if (camList.length) {
+        <div class="site-info">
         <select class="w-100">
-            <option value="All">All</option>
+            <option value="All">All ({{camList.length}})</option>
         </select>
     </div>
 
-    <div class="d-inline-flex align-items-center gap-3 pointer">
-        @for (item of gridTypes; track $index) {
-        <a class="grid-highlight" (click)="adjustGrid(item.noOfItems)">
-            <img [src]="item.path" width="16px" [ngClass]="selectedGrid == item.noOfItems ? 'grid-highlight-active': ''" alt="">
-        </a>
-        }
+    <!-- pagination -->
+    <div class="d-flex gap-3">
+        <div class="d-inline-flex align-items-center gap-2">
+            @for (item of gridTypes; track $index) {
+            <a [ngClass]="itemsPerPage == item.noOfItems ? 'grid-highlight active': 'grid-highlight'"
+                (click)="adjustGrid(item.noOfItems)">
+                <!-- <img [src]="item.path" width="16px" alt=""> -->
+                {{item?.label}}
+            </a>
+            }
+        </div>
+
+        <div class="d-inline-flex align-items-center gap-2">
+            <button (click)="navigate('prev')" [disabled]="currentPage === 1"> {{'<'}} </button>
+                    <p>{{`${currentPage} of ${totalPages}`}}</p>
+                    <button (click)="navigate('next')" [disabled]="currentPage === totalPages">{{'>'}}</button>
+        </div>
     </div>
 
-    <div>
-        camera info
+
+    <div class="d-inline-flex align-items-center gap-2">
+        <span class="label" [class.analyticsred]="isChecked">camera info</span>
+        <label class="switch">
+            <input type="checkbox" [(ngModel)]="isChecked" />
+            <span class="slider"></span>
+        </label>
     </div>
+    }
 </section>
 
+<!-- camera container -->
 <section class="grid-container" #gridContainer appGlobalClick>
-    @for(cam of newCamerasList; track $index) {
-    <div class="grid-item" (dblclick)="playCurrentCam(cam)">
-        <ng-container>
-            <!-- <app-video-plr [videoData]="cam?.httpUrl + '/'"></app-video-plr> -->
-             <iframe class="iframe" [src]="cam?.httpUrl | sanitize" frameborder="0"></iframe>
-        </ng-container>
+    @for(item of getPaginatedList(); track $index) {
+    <div class="grid-item">
+        @if (change) {
+            <app-stream [videoData]="item"></app-stream>
+        }
+        <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
 
-        @if(cam.videoUrl && selectedGrid === 10) {
-        <ng-container>
+        <!-- @if(cam.videoUrl && selectedGrid === 1) {
             <div class="d-flex align-items-center justify-content-around h-100">
                 <a class="first-arrow" (click)="loadPrevCam()">
                     <img src="icons/arrow-down-short-orange.svg" alt="">
@@ -36,17 +54,16 @@
                 <div>
                     <ng-container>
                         <app-video-plr [videoData]="cam?.httpUrl + '/'"></app-video-plr>
-                        <!-- <iframe class="iframe" [src]="currentCam?.httpUrl | sanitize" frameborder="0"></iframe> -->
+                        <iframe class="iframe" [src]="currentCam?.httpUrl | sanitize" frameborder="0"></iframe>
                     </ng-container>
 
                     <div class="camera-tile-list">
                         @for (item of camerasList; track $index) {
-                        <!-- <iframe class="d-none" (load)="getUrl(item?.httpUrl, item)"></iframe> -->
                         <div class=" d-flex flex-column">
                             <div [ngClass]="currentCam.cameraId == item.cameraId ? 'camera-tile tile-active' : 'camera-tile'"
                                 (click)="playCurrentCam(item)">
                                 <img [src]="item.snapshotUrl" width="100%" height="100%" alt="">
-                                <!-- <img src="icons/camera-grey (2).svg" alt=""> -->
+                                <img src="icons/camera-grey (2).svg" alt="">
                             </div>
                             <p class="tile-name">{{item.name}}</p>
                         </div>
@@ -58,8 +75,12 @@
                     <img src="icons/arrow-down-short-orange.svg" alt="">
                 </a>
             </div>
-        </ng-container>
+        } -->
+
+        @if (isChecked) {
+        <div class="info">{{item?.name}}</div>
         }
+        <!-- <div class="cam-info">{{item?.name}}</div> -->
     </div>
     }
 </section>

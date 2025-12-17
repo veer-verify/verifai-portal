@@ -16,17 +16,12 @@ export class ConfigService {
 
   public showSiteMenu: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
-
   public dataFromSubheader: BehaviorSubject<any> = new BehaviorSubject([]);
   public numberFromSub: BehaviorSubject<any> = new BehaviorSubject(null);
   public current_site_sub: BehaviorSubject<any> = new BehaviorSubject(null);
-
   public site_add_sub: BehaviorSubject<any> = new BehaviorSubject({});
-
   public devices_sub: BehaviorSubject<any> = new BehaviorSubject(null);
   public filter_sub: BehaviorSubject<any> = new BehaviorSubject({});
-
-  // public currentpage_sub: BehaviorSubject<any> = new BehaviorSubject(1);
   public paginated_cam_sub: BehaviorSubject<any> = new BehaviorSubject([]);
 
 
@@ -34,20 +29,13 @@ export class ConfigService {
     const url = `${environment.sitesUrl}/getSitesListForUserName_1_0/`;
     const user = this.storageSrvc.getData('user');
     const params = new HttpParams().set('userName', user?.UserName);
-
-    return this.http.get(url, { params});
+    return this.http.get(url, { params });
   }
 
   public getCamerasForSiteId(payload: any): Observable<any> {
-    
-    const url = `${environment.sitesUrl}/getCamerasForSiteId_1_0/${payload?.siteId}`;
-        const user = this.storageSrvc.getData('user');
-
+    const url = `${environment.sitesUrl}/getCamerasForSiteIdForPortal_1_0/${payload?.siteId}`;
+    const user = this.storageSrvc.getData('user');
     return this.http.get(url);
   }
-
-
-
-
 
 }

@@ -1,1 +1,10 @@
-<p>service-requests works!</p>
+<!-- table -->
+<div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
+  <ag-grid-angular
+    style="height: 100%"
+    [serverSideDatasource]="datasource"
+    [gridOptions]="gridOptions"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClicked($event)"
+  ></ag-grid-angular>
+</div>

@@ -1,19 +1,19 @@
 .header-container {
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    border-bottom: 1px solid #eeeeee;
-    opacity: 1;
-    height: 60px;
-    /* width: 100%; */
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 10px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border-bottom: 1px solid #eeeeee;
+  opacity: 1;
+  height: 60px;
+  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
 .nav-items {
-    display: flex;
-    align-items: center;
-    gap: 30px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
 .custom_support {
@@ -46,9 +46,9 @@
 }
 
 @media screen and (max-width: 768px) {
-    .nav-items {
-        display: none;
-    }
+  .nav-items {
+    display: none;
+  }
 }
 
 /* .nav-items a {
@@ -60,115 +60,125 @@
     opacity: 1;
 } */
 
-
 .list-group-item {
-    /* background-color: #FD6327; */
-    border-radius: 5px;
-    /* padding: 5px; */
-    border-style: none;
-    /* color: #fff; */
-    text-transform: uppercase;
-    font-weight: 400;
-    font-size: 12px;
+  /* background-color: #FD6327; */
+  border-radius: 5px;
+  /* padding: 5px; */
+  border-style: none;
+  /* color: #fff; */
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 12px;
 }
 
-
 .active {
-    /* background-color: #fff; */
-    border-radius: 5px;
-    color: #FD6327;
+  /* background-color: #fff; */
+  border-radius: 5px;
+  color: #fd6327;
 }
 
 .list-group-item:hover {
-    /* background-color: #fff; */
-    border-radius: 5px;
-    color: #FD6327;
+  /* background-color: #fff; */
+  border-radius: 5px;
+  color: #fd6327;
 }
 
 .logout-image {
-    border-left: 1px solid #7d7977;
-    border-right: 1px solid #7e7b7a;
+  border-left: 1px solid #7d7977;
+  border-right: 1px solid #7e7b7a;
 }
 
 .profile-image {
-    font: normal normal normal 9px/11px Montserrat;
-    letter-spacing: 0px;
-    color: #FD6327;
-    text-transform: uppercase;
-    opacity: 1;
+  font: normal normal normal 9px/11px Montserrat;
+  letter-spacing: 0px;
+  color: #fd6327;
+  text-transform: uppercase;
+  opacity: 1;
+  font-size: 12px;
 }
 
 .profile-key {
-    font: normal normal normal 9px/11px Montserrat;
-    letter-spacing: 0px;
-    color: #989FB4;
-    text-transform: uppercase;
-    opacity: 1;
+  font: normal normal normal 9px/11px Montserrat;
+  letter-spacing: 0px;
+  color: #989fb4;
+  text-transform: uppercase;
+  opacity: 1;
+  font-size: 12px;
 }
 
 .profile-terms {
-    text-align: left;
-    font: normal normal normal 9px/11px Montserrat;
-    letter-spacing: 0px;
-    text-decoration: none;
-    color: #989FB4;
-    text-transform: uppercase;
-    opacity: 1;
+  text-align: left;
+  font: normal normal normal 9px/11px Montserrat;
+  letter-spacing: 0px;
+  text-decoration: none;
+  color: #989fb4;
+  text-transform: uppercase;
+  opacity: 1;
+  font-size: 12px;
 }
 
 .profile-logout {
-    font: normal normal medium 9px/11px Montserrat;
-    letter-spacing: 0px;
-    color: #989FB4;
-    text-transform: uppercase;
-    opacity: 1;
-    text-decoration: none;
+  font: normal normal medium 9px/11px Montserrat;
+  letter-spacing: 0px;
+  color: #989fb4;
+  text-transform: uppercase;
+  opacity: 1;
+  text-decoration: none;
+  font-size: 12px;
 }
 
 /* new */
 
 .site-accordian {
-    cursor: pointer;
-    user-select: none;
-    background-color: #ed3237;
-    padding: 4px;
-    border-radius: 5px;
-    color: #ffffff;
-    width: 300px;
+  cursor: pointer;
+  user-select: none;
+  background-color: #ed3237;
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 5px;
+  color: #ffffff;
+  width: 300px;
+  display: inline-flex;
+  align-items: center;
 }
 
 .site-accordian a {
-    display: block;
-    width: 100%;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  display: block;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .site-dropdown {
-    position: absolute;
-    top: 50px;
-    height: 50vh;
-    overflow-y: auto;
-    width: 300px;
-    background-color: #ffffff;
-    z-index: 99;
+  position: absolute;
+  top: 50px;
+  max-height: 50vh;
+  overflow-y: auto;
+  width: 300px;
+  background-color: #ffffff;
+  z-index: 99;
 }
 
 .site-dropdown p {
-    background-color: #ff3a3a;
-    margin: 2px 0 !important;
-    padding: 4px;
-    font-size: 14px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+  background-color: #ff3a3a;
+  margin: 2px 0 !important;
+  padding: 4px;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 
-    &:hover {
-        opacity: 0.8;
-    }
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+input[type="search"] {
+  outline-offset: none !important;
+  outline: none !important;
 }
 
 ::ng-deep.mat-mdc-menu-panel {
-    background-color: #FFFFFF !important;
+  background-color: #ffffff !important;
 }

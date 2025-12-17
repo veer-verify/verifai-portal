@@ -1,22 +1,28 @@
 <div class="header-container" appGlobalClick>
-  <div>
-    <img src="/themes/verifai/logo-black.png" alt="" width="100px" />
-  </div>
+    <div class="d-flex gap-5">
+        <div>
+            <img src="/themes/verifai/logo-black.png" alt="" width="100px">
+        </div>
 
-  <div class="site-accordian">
-    <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
+        <div class="site-accordian">
+            <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
             @for (item of sitesList; track $index) {
             <option [value]="item.siteId">
                 <p>{{item.siteName}}</p>
             </option>
             }
         </select> -->
-    <a (click)="showSite = !showSite">{{ currentSite?.siteName }}</a>
-    @if (showSite) {
-    <div class="site-dropdown">
-      @for (item of sitesList; track $index) {
-      <p (click)="set(item)">{{ item.siteName }}</p>
-      }
+            <a (click)="toggleSites()">{{currentSite?.siteName}}</a>
+            @if (showSite) {
+            <div class="site-dropdown">
+                <input type="search" [(ngModel)]="searchSite" #siteInput>
+                @for (item of sitesList | search: searchSite; track $index) {
+                <p (click)="set(item)">{{item.siteName}}</p>
+                }
+            </div>
+            }
+            <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
+        </div>
     </div>
     }
   </div>

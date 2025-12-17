@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
         this.config_service.getSitesListForUserName()
         .subscribe({
             next: (res) => {
-                this.storage_service.saveSites(res);
+                this.storage_service.siteData$.next(res);
             }
         })
     }

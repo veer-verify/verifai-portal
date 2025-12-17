@@ -1,46 +1,67 @@
 <main>
-  <div>
-    <div class="toolbar">
-      <div class="left">
-        <select class="tag-select" [(ngModel)]="cameraId" (change)="onFilterChange()">
-          <option value="">ALL({{this.camerasList?.length}})</option>
-          @for (item of camerasList; track $index) {
-          <option [value]="item?.cameraId">{{item.name}}</option>
-          }
-        </select>
-        <select class="tag-select">
-          <option>All Action Tags</option>
-          @for (item of actionTags; track $index) {
-          <option>{{item.value}}</option>
-          }
-        </select>
-      </div>
+  <!-- filters -->
+  <div class="toolbar">
+    <div class="left">
+      <select
+        class="tag-select"
+        [(ngModel)]="filterObj.cameraId"
+        (change)="onFilterChange()"
+      >
+        <option value="">ALL ({{ this.camerasList?.length || 0 }})</option>
+        @for (item of camerasList; track $index) {
+        <option [value]="item?.cameraId">{{ item.name }}</option>
+        } @empty {
+        <option disabled>No cameras available</option>
+        }
+      </select>
+      <select
+        class="tag-select"
+        [(ngModel)]="filterObj.actionTag"
+        (change)="onFilterChange()"
+      >
+        <option value="">All</option>
+        @for (item of actionTags; track $index) {
+        <option>{{ item.value }}</option>
+        }
+      </select>
 
-      <div class="center">
+      <div class="date-time">
         <span class="label">START</span>
-        <div class="date-time">
-
-        </div>
-
+        <input
+          type="date"
+          [(ngModel)]="filterObj.fromDate"
+          (change)="onFilterChange()"
+        />
+      </div>
+      <div class="date-time">
         <span class="label">END</span>
-        <div class="date-time">
-
-
-        </div>
+        <input
+          type="date"
+          [(ngModel)]="filterObj.toDate"
+          (change)="onFilterChange()"
+        />
       </div>
+    </div>
 
-      <div class="right">
-        <span class="label" [class.analyticsred]="isChecked">ANALYTICS</span>
-        <label class="switch">
-          <input type="checkbox" [(ngModel)]="isChecked" />
-          <span class="slider"></span>
-        </label>
-      </div>
+    <div class="right">
+      <span class="label" [class.analyticsred]="isChecked">ANALYTICS</span>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="isChecked" />
+        <span class="slider"> </span>
+      </label>
     </div>
   </div>
 
-
-  <app-table [fields]="fields" [datasource]="gridDatasource" (gridReady)="onGridReady($event)"></app-table>
-
-
+  <!-- table -->
+  <div
+    style="height: calc(100vh - 120px); display: flex; flex-direction: column"
+  >
+    <ag-grid-angular
+      style="height: 100%"
+      [serverSideDatasource]="datasource"
+      [gridOptions]="gridOptions"
+      (gridReady)="onGridReady($event)"
+      (cellClicked)="onCellClicked($event)"
+    ></ag-grid-angular>
+  </div>
 </main>

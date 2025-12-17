@@ -1,16 +1,27 @@
-
-
-
 @font-face {
-  font-family: 'Neometric Regular';
-  src: url('../public/fonts/neometric-2/Neometric-Regular.otf');
+  font-family: "Neometric Regular";
+  src: url("../public/fonts/neometric-2/Neometric-Regular.otf");
 }
 
 html,
 body {
   height: 100%;
   margin: 0;
-font-family: 'Neometric Regular', sans-serif !important;
+  font-family: "Neometric Regular", sans-serif !important;
+}
+
+input {
+  width: 100%;
+}
+
+a {
+  cursor: pointer;
+  text-emphasis: none;
+}
+
+button {
+  border: none;
+  background: transparent;
 }
 
 ::-webkit-scrollbar {
@@ -30,8 +41,6 @@ font-family: 'Neometric Regular', sans-serif !important;
 ::-webkit-scrollbar-thumb:hover {
   background: #084982ef;
 }
-
-
 
 p {
   margin: 0 !important;
@@ -67,7 +76,6 @@ p {
   cursor: pointer !important;
 }
 
-
 .table-container {
   max-height: 70vh;
   overflow-y: auto;
@@ -80,7 +88,6 @@ p {
   font-size: 12px;
   font-weight: 100;
   background-color: #084982;
-
 
   color: #fff;
   text-transform: uppercase;
@@ -118,9 +125,8 @@ p {
   overflow-y: auto;
 }
 
-
 .dialog-header {
-  background-color: #FD6327;
+  background-color: #fd6327;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -133,76 +139,46 @@ p {
   text-transform: uppercase;
 }
 
-
-/** Toggle Switch **/
-.on-off-toggle {
-  width: 55px;
-  height: 24px;
+/* toggle switch */
+.switch {
   position: relative;
-  /* display: inline-block; */
+  display: inline-block;
+  width: 34px;
+  height: 18px;
 }
 
-.on-off-toggle__slider {
-  width: 55px;
-  height: 23px;
-  display: block;
-  border-radius: 34px;
-  /* background-color: #fff; */
-  border: 1px solid #00573c;
-  transition: background-color 0.4s;
-  cursor: pointer;
-}
-
-.on-off-toggle__slider:before {
-  content: '';
-  display: block;
-  background-color: #D34124;
-  /* box-shadow: 0 0 0 1px #949494; */
-  bottom: 5px;
-  height: 15px;
-  left: 3px;
-  position: absolute;
-  transition: .4s;
-  width: 16px;
-  z-index: 5;
-  border-radius: 100%;
-}
-
-.on-off-toggle__slider:after {
-  display: block;
-  line-height: 24px;
-  text-transform: lowercase;
-  font-size: 12px;
-  font-weight: bold;
-  content: 'No';
-  color: #D34124;
-  padding-left: 26px;
-  transition: all 0.4s;
-}
-
-
-.on-off-toggle__input {
-  position: absolute;
+.switch input {
   opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-.on-off-toggle__input:checked+.on-off-toggle__slider {
-  background-color: #fff;
-  border: 1px solid #00573c;
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  background-color: #cccccc;
+  border-radius: 16px;
+  transition: background-color 0.2s ease;
 }
 
-.on-off-toggle__input+.on-off-toggle__slider {
-  background-color: #F8F8F8;
-  border: 1px solid #D34124;
+.slider::before {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  left: 2px;
+  top: 2px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease;
 }
 
-.on-off-toggle__input:checked+ :before {
-  transform: translateX(35px);
-  background-color: #00573c;
+.switch input:checked + .slider {
+  background-color: #ff3b30;
 }
 
-.on-off-toggle__input:checked+ :after {
-  content: 'Yes';
-  color: #00573c;
-  padding-left: 8px;
+.switch input:checked + .slider::before {
+  transform: translateX(16px);
 }

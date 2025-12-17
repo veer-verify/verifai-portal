@@ -5,7 +5,6 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { gridOptions } from './tableconfig';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -14,6 +13,7 @@ import {
   GridReadyEvent,
   IServerSideDatasource,
 } from 'ag-grid-community';
+import { gridOptions } from '../../../grid.config';
 
 @Component({
   selector: 'app-table',
@@ -28,32 +28,26 @@ export class TableComponent {
   @Output() gridReady = new EventEmitter<GridApi>();
 
   private gridApi!: GridApi;
-  gridOptions = gridOptions;
+  gridOptions: any;
   mapFieldsToColumnDefs() {
+    this.gridOptions = gridOptions;
     this.gridOptions.columnDefs = this.fields.map((f: any) => ({
-      headerName: f.label,
       field: f.id,
       sortable: !!f.sort,
     }));
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(this.datasource)
     this.mapFieldsToColumnDefs();
 
     if (this.gridApi && this.datasource) {
-
       this.gridApi.setGridOption('serverSideDatasource', this.datasource);
     }
   }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-
     this.gridReady.emit(this.gridApi);
-
-
-
 
     if (this.datasource) {
       this.gridApi.setGridOption('serverSideDatasource', this.datasource);

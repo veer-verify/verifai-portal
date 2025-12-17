@@ -8,53 +8,49 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { GridApi, IServerSideDatasource } from 'ag-grid-community';
-import { handleResponse } from '../../../utilities/components/table/tableconfig';
+import { CellClickedEvent, GridApi, GridReadyEvent, IServerSideDatasource } from 'ag-grid-community';
+import { AgGridAngular } from 'ag-grid-angular';
+import { gridOptions, handleResponse } from '../../../grid.config';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
 
 @Component({
   selector: 'app-alerts',
   standalone: true,
   imports: [
-    TableComponent,
     CommonModule,
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
+    AgGridAngular,
+    MatDialogModule
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
 })
 export class AlertsComponent {
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private storage_service: StorageService,
+    private config_service: ConfigService,
+    private incident_service: IncidentService,
+    private dialog: MatDialog
+  ) { }
+
   currentSite: any;
   incidentdata: any = [];
   isChecked: boolean = false;
-  gridDatasource!: IServerSideDatasource;
   camerasList: any = [];
   actionTags: any = [];
-  cameraId: any = '';
-  fields = [
-    { label: 'Camera', id: 'name', sort: true },
-    { label: 'Date', id: 'eventDate', sort: true },
-    { label: 'Start Time', id: 'eventFromTime', sort: false },
-    { label: 'End Time', id: 'eventToTime', sort: false },
-    { label: 'Duration', id: 'duration', sort: false },
-    { label: 'Object Identified', id: 'objectName', sort: false },
-    { label: 'Action Tag', id: 'actionTag', sort: false },
-    { label: 'Type', id: 'actionTag', sort: false },
-  ];
 
-  private destroy$ = new Subject<void>();
   gridApi!: GridApi;
-
-  constructor(
-    private storage: StorageService,
-    private config: ConfigService,
-    private incident: IncidentService
-  ) {}
-
+  datasource!: IServerSideDatasource;
+  gridOptions: any;
   ngOnInit() {
     this.getTypes();
-    this.storage.currentSite$
+    this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
         takeUntil(this.destroy$)
@@ -62,48 +58,95 @@ export class AlertsComponent {
       .subscribe((site) => {
         this.currentSite = site;
         this.getcamerasForSiteId();
-        this.gridDatasource = this.createDatasource();
-        this.gridApi.refreshServerSide({ purge: true });
+        this.datasource = this.createDatasource();
+        // this.gridApi.refreshServerSide({ purge: true });
       });
+
+    this.gridOptions = gridOptions;
+    this.gridOptions.columnDefs = [
+      { field: 'name', sort: true },
+      { field: 'eventDate', sort: true },
+      { field: 'eventFromTime', sort: false },
+      { field: 'eventToTime', sort: false },
+      { field: 'duration', sort: false },
+      { field: 'objectName', sort: false },
+      { field: 'actionTag', sort: false },
+      // {
+      //   field: 'clip',
+      //   sort: false,
+      //   cellRenderer: () => {
+      //     return '<img src="icons/play-circle-fill.svg" />';
+      //   },
+      //   minWidth: 50,
+      //   maxWidth: 80
+      // },
+      {
+        field: 'clip',
+        cellRenderer: () => '<img src="icons/play-circle-fill.svg" class="btn-open" />',
+        editable: false,
+        sort: false,
+        disabled: true
+      },
+      // {
+      //   field: 'action',
+      //   cellRenderer: () => '<button class="btn-open">Open</button>',
+      // }
+    ]
   }
 
-  onGridReady(api: GridApi) {
-    this.gridApi = api;
+  onCellClicked(event: CellClickedEvent) {
+    if (event.event?.target instanceof HTMLElement && event.event?.target.classList.contains('btn-open')) {
+      this.dialog.open(MediaDialogComponent, { data: event.data });
+    }
   }
 
   getcamerasForSiteId() {
-    this.config.getCamerasForSiteId(this.currentSite).subscribe((res: any) => {
+    this.config_service.getCamerasForSiteId(this.currentSite).subscribe((res: any) => {
       this.camerasList = res;
     });
   }
 
   getTypes() {
-    let res = this.storage.getType(36);
+    let res = this.storage_service.getType(36);
     this.actionTags = res[0]?.metadata;
   }
 
-  /** Create AG Grid datasource */
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+
+    if (this.datasource) {
+      this.gridApi.setGridOption('serverSideDatasource', this.datasource);
+    }
+  }
+
+  filterObj = {
+    cameraId: '',
+    actionTag: '',
+    fromDate: '',
+    toDate: ''
+  }
   createDatasource() {
     return {
       getRows: (params: any) => {
         const pageSize = params.request.endRow - params.request.startRow;
         const pageNumber = params.request.startRow / pageSize + 1;
 
-        this.incident
+        this.incident_service
           .incidentList({
             ...this.currentSite,
+            ...this.filterObj,
             page: pageNumber,
-            pageSize: pageSize,
-            cameraId: this.cameraId,
+            pageSize: pageSize
           })
           .subscribe((res: any) => {
             if (res.statusCode == 200) {
-               handleResponse(params, res, pageSize,res?.IncidentList);
+              handleResponse(params, res, pageSize, res?.IncidentList);
             }
           });
       },
     };
   }
+
   onFilterChange() {
     if (!this.gridApi) return;
     const ds = this.createDatasource();
