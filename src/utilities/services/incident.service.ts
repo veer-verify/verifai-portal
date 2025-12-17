@@ -11,10 +11,9 @@ export class IncidentService {
   constructor(
     private http: HttpClient,
     private storageService: StorageService
-  ) {}
+  ) { }
 
   incidentList(payload?: any): Observable<any> {
-
     let url = `${environment.incidentsUrl}/incidentList_1_0`;
     let params = new HttpParams();
 
@@ -35,12 +34,10 @@ export class IncidentService {
       params = params.set('actionTag', payload?.actionTag);
     }
     if (payload?.fromDate) {
-      let x = payload?.fromDate;
-      params = params.set('fromDate', `${x.year}-${x.month}-${x.day}`);
+      params = params.set('fromDate', payload?.fromDate);
     }
     if (payload?.toDate) {
-      let x = payload?.toDate;
-      params = params.set('toDate', `${x.year}-${x.month}-${x.day}`);
+      params = params.set('toDate', payload?.toDate);
     }
 
     if (payload?.pageSize) {

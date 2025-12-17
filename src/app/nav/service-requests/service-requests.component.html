@@ -1,13 +1,10 @@
-<!-- <div class="content" style="width: 100%; height: 100%">
+<!-- table -->
+<div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
   <ag-grid-angular
-    style="width: 100%; height: 100%"
-    [columnDefs]="colDefs"
-    [defaultColDef]="defaultColDef"
-    [pagination]="true"
-    [rowData]="rowData"
+    style="height: 100%"
+    [serverSideDatasource]="datasource"
+    [gridOptions]="gridOptions"
     (gridReady)="onGridReady($event)"
-  />
-</div> -->
-
-  <app-table [fields]="fields" [datasource]="gridDatasource" (gridReady)="onGridReady($event)"></app-table>
-
+    (cellClicked)="onCellClicked($event)"
+  ></ag-grid-angular>
+</div>

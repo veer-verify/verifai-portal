@@ -1,0 +1,6 @@
+@for (item of data?.files; track $index) { @if (isVideo(item)) {
+
+<video [src]="item | media | async" autoplay controls></video>
+} @else {
+<img [src]="item | media | async" onerror="this.src='icons/eyedisabled.svg'" />
+} }

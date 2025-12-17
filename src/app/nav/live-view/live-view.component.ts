@@ -19,8 +19,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SanitizePipe } from '../../../utilities/pipes/sanitize.pipe';
-import { DummyPlrComponent } from '../../../utilities/components/dummy-plr/dummy-plr.component';
-import { VideoPlrComponent } from '../../../utilities/components/video-plr/video-plr.component';
 import { GlobalClickDirective } from '../../../utilities/directives/global-click.directive';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
@@ -35,12 +33,10 @@ import { StreamComponent } from "../../../utilities/components/stream/stream.com
     SanitizePipe,
     FormsModule,
     ReactiveFormsModule,
-    VideoPlrComponent,
     CommonModule,
-    DummyPlrComponent,
     GlobalClickDirective,
     StreamComponent
-],
+  ],
   templateUrl: './live-view.component.html',
   styleUrl: './live-view.component.css',
 })
@@ -71,7 +67,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       noOfItems: 16,
       path: 'icons/dot4.svg',
     },
-        {
+    {
       label: '4X5',
       noOfItems: 20,
       path: 'icons/dot4.svg',
@@ -82,10 +78,10 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     public configSrvc: ConfigService,
     private storage_service: StorageService,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
-  
+
   isChecked: boolean = false;
   searchText: any;
   sitesList = [];
@@ -99,19 +95,19 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
+
   }
 
   camList = [];
   tempCamList = [];
   ngAfterViewInit(): void {
     this.storage_service.currentSite$
-    .pipe(filter((site) => !!site), takeUntil(this.destroy$))
-    .subscribe((res) => {
-      this.getCamerasForSiteId(res);
-    });
+      .pipe(filter((site) => !!site), takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.getCamerasForSiteId(res);
+      });
   }
-  
+
   getCamerasForSiteId(data: any) {
     this.tempCamList = [];
     this.configSrvc.getCamerasForSiteId(data).subscribe({
@@ -122,7 +118,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
       },
     });
   }
-  
+
   currentPage: number = 1;
   itemsPerPage: number = 4;
   totalPages: number = 0;

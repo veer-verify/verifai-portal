@@ -1,16 +1,13 @@
-
-
-
 @font-face {
-  font-family: 'Neometric Regular';
-  src: url('../public/fonts/neometric-2/Neometric-Regular.otf');
+  font-family: "Neometric Regular";
+  src: url("../public/fonts/neometric-2/Neometric-Regular.otf");
 }
 
 html,
 body {
   height: 100%;
   margin: 0;
-font-family: 'Neometric Regular', sans-serif !important;
+  font-family: "Neometric Regular", sans-serif !important;
 }
 
 input {
@@ -44,8 +41,6 @@ button {
 ::-webkit-scrollbar-thumb:hover {
   background: #084982ef;
 }
-
-
 
 p {
   margin: 0 !important;
@@ -81,7 +76,6 @@ p {
   cursor: pointer !important;
 }
 
-
 .table-container {
   max-height: 70vh;
   overflow-y: auto;
@@ -94,7 +88,6 @@ p {
   font-size: 12px;
   font-weight: 100;
   background-color: #084982;
-
 
   color: #fff;
   text-transform: uppercase;
@@ -132,9 +125,8 @@ p {
   overflow-y: auto;
 }
 
-
 .dialog-header {
-  background-color: #FD6327;
+  background-color: #fd6327;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -147,14 +139,12 @@ p {
   text-transform: uppercase;
 }
 
-
 /* toggle switch */
 .switch {
   position: relative;
   display: inline-block;
   width: 34px;
   height: 18px;
-
 }
 
 .switch input {
@@ -173,7 +163,7 @@ p {
 }
 
 .slider::before {
-  content: '';
+  content: "";
   position: absolute;
   width: 14px;
   height: 14px;

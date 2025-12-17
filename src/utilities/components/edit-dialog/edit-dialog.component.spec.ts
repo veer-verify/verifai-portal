@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DummyPlrComponent } from './dummy-plr.component';
+import { EditDialogComponent } from './edit-dialog.component';
 
-describe('DummyPlrComponent', () => {
-  let component: DummyPlrComponent;
-  let fixture: ComponentFixture<DummyPlrComponent>;
+describe('EditDialogComponent', () => {
+  let component: EditDialogComponent;
+  let fixture: ComponentFixture<EditDialogComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DummyPlrComponent]
+      imports: [EditDialogComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DummyPlrComponent);
+    fixture = TestBed.createComponent(EditDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
