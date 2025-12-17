@@ -1,0 +1,69 @@
+<div class="sub-header">
+  <div class="dropdown" [ngClass]="drop ? 'open' : ''">
+    <button class="dropdown-btn" (click)="toggleDrop()">
+      <span class="left">
+        <!-- camera icon (you can replace with your own SVG) -->
+        <img src="/icons/cctv.png" alt="" style="width: 28px" />
+        <span class="label">ALL (3)</span>
+      </span>
+
+      <!-- arrow icon -->
+      <svg
+        class="arrow"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="black"
+      >
+        <path d="M7 10l5 5 5-5z" />
+      </svg>
+    </button>
+
+    <!-- Optional dropdown content -->
+    <div class="dropdown-content">
+      <a href="#">Option 1</a>
+      <a href="#">Option 2</a>
+      <a href="#">Option 3</a>
+    </div>
+  </div>
+
+  <div class="calendar">
+    <div class="start">
+      <div class="label-box">START</div>
+
+      <input
+        #startDate
+        [matDatepicker]="picker1"
+        matInput
+        placeholder="MM-DD-YYYY"
+      />
+
+      <img
+        src="icons/calendar.svg"
+        alt="calendar"
+        class="calendar-icon"
+        (click)="openPicker(startDate)"
+      />
+      <mat-datepicker #picker1></mat-datepicker>
+    </div>
+
+    <div class="end">
+      <div class="label-box">END</div>
+
+      <input
+        #endDate
+        [matDatepicker]="picker2"
+        matInput
+        placeholder="MM-DD-YYYY"
+      />
+
+      <img
+        src="icons/calendar.svg"
+        alt="calendar"
+        class="calendar-icon"
+        (click)="openPicker(endDate)"
+      />
+      <mat-datepicker #picker2></mat-datepicker>
+    </div>
+  </div>
+</div>

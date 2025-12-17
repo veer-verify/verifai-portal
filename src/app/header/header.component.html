@@ -1,68 +1,122 @@
 <div class="header-container" appGlobalClick>
-    <div>
-        <img src="/themes/verifai/logo-black.png" alt="" width="100px">
-    </div>
-    
-    <div class="site-accordian" >
-        <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
+  <div>
+    <img src="/themes/verifai/logo-black.png" alt="" width="100px" />
+  </div>
+
+  <div class="site-accordian">
+    <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
             @for (item of sitesList; track $index) {
             <option [value]="item.siteId">
                 <p>{{item.siteName}}</p>
             </option>
             }
         </select> -->
-        <a (click)="showSite = !showSite">{{currentSite?.siteName}}</a>
-        @if (showSite) {
-        <div class="site-dropdown">
-            @for (item of sitesList; track $index) {
-            <p (click)="set(item)">{{item.siteName}}</p>
-            }
-        </div>
-        }
+    <a (click)="showSite = !showSite">{{ currentSite?.siteName }}</a>
+    @if (showSite) {
+    <div class="site-dropdown">
+      @for (item of sitesList; track $index) {
+      <p (click)="set(item)">{{ item.siteName }}</p>
+      }
     </div>
+    }
+  </div>
 
-    <div class="nav-items">
-        <a class="list-group-item " routerLink="/dashboard/live-view" routerLinkActive="active">live view</a>
-        <a class="list-group-item" routerLink="/dashboard/alerts" routerLinkActive="active">Alerts</a>
-        <a class="list-group-item" routerLink="/dashboard/service-requests" routerLinkActive="active">support</a>
-        <a class="list-group-item d-inline-flex align-items-center" [matMenuTriggerFor]="menu">
-            <span class="material-symbols-outlined">account_circle</span>
-            <!-- <span>
+  <div class="nav-items">
+    <a
+      class="list-group-item"
+      routerLink="/dashboard/live-view"
+      routerLinkActive="active"
+      >live view</a
+    >
+    <a
+      class="list-group-item"
+      routerLink="/dashboard/alerts"
+      routerLinkActive="active"
+      >Alerts</a
+    >
+    <a
+      class="list-group-item"
+      routerLink="/dashboard/timelapse"
+      routerLinkActive="active"
+      >Time Lapse</a
+    >
+    <!-- <a
+      class="list-group-item"
+      routerLink="/dashboard/service-requests"
+      routerLinkActive="active"
+      >support</a
+    > -->
+    <a
+      class="list-group-item d-inline-flex align-items-center"
+      [matMenuTriggerFor]="menu1"
+    >
+      <span class="material-symbols-outlined custom_support" [ngClass]="{ 'active-icon': activeSupportMenu }"> call </span>
+      <!-- <span>
                 <p>user name</p>
                 <p>admin</p>
             </span> -->
-        </a>
-        <!-- <a class="pointer" [matMenuTriggerFor]="menu"><img src="icons/logout-person-image.svg" alt="" width="12px"></a> -->
+    </a>
+    <!-- <a class="pointer" [matMenuTriggerFor]="menu"><img src="icons/logout-person-image.svg" alt="" width="12px"></a> -->
 
+    <!-- FIRST MENU TRIGGER -->
+    <!-- <button mat-button [matMenuTriggerFor]="menu1">Menu 1</button> -->
 
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-                <a>
-                    <img src="icons/profile.svg" alt="" width="8px" class="me-2">
-                    <span class="profile-image">PROFILE</span>
-                </a>
-            </button>
-            <button mat-menu-item>
-                <a>
-                    <img src="icons/key.svg" alt="" width="6px" class="me-2">
-                    <span class="profile-key">CHANGE PASSWORD</span>
-                </a>
-            </button>
-            <button mat-menu-item>
-                <a class="profile-terms">
-                    <img src="icons/info-circle-fill.svg" alt="" width="8px" class="me-2">
-                    <span>TERMS & CONDITIONS</span>
-                </a>
-            </button>
-            <button mat-menu-item (click)="logout()">
-                <a class="profile-logout">
-                    <img src="icons/logout.svg" alt="" width="10px" class="me-2">
-                    <span>LOGOUT</span>
-                </a>
-            </button>
+    <mat-menu #menu1="matMenu">
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('requests')" routerLink="/dashboard/service-requests" [ngClass]="{'active-menu-tab': activeMenuTab.requests}">
+        <!-- <img src="icons/profile.svg" width="8px" class="me-2" /> -->
+        <span>REQUESTS</span>
+      </button>
 
-        </mat-menu>
-    </div>
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('faqs')" [ngClass]="{'active-menu-tab': activeMenuTab.faqs}">
+        <!-- <img src="icons/key.svg" width="6px" class="me-2" /> -->
+        <span>FAQs</span>
+      </button>
 
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('terms')" [ngClass]="{'active-menu-tab': activeMenuTab.terms}">
+        <!-- <img src="icons/info-circle-fill.svg" width="8px" class="me-2" /> -->
+        <span>TERMS & CONDITIONS</span>
+      </button>
 
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('contact')" [ngClass]="{'active-menu-tab': activeMenuTab.contact}">
+        <!-- <img src="icons/logout.svg" width="10px" class="me-2" /> -->
+        <span>CONTACT</span>
+      </button>
+    </mat-menu>
+
+    <!-- SECOND MENU TRIGGER BESIDE IT -->
+    <!-- <button mat-button [matMenuTriggerFor]="menu2" class="ms-3">Menu 2</button> -->
+
+    <a
+      class="list-group-item d-inline-flex align-items-center"
+      [matMenuTriggerFor]="menu2"
+    >
+      <span class="material-symbols-outlined">account_circle</span>
+      <!-- <span>
+                <p>user name</p>
+                <p>admin</p>
+            </span> -->
+    </a>
+
+    <mat-menu #menu2="matMenu">
+      <button mat-menu-item>
+        <img src="icons/profile.svg" width="8px" class="me-2" />
+        <span>PROFILE</span>
+      </button>
+
+      <button mat-menu-item>
+        <img src="icons/key.svg" width="6px" class="me-2" />
+        <span>CHANGE PASSWORD</span>
+      </button>
+
+      <button mat-menu-item>
+        <img src="icons/info-circle-fill.svg" width="8px" class="me-2" />
+        <span>TERMS & CONDITIONS</span>
+      </button>
+
+      <button mat-menu-item (click)="logout()">
+        <img src="icons/logout.svg" width="10px" class="me-2" />
+        <span>LOGOUT</span>
+      </button>
+    </mat-menu>
+  </div>
 </div>

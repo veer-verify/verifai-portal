@@ -6,6 +6,8 @@ import { LiveViewComponent } from './nav/live-view/live-view.component';
 import { ServiceRequestsComponent } from './nav/service-requests/service-requests.component';
 import { AlertsComponent } from './nav/alerts/alerts.component';
 import { authGuard } from './auth/auth.guard';
+import { TimelapseComponent } from './nav/timelapse/timelapse.component';
+// import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +34,10 @@ export const routes: Routes = [
             {
                 path: 'service-requests',
                 component: ServiceRequestsComponent
+            },
+            {
+                path: 'timelapse',
+                component: TimelapseComponent
             },
             {
                 path: '',

@@ -16,6 +16,35 @@
     gap: 30px;
 }
 
+.custom_support {
+    font-size: 15px;
+    border: 2px solid black;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.custom_support:hover {
+    border: 2px solid #FD6327;
+}
+
+.active-icon {
+    background-color: #FD6327;
+    color: white;
+    border: 2px solid #FD6327;
+}
+
+.active-menu-tab {
+    background-color: #FD6327;
+    color: white;
+    border: 2px solid #FD6327;
+}
+
+.active-menu-tab:hover {
+    background-color: #FD6327;
+    color: white;
+    border: 2px solid #FD6327;
+}
+
 @media screen and (max-width: 768px) {
     .nav-items {
         display: none;
