@@ -5,27 +5,46 @@
 
   <div class="right-panel">
     <div class="login-box">
-      <img src="/themes/verifai/logo-black.png" alt="VERIFAI LIVE" class="logo" />
+      <img
+        src="/themes/verifai/logo-black.png"
+        alt="VERIFAI LIVE"
+        class="logo"
+      />
       <p>Welcome to sign in</p>
 
       <form [formGroup]="loginForm">
         <div class="form-group">
           <label>Username</label>
           <input type="text" placeholder="Enter" formControlName="userName" />
-          @if (loginForm.get('userName')?.invalid && loginForm.dirty) {<span class="required">*required</span>}
+          @if (loginForm.get('userName')?.invalid && loginForm.dirty) {<span
+            class="required"
+            >*required</span
+          >}
         </div>
 
         <div class="form-group">
           <label>Password</label>
-          <input [type]="showPassword ? 'text' : 'password'" placeholder="Enter" formControlName="password" />
-          @if (loginForm.get('password')?.invalid && loginForm.dirty) {<span class="required">*required</span>}
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Enter"
+            formControlName="password"
+          />
+          @if (loginForm.get('password')?.invalid && loginForm.dirty) {<span
+            class="required"
+            >*required</span
+          >}
         </div>
 
         <div class="options">
-          <label><input type="checkbox" (change)="showPassword=!showPassword" /> Show Password</label>
+          <label
+            ><input type="checkbox" (change)="showPassword = !showPassword" />
+            Show Password</label
+          >
         </div>
 
-        <button type="submit" class="login-btn" (click)="login()">LOG IN</button>
+        <button type="submit" class="login-btn" (click)="login()">
+          LOG IN
+        </button>
       </form>
     </div>
   </div>

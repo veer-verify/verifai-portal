@@ -7,15 +7,16 @@
 /* Left side (image + overlay) */
 .left-panel {
   flex: 2;
-  background: url('../../../../public/themes/verifai/background.png') no-repeat center center;
+  background: url("../../../../public/themes/verifai/background.png") no-repeat
+    center center;
   background-size: cover;
   position: relative;
 }
 
 @media (max-width: 768px) {
-    .left-panel {
-        display: none;
-    }
+  .left-panel {
+    display: none;
+  }
 }
 
 .left-panel .overlay {

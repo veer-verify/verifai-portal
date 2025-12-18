@@ -1,11 +1,12 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { GlobalClickDirective } from '../../utilities/directives/global-click.directive';
 import { StorageService } from '../../utilities/services/storage.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
+import { AsyncPipe, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -14,51 +15,42 @@ import { SearchPipe } from '../../utilities/pipes/search.pipe';
     MatMenuModule,
     GlobalClickDirective,
     FormsModule,
-    SearchPipe
+    SearchPipe,
+    TitleCasePipe,
+    AsyncPipe
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
   standalone: true,
 })
-export class HeaderComponent {
-  private destroy$ = new Subject<void>();
+export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private storage_service: StorageService
-  ) {}
+    public storage_service: StorageService
+  ) { }
 
   searchSite!: string;
-  sitesList!: Array<any>;
-  ngOnInit() {
-    this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (res: any) => {
-        if (res.length === 0) return;
-        this.sitesList = res.sites;
-        this.currentSite = this.sitesList[0];
-        const current = this.storage_service.currentSite$.getValue();
-        if (!current) {
-          this.storage_service.currentSite$.next(this.currentSite);
-        }
-      },
-    });
+  sitesList!: Observable<any>;
+  ngOnInit(): void {
+    this.sitesList = this.storage_service.siteData$;
   }
 
-  currentSite: any;
   showSite: boolean = false;
-  set(site: any) {
+  updateSite(site: any) {
     this.showSite = !this.showSite;
-    this.currentSite = site;
-    this.storage_service.currentSite$.next(this.currentSite);
+    this.storage_service.currentSite$.next(site);
   }
 
-  @ViewChild('siteInput') siteInput!: ElementRef;
+  @ViewChild('siteInput', { static: false }) siteInput!: ElementRef;
   toggleSites(): void {
     this.searchSite = '';
     this.showSite = !this.showSite;
     setTimeout(() => {
-      this.siteInput.nativeElement?.focus()
-    }, 500)
+      if (this.showSite) {
+        this.siteInput.nativeElement?.focus()
+      }
+    }, 500);
   }
 
   logout() {

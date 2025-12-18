@@ -2,6 +2,11 @@ import { Injectable, signal } from '@angular/core';
 import { AES } from 'crypto-js';
 import { BehaviorSubject } from 'rxjs';
 
+export interface Site {
+  siteName: string;
+  siteId: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,7 +21,7 @@ export class StorageService {
   public siteData$ = new BehaviorSubject([]);
 
   // private _currentSite = new BehaviorSubject(null);
-  public currentSite$ = new BehaviorSubject(null);
+  public currentSite$ = new BehaviorSubject<Site | null>(null);
 
 
 

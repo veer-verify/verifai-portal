@@ -12,6 +12,7 @@ body {
 
 input {
   width: 100%;
+  outline: none;
 }
 
 a {
@@ -25,8 +26,8 @@ button {
 }
 
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
 }
 
 ::-webkit-scrollbar-track {
@@ -34,12 +35,8 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #084982;
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #084982ef;
+  background: #ed3237;
+  border-radius: 6px;
 }
 
 p {
@@ -126,18 +123,18 @@ p {
 }
 
 .dialog-header {
-  background-color: #fd6327;
+  background-color: #ed3237;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 5px;
-}
-
-.dialog-header p {
-  font-size: 14px;
   color: #ffffff;
+  font-size: 14px;
   text-transform: uppercase;
 }
+
+/* .dialog-header p {
+} */
 
 /* toggle switch */
 .switch {

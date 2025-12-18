@@ -16,7 +16,7 @@ export class StreamComponent {
   ) { }
 
   @ViewChild('video') video!: ElementRef;
-  @ViewChild('canvas') canvas!: ElementRef;
+  // @ViewChild('canvas') canvas!: ElementRef;
 
   // ngOnChanges(): void {
   //   // console.log(this.videoData);
@@ -314,15 +314,17 @@ export class StreamComponent {
     return frag;
   };
 
-  plainCapture(camera: any) {
-    let finalWidth = 1280;
-    let finalHeight = 720;
-    this.canvas.nativeElement.getContext("2d").drawImage(this.video.nativeElement, 0, 0, finalWidth, finalHeight);
-
-    const screenshotDataUrl = this.canvas.nativeElement.toDataURL('image/png');
+  capture() {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1280;
+    canvas.height = 720;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.drawImage(this.video.nativeElement, 0, 0, canvas.width, canvas.height);
+    const imgUrl = canvas.toDataURL('image/png');
     const link = document.createElement('a');
-    link.href = screenshotDataUrl;
-    link.download = `${camera?.cameraId}-${camera?.name}-${new Date()}.png`
+    link.href = imgUrl;
+    link.download = `${new Date()}.png`
     link.click();
   }
 

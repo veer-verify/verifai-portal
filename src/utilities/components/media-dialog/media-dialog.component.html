@@ -1,6 +1,18 @@
-@for (item of data?.files; track $index) { @if (isVideo(item)) {
+<section>
+  <header class="dialog-header">
+    <a>Dialog</a>
+    <a mat-dialog-close>Close</a>
+  </header>
 
-<video [src]="item | media | async" autoplay controls></video>
-} @else {
-<img [src]="item | media | async" onerror="this.src='icons/eyedisabled.svg'" />
-} }
+  <main>
+    @for (item of data?.files; track $index) { @if (isVideo(item)) {
+
+    <video [src]="item | media | async" autoplay controls></video>
+    } @else {
+    <img
+      [src]="item | media | async"
+      onerror="this.src='gif/loading-gif.gif'"
+    />
+    } }
+  </main>
+</section>

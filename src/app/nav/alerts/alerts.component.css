@@ -6,10 +6,10 @@
   padding: 6px 12px;
   background-color: #ffffff;
   border-bottom: 1px solid #e5e5e5;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
   font-size: 12px;
   height: 60px;
-
 }
 
 /* left section */
@@ -64,7 +64,6 @@
   outline: none;
 }
 
-
 /* right section (analytics + toggle) */
 .right {
   display: flex;
@@ -73,7 +72,7 @@
   cursor: pointer;
 }
 
-.analyticsred{
+.analyticsred {
   color: #ff3b30;
 }
 
@@ -93,5 +92,3 @@ select::-webkit-scrollbar-thumb {
 select::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
-
-
