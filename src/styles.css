@@ -24,6 +24,39 @@ button {
   background: transparent;
 }
 
+.filter-menu{
+    background: linear-gradient(180deg, white 0%, rgba(170, 170, 170, 0.637) 100%);
+}
+
+/* 🔥 Remove outline completely */
+.no-border .mdc-notched-outline,
+.no-border .mat-mdc-form-field-outline {
+  display: none !important;
+}
+
+/* 🔥 Remove background + padding */
+.no-border .mat-mdc-text-field-wrapper {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* 🔥 Remove focus/hover overlay */
+.no-border .mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+/* 🔥 Fix height alignment */
+.no-border .mat-mdc-form-field-infix {
+  padding: 0 !important;
+  min-height: unset !important;
+}
+
+/* 🔥 Remove underline (safety) */
+.no-border .mdc-line-ripple {
+  display: none !important;
+}
+
+
 ::-webkit-scrollbar {
   width: 3px;
   height: 3px;

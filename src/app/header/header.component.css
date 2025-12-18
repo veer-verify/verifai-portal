@@ -10,12 +10,6 @@
   padding: 0 10px;
 }
 
-.nav-items {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
 .custom_support {
     font-size: 15px;
     border: 2px solid black;
@@ -27,22 +21,10 @@
     border: 2px solid #FD6327;
 }
 
-.active-icon {
-    background-color: #FD6327;
-    color: white;
-    border: 2px solid #FD6327;
-}
-
-.active-menu-tab {
-    background-color: #FD6327;
-    color: white;
-    border: 2px solid #FD6327;
-}
-
-.active-menu-tab:hover {
-    background-color: #FD6327;
-    color: white;
-    border: 2px solid #FD6327;
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 30px;
 }
 
 @media screen and (max-width: 768px) {

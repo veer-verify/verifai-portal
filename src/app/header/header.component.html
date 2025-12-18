@@ -1,62 +1,40 @@
 <div class="header-container" appGlobalClick>
-    <div class="d-flex gap-5">
-        <div>
-            <img src="/themes/verifai/logo-black.png" alt="" width="100px">
-        </div>
+  <div class="d-flex gap-5">
+    <div>
+      <img src="/themes/verifai/logo-black.png" alt="" width="100px">
+    </div>
 
-        <div class="site-accordian">
-            <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
+    <div class="site-accordian">
+      <!-- <select class="w-100" [(ngModel)]="currentSite" (ngModelChange)="set()">
             @for (item of sitesList; track $index) {
             <option [value]="item.siteId">
                 <p>{{item.siteName}}</p>
             </option>
             }
         </select> -->
-            <a (click)="toggleSites()">{{currentSite?.siteName}}</a>
-            @if (showSite) {
-            <div class="site-dropdown">
-                <input type="search" [(ngModel)]="searchSite" #siteInput>
-                @for (item of sitesList | search: searchSite; track $index) {
-                <p (click)="set(item)">{{item.siteName}}</p>
-                }
-            </div>
-            }
-            <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
-        </div>
+      <a (click)="toggleSites()">{{currentSite?.siteName}}</a>
+      @if (showSite) {
+      <div class="site-dropdown">
+        <input type="search" [(ngModel)]="searchSite" #siteInput>
+        @for (item of sitesList | search: searchSite; track $index) {
+        <p (click)="set(item)">{{item.siteName}}</p>
+        }
+      </div>
+      }
+      <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
     </div>
-    }
   </div>
 
   <div class="nav-items">
-    <a
-      class="list-group-item"
-      routerLink="/dashboard/live-view"
-      routerLinkActive="active"
-      >live view</a
-    >
-    <a
-      class="list-group-item"
-      routerLink="/dashboard/alerts"
-      routerLinkActive="active"
-      >Alerts</a
-    >
-    <a
-      class="list-group-item"
-      routerLink="/dashboard/timelapse"
-      routerLinkActive="active"
-      >Time Lapse</a
-    >
-    <!-- <a
-      class="list-group-item"
-      routerLink="/dashboard/service-requests"
-      routerLinkActive="active"
-      >support</a
-    > -->
-    <a
-      class="list-group-item d-inline-flex align-items-center"
-      [matMenuTriggerFor]="menu1"
-    >
-      <span class="material-symbols-outlined custom_support" [ngClass]="{ 'active-icon': activeSupportMenu }"> call </span>
+    <a class="list-group-item " routerLink="/dashboard/live-view" routerLinkActive="active">live view</a>
+    <a class="list-group-item" routerLink="/dashboard/alerts" routerLinkActive="active">Alerts</a>
+    <a class="list-group-item" routerLink="/dashboard/service-requests" routerLinkActive="active">support</a>
+    <a class="list-group-item d-inline-flex align-items-center" [matMenuTriggerFor]="menu1">
+      <span class="material-symbols-outlined custom_support" [ngClass]="{ 'active-icon': activeSupportMenu }"> call
+      </span>
+    </a>
+    <a class="list-group-item d-inline-flex align-items-center" [matMenuTriggerFor]="menu">
+      <span class="material-symbols-outlined">account_circle</span>
       <!-- <span>
                 <p>user name</p>
                 <p>admin</p>
@@ -64,65 +42,70 @@
     </a>
     <!-- <a class="pointer" [matMenuTriggerFor]="menu"><img src="icons/logout-person-image.svg" alt="" width="12px"></a> -->
 
+    <!-- <span>
+                <p>user name</p>
+                <p>admin</p>
+            </span> -->
+    <!-- <a class="pointer" [matMenuTriggerFor]="menu"><img src="icons/logout-person-image.svg" alt="" width="12px"></a> -->
+
     <!-- FIRST MENU TRIGGER -->
     <!-- <button mat-button [matMenuTriggerFor]="menu1">Menu 1</button> -->
 
     <mat-menu #menu1="matMenu">
-      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('requests')" routerLink="/dashboard/service-requests" [ngClass]="{'active-menu-tab': activeMenuTab.requests}">
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('requests')"
+        routerLink="/dashboard/service-requests" [ngClass]="{'active-menu-tab': activeMenuTab.requests}">
         <!-- <img src="icons/profile.svg" width="8px" class="me-2" /> -->
         <span>REQUESTS</span>
       </button>
 
-      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('faqs')" [ngClass]="{'active-menu-tab': activeMenuTab.faqs}">
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('faqs')"
+        [ngClass]="{'active-menu-tab': activeMenuTab.faqs}">
         <!-- <img src="icons/key.svg" width="6px" class="me-2" /> -->
         <span>FAQs</span>
       </button>
 
-      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('terms')" [ngClass]="{'active-menu-tab': activeMenuTab.terms}">
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('terms')"
+        [ngClass]="{'active-menu-tab': activeMenuTab.terms}">
         <!-- <img src="icons/info-circle-fill.svg" width="8px" class="me-2" /> -->
         <span>TERMS & CONDITIONS</span>
       </button>
 
-      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('contact')" [ngClass]="{'active-menu-tab': activeMenuTab.contact}">
+      <button mat-menu-item (click)="setActive()" (click)="setActiveMenuTab('contact')"
+        [ngClass]="{'active-menu-tab': activeMenuTab.contact}">
         <!-- <img src="icons/logout.svg" width="10px" class="me-2" /> -->
         <span>CONTACT</span>
       </button>
     </mat-menu>
 
-    <!-- SECOND MENU TRIGGER BESIDE IT -->
-    <!-- <button mat-button [matMenuTriggerFor]="menu2" class="ms-3">Menu 2</button> -->
 
-    <a
-      class="list-group-item d-inline-flex align-items-center"
-      [matMenuTriggerFor]="menu2"
-    >
-      <span class="material-symbols-outlined">account_circle</span>
-      <!-- <span>
-                <p>user name</p>
-                <p>admin</p>
-            </span> -->
-    </a>
-
-    <mat-menu #menu2="matMenu">
+    <mat-menu #menu="matMenu">
       <button mat-menu-item>
-        <img src="icons/profile.svg" width="8px" class="me-2" />
-        <span>PROFILE</span>
+        <a>
+          <img src="icons/profile.svg" alt="" width="8px" class="me-2">
+          <span class="profile-image">PROFILE</span>
+        </a>
       </button>
-
       <button mat-menu-item>
-        <img src="icons/key.svg" width="6px" class="me-2" />
-        <span>CHANGE PASSWORD</span>
+        <a>
+          <img src="icons/key.svg" alt="" width="6px" class="me-2">
+          <span class="profile-key">CHANGE PASSWORD</span>
+        </a>
       </button>
-
       <button mat-menu-item>
-        <img src="icons/info-circle-fill.svg" width="8px" class="me-2" />
-        <span>TERMS & CONDITIONS</span>
+        <a class="profile-terms">
+          <img src="icons/info-circle-fill.svg" alt="" width="8px" class="me-2">
+          <span>TERMS & CONDITIONS</span>
+        </a>
       </button>
-
       <button mat-menu-item (click)="logout()">
-        <img src="icons/logout.svg" width="10px" class="me-2" />
-        <span>LOGOUT</span>
+        <a class="profile-logout">
+          <img src="icons/logout.svg" alt="" width="10px" class="me-2">
+          <span>LOGOUT</span>
+        </a>
       </button>
+
     </mat-menu>
   </div>
+
+
 </div>
