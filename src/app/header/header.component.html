@@ -3,7 +3,6 @@
     <div>
       <img src="/themes/verifai/logo-black.png" alt="" width="100px" />
     </div>
-
     @if (storage_service.currentSite$ | async; as site) {
     <div class="site-accordian">
       <a (click)="toggleSites()">{{ site.siteName }}</a>
@@ -27,7 +26,6 @@
     </div>
     }
   </div>
-
   <div class="nav-items">
     <a
       class="list-group-item"
@@ -53,9 +51,9 @@
     >
       <span class="material-symbols-outlined">account_circle</span>
       <!-- <span>
-                <p>user name</p>
-                <p>admin</p>
-            </span> -->
+                  <p>user name</p>
+                  <p>admin</p>
+              </span> -->
     </a>
     <!-- <a class="pointer" [matMenuTriggerFor]="menu"><img src="icons/logout-person-image.svg" alt="" width="12px"></a> -->
 
@@ -90,5 +88,6 @@
         </a>
       </button>
     </mat-menu>
+    <!-- </div> -->
   </div>
 </div>

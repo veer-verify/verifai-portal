@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
 import { AsyncPipe, TitleCasePipe } from '@angular/common';
 
+type MenuTab = 'requests' | 'faqs' | 'terms' | 'contact';
 @Component({
   selector: 'app-header',
   imports: [

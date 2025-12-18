@@ -1,0 +1,126 @@
+.sub-header {
+  height: 50px;
+  width: 100%;
+  background: linear-gradient(180deg, white, rgba(128, 128, 128, 0.322) 90%);
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  font-family: sans-serif;
+}
+
+/* Main button */
+.dropdown-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  width: 450px;
+  height: 36px;
+
+  /* background: transparent; */
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+
+  cursor: pointer;
+}
+
+.dropdown-btn .left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.dropdown-btn svg {
+  display: block;
+}
+
+/* Dropdown menu */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 42px;
+  left: 0;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  min-width: 450px;
+
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+}
+
+.dropdown-content a {
+  padding: 10px 12px;
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+
+.dropdown-content a:hover {
+  background: #f2f2f2;
+}
+
+/* show dropdown on click */
+.dropdown.open .dropdown-content {
+  display: block;
+}
+
+.calendar {
+  display: flex;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
+.start,
+.end {
+  display: flex;
+  align-items: center;
+  border: 1px solid #c4c4c4;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+  width: 210px;
+}
+
+.label-box {
+  /* background: #eaeaea; */
+  background: linear-gradient(180deg, #ffffff, #eeeeee);
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.calendar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 5px 8px;
+  font-size: 14px;
+  background: white;
+  width: 100%;
+}
+
+.calendar-icon {
+  width: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+input::-webkit-calendar-picker-indicator {
+  opacity: 0; /* hide Material icon */
+}
+
+input:focus {
+  outline: none;
+  border-color: #888;
+}
