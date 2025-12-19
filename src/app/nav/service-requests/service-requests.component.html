@@ -1,19 +1,24 @@
 <div class="sub-header">
-  <p>ALL REQUESTS - {{currentSite?.siteName}}</p>
+  <p>ALL REQUESTS - {{ currentSite?.siteName }}</p>
   <div>
-    <button class="req-button me-3" (click)="openNewRequestModal()">+ NEW REQUEST</button>
-    <button class="filter" [matMenuTriggerFor]="filterMenu"><img src="icons/filter.svg" alt=""></button>
+    <button class="req-button me-3" (click)="openNewRequestModal()">
+      + NEW REQUEST
+    </button>
+    <button class="filter" [matMenuTriggerFor]="filterMenu">
+      <img src="icons/filter.svg" alt="" />
+    </button>
     <mat-menu #filterMenu="matMenu" panelClass="filter-menu">
-
       <ng-template matMenuContent>
-
         <div class="filter-header">
           <p>FILTER</p>
           <div class="close">✕</div>
         </div>
 
-        <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
-
+        <form
+          class="filter-content"
+          [formGroup]="filterForm"
+          (click)="$event.stopPropagation()"
+        >
           <label>Camera</label>
           <select formControlName="camera">
             <option value="">All</option>
@@ -35,44 +40,70 @@
           <!-- START DATE -->
           <label class="date-label mt-3">Start Date</label>
           <div class="date-time-row">
-
             <mat-form-field appearance="outline" class="no-border">
-              <input matInput [matDatepicker]="startPicker" formControlName="startDate">
-              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <input
+                matInput
+                [matDatepicker]="startPicker"
+                formControlName="startDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="startPicker"
+              ></mat-datepicker-toggle>
               <mat-datepicker #startPicker></mat-datepicker>
             </mat-form-field>
 
-            <input type="time" class="time-input" formControlName="startTime">
+            <input type="time" class="time-input" formControlName="startTime" />
           </div>
 
           <!-- END DATE -->
           <label class="date-label mt-3">End Date</label>
           <div class="date-time-row">
-
             <mat-form-field appearance="outline" class="no-border">
-              <input matInput [matDatepicker]="endPicker" formControlName="endDate">
-              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <input
+                matInput
+                [matDatepicker]="endPicker"
+                formControlName="endDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="endPicker"
+              ></mat-datepicker-toggle>
               <mat-datepicker #endPicker></mat-datepicker>
             </mat-form-field>
 
-            <input type="time" class="time-input" formControlName="endTime">
+            <input type="time" class="time-input" formControlName="endTime" />
           </div>
 
           <label class="date-label">Duration</label>
 
           <div class="duration-container">
-
             <!-- Slider -->
-            <div class="range-slider" [style.--start]="startPercent" [style.--end]="endPercent">
+            <div
+              class="range-slider"
+              [style.--start]="startPercent"
+              [style.--end]="endPercent"
+            >
+              <input
+                type="range"
+                class="range-start"
+                min="0"
+                max="120"
+                step="1"
+                [value]="durationStart"
+                (input)="onStartChange($event)"
+              />
 
-              <input type="range" class="range-start" min="0" max="120" step="1" [value]="durationStart"
-                (input)="onStartChange($event)" />
-
-              <input type="range" class="range-end" min="0" max="120" step="1" [value]="durationEnd"
-                (input)="onEndChange($event)" />
+              <input
+                type="range"
+                class="range-end"
+                min="0"
+                max="120"
+                step="1"
+                [value]="durationEnd"
+                (input)="onEndChange($event)"
+              />
             </div>
-
-
           </div>
 
           <div class="range-labels">
@@ -85,14 +116,11 @@
             {{ formatTime(durationStart) }} to {{ formatTime(durationEnd) }}
           </div>
 
-
           <div class="filter-btns">
             <button type="reset" class="btn-secondary">RESET</button>
             <button type="submit" class="btn-primary">APPLY</button>
           </div>
-
         </form>
-
       </ng-template>
     </mat-menu>
   </div>
@@ -100,8 +128,13 @@
 
 <!-- table -->
 <div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
-  <ag-grid-angular style="height: 100%" [serverSideDatasource]="datasource" [gridOptions]="gridOptions"
-    (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"></ag-grid-angular>
+  <ag-grid-angular
+    style="height: 100%"
+    [serverSideDatasource]="datasource"
+    [gridOptions]="gridOptions"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClicked($event)"
+  ></ag-grid-angular>
 </div>
 
 @if(showNewRequestModal) {
