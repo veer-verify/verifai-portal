@@ -41,29 +41,6 @@
   gap: 12px;
 }
 
-.label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #777;
-}
-
-.date-time {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-  background-color: #fafafa;
-}
-
-.date-time input {
-  border: none;
-  outline: none;
-}
-
 /* right section (analytics + toggle) */
 .right {
   display: flex;
