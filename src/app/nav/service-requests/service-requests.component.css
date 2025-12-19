@@ -85,6 +85,17 @@
   margin-bottom: 8px;
 }
 
+.date-time {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.date-time input{
+  font-size: 13px;
+  padding: 8px;
+  color: rgb(129, 129, 129);
+}
+
 .filter-content select {
   width: 100%;
   height: 30px;

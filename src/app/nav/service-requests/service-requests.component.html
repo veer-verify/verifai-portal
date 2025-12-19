@@ -12,50 +12,43 @@
           <div class="close">✕</div>
         </div>
 
-        <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
+        <form class="filter-content" [formGroup]="filterForm" (ngSubmit)="onFilterChange()"
+          (click)="$event.stopPropagation()">
 
           <label>Camera</label>
           <select formControlName="camera">
-            <option value="">All</option>
-            <option value="1">Cam 1</option>
+            @for(cam of camerasList; track cam){
+            <option value="{{cam.id}}">{{cam.name}}</option>
+            }
           </select>
 
-          <label class="mt-3">Type</label>
+          <!-- <label class="mt-3">Type</label>
           <select formControlName="type">
             <option value="">All</option>
             <option value="1">Type 1</option>
+          </select> -->
+
+          <label class="mt-3">Alert</label>
+          <select formControlName="serviceCategory" (change)="filterSubs()">
+            @for(cat of categoryList; track cat){
+            <option value="{{cat.catId}}">{{cat.catName}}</option>
+            }
           </select>
 
-          <label class="mt-3">Action Tag</label>
-          <select formControlName="actionTag">
-            <option value="">All</option>
-            <option value="1">Action Tag 1</option>
+          <label class="mt-3">Sub-Alert</label>
+          <select formControlName="serviceSubCategory">
+            @for(subcat of subcategoryList; track subcat){
+            <option value="{{subcat.serviceSubcatId}}">{{subcat.serviceSubcatName}}</option>
+            }
           </select>
 
-          <!-- START DATE -->
-          <label class="date-label mt-3">Start Date</label>
-          <div class="date-time-row">
-
-            <mat-form-field appearance="outline" class="no-border">
-              <input matInput [matDatepicker]="startPicker" formControlName="startDate">
-              <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-              <mat-datepicker #startPicker></mat-datepicker>
-            </mat-form-field>
-
-            <input type="time" class="time-input" formControlName="startTime">
+          <div class="date-time">
+            <span class="label">START</span>
+            <input type="date" formControlName="fromDate" />
           </div>
-
-          <!-- END DATE -->
-          <label class="date-label mt-3">End Date</label>
-          <div class="date-time-row">
-
-            <mat-form-field appearance="outline" class="no-border">
-              <input matInput [matDatepicker]="endPicker" formControlName="endDate">
-              <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
-              <mat-datepicker #endPicker></mat-datepicker>
-            </mat-form-field>
-
-            <input type="time" class="time-input" formControlName="endTime">
+          <div class="date-time">
+            <span class="label">END</span>
+            <input type="date" formControlName="toDate" />
           </div>
 
           <label class="date-label">Duration</label>
@@ -105,5 +98,6 @@
 </div>
 
 @if(showNewRequestModal) {
-<app-new-request (closeModal)="closeNewRequestModal()"></app-new-request>
+<app-new-request (closeModal)="closeNewRequestModal()" [currentRequestData]="currentRequest"></app-new-request>
 }
+<app-assign-request *ngIf="showAssignDialog" [requestData]="currentRequest"></app-assign-request>
