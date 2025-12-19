@@ -14,7 +14,7 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { RequestService } from '../../../utilities/services/request.service';
 import { gridOptions, handleResponse } from '../../../grid.config';
-import { NewRequestComponent } from './new-request/new-request.component';
+import { AddRequestComponent } from './add-request/add-request.component';
 import { MatFormField } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
@@ -29,9 +29,8 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-service-requests',
   imports: [
-    TableComponent,
+    AddRequestComponent,
     AgGridAngular,
-    NewRequestComponent,
     MatMenuModule,
     MatFormField,
     FormsModule,
@@ -56,7 +55,7 @@ export class ServiceRequestsComponent {
     private incident_service: IncidentService,
     private request_service: RequestService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   currentSite: any;
   incidentdata: any = [];
@@ -127,17 +126,17 @@ export class ServiceRequestsComponent {
   }
 
   maxDuration = 120;
-get startPercent(): string {
-  return `${(this.durationStart / this.maxDuration) * 100}%`;
-}
+  get startPercent(): string {
+    return `${(this.durationStart / this.maxDuration) * 100}%`;
+  }
 
-get endPercent(): string {
-  return `${(this.durationEnd / this.maxDuration) * 100}%`;
-}
+  get endPercent(): string {
+    return `${(this.durationEnd / this.maxDuration) * 100}%`;
+  }
 
-  onStatusFilterChange() {}
+  onStatusFilterChange() { }
 
-  onPriorityFilterChange() {}
+  onPriorityFilterChange() { }
 
   filterForm!: FormGroup;
 

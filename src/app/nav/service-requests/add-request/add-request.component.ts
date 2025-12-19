@@ -1,56 +1,61 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, NgForm } from '@angular/forms';
 import { RequestService } from '../../../../utilities/services/request.service';
 import { StorageService } from '../../../../utilities/services/storage.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { filter } from 'rxjs';
+import { filter, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-new-request',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './new-request.component.html',
-  styleUrl: './new-request.component.css',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AsyncPipe
+  ],
+  templateUrl: './add-request.component.html',
+  styleUrl: './add-request.component.css',
 })
-export class NewRequestComponent {
+export class AddRequestComponent {
   constructor(
     private request_service: RequestService,
-    private storage_service: StorageService,
+    public storage_service: StorageService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ticketForm!: FormGroup;
   @Output() closeModal = new EventEmitter<void>();
 
   isClose = false;
   categories: any = [];
-  subCategories:any =[];
-  siteData: any = [];
+  subCategories: any = [];
+  sitesList!: Observable<any>;
 
-  
+
   ngOnInit() {
     this.initForm();
     this.loadCategories();
-    
+    this.sitesList = this.storage_service.siteData$;
+
     this.ticketForm.get('category')?.valueChanges.subscribe((catId) => {
-      const selectedCategory: any = this.categories.find((c:any) => c.catId === catId);
-      
+      const selectedCategory: any = this.categories.find((c: any) => c.catId === catId);
       this.ticketForm.patchValue({ subCategory: '' });
     });
-    
-    this.storage_service.currentSite$
-    .pipe(filter((res) => res !== null))
-    .subscribe((res: any) => {
-      const siteId = typeof res === 'object' ? res.siteId : res;
-      
-      this.ticketForm.patchValue({
-        siteId: siteId,
-      });
-    });
 
-    this.siteData = this.storage_service.siteData$.getValue();
-    this.siteData = this.siteData.sites;
-    console.log('Site Data:', this.siteData);
+    this.storage_service.currentSite$
+      .pipe(filter((res) => res !== null))
+      .subscribe((res: any) => {
+        const siteId = typeof res === 'object' ? res.siteId : res;
+
+        this.ticketForm.patchValue({
+          siteId: siteId,
+        });
+      });
+
+    // this.sitesList = this.storage_service.sitesList$.getValue();
+    // this.sitesList = this.sitesList.sites;
+    // console.log('Site Data:', this.sitesList);
   }
 
   initForm() {
@@ -58,7 +63,7 @@ export class NewRequestComponent {
       siteId: ['', Validators.required],
       category: ['', Validators.required],
       subCategory: ['', Validators.required],
-      priority: ['', Validators.required],
+      priority: ['low', Validators.required],
       description: ['', [Validators.required, Validators.required]],
       remarks: [''],
     });
@@ -68,7 +73,6 @@ export class NewRequestComponent {
     this.request_service.getHelpDeskCategories().subscribe({
       next: (res: any) => {
         this.categories = res.categoryList;
-        console.log('Loaded categories:', this.categories);
       },
       error: (err) => {
         console.error('Error loading categories', err);
@@ -78,10 +82,8 @@ export class NewRequestComponent {
 
   filterSubs() {
     const selectedCatId = Number(this.ticketForm.get('category')?.value);
-    console.log('Selected Category ID:', selectedCatId);
-    const selectedCategory: any = this.categories.find((c:any) => c.catId === selectedCatId);
+    const selectedCategory: any = this.categories.find((c: any) => c.catId === selectedCatId);
     this.subCategories = selectedCategory?.subCategoryList || [];
-    console.log('Filtered subcategories:', this.subCategories);
     this.ticketForm.patchValue({ subCategory: '' });
   }
 
@@ -104,7 +106,6 @@ export class NewRequestComponent {
       remarks: formData.remarks
     }).subscribe({
       next: (res) => {
-        console.log('Request submitted successfully', res);
         this.close();
       },
       error: (err) => {

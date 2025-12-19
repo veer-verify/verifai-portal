@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { GlobalClickDirective } from '../../utilities/directives/global-click.directive';
@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
 import { AsyncPipe, TitleCasePipe } from '@angular/common';
 
-type MenuTab = 'requests' | 'faqs' | 'terms' | 'contact';
 @Component({
   selector: 'app-header',
   imports: [
@@ -30,6 +29,13 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     public storage_service: StorageService
   ) { }
+
+  // @HostListener('click') onClick() {
+  //   console.log('click')
+  //   if (this.showSite) {
+  //     this.showSite = false
+  //   }
+  // }
 
   searchSite!: string;
   sitesList!: Observable<any>;

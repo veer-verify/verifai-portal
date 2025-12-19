@@ -12,7 +12,7 @@ export class GlobalClickDirective {
   ) { }
 
   @HostListener('click') onClick() {
-    this.configSrvc.showSiteMenu.next(false);
+    // this.configSrvc.showSiteMenu.next(false);
   }
 
 }

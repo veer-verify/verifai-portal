@@ -14,16 +14,8 @@ export class ConfigService {
     private storageSrvc: StorageService
   ) { }
 
-  public showSiteMenu: BehaviorSubject<boolean> = new BehaviorSubject(false);
-
   public dataFromSubheader: BehaviorSubject<any> = new BehaviorSubject([]);
-  public numberFromSub: BehaviorSubject<any> = new BehaviorSubject(null);
-  public current_site_sub: BehaviorSubject<any> = new BehaviorSubject(null);
   public site_add_sub: BehaviorSubject<any> = new BehaviorSubject({});
-  public devices_sub: BehaviorSubject<any> = new BehaviorSubject(null);
-  public filter_sub: BehaviorSubject<any> = new BehaviorSubject({});
-  public paginated_cam_sub: BehaviorSubject<any> = new BehaviorSubject([]);
-
 
   public getSitesListForUserName(): Observable<any> {
     const url = `${environment.sitesUrl}/getSitesListForUserName_1_0/`;
