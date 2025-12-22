@@ -89,6 +89,10 @@ export class ServiceRequestsComponent {
         this.datasource = this.createDatasource();
       });
 
+      this.storage_service.siteData$.subscribe((sites:any)=>{
+        // console.log('Sites Data:', sites);
+      });
+
     this.gridOptions = gridOptions;
     this.gridOptions.columnDefs = [
       { headerName: '#ID', field: 'serviceReqId', sort: true },
@@ -103,7 +107,7 @@ export class ServiceRequestsComponent {
       },
       {
         field: 'edit',
-        cellRenderer: () => '<button class="btn-edit" (click)="editRequest()">Edit</button>',
+        cellRenderer: () => '<button class="btn-edit">Edit</button>',
         editable: false,
         sort: false,
         disabled: true
@@ -179,6 +183,7 @@ export class ServiceRequestsComponent {
   refreshGrid() {
     if (!this.gridApi) return;
     this.gridApi.refreshServerSide({ purge: true });
+    // console.log(this.gridApi);
   }
 
   showNewRequestModal: boolean = false;
