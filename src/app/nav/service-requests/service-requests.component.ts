@@ -92,7 +92,7 @@ export class ServiceRequestsComponent {
       },
       {
         field: 'edit',
-        cellRenderer: () => '<button class="btn-edit" (click)="editRequest()">Edit</button>',
+        cellRenderer: () => '<button class="btn-edit">Edit</button>',
         editable: false,
       }
     ];
@@ -164,6 +164,7 @@ export class ServiceRequestsComponent {
   refreshGrid() {
     if (!this.gridApi) return;
     this.gridApi.refreshServerSide({ purge: true });
+    // console.log(this.gridApi);
   }
 
   showNewRequestModal: boolean = false;

@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
-import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
+// import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LiveViewComponent } from './nav/live-view/live-view.component';
 import { ServiceRequestsComponent } from './nav/service-requests/service-requests.component';
@@ -13,10 +13,6 @@ export const routes: Routes = [
     {
         path: 'login',
         component: LoginComponent
-    },
-    {
-        path: 'forgot-password',
-        component: ForgotPasswordComponent
     },
     {
         path: 'dashboard',
