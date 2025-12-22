@@ -1,24 +1,33 @@
 <div class="sub-header">
+<<<<<<< HEAD
   <p>ALL REQUESTS - {{categoryList.length}}</p>
+=======
+  <p>ALL REQUESTS - {{ currentSite?.siteName }}</p>
+>>>>>>> 441e4bd78b51dfdb84e6d862a94cc2ea2bf47b01
   <div>
-    <button class="req-button me-3" (click)="openNewRequestModal()">+ NEW REQUEST</button>
-    <button class="filter" [matMenuTriggerFor]="filterMenu"><img src="icons/filter.svg" alt=""></button>
+    <button class="req-button me-3" (click)="openNewRequestModal()">
+      + NEW REQUEST
+    </button>
+    <button class="filter" [matMenuTriggerFor]="filterMenu">
+      <img src="icons/filter.svg" alt="" />
+    </button>
     <mat-menu #filterMenu="matMenu" panelClass="filter-menu">
-
       <ng-template matMenuContent>
-
         <div class="filter-header">
           <p>FILTER</p>
           <div class="close">✕</div>
         </div>
 
-        <form class="filter-content" [formGroup]="filterForm" (ngSubmit)="onFilterChange()"
-          (click)="$event.stopPropagation()">
-
+        <form
+          class="filter-content"
+          [formGroup]="filterForm"
+          (ngSubmit)="onFilterChange()"
+          (click)="$event.stopPropagation()"
+        >
           <label>Camera</label>
           <select formControlName="camera">
             @for(cam of camerasList; track cam){
-            <option value="{{cam.id}}">{{cam.name}}</option>
+            <option value="{{ cam.id }}">{{ cam.name }}</option>
             }
           </select>
 
@@ -31,14 +40,16 @@
           <label class="mt-3">Alert</label>
           <select formControlName="serviceCategory" (change)="filterSubs()">
             @for(cat of categoryList; track cat){
-            <option value="{{cat.catId}}">{{cat.catName}}</option>
+            <option value="{{ cat.catId }}">{{ cat.catName }}</option>
             }
           </select>
 
           <label class="mt-3">Sub-Alert</label>
           <select formControlName="serviceSubCategory">
             @for(subcat of subcategoryList; track subcat){
-            <option value="{{subcat.serviceSubcatId}}">{{subcat.serviceSubcatName}}</option>
+            <option value="{{ subcat.serviceSubcatId }}">
+              {{ subcat.serviceSubcatName }}
+            </option>
             }
           </select>
 
@@ -54,18 +65,32 @@
           <label class="date-label">Duration</label>
 
           <div class="duration-container">
-
             <!-- Slider -->
-            <div class="range-slider" [style.--start]="startPercent" [style.--end]="endPercent">
+            <div
+              class="range-slider"
+              [style.--start]="startPercent"
+              [style.--end]="endPercent"
+            >
+              <input
+                type="range"
+                class="range-start"
+                min="0"
+                max="120"
+                step="1"
+                [value]="durationStart"
+                (input)="onStartChange($event)"
+              />
 
-              <input type="range" class="range-start" min="0" max="120" step="1" [value]="durationStart"
-                (input)="onStartChange($event)" />
-
-              <input type="range" class="range-end" min="0" max="120" step="1" [value]="durationEnd"
-                (input)="onEndChange($event)" />
+              <input
+                type="range"
+                class="range-end"
+                min="0"
+                max="120"
+                step="1"
+                [value]="durationEnd"
+                (input)="onEndChange($event)"
+              />
             </div>
-
-
           </div>
 
           <div class="range-labels">
@@ -78,14 +103,11 @@
             {{ formatTime(durationStart) }} to {{ formatTime(durationEnd) }}
           </div>
 
-
           <div class="filter-btns">
             <button type="reset" class="btn-secondary">RESET</button>
             <button type="submit" class="btn-primary">APPLY</button>
           </div>
-
         </form>
-
       </ng-template>
     </mat-menu>
   </div>
@@ -93,11 +115,22 @@
 
 <!-- table -->
 <div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
-  <ag-grid-angular style="height: 100%" [serverSideDatasource]="datasource" [gridOptions]="gridOptions"
-    (gridReady)="onGridReady($event)" (cellClicked)="onCellClicked($event)"></ag-grid-angular>
+  <ag-grid-angular
+    style="height: 100%"
+    [serverSideDatasource]="datasource"
+    [gridOptions]="gridOptions"
+    (gridReady)="onGridReady($event)"
+    (cellClicked)="onCellClicked($event)"
+  ></ag-grid-angular>
 </div>
 
 @if(showNewRequestModal) {
-<app-new-request (closeModal)="closeNewRequestModal()" [currentRequestData]="currentRequest"></app-new-request>
+<app-new-request
+  (closeModal)="closeNewRequestModal()"
+  [currentRequestData]="currentRequest"
+></app-new-request>
 }
-<app-assign-request *ngIf="showAssignDialog" [requestData]="currentRequest"></app-assign-request>
+<app-assign-request
+  *ngIf="showAssignDialog"
+  [requestData]="currentRequest"
+></app-assign-request>
