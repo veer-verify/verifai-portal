@@ -24,20 +24,19 @@ export class AddRequestComponent {
     private request_service: RequestService,
     public storage_service: StorageService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ticketForm!: FormGroup;
-  @Output() closeModal = new EventEmitter<void>();
   @Input() currentRequestData: any;
+  @Output() closeModal: any = new EventEmitter<void>();
 
-  isClose = false;
   categories: any = [];
   subCategories: any = [];
   sitesList!: Observable<any>;
 
   ngOnInit() {
     this.initForm();
-    this.loadCategories();
+    this.getHelpDeskCategories();
     this.sitesList = this.storage_service.siteData$;
 
     this.storage_service.currentSite$
@@ -50,12 +49,11 @@ export class AddRequestComponent {
         });
       });
 
-    this.ticketForm.patchValue(this.currentRequestData || {});
-
-    // this.sitesList = this.storage_service.sitesList$.getValue();
-    // this.sitesList = this.sitesList.sites;
-    // console.log('Site Data:', this.sitesList);
-    console.log('Current Request Data:', this.currentRequestData);
+    if (this.currentRequestData) {
+      this.ticketForm.patchValue(this.currentRequestData);
+    } else {
+      this.ticketForm.patchValue({});
+    }
   }
 
   initForm() {
@@ -69,21 +67,13 @@ export class AddRequestComponent {
     });
   }
 
-  loadCategories() {
+  getHelpDeskCategories() {
     this.request_service.getHelpDeskCategories().subscribe({
       next: (res: any) => {
         this.categories = res.categoryList;
         if (this.currentRequestData) {
           this.filterSubs();
         }
-        this.ticketForm
-          .get('service_cat_id')
-          ?.valueChanges.subscribe((catId) => {
-            const selectedCategory: any = this.categories.find(
-              (c: any) => c.catId === catId
-            );
-            this.ticketForm.patchValue({ service_subcat_id: '' });
-          });
       },
       error: (err) => {
         console.error('Error loading categories', err);
@@ -161,15 +151,11 @@ export class AddRequestComponent {
   }
 
   close() {
-    this.isClose = true;
-    setTimeout(() => {
-      this.closeModal.emit();
-    }, 300);
+    this.currentRequestData = null;
+    this.closeModal.emit(false);
   }
 
   getServiceDet(data: NgForm) {
-    console.log('Received Data:', data);
-
     const formData = {
       site_id: this.storage_service.currentSite$,
       site: data.value.site,

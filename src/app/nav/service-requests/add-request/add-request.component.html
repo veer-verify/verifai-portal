@@ -1,13 +1,9 @@
-<div class="req-container" [ngClass]="isClose ? 'ending' : ''">
+<div class="req-container">
   <div class="top-header">
-    @if(currentRequestData){
-    EDIT REQUEST
-    }
-    @else{
-    CREATE NEW REQUEST
-    }
+    @if(currentRequestData){ EDIT REQUEST } @else{ CREATE NEW REQUEST }
     <div class="close" (click)="close()">X</div>
   </div>
+
   <div class="content">
     <form [formGroup]="ticketForm" (ngSubmit)="createTicket()" action="">
       <label for="site">Site</label>
@@ -17,14 +13,23 @@
         }
       </select>
       <label for="category">Category</label>
-      <select name="category" id="category" formControlName="service_cat_id" (change)="filterSubs()">
+      <select
+        name="category"
+        id="category"
+        formControlName="service_cat_id"
+        (change)="filterSubs()"
+      >
         @for(cat of categories; track cat.catId) {
         <option [value]="cat.catId">{{ cat.catName }}</option>
         }
         <option value="example">Category 1</option>
       </select>
       <label for="sub-category">Sub Category</label>
-      <select name="sub-category" id="sub-category" formControlName="service_subcat_id">
+      <select
+        name="sub-category"
+        id="sub-category"
+        formControlName="service_subcat_id"
+      >
         @for(subCat of subCategories; track subCat.subCatId) {
         <option [value]="subCat.serviceSubcatId">
           {{ subCat.serviceSubcatName }}
@@ -34,33 +39,63 @@
       <label for="priority">Priority</label>
       <div class="priority-btns">
         <div>
-          <input type="radio" name="priority" value="low" formControlName="priority" />
+          <input
+            type="radio"
+            name="priority"
+            value="low"
+            formControlName="priority"
+          />
           Low
         </div>
         <div>
-          <input type="radio" name="priority" value="medium" formControlName="priority" />
+          <input
+            type="radio"
+            name="priority"
+            value="medium"
+            formControlName="priority"
+          />
           Medium
         </div>
         <div>
-          <input type="radio" name="priority" value="high" formControlName="priority" />
+          <input
+            type="radio"
+            name="priority"
+            value="high"
+            formControlName="priority"
+          />
           High
         </div>
       </div>
       <label for="description">Description</label>
-      <textarea name="description" id="description" rows="4" formControlName="description"></textarea>
+      <textarea
+        name="description"
+        id="description"
+        rows="4"
+        formControlName="description"
+      ></textarea>
       <label for="remarks">Remarks</label>
-      <textarea name="remarks" id="remarks" rows="4" formControlName="remarks"></textarea>
+      <textarea
+        name="remarks"
+        id="remarks"
+        rows="4"
+        formControlName="remarks"
+      ></textarea>
       <div class="form-btns">
-        <button Class="btn-secondary" style="width: 50%" type="reset" (click)="close()">
+        <button
+          Class="btn-secondary"
+          style="width: 50%"
+          type="reset"
+          (click)="close()"
+        >
           CANCEL
         </button>
-        <button class="btn-primary" style="width: 50%" type="submit" [disabled]="ticketForm.invalid">
-          @if(currentRequestData){
-          UPDATE
-          }
-          @else{
-          CREATE
-          }
+        <button
+          class="btn-primary"
+          style="width: 50%"
+          type="submit"
+          [disabled]="ticketForm.invalid"
+        >
+          @if(currentRequestData){ UPDATE } @else{ CREATE }
         </button>
       </div>
     </form>

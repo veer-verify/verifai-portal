@@ -98,9 +98,6 @@ export class RequestService {
     if (payload?.toDate) {
       params = params.set('toDate', payload?.toDate);
     }
-    if (payload?.site?.siteId) {
-      params = params.set('siteId', payload?.siteId);
-    }
 
     return this.http.get(url, { params: params });
   }

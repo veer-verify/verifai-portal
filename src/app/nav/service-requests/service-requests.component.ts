@@ -1,32 +1,27 @@
-import { HeaderComponent } from './../../header/header.component';
-import { Component, Input, forwardRef } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   CellClickedEvent,
-  ColDef,
   GridApi,
+  GridOptions,
   GridReadyEvent,
   IServerSideDatasource,
 } from 'ag-grid-community';
-import { IncidentService } from '../../../utilities/services/incident.service';
-import { TableComponent } from '../../../utilities/components/table/table.component';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { RequestService } from '../../../utilities/services/request.service';
 import { gridOptions, handleResponse } from '../../../grid.config';
 import { AddRequestComponent } from './add-request/add-request.component';
-import { MatFormField } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatLabel } from '@angular/material/select';
-import { MatOption, MatSelect } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogClose } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-service-requests',
@@ -34,18 +29,13 @@ import { MatDialog, MatDialogClose } from '@angular/material/dialog';
     AddRequestComponent,
     AgGridAngular,
     MatMenuModule,
-    MatFormField,
     FormsModule,
     ReactiveFormsModule,
-    MatLabel,
-    MatOption,
-    MatSelect,
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    forwardRef(() => AssignRequestComponent)
-],
+  ],
   templateUrl: './service-requests.component.html',
   styleUrl: './service-requests.component.css',
 })
@@ -55,7 +45,6 @@ export class ServiceRequestsComponent {
   constructor(
     private storage_service: StorageService,
     private config_service: ConfigService,
-    private incident_service: IncidentService,
     private request_service: RequestService,
     private fb: FormBuilder,
     private dialog: MatDialog
@@ -66,16 +55,17 @@ export class ServiceRequestsComponent {
   isChecked: boolean = false;
   camerasList: any = [];
   actionTags: any = [];
-  // dialog: any;
 
   gridApi!: GridApi;
   datasource!: IServerSideDatasource;
-  gridOptions: any;
+  gridOptions!: GridOptions;
   categoryList: any = [];
   subcategoryList: any = [];
   showAssignDialog: boolean = false;
 
+
   ngOnInit() {
+    this.gridOptions = gridOptions;
     this.getTypes();
     this.loadCategories();
     this.storage_service.currentSite$
@@ -89,14 +79,13 @@ export class ServiceRequestsComponent {
         this.datasource = this.createDatasource();
       });
 
-    this.gridOptions = gridOptions;
     this.gridOptions.columnDefs = [
-      { headerName: '#ID', field: 'serviceReqId', sort: true },
-      { headerName: 'SITE', field: 'siteName', sort: false },
-      { headerName: 'CATEGORY', field: 'service_cat_name', sort: true },
-      { headerName: 'SUB CATEGORY', field: 'service_subcat_name', sort: false },
-      { headerName: 'CREATED TIME', field: 'createdTime', sort: false },
-      { headerName: 'CREATED BY', field: 'createdByName', sort: false },
+      { field: 'serviceReqId' },
+      { field: 'siteName' },
+      { field: 'service_cat_name' },
+      { field: 'service_subcat_name' },
+      { field: 'createdTime' },
+      { field: 'createdByName' },
       {
         field: 'action',
         cellRenderer: () => '<button class="btn-open">Open</button>'
@@ -105,8 +94,6 @@ export class ServiceRequestsComponent {
         field: 'edit',
         cellRenderer: () => '<button class="btn-edit" (click)="editRequest()">Edit</button>',
         editable: false,
-        sort: false,
-        disabled: true
       }
     ];
 
@@ -122,24 +109,22 @@ export class ServiceRequestsComponent {
     });
   }
 
-  editRequest(){
+  editRequest() {
     this.showNewRequestModal = true;
   }
 
-  loadCategories(){
+  loadCategories() {
     this.request_service.getHelpDeskCategories().subscribe({
       next: (res: any) => {
         this.categoryList = res.categoryList;
-        // console.log('Categories:', this.categoryList);
       }
     });
   }
 
-  filterSubs(){
+  filterSubs() {
     const selectCatId = Number(this.filterForm.get('serviceCategory')?.value);
-    this.subcategoryList = this.categoryList.find((cat: any)=> cat.catId === selectCatId)?.subCategoryList || [];
+    this.subcategoryList = this.categoryList.find((cat: any) => cat.catId === selectCatId)?.subCategoryList || [];
     this.filterForm.patchValue({ subAlert: '' });
-    // console.log('Subcategories:', this.subcategoryList);
   }
 
   durationStart = 0; // minutes
@@ -184,29 +169,23 @@ export class ServiceRequestsComponent {
   showNewRequestModal: boolean = false;
 
   openNewRequestModal() {
+    this.currentRequest = null;
     this.showNewRequestModal = true;
   }
 
-  closeNewRequestModal() {
-    this.showNewRequestModal = false;
+  closeNewRequestModal(val: boolean) {
+    this.showNewRequestModal = val;
     this.refreshGrid();
   }
 
-  currentRequest :any;
+  currentRequest: any;
   onCellClicked(event: CellClickedEvent) {
-    if (
-      event.event?.target instanceof HTMLElement &&
-      event.event?.target.classList.contains('btn-open')
-    ) {
-      // this.dialog.open(MediaDialogComponent, { data: event.data });
-    }
-
-    if(event.event?.target instanceof HTMLElement && event.event?.target.classList.contains('btn-edit')){
+    if (event.event?.target instanceof HTMLElement && event.event?.target.classList.contains('btn-edit')) {
       this.showNewRequestModal = true;
       this.currentRequest = event.data;
     }
 
-    if(event.event?.target instanceof HTMLElement && event.event?.target.classList.contains('btn-open')){
+    if (event.event?.target instanceof HTMLElement && event.event?.target.classList.contains('btn-open')) {
       this.showAssignDialog = true;
       this.dialog.open(AssignRequestComponent, {
         data: event.data
@@ -236,14 +215,7 @@ export class ServiceRequestsComponent {
     }
   }
 
-  // filterObj = {
-  //   cameraId: '',
-  //   actionTag: '',
-  //   fromDate: '',
-  //   toDate: '',
-  // };
   createDatasource() {
-    console.log('Filter Values:', this.filterForm.value);
     return {
       getRows: (params: any) => {
         const pageSize = params.request.endRow - params.request.startRow;
@@ -257,11 +229,10 @@ export class ServiceRequestsComponent {
             pageSize: pageSize,
           })
           .subscribe((res: any) => {
-            if (res.statusCode == 200) {
-              handleResponse(params, res, pageSize, res?.serviceRequestList);
-            }
+            handleResponse(params, res, pageSize, res?.serviceRequestList);
+
           });
-      },
+      }
     };
   }
 
@@ -279,54 +250,71 @@ export class ServiceRequestsComponent {
 }
 
 @Component({
-  imports: [FormsModule, ReactiveFormsModule, MatDialogClose],
   selector: 'app-assign-request',
-  template: `<div class="assign-dialog">
-    <div class="dialog-header">
-  <h4>Assign Service Request</h4>
-</div>
-  <form [formGroup]="assignForm">
-    <label for="assignee">Assign To:</label>
-    <select id="assignee" formControlName="assignee">
-      <option *ngFor="let user of usersList" [value]="user.userId">{{ user.userName }}</option>
-    </select>
-    <input type="text" formControlName="comments" placeholder="Comments" />
-    <div class="buttons">
-      <button type="button" (click)="assign()">Assign</button>
-      <button type="button" mat-dialog-close>Cancel</button>
-    </div>
-    </form>
-  </div>`,
+  template: `
+  <section>
+    <header class="dialog-header">
+      <a>Assign Service Request</a>
+      <a mat-dialog-close>Close</a>
+    </header>
+    
+    <main>
+      <form [formGroup]="assignForm">
+        <div class="mb-3">
+          <label for="assignee">Assign To:</label>
+          <select id="assignee" formControlName="assignee">
+            @for(user of usersList; track user) {
+              <option [value]="user.userId">{{ user.userName }}</option>
+            }
+          </select>
+        </div>
+        
+        <div class="mb-3">
+          <input type="text" formControlName="comments" placeholder="Comments" />
+        </div>
+        
+        <div class="buttons">
+          <button type="button" (click)="assign()">Assign</button>
+        </div>
+      </form>
+    </main>
+    
+  </section>`,
   styles: [`
-    .dialog-header h4{ font-weight: bold; text-align: center; }
-    .dialog-header, form { padding: 10px;}
-    .buttons { margin-top: 15px; }
-    .buttons button { margin-right: 10px; }
-  `]
+    .dialog-header h4{ font-weight: bold; text-align: center; };
+    .dialog-header, form { padding: 10px;};
+    .buttons { margin-top: 15px; text-align: "center" };
+    .buttons button { margin-right: 10px; };
+    main {
+      width: 500px;
+      height: 500px;
+      overflow-y: auto;
+    }
+    `],
+  imports: [FormsModule, ReactiveFormsModule, MatDialogClose, CommonModule],
 })
+
 export class AssignRequestComponent {
   @Input() requestData: any;
-  // @Input() closeAssignDialog: () => void;
   assignForm: FormGroup;
+
   usersList = [
     { userId: 1, userName: 'John Doe' },
     { userId: 2, userName: 'Jane Smith' }
   ];
-  constructor(private fb: FormBuilder, private request_service: RequestService) {
+
+  constructor(
+    private fb: FormBuilder,
+    private request_service: RequestService
+  ) {
     this.assignForm = this.fb.group({
       assignee: [''],
       comments: ['']
     });
   }
+
   assign() {
     const formData = this.assignForm.value;
-    console.log('Assigning request', this.requestData.serviceReqId, 'to user', formData.assignee);
-    // Call service to assign request
-    // this.close();
   }
-  // close() {
-  //   if (this.closeDialog) {
-  //     this.closeDialog();
-  //   }
-  // }
+
 }
