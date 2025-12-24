@@ -27,7 +27,6 @@
   bottom: 0;
 }
 
-/* Right side (login form) */
 .right-panel {
   flex: 1;
   display: flex;
@@ -48,167 +47,30 @@
   margin-left: auto;
 }
 
-.login-box p,
-.forgot-password p,
-.createNewPassword p {
-  font-size: 20px;
+.forgot-password {
+  font-size: 14px;
   font-weight: 400;
-  margin-bottom: 20px !important;
   opacity: 0.5;
 }
 
-.form-group {
-  position: relative;
-  text-align: left;
-  margin-bottom: 24px;
-}
-
-.form-group label {
-  display: block;
-  font-size: 14px;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #eeeeee;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
 .options {
-  display: flex;
+  display: inline-flex;
   justify-content: space-between;
   align-items: center;
-  margin: 26px 0;
+  /* margin-bottom: 20px; */
   font-size: 13px;
   user-select: none;
+}
+
+.options input {
+  width: 14px !important;
+  height: 14px !important;
+  margin-right: 4px;
 }
 
 .options a {
   color: #d62828;
   text-decoration: none;
-}
-
-.forgot-password p {
-  margin-bottom: 30px !important;
-}
-
-.forgot-password input {
-  width: 350px;
-}
-
-.forgot-password {
-  text-align: center;
-  margin-top: -12px;
-  margin-bottom: 12px;
-  width: 100%;
-  /* font-size: 13px; */
-}
-
-.forgot-password button {
-  font-size: 16px !important;
-  background: none;
-  border: none;
-  color: #d62828;
-  cursor: pointer;
-  font-size: 13px;
-  padding: 0;
-  text-decoration: underline;
-  margin-left: 10px;
-  opacity: 1 !important;
-  /* font-size: 10px; */
-}
-
-.forgot-password button:hover {
-  color: #b71c1c;
-}
-
-.success-message h2 {
-  text-align: center;
-  color: #ed3237;
-}
-
-.inputContainer {
-  margin-top: 20px;
-}
-
-ng-otp-input {
-  display: flex;
-  justify-content: center;
-}
-
-.password-wrapper {
-  position: relative;
-}
-
-.password-wrapper input {
-  width: 100%;
-  padding-right: 40px; /* space for icon */
-}
-
-.toggle-password {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 20px;
-  cursor: pointer;
-  opacity: 0.6;
-}
-
-.toggle-password:hover {
-  opacity: 1;
-}
-
-.form-group input {
-  width: 400px;
-}
-
-.password-rules {
-  margin-top: 10px;
-  font-size: 13px;
-}
-
-.password-rules ul {
-  list-style: none;
-  padding: 0;
-  margin: 5px 0;
-}
-
-.password-rules li {
-  display: flex;
-  align-items: center;
-  color: #999;
-  margin-bottom: 5px;
-}
-
-.password-rules li .icon {
-  margin-right: 8px;
-  color: #ccc;
-}
-
-.password-rules li.valid {
-  color: #2ecc71;
-}
-
-.password-rules li.valid .icon {
-  color: #2ecc71;
-}
-
-.btn-secondary {
-  margin-bottom: 10px;
-  width: 100%;
-  padding: 12px !important;
-  /* background-color: #eeeeee !important; */
-  color: #000000 !important;
-  font-weight: bold;
-  border: 1px solid black !important;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none !important;
-  transition: 0.3s ease;
-  margin-right: 10px;
 }
 
 .login-btn,
@@ -227,4 +89,11 @@ button[type="submit"] {
 
 .login-btn:hover {
   background-color: #b71c1c;
+}
+
+.bottom-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
 }

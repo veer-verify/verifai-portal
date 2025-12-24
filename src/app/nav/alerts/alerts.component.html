@@ -19,7 +19,7 @@
         [(ngModel)]="filterObj.actionTag"
         (change)="onFilterChange()"
       >
-        <option value="">All</option>
+        <option value="">ALL</option>
         @for (item of actionTags; track $index) {
         <option>{{ item.value }}</option>
         }
@@ -58,6 +58,7 @@
   >
     <ag-grid-angular
       style="height: 100%"
+      [columnDefs]="columnDefs"
       [serverSideDatasource]="datasource"
       [gridOptions]="gridOptions"
       (gridReady)="onGridReady($event)"

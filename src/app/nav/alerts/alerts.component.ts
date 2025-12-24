@@ -8,7 +8,7 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { CellClickedEvent, GridApi, GridReadyEvent, IServerSideDatasource } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, IServerSideDatasource } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { gridOptions, handleResponse } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -45,9 +45,44 @@ export class AlertsComponent {
   camerasList: any = [];
   actionTags: any = [];
 
+  columnDefs: ColDef[] = [
+    { field: 'name' },
+    { field: 'eventDate' },
+    { field: 'eventFromTime' },
+    { field: 'eventToTime' },
+    { field: 'duration' },
+    { field: 'objectName' },
+    { field: 'actionTag' },
+    {
+      field: 'clip',
+      cellRenderer: (params: any) => {
+        // console.log(params)
+        const isDisabled = params.data.files.length === 0;
+        const disabledAttr = isDisabled ? 'disabled' : '';
+        const style = isDisabled ? 'style="opacity: 0.5; pointer-events: none; filter: grayscale(1);"' : '';
+        return `<img src="icons/play-circle-fill.svg" class="btn-open" ${disabledAttr} ${style} />`;
+      },
+      editable: false,
+      sortable: false
+    },
+  ];
   gridApi!: GridApi;
   datasource!: IServerSideDatasource;
-  gridOptions: any;
+  defaultColDef: ColDef = {
+    flex: 1,
+    minWidth: 100,
+    filter: false,
+    resizable: false,
+  };
+  gridOptions: GridOptions = {
+    rowModelType: 'serverSide',
+    defaultColDef: this.defaultColDef,
+    pagination: true,
+    paginationPageSize: 10,
+    paginationPageSizeSelector: [10, 20, 50, 100],
+    overlayNoRowsTemplate: '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
+    noRowsOverlayComponentParams: { message: 'Your custom message' }
+  };
   ngOnInit() {
     this.getTypes();
     this.storage_service.currentSite$
@@ -61,37 +96,6 @@ export class AlertsComponent {
         this.datasource = this.createDatasource();
         // this.gridApi.refreshServerSide({ purge: true });
       });
-
-    this.gridOptions = gridOptions;
-    this.gridOptions.columnDefs = [
-      { field: 'name', sort: true },
-      { field: 'eventDate', sort: true },
-      { field: 'eventFromTime', sort: false },
-      { field: 'eventToTime', sort: false },
-      { field: 'duration', sort: false },
-      { field: 'objectName', sort: false },
-      { field: 'actionTag', sort: false },
-      // {
-      //   field: 'clip',
-      //   sort: false,
-      //   cellRenderer: () => {
-      //     return '<img src="icons/play-circle-fill.svg" />';
-      //   },
-      //   minWidth: 50,
-      //   maxWidth: 80
-      // },
-      {
-        field: 'clip',
-        cellRenderer: () => '<img src="icons/play-circle-fill.svg" class="btn-open" />',
-        editable: false,
-        sort: false,
-        disabled: true
-      },
-      // {
-      //   field: 'action',
-      //   cellRenderer: () => '<button class="btn-open">Open</button>',
-      // }
-    ]
   }
 
   onCellClicked(event: CellClickedEvent) {
@@ -113,7 +117,6 @@ export class AlertsComponent {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-
     if (this.datasource) {
       this.gridApi.setGridOption('serverSideDatasource', this.datasource);
     }
@@ -138,9 +141,21 @@ export class AlertsComponent {
             page: pageNumber,
             pageSize: pageSize
           })
-          .subscribe((res: any) => {
-            if (res.statusCode == 200) {
-              handleResponse(params, res, pageSize, res?.IncidentList);
+          .subscribe({
+            next: (res) => {
+              if (res.statusCode === 200) {
+                const isLastPage = res.IncidentList.length < pageSize;
+                params.success({
+                  rowData: res.IncidentList,
+                  rowCount: isLastPage
+                    ? params.request.startRow + res.IncidentList.length
+                    : res.totalPages * pageSize
+                });
+                params.api.hideOverlay();
+              } else {
+                params.fail();
+                params.api.showNoRowsOverlay();
+              }
             }
           });
       },

@@ -1,51 +1,63 @@
 <section class="sub-header">
-    @if (camList.length) {
-        <div class="site-info">
-        <select class="w-100">
-            <option value="All">All ({{camList.length}})</option>
-        </select>
-    </div>
+  @if (camList.length) {
+  <div class="site-info">
+    <select class="w-100">
+      <option value="All">All ({{ camList.length }})</option>
+    </select>
+  </div>
 
-    <!-- pagination -->
-    <div class="d-flex gap-3">
-        <div class="d-inline-flex align-items-center gap-2">
-            @for (item of gridTypes; track $index) {
-            <a [ngClass]="itemsPerPage == item.noOfItems ? 'grid-highlight active': 'grid-highlight'"
-                (click)="adjustGrid(item.noOfItems)">
-                <!-- <img [src]="item.path" width="16px" alt=""> -->
-                {{item?.label}}
-            </a>
-            }
-        </div>
-
-        <div class="d-inline-flex align-items-center gap-2">
-            <button (click)="navigate('prev')" [disabled]="currentPage === 1"> {{'<'}} </button>
-                    <p>{{`${currentPage} of ${totalPages}`}}</p>
-                    <button (click)="navigate('next')" [disabled]="currentPage === totalPages">{{'>'}}</button>
-        </div>
-    </div>
-
-
+  <!-- pagination -->
+  <div class="d-flex gap-3">
     <div class="d-inline-flex align-items-center gap-2">
-        <span class="label" [class.analyticsred]="isChecked">camera info</span>
-        <label class="switch">
-            <input type="checkbox" [(ngModel)]="isChecked" />
-            <span class="slider"></span>
-        </label>
+      @for (item of gridTypes; track $index) {
+      <a
+        [ngClass]="
+          itemsPerPage == item.noOfItems
+            ? 'grid-highlight active'
+            : 'grid-highlight'
+        "
+        (click)="adjustGrid(item.noOfItems)"
+      >
+        <!-- <img [src]="item.path" width="16px" alt=""> -->
+        {{ item?.label }}
+      </a>
+      }
     </div>
-    }
+
+    <div class="d-inline-flex align-items-center">
+      <button (click)="navigate('prev')" [disabled]="currentPage === 1">
+        <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+      </button>
+      <a>{{`${currentPage} of ${totalPages}`}}</a>
+      <button
+        (click)="navigate('next')"
+        [disabled]="currentPage === totalPages"
+      >
+        <span class="material-symbols-outlined"> keyboard_arrow_right </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="d-inline-flex align-items-center gap-2">
+    <span class="label" [class.analyticsred]="isChecked">camera info</span>
+    <label class="switch">
+      <input type="checkbox" [(ngModel)]="isChecked" />
+      <span class="slider"></span>
+    </label>
+  </div>
+  }
 </section>
 
 <!-- camera container -->
 <section class="grid-container" #gridContainer appGlobalClick>
-    @for(item of getPaginatedList(); track $index) {
-    <div class="grid-item">
-        @if (change) {
-            <app-stream [videoData]="item"></app-stream>
-        }
-        <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
+  @for(item of getPaginatedList(); track $index) {
+  <div class="grid-item">
+    @if (change) {
+    <app-stream [videoData]="item"></app-stream>
+    }
+    <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
 
-        <!-- @if(cam.videoUrl && selectedGrid === 1) {
+    <!-- @if(cam.videoUrl && selectedGrid === 1) {
             <div class="d-flex align-items-center justify-content-around h-100">
                 <a class="first-arrow" (click)="loadPrevCam()">
                     <img src="icons/arrow-down-short-orange.svg" alt="">
@@ -77,10 +89,10 @@
             </div>
         } -->
 
-        @if (isChecked) {
-        <div class="info">{{item?.name}}</div>
-        }
-        <!-- <div class="cam-info">{{item?.name}}</div> -->
-    </div>
+    @if (isChecked) {
+    <div class="info">{{ item?.name }}</div>
     }
+    <!-- <div class="cam-info">{{item?.name}}</div> -->
+  </div>
+  }
 </section>

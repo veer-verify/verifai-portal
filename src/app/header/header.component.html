@@ -1,7 +1,7 @@
 <div class="header-container" appGlobalClick>
   <div class="d-flex gap-5">
     <div>
-      <img src="/themes/verifai/logo-black.png" alt="" width="100px" />
+      <img src="themes/verifai/logo-black.png" alt="" width="100px" />
     </div>
     @if (storage_service.currentSite$ | async; as site) {
     <div class="site-accordian">
@@ -11,10 +11,10 @@
       <div class="site-dropdown">
         <input type="search" [(ngModel)]="searchSite" #siteInput />
         @for (item of sitesList | async | search: searchSite; track $index) {
-        <p (click)="updateSite(item)">
-          <img src="icons/dot-1.svg" width="10px" class="me-1" />
+        <a (click)="updateSite(item)">
+          <img src="icons/dot-1.svg" width="8px" class="me-1" />
           {{ item.siteName }}
-        </p>
+        </a>
         } @empty {
         <p class="text-center bg-secondary">{{ "no sites!" | titlecase }}</p>
         }
@@ -26,6 +26,8 @@
     </div>
     }
   </div>
+
+  <!-- nav list -->
   <div class="nav-items">
     <a
       class="list-group-item"
@@ -45,46 +47,45 @@
       routerLinkActive="active"
       >support</a
     >
-    <a
-      class="list-group-item d-inline-flex align-items-center"
-      [matMenuTriggerFor]="menu"
-    >
-      <span class="material-symbols-outlined">account_circle</span>
-      <!-- <span>
-                  <p>user name</p>
-                  <p>admin</p>
-              </span> -->
+    <!-- <a class="list-group-item icon" [matMenuTriggerFor]="menu">
+      <span class="material-symbols-outlined" style="font-size: 20px"
+        >call</span
+      >
+    </a> -->
+    <a class="list-group-item icon" [matMenuTriggerFor]="menu">
+      <span class="material-symbols-outlined" style="font-size: 20px"
+        >person</span
+      >
     </a>
-    <!-- <a class="pointer" [matMenuTriggerFor]="menu"><img src="icons/logout-person-image.svg" alt="" width="12px"></a> -->
 
     <mat-menu #menu="matMenu">
       <button mat-menu-item>
         <a>
-          <img src="icons/profile.svg" alt="" width="8px" class="me-2" />
-          <span class="profile-image">PROFILE</span>
+          <!-- <img src="icons/profile.svg" alt="" width="8px" class="me-2" /> -->
+          <span class="profile-image">Profile</span>
         </a>
       </button>
-      <button mat-menu-item>
+      <!-- <button mat-menu-item>
         <a>
           <img src="icons/key.svg" alt="" width="6px" class="me-2" />
           <span class="profile-key">CHANGE PASSWORD</span>
         </a>
-      </button>
+      </button> -->
       <button mat-menu-item>
         <a class="profile-terms">
-          <img
+          <!-- <img
             src="icons/info-circle-fill.svg"
             alt=""
             width="8px"
             class="me-2"
-          />
-          <span>TERMS & CONDITIONS</span>
+          /> -->
+          <span>Terms & Conditions</span>
         </a>
       </button>
       <button mat-menu-item (click)="logout()">
         <a class="profile-logout">
-          <img src="icons/logout.svg" alt="" width="10px" class="me-2" />
-          <span>LOGOUT</span>
+          <!-- <img src="icons/logout.svg" alt="" width="10px" class="me-2" /> -->
+          <span>Logout</span>
         </a>
       </button>
     </mat-menu>
