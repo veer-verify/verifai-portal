@@ -20,8 +20,6 @@
     "@angular/platform-browser": "^19.2.15",
     "@angular/platform-browser-dynamic": "^19.2.15",
     "@angular/router": "^19.2.15",
-    "@coreui/angular": "^5.5.25",
-    "@coreui/coreui": "^5.4.3",
     "@types/crypto-js": "^4.2.2",
     "ag-grid-angular": "^34.3.1",
     "ag-grid-community": "^34.3.1",

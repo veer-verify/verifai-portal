@@ -11,20 +11,32 @@
 }
 
 .custom_support {
-    font-size: 15px;
-    border: 2px solid black;
-    border-radius: 50%;
-    padding: 2px;
+  font-size: 15px;
+  border: 2px solid black;
+  border-radius: 50%;
+  padding: 2px;
 }
 
 .custom_support:hover {
-    border: 2px solid #FD6327;
+  border: 2px solid #fd6327;
 }
 
 .nav-items {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 18px;
+}
+
+.nav-items .icon {
+  height: 30px;
+  width: 30px;
+  border: 1px solid;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.nav-items .icon .material-symbols-outlined {
+  vertical-align: -webkit-baseline-middle;
 }
 
 @media screen and (max-width: 768px) {
@@ -51,18 +63,18 @@
   text-transform: uppercase;
   font-weight: 400;
   font-size: 12px;
+  opacity: 0.7;
 }
 
 .active {
   /* background-color: #fff; */
   border-radius: 5px;
-  color: #fd6327;
+  color: #ed3237;
+  opacity: 1;
 }
 
 .list-group-item:hover {
-  /* background-color: #fff; */
-  border-radius: 5px;
-  color: #fd6327;
+  opacity: 1;
 }
 
 .logout-image {
@@ -71,42 +83,41 @@
 }
 
 .profile-image {
-  font: normal normal normal 9px/11px Montserrat;
+  /* font: normal normal normal 9px/11px Montserrat; */
   letter-spacing: 0px;
   color: #fd6327;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   opacity: 1;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .profile-key {
-  font: normal normal normal 9px/11px Montserrat;
+  /* font: normal normal normal 9px/11px Montserrat; */
   letter-spacing: 0px;
   color: #989fb4;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   opacity: 1;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .profile-terms {
   text-align: left;
-  font: normal normal normal 9px/11px Montserrat;
   letter-spacing: 0px;
   text-decoration: none;
   color: #989fb4;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   opacity: 1;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .profile-logout {
-  font: normal normal medium 9px/11px Montserrat;
+  /* font: normal normal medium 9px/11px Montserrat; */
   letter-spacing: 0px;
   color: #989fb4;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   opacity: 1;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 /* new */
@@ -143,7 +154,7 @@
   z-index: 99;
 }
 
-.site-dropdown p {
+.site-dropdown a {
   border-bottom: 1px solid #ff3a3a;
   /* margin: 4px !important; */
   padding: 6px;

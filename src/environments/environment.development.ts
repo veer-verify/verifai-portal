@@ -1,4 +1,5 @@
 const dev_url: string = 'https://usstaging.ivisecurity.com';
+const local_url: string = 'http://192.168.0.235:3002';
 
 export const environment = {
     configUrl: 'http://usstaging.ivisecurity.com:8943',

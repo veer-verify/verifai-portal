@@ -14,7 +14,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/verifai-portal"
+              "base": "dist/verifai-portal",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": [

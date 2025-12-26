@@ -7,7 +7,7 @@
   background-color: #f8f9fa;
 }
 
-.sub-header p {
+.sub-header span {
   font-size: 12px;
   font-weight: 900;
 }
@@ -90,7 +90,7 @@
   margin-top: 12px;
 }
 
-.date-time input{
+.date-time input {
   font-size: 13px;
   padding: 8px;
   color: rgb(129, 129, 129);
@@ -262,18 +262,14 @@
 }
 
 .range-slider::before {
-  content: '';
+  content: "";
   position: absolute;
   left: var(--start);
   right: calc(100% - var(--end));
   top: 50%;
   transform: translateY(-50%);
   height: 4px;
-  background: linear-gradient(
-    90deg,
-    #000 0%,
-    #ff3b3b 100%
-  );
+  background: linear-gradient(90deg, #000 0%, #ff3b3b 100%);
   border-radius: 4px;
   z-index: 2;
 }
@@ -318,35 +314,33 @@
   background: #ff3b3b;
 }
 
-
-
 .filter-btns {
   display: flex;
   justify-content: center;
-    gap: 10px;
+  gap: 10px;
   margin-top: 20px;
 }
 
-.btn-primary{
-    background-color: #ED3237;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+.btn-primary {
+  background-color: #ed3237;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.btn-secondary{
-    background-color: white;
-    color: black;
-    /* border: 1px solid #ED3237; */
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
+.btn-secondary {
+  background-color: white;
+  color: black;
+  /* border: 1px solid #ED3237; */
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 app-new-request {

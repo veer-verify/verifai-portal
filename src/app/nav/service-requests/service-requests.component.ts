@@ -2,10 +2,12 @@ import { Component, Input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   CellClickedEvent,
+  ColDef,
   GridApi,
   GridOptions,
   GridReadyEvent,
   IServerSideDatasource,
+  IServerSideGetRowsParams,
 } from 'ag-grid-community';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { StorageService } from '../../../utilities/services/storage.service';
@@ -50,22 +52,54 @@ export class ServiceRequestsComponent {
     private dialog: MatDialog
   ) { }
 
+
+  gridApi!: GridApi;
+  datasource!: IServerSideDatasource;
+  columnDefs: ColDef[] = [
+    { field: 'serviceReqId' },
+    { field: 'siteName' },
+    { field: 'service_cat_name' },
+    { field: 'service_subcat_name' },
+    { field: 'createdTime' },
+    { field: 'createdByName' },
+    {
+      field: 'action',
+      cellRenderer: () => '<button class="btn-open text-primary">Assign</button>'
+    },
+    {
+      field: 'edit',
+      cellRenderer: () => '<span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>',
+      editable: false,
+      sortable: false,
+    }
+  ];
+  defaultColDef: ColDef = {
+    flex: 1,
+    minWidth: 100,
+    filter: false,
+    resizable: false,
+  };
+  gridOptions: GridOptions = {
+    rowModelType: 'serverSide',
+    defaultColDef: this.defaultColDef,
+    pagination: true,
+    paginationPageSize: 10,
+    paginationPageSizeSelector: [10, 20, 50, 100],
+    overlayNoRowsTemplate: '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
+    noRowsOverlayComponentParams: { message: 'Your custom message' }
+  };
+
+
+
   currentSite: any;
   incidentdata: any = [];
   isChecked: boolean = false;
   camerasList: any = [];
   actionTags: any = [];
-
-  gridApi!: GridApi;
-  datasource!: IServerSideDatasource;
-  gridOptions!: GridOptions;
   categoryList: any = [];
   subcategoryList: any = [];
   showAssignDialog: boolean = false;
-
-
   ngOnInit() {
-    this.gridOptions = gridOptions;
     this.getTypes();
     this.loadCategories();
     this.storage_service.currentSite$
@@ -79,23 +113,6 @@ export class ServiceRequestsComponent {
         this.datasource = this.createDatasource();
       });
 
-    this.gridOptions.columnDefs = [
-      { field: 'serviceReqId' },
-      { field: 'siteName' },
-      { field: 'service_cat_name' },
-      { field: 'service_subcat_name' },
-      { field: 'createdTime' },
-      { field: 'createdByName' },
-      {
-        field: 'action',
-        cellRenderer: () => '<button class="btn-open">Open</button>'
-      },
-      {
-        field: 'edit',
-        cellRenderer: () => '<button class="btn-edit">Edit</button>',
-        editable: false,
-      }
-    ];
 
     this.filterForm = this.fb.group({
       camera: [''],
@@ -218,9 +235,13 @@ export class ServiceRequestsComponent {
 
   createDatasource() {
     return {
-      getRows: (params: any) => {
-        const pageSize = params.request.endRow - params.request.startRow;
-        const pageNumber = params.request.startRow / pageSize + 1;
+      getRows: (params: IServerSideGetRowsParams) => {
+        // console.log(params);
+        const end = params.request.endRow || 0;
+        const start = params.request.startRow || 0
+
+        const pageSize = end - start;
+        const pageNumber = start / pageSize + 1;
 
         this.request_service
           .getHelpDeskRequests({
@@ -229,9 +250,24 @@ export class ServiceRequestsComponent {
             page: pageNumber,
             pageSize: pageSize,
           })
-          .subscribe((res: any) => {
-            handleResponse(params, res, pageSize, res?.serviceRequestList);
+          .subscribe({
+            next: (res) => {
+              if (res.statusCode === 200) {
+                const isLastPage = res.serviceRequestList.length < pageSize;
+                params.success({
+                  rowData: res.serviceRequestList,
+                  rowCount: isLastPage
+                    ? params.request.startRow + res.serviceRequestList.length
+                    : res?.totalPages * pageSize
+                });
+                params.api.hideOverlay();
 
+              } else {
+                params.fail();
+                params.api.showNoRowsOverlay();
+
+              }
+            }
           });
       }
     };
@@ -250,19 +286,23 @@ export class ServiceRequestsComponent {
   }
 }
 
+
 @Component({
   selector: 'app-assign-request',
+  imports: [FormsModule, ReactiveFormsModule, MatDialogClose, CommonModule],
+  standalone: true,
   template: `
   <section>
     <header class="dialog-header">
       <a>Assign Service Request</a>
-      <a mat-dialog-close>Close</a>
+      <a mat-dialog-close><img src="icons/cancel_24dp_999999.svg" width="16px"
+    /></a>
     </header>
     
-    <main>
+    <main class="dialog">
       <form [formGroup]="assignForm">
         <div class="mb-3">
-          <label for="assignee">Assign To:</label>
+          <label for="assignee">Assign To</label>
           <select id="assignee" formControlName="assignee">
             @for(user of usersList; track user) {
               <option [value]="user.userId">{{ user.userName }}</option>
@@ -271,28 +311,28 @@ export class ServiceRequestsComponent {
         </div>
         
         <div class="mb-3">
+          <label>Comments</label>
           <input type="text" formControlName="comments" placeholder="Comments" />
         </div>
         
-        <div class="buttons">
+        <div class="btn-sec">
           <button type="button" (click)="assign()">Assign</button>
         </div>
       </form>
     </main>
-    
-  </section>`,
+  </section>
+  `,
   styles: [`
-    .dialog-header h4{ font-weight: bold; text-align: center; };
-    .dialog-header, form { padding: 10px;};
-    .buttons { margin-top: 15px; text-align: "center" };
-    .buttons button { margin-right: 10px; };
-    main {
-      width: 500px;
-      height: 500px;
-      overflow-y: auto;
+    .btn-sec {
+      display: flex;
+      justify-content: center;
     }
-    `],
-  imports: [FormsModule, ReactiveFormsModule, MatDialogClose, CommonModule],
+    
+    .btn-sec button {
+      border: 1px solid;
+      padding: 4px;
+    }
+    `]
 })
 
 export class AssignRequestComponent {

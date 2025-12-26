@@ -1,4 +1,4 @@
-import { themeQuartz, ColDef, GridOptions } from 'ag-grid-community';
+import { themeQuartz, ColDef, GridOptions, IServerSideGetRowsParams } from 'ag-grid-community';
 
 export const myTheme = themeQuartz.withParams({
     headerTextColor: '#FFFFFF',
@@ -18,7 +18,7 @@ const paginationPageSize = 10;
 const paginationPageSizeSelector = [10, 20, 50, 100];
 
 export const gridOptions: GridOptions = {
-    columnDefs: [],
+    // columnDefs: [],
     theme: myTheme,
     defaultColDef: defaultColDef,
     rowModelType: 'serverSide',
@@ -32,10 +32,11 @@ export const gridOptions: GridOptions = {
   <div style="padding: 20px; text-align:center; color:#ed3237;font-size:16px;font-weight:bold">
     No data available
   </div>
-`
+`,
+    noRowsOverlayComponentParams: { message: 'Your custom message' }
 };
 
-export function handleResponse(params: any, res: any, pageSize: number, data: any) {
+export function handleResponse(params: IServerSideGetRowsParams, res: any, pageSize: number, data: any) {
     if (res.statusCode === 200) {
         const isLastPage = data?.length < pageSize;
         params.success({

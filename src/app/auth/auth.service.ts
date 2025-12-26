@@ -32,6 +32,29 @@ export class AuthService {
     let url = `${environment.authUrl}/getUserInfoForUserId_1_0/${user?.UserId}`;
     return this.http.get(url);
   }
+  generateOTP(payload: any): Observable<any> {
+    const url = `${environment.authUrl}/generateOTP_1_0`;
+    const params = new HttpParams().set('email', payload?.email);
+    return this.http.get(url, { params });
+  }
+
+  validateOTP(payload: any): Observable<any> {
+    const url = `${environment.authUrl}/validateOTP_1_0`;
+    const obj = {
+      email: payload.email,
+      otp: payload?.otp,
+    }
+    return this.http.post(url, obj);
+  }
+
+  updateForgotPassword(payload: any): Observable<any> {
+    const url = `${environment.authUrl}/UpdateForgotPassword_1_0`;
+    const obj = {
+      email: payload.email,
+      newPassword: payload?.newPassword
+    }
+    return this.http.put(url, obj);
+  }
 
   getAccessforRefreshToken(payload: any): Observable<any> {
     let url = `${environment.authUrl}/getAccessforRefreshToken`;
