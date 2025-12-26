@@ -14,10 +14,10 @@
 
 .profile-image {
   position: relative;
-  width: 10%;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
-  /* overflow: hidden; */
-  border: 1px solid black;
+  border: 1px solid #E8E8E8;
   box-shadow: -6px 6px 10px black;
 }
 
@@ -188,6 +188,7 @@
 .dec-user{
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .card-container:hover{

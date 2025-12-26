@@ -41,17 +41,25 @@
       routerLinkActive="active"
       >Alerts</a
     >
-    <a
-      class="list-group-item"
-      routerLink="/dashboard/service-requests"
-      routerLinkActive="active"
-      >support</a
-    >
-    <!-- <a class="list-group-item icon" [matMenuTriggerFor]="menu">
+    <a class="list-group-item icon" [matMenuTriggerFor]="menu1">
       <span class="material-symbols-outlined" style="font-size: 20px"
         >call</span
       >
-    </a> -->
+    </a>
+    <mat-menu #menu1="matMenu">
+      <button routerLink="/dashboard/service-requests" mat-menu-item>
+        <a>Requests</a>
+      </button>
+      <button mat-menu-item>
+        <a>FAQs</a>
+      </button>
+      <button mat-menu-item>
+        <a>T&C</a>
+      </button>
+      <button mat-menu-item>
+        <a>Contact</a>
+      </button>
+    </mat-menu>
     <a class="list-group-item icon" [matMenuTriggerFor]="menu">
       <span class="material-symbols-outlined" style="font-size: 20px"
         >person</span
@@ -59,8 +67,8 @@
     </a>
 
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
-        <a>
+      <button routerLink="/dashboard/profile" routerLinkActive="active" mat-menu-item>
+        <a style="text-decoration: none;">
           <!-- <img src="icons/profile.svg" alt="" width="8px" class="me-2" /> -->
           <span class="profile-image">Profile</span>
         </a>

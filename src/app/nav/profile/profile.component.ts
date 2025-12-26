@@ -8,6 +8,7 @@ import { ConfigService } from '../../../utilities/services/config.service';
 import { FormsModule } from '@angular/forms';
 import { UpdateuserComponent } from './updateuser/updateuser.component';
 import { AddUserComponent } from './add-user/add-user.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +21,7 @@ export class ProfileComponent {
     private auth_service: AuthService,
     private storage_service: StorageService,
     private alert_service: AlertService,
-    private config_service: ConfigService
+    private router: Router
   ){}
 
   profileImg: any;
@@ -164,6 +165,11 @@ export class ProfileComponent {
         })
       }
     })
+  }
+
+  logout() {
+    this.router.navigate(['/login']);
+    this.storage_service.clearData();
   }
 
 }
