@@ -8,6 +8,7 @@ import { AlertsComponent } from './nav/alerts/alerts.component';
 import { authGuard } from './auth/auth.guard';
 import { TimelapseComponent } from './nav/timelapse/timelapse.component';
 import { ProfileComponent } from './nav/profile/profile.component';
+import { ChangePasswordComponent } from './nav/profile/change-password/change-password.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
@@ -22,7 +23,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'live-view',
-                component:LiveViewComponent
+                component: LiveViewComponent
             },
             {
                 path: 'alerts',
@@ -41,6 +42,10 @@ export const routes: Routes = [
                 component: ProfileComponent
             },
             {
+                path: 'change-password',
+                component: ChangePasswordComponent
+            },
+            {
                 path: '',
                 redirectTo: '/dashboard/live-view',
                 pathMatch: 'full'
@@ -52,5 +57,5 @@ export const routes: Routes = [
         redirectTo: '/login',
         pathMatch: 'full'
     }
-    
+
 ];

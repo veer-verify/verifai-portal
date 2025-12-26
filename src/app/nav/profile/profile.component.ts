@@ -6,7 +6,7 @@ import { AsyncPipe, NgClass } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { FormsModule } from '@angular/forms';
-import { UpdateuserComponent } from './updateuser/updateuser.component';
+import { UpdateuserComponent } from './update-user/updateuser.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { Router } from '@angular/router';
 
@@ -22,37 +22,35 @@ export class ProfileComponent {
     private storage_service: StorageService,
     private alert_service: AlertService,
     private router: Router
-  ){}
+  ) { }
 
   profileImg: any;
   userData: any;
   showLoader = false;
-  address: any=[];
+  address: any = [];
   raw_address: any;
-  sitesList :any;
-  subUsers : any;
+  sitesList: any;
+  subUsers: any = [];
   isEdit = false;
-  userRoles:any;
-  editBtns : any;
+  userRoles: any;
+  editBtns: any;
   addBtn = false;
 
-  ngOnInit(){
-
-    // const key = this.storage_service.getData('user')
-    this.auth_service.getUserInfoForId().subscribe((res: any)=>{
+  ngOnInit() {
+    this.auth_service.getUserInfoForId().subscribe((res: any) => {
       this.userData = res;
-      this.raw_address = [this.userData?.address_line1, this.userData?.address_line2, this.userData?.city,this.userData?.district, this.userData?.state,this.userData?.country]
+      this.raw_address = [this.userData?.address_line1, this.userData?.address_line2, this.userData?.city, this.userData?.district, this.userData?.state, this.userData?.country]
       this.address = this.raw_address.filter(Boolean)
-      console.log(this.userData)
+      // console.log(this.userData);
       this.profileImg = this.userData?.profileImage;
     });
-    this.storage_service.siteData$.subscribe((res:any)=>{
+    this.storage_service.siteData$.subscribe((res: any) => {
       this.sitesList = res;
     })
-    this.auth_service.listRoles().subscribe((res:any)=>{
+    this.auth_service.listRoles().subscribe((res: any) => {
       this.userRoles = res?.roleList;
     })
-    this.auth_service.getUserNamesByUserName().subscribe((res:any)=>{
+    this.auth_service.getUserNamesByUserName().subscribe((res: any) => {
       this.subUsers = res.data;
       // console.log(this.subUsers);
       this.editBtns = new Array(this.subUsers.length).fill(false);
@@ -61,11 +59,11 @@ export class ProfileComponent {
 
   @ViewChild('profileInput') profileinput!: ElementRef;
 
-  update(){
+  update() {
     this.profileinput.nativeElement.click();
   }
 
-  editDetails(){
+  editDetails() {
     this.isEdit = true;
   }
 
@@ -73,28 +71,28 @@ export class ProfileComponent {
     this.isEdit = val;
   }
 
-  closeAddUserModal(val: boolean){
+  closeAddUserModal(val: boolean) {
     this.addBtn = val;
   }
 
-  onFileChange(event: any){
+  onFileChange(event: any) {
     const reader = new FileReader();
-    if(event.target.files && event.target.files.length){
+    if (event.target.files && event.target.files.length) {
       const [file] = event.target.files
       reader.readAsDataURL(file);
-      reader.onload = ()=>{
-        if(file.size < 2048000){
+      reader.onload = () => {
+        if (file.size < 2048000) {
           this.profileImg = file;
           this.updateProfilePic();
         }
-        else{
+        else {
           this.alert_service.error('Image size should not be more than 2mb');
         }
       }
     }
   }
 
-  updateProfilePic(){
+  updateProfilePic() {
     var userUpdate = this.storage_service.getData('user');
 
     let obj = {
@@ -102,64 +100,64 @@ export class ProfileComponent {
       userId: userUpdate.UserId
     };
 
-    this.auth_service.updateProfilePicture(obj).subscribe((res: any)=>{
-      if(res?.status_code === 200){
+    this.auth_service.updateProfilePicture(obj).subscribe((res: any) => {
+      if (res?.status_code === 200) {
         this.alert_service.success(`Profile image updated successfully for ${userUpdate.FirstName} ${userUpdate.LastName}`)
         this.getUser();
       }
-      else{
+      else {
         this.alert_service.error(res?.message)
       }
-    },(err)=>{
+    }, (err) => {
       this.alert_service.error('Request Entity Too Large');
     })
   }
 
   userinfo: any = null;
   user: any = null;
-  getUser(){
+  getUser() {
     this.auth_service.getUserInfoForId().subscribe({
-      next: (res: any) =>{
-        if(res?.Status !== 'Failed'){
+      next: (res: any) => {
+        if (res?.Status !== 'Failed') {
           this.userinfo = res;
-          this.user = {...this.userinfo};
+          this.user = { ...this.userinfo };
           this.getSitesListForUserName();
         }
       },
-      error: (err)=>{
+      error: (err) => {
 
       }
     })
   }
 
   siteData: any = [];
-  getSitesListForUserName(){
+  getSitesListForUserName() {
     this.siteData = this.storage_service.siteData$.getValue();
   }
 
-  showEditBtns(idx: number){
-    this.editBtns[idx]=true;
+  showEditBtns(idx: number) {
+    this.editBtns[idx] = true;
   }
 
-  hideEditBtns(idx: number){
-    this.editBtns[idx]=false;
+  hideEditBtns(idx: number) {
+    this.editBtns[idx] = false;
   }
 
-  userAdd(){
+  userAdd() {
     this.addBtn = true;
   }
 
-  deleteUser(data: any){
+  deleteUser(data: any) {
     // data = Number(data);
     console.log(data);
-    this.alert_service.confirmDel().then((result: any) =>{
-      if(result.isConfirmed){
+    this.alert_service.confirmDel().then((result: any) => {
+      if (result.isConfirmed) {
         this.auth_service.deactivateUser(data?.userId).subscribe({
           next: (res: any) => {
-            if(res.statusCode === 200) this.alert_service.success(res.message);
+            if (res.statusCode === 200) this.alert_service.success(res.message);
             else this.alert_service.error(res.message);
           },
-          error: (err: any) =>{
+          error: (err: any) => {
             this.alert_service.error(err)
           }
         })

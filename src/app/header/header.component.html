@@ -51,9 +51,6 @@
         <a>Requests</a>
       </button>
       <button mat-menu-item>
-        <a>FAQs</a>
-      </button>
-      <button mat-menu-item>
         <a>T&C</a>
       </button>
       <button mat-menu-item>
@@ -67,34 +64,11 @@
     </a>
 
     <mat-menu #menu="matMenu">
-      <button routerLink="/dashboard/profile" routerLinkActive="active" mat-menu-item>
-        <a style="text-decoration: none;">
-          <!-- <img src="icons/profile.svg" alt="" width="8px" class="me-2" /> -->
-          <span class="profile-image">Profile</span>
-        </a>
+      <button routerLink="/dashboard/profile" mat-menu-item>
+        <span class="menu-item">Profile</span>
       </button>
-      <!-- <button mat-menu-item>
-        <a>
-          <img src="icons/key.svg" alt="" width="6px" class="me-2" />
-          <span class="profile-key">CHANGE PASSWORD</span>
-        </a>
-      </button> -->
-      <button mat-menu-item>
-        <a class="profile-terms">
-          <!-- <img
-            src="icons/info-circle-fill.svg"
-            alt=""
-            width="8px"
-            class="me-2"
-          /> -->
-          <span>Terms & Conditions</span>
-        </a>
-      </button>
-      <button mat-menu-item (click)="logout()">
-        <a class="profile-logout">
-          <!-- <img src="icons/logout.svg" alt="" width="10px" class="me-2" /> -->
-          <span>Logout</span>
-        </a>
+      <button routerLink="/dashboard/change-password" mat-menu-item>
+        <span class="menu-item">Change Password</span>
       </button>
     </mat-menu>
     <!-- </div> -->

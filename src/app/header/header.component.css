@@ -82,36 +82,7 @@
   border-right: 1px solid #7e7b7a;
 }
 
-.profile-image {
-  /* font: normal normal normal 9px/11px Montserrat; */
-  letter-spacing: 0px;
-  color: #fd6327;
-  /* text-transform: uppercase; */
-  opacity: 1;
-  font-size: 14px;
-}
-
-.profile-key {
-  /* font: normal normal normal 9px/11px Montserrat; */
-  letter-spacing: 0px;
-  color: #989fb4;
-  /* text-transform: uppercase; */
-  opacity: 1;
-  font-size: 14px;
-}
-
-.profile-terms {
-  text-align: left;
-  letter-spacing: 0px;
-  text-decoration: none;
-  color: #989fb4;
-  /* text-transform: uppercase; */
-  opacity: 1;
-  font-size: 14px;
-}
-
-.profile-logout {
-  /* font: normal normal medium 9px/11px Montserrat; */
+.menu-item {
   letter-spacing: 0px;
   color: #989fb4;
   /* text-transform: uppercase; */

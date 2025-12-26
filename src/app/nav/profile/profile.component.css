@@ -2,7 +2,8 @@
   background: transparent
     linear-gradient(181deg, #ffffff 0%, #f3f3f3 50%, #eeeeee 100%) 0% 0%
     no-repeat padding-box;
-  /* height: calc(100vh - 60px); */
+  height: calc(100vh - 60px);
+  overflow-y: auto;
 }
 .upper-container {
   display: flex;
@@ -17,7 +18,7 @@
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  border: 1px solid #E8E8E8;
+  border: 1px solid #e8e8e8;
   box-shadow: -6px 6px 10px black;
 }
 
@@ -76,7 +77,8 @@
   font-weight: 600;
 }
 
-.user-desig p, .card-container p {
+.user-desig p,
+.card-container p {
   font-style: italic;
   opacity: 0.5;
   font-size: 12px;
@@ -165,10 +167,10 @@
   border-radius: 3px;
 }
 
-.user-cards{
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
-    gap: 10px;
+.user-cards {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 10px;
 }
 
 .card-container {
@@ -185,29 +187,34 @@
   cursor: pointer;
 }
 
-.dec-user{
+.dec-user {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.card-container:hover{
+.card-container:hover {
   transform: scale(1.1);
 }
 
-.usr-profile-img{
-    padding: 10px;
+.usr-profile-img {
+  padding: 10px;
 }
 
-.role-btn{
-    font-size: 12px;
-    padding: 5px;
-    background: linear-gradient(180deg, white 10%, rgba(153, 153, 153, 0.192) 90%);
-    border-radius: 5px;
-    margin-top: 5px;
+.role-btn {
+  font-size: 12px;
+  padding: 5px;
+  background: linear-gradient(
+    180deg,
+    white 10%,
+    rgba(153, 153, 153, 0.192) 90%
+  );
+  border-radius: 5px;
+  margin-top: 5px;
 }
 
-app-updateuser, app-add-user {
+app-updateuser,
+app-add-user {
   position: fixed;
   top: 0;
   right: 0;
