@@ -9,6 +9,8 @@ import { authGuard } from './auth/auth.guard';
 import { TimelapseComponent } from './nav/timelapse/timelapse.component';
 import { ProfileComponent } from './nav/profile/profile.component';
 import { ChangePasswordComponent } from './nav/profile/change-password/change-password.component';
+import { TermsConditionsComponent } from './nav/service-requests/terms-conditions/terms-conditions.component';
+import { ContactComponent } from './nav/service-requests/contact/contact.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
@@ -32,6 +34,14 @@ export const routes: Routes = [
             {
                 path: 'service-requests',
                 component: ServiceRequestsComponent
+            },
+            {
+                path: 'terms-conditions',
+                component: TermsConditionsComponent
+            },
+            {
+                path: 'contact',
+                component: ContactComponent
             },
             {
                 path: 'timelapse',

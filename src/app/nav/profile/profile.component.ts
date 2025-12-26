@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, NgClass, UpperCasePipe } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
-  imports: [MediaPipe, AsyncPipe, NgClass, FormsModule, UpdateuserComponent, AddUserComponent],
+  imports: [MediaPipe, AsyncPipe, UpperCasePipe, NgClass, FormsModule, UpdateuserComponent, AddUserComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })

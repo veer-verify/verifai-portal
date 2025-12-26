@@ -70,6 +70,8 @@ export class LoginComponent implements OnInit {
           this.storageSrvc.saveData('user', res);
           this.saveMetaData();
           this.router.navigate(['/dashboard']);
+        } else {
+          alert(res.message)
         }
       },
       error: (err) => {

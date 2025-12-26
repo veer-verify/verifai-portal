@@ -3,10 +3,10 @@
   src: url("../public/fonts/neometric-2/Neometric-Regular.otf");
 }
 
-/* @font-face {
+@font-face {
   font-family: "Neometric Medium";
   src: url("../public/fonts/neometric-2/Neometric\ Medium\ \(Regular\).otf");
-} */
+}
 
 html,
 body {

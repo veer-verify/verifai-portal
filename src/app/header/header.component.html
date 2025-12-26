@@ -27,7 +27,7 @@
     }
   </div>
 
-  <!-- nav list -->
+  <!-- nav-list -->
   <div class="nav-items">
     <a
       class="list-group-item"
@@ -41,29 +41,30 @@
       routerLinkActive="active"
       >Alerts</a
     >
-    <a class="list-group-item icon" [matMenuTriggerFor]="menu1">
+    <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
       <span class="material-symbols-outlined" style="font-size: 20px"
         >call</span
       >
     </a>
-    <mat-menu #menu1="matMenu">
+
+    <mat-menu #requestMenu="matMenu">
       <button routerLink="/dashboard/service-requests" mat-menu-item>
-        <a>Requests</a>
+        <span class="menu-item">Requests</span>
       </button>
-      <button mat-menu-item>
-        <a>T&C</a>
+      <button routerLink="/dashboard/terms-conditions" mat-menu-item>
+        <span class="menu-item">T&C</span>
       </button>
-      <button mat-menu-item>
-        <a>Contact</a>
+      <button routerLink="/dashboard/contact" mat-menu-item>
+        <span class="menu-item">Contact</span>
       </button>
     </mat-menu>
-    <a class="list-group-item icon" [matMenuTriggerFor]="menu">
+    <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
       <span class="material-symbols-outlined" style="font-size: 20px"
         >person</span
       >
     </a>
 
-    <mat-menu #menu="matMenu">
+    <mat-menu #profileMenu="matMenu">
       <button routerLink="/dashboard/profile" mat-menu-item>
         <span class="menu-item">Profile</span>
       </button>
@@ -71,6 +72,5 @@
         <span class="menu-item">Change Password</span>
       </button>
     </mat-menu>
-    <!-- </div> -->
   </div>
 </div>

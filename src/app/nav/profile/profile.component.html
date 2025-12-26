@@ -4,6 +4,7 @@
       <img
         [src]="profileImg | media | async"
         alt=""
+        onerror="this.src='icons/profile.svg'"
         style="width: 100%; height: 100%; border-radius: 50%"
       />
       <img src="icons/editicon2.svg" class="editicon" alt="" />
@@ -23,28 +24,32 @@
       "
       (change)="onFileChange($event)"
     />
+
+    <!-- user info -->
     <div class="user-details">
       <div class="rows">
         <div class="row1">
           <div class="user-desig">
-            <h3>{{ userData?.userName }}</h3>
+            <h5 class="m-0">{{ userData?.userName | uppercase }}</h5>
             <p>{{ userData?.roleList[0]?.roleName }}</p>
           </div>
         </div>
-        <div class="row2">
+
+        <div class="row2 mb-2">
           <div class="location">
-            <img src="icons/location.svg" alt="" />
-            <p>{{ address.join(", ") }}</p>
+            <img src="icons/location.svg" alt="" width="16px" />
+            <span>{{ address.join(", ") }}</span>
           </div>
           <div class="call">
-            <img src="icons/phone.svg" alt="" style="height: 25px" />
+            <img src="icons/phone.svg" alt="" width="16px" />
             <div class="phnum">{{ userData?.contactNo1 }}</div>
           </div>
           <div class="mail">
-            <img src="icons/mail.svg" alt="" />
+            <img src="icons/mail.svg" alt="" width="16px" />
             <div class="mailid">{{ userData?.email }}</div>
           </div>
         </div>
+
         <div class="row3">
           <div class="org">
             <label>Organization Name</label>
@@ -60,8 +65,8 @@
           </div>
           <div class="user-status">
             <label>Status</label>
-            <h5 [ngClass]="userData?.active == 'T' ? 'st-act' : ''">
-              {{ userData?.active === "T" ? "active" : "inactive" }}
+            <h5 [style.color]="userData?.active == 'T' ? 'green' : ''">
+              {{ userData?.active === "T" ? "Active" : "Inactive" }}
             </h5>
           </div>
         </div>
@@ -72,17 +77,20 @@
           <img src="icons/logout.svg" alt="" />
         </button>
         <button class="edit-btn" (click)="editDetails()">
-          <img src="icons/edit.svg" alt="" /> Edit
+          <img src="icons/edit.svg" alt="" width="16px" /> Edit
         </button>
       </div>
     </div>
   </div>
+
   <div class="lower-container">
     <div class="low-heading">
       <strong>Total Users - {{ subUsers.length }}</strong>
       <button class="add-btn" (click)="userAdd()">+ Add</button>
     </div>
+
     <hr />
+
     <div class="user-cards">
       @for(usr of subUsers; track usr){
       <div
@@ -98,7 +106,12 @@
               : 'icons/def_profile_image.png'
           "
           alt=""
-          style="width: 40%; border-radius: 50%; border: 1px solid grey"
+          style="
+            width: 40%;
+            border-radius: 50%;
+            border: 1px solid grey;
+            padding: 10px;
+          "
         />
         <strong>{{ usr?.User_Name }}</strong>
         <p style="text-align: center; opacity: 1">{{ usr.roleName }}</p>
@@ -107,8 +120,7 @@
           class="extra-btns"
           [style.visibility]="editBtns[$index] ? 'visible' : 'hidden'"
         >
-          <img src="icons/edit.svg" alt="" />
-          <span style="opacity: 0">---</span>
+          <!-- <img src="icons/edit.svg" alt="" /> -->
           <img src="icons/delete.svg" alt="" (click)="deleteUser(usr)" />
         </div>
       </div>

@@ -110,11 +110,18 @@
 /* mat-menu */
 ::ng-deep .mat-mdc-menu-content {
   padding: 0 !important;
+  /* overflow: hidden !important; */
 }
 
-::ng-deep .mat-button-toggle-label-content {
-  /* font-family: Roboto, "Helvetica Neue", sans-serif !important; */
+::ng-deep .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
+  font-family: "Neometric Medium", sans-serif !important;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  min-height: 34px !important;
+  /* border-bottom: 1px solid #ababab; */
   font-size: 14px !important;
+  /* margin: 0 4px !important; */
 }
 
 ::ng-deep .mat-mdc-dialog-surface {

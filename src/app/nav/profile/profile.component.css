@@ -9,14 +9,14 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 30px;
+  padding: 20px 40px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .profile-image {
   position: relative;
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   border: 1px solid #e8e8e8;
   box-shadow: -6px 6px 10px black;
@@ -24,8 +24,8 @@
 
 .editicon {
   position: absolute;
-  width: 35px;
-  height: 35px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   background-color: #ffff;
   top: 5%;
@@ -34,7 +34,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* animation: rotateBorderColor 5s linear infinite; */
   border: 2px solid #ed3237;
   z-index: 1;
   cursor: pointer;
@@ -44,14 +43,15 @@
   flex: 8;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  margin-left: 30px;
 }
 
 .rows {
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  gap: 20px;
+  justify-content: center;
+  align-items: start;
+  gap: 4px;
 }
 
 .rows input {
@@ -66,10 +66,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.user-desig {
-  padding: 20px;
+  gap: 20px;
 }
 
 .user-desig h3 {
@@ -81,7 +78,11 @@
 .card-container p {
   font-style: italic;
   opacity: 0.5;
-  font-size: 12px;
+  font-size: 10px;
+}
+
+.card-container strong {
+  font-size: 14px;
 }
 
 .row3 label {
@@ -90,13 +91,8 @@
 }
 
 .row3 h5 {
-  font-size: 15px;
+  font-size: 12px;
   font-weight: 600;
-}
-
-.st-act {
-  color: green;
-  text-shadow: rgba(9, 255, 0, 0.24) 0px 3px 8px;
 }
 
 .user-btns {
@@ -109,16 +105,18 @@
 .logout-btn {
   background-color: black;
   color: white;
-  padding: 10px;
+  padding: 6px 12px;
   border-radius: 25px;
-  height: 45px;
+  font-size: 14px;
+  /* height: 45px; */
 }
 
 .edit-btn {
-  padding: 5px;
+  padding: 4px 8px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   box-shadow: rgba(61, 61, 61, 0.24) 0px 3px 8px;
+  font-size: 14px;
 }
 
 .post-edit-btns {
@@ -147,8 +145,10 @@
 .mail {
   display: flex;
   justify-content: start;
-  gap: 10px;
-  width: 275px;
+  gap: 4px;
+  margin-right: 16px;
+  font-size: 14px;
+  /* width: 275px; */
 }
 
 .lower-container {
@@ -169,22 +169,23 @@
 
 .user-cards {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 4px;
 }
 
 .card-container {
   background: #ffffff80 0% 0% no-repeat padding-box;
   box-shadow: 0px 3px 6px #0000001a;
   border: 1px solid #0000000d;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
   padding: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  /* gap: 5px; */
   transition: transform 1s ease;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .dec-user {
@@ -193,9 +194,9 @@
   pointer-events: none;
 }
 
-.card-container:hover {
+/* .card-container:hover {
   transform: scale(1.1);
-}
+} */
 
 .usr-profile-img {
   padding: 10px;
@@ -210,7 +211,7 @@
     rgba(153, 153, 153, 0.192) 90%
   );
   border-radius: 5px;
-  margin-top: 5px;
+  margin: 5px 0;
 }
 
 app-updateuser,
@@ -218,6 +219,5 @@ app-add-user {
   position: fixed;
   top: 0;
   right: 0;
-  /* transform: translateX(-100%); */
   z-index: 1000;
 }

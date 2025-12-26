@@ -33,6 +33,7 @@
   border: 1px solid;
   border-radius: 50%;
   text-align: center;
+  user-select: none;
 }
 
 .nav-items .icon .material-symbols-outlined {
