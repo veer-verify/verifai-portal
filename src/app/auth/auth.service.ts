@@ -127,6 +127,19 @@ export class AuthService {
     return this.http.post(url, payload);
   }
 
+  updatePassword(payload: any) {
+    let url = environment.authUrl + `/updatePassword_1_0`;
+    let user = this.storage_service.getData('user')
+    let obj = {
+      userName: user?.UserName,
+      oldPassword: payload.oldPassword,
+      newPassword: payload.newPassword,
+      firstTime: 'F',
+    };
+    console.log(user);
+    return this.http.put(url, obj);
+  }
+
   logout() {
     this.storage_service.clearData();
     this.router.navigate(['./login']);
