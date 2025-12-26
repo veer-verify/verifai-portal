@@ -7,6 +7,7 @@ import { ServiceRequestsComponent } from './nav/service-requests/service-request
 import { AlertsComponent } from './nav/alerts/alerts.component';
 import { authGuard } from './auth/auth.guard';
 import { TimelapseComponent } from './nav/timelapse/timelapse.component';
+import { ProfileComponent } from './nav/profile/profile.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
@@ -34,6 +35,10 @@ export const routes: Routes = [
             {
                 path: 'timelapse',
                 component: TimelapseComponent
+            },
+            {
+                path: 'profile',
+                component: ProfileComponent
             },
             {
                 path: '',

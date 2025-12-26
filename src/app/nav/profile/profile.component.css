@@ -1,0 +1,216 @@
+.profile-container {
+  background: transparent
+    linear-gradient(181deg, #ffffff 0%, #f3f3f3 50%, #eeeeee 100%) 0% 0%
+    no-repeat padding-box;
+  /* height: calc(100vh - 60px); */
+}
+.upper-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 30px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.profile-image {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid #E8E8E8;
+  box-shadow: -6px 6px 10px black;
+}
+
+.editicon {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #ffff;
+  top: 5%;
+  left: 70%;
+  box-shadow: -6px 6px 10px #e72e2e40;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* animation: rotateBorderColor 5s linear infinite; */
+  border: 2px solid #ed3237;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.user-details {
+  flex: 8;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 20px;
+}
+
+.rows input {
+  padding: 5px;
+  border-radius: 8px;
+  margin-right: 20px;
+}
+
+.row1,
+.row2,
+.row3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-desig {
+  padding: 20px;
+}
+
+.user-desig h3 {
+  color: #ed3237;
+  font-weight: 600;
+}
+
+.user-desig p, .card-container p {
+  font-style: italic;
+  opacity: 0.5;
+  font-size: 12px;
+}
+
+.row3 label {
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.row3 h5 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.st-act {
+  color: green;
+  text-shadow: rgba(9, 255, 0, 0.24) 0px 3px 8px;
+}
+
+.user-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-btn {
+  background-color: black;
+  color: white;
+  padding: 10px;
+  border-radius: 25px;
+  height: 45px;
+}
+
+.edit-btn {
+  padding: 5px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  box-shadow: rgba(61, 61, 61, 0.24) 0px 3px 8px;
+}
+
+.post-edit-btns {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-secondary {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ed3237;
+  font-weight: 600;
+}
+
+.btn-primary {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #ed3237;
+  color: white;
+  font-weight: 600;
+}
+
+.location,
+.call,
+.mail {
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+  width: 275px;
+}
+
+.lower-container {
+  padding: 20px;
+}
+
+.low-heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.add-btn {
+  font-weight: 600;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #0000001a;
+  border-radius: 3px;
+}
+
+.user-cards{
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 10px;
+}
+
+.card-container {
+  background: #ffffff80 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #0000001a;
+  border: 1px solid #0000000d;
+  margin-bottom: 40px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: transform 1s ease;
+  cursor: pointer;
+}
+
+.dec-user{
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.card-container:hover{
+  transform: scale(1.1);
+}
+
+.usr-profile-img{
+    padding: 10px;
+}
+
+.role-btn{
+    font-size: 12px;
+    padding: 5px;
+    background: linear-gradient(180deg, white 10%, rgba(153, 153, 153, 0.192) 90%);
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+app-updateuser, app-add-user {
+  position: fixed;
+  top: 0;
+  right: 0;
+  /* transform: translateX(-100%); */
+  z-index: 1000;
+}

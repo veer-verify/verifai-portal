@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg
+  width="85"
+  height="85"
+  viewBox="0 0 40.523 40.424"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <defs>
+    <linearGradient id="MyGradient">
+      <stop offset="5%" stop-color="#ed3237" />
+      <stop offset="95%" stop-color="#d04329" />
+    </linearGradient>
+  </defs>
+
+  <!-- Pencil Icon Only -->
+  <path
+    id="edit"
+    d="M0,11.728l9.1-9.1L12.191,5.71l-9.1,9.1H0Zm14.584-8.41-1.5,1.5L9.993,1.736l1.5-1.5a.838.838,0,0,1,1.157,0l1.929,1.929a.785.785,0,0,1,.232.579.785.785,0,0,1-.232.579Z"
+    transform="translate(14 14)"
+    fill="#ed3237"
+  />
+</svg>
