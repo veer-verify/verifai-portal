@@ -7,15 +7,14 @@ import { StorageService } from '../../utilities/services/storage.service';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-
   constructor(
     private http: HttpClient,
     private storage_service: StorageService,
-      private router: Router
-  ) { }
+    private router: Router
+  ) {}
 
   // private storage_service = inject(StorageService);
   login(payload: User): Observable<any> {
@@ -23,20 +22,90 @@ export class AuthService {
     const user = {
       userName: payload.userName,
       password: this.storage_service.encrypt(payload.password),
-      callingSystemDetail: ''
-    }
-    return this.http.post(url, user)
+      callingSystemDetail: '',
+    };
+    return this.http.post(url, user);
   }
 
-    getAccessforRefreshToken(payload: any): Observable<any> {
+  getUserInfoForId() {
+    var user = this.storage_service.getData('user');
+    let url = `${environment.authUrl}/getUserInfoForUserId_1_0/${user?.UserId}`;
+    return this.http.get(url);
+  }
+
+  getAccessforRefreshToken(payload: any): Observable<any> {
     let url = `${environment.authUrl}/getAccessforRefreshToken`;
-    let params = new HttpParams().set('refresh_token', payload?.RefreshToken).set('modifiedBy', payload?.UserId);
+    let params = new HttpParams()
+      .set('refresh_token', payload?.RefreshToken)
+      .set('modifiedBy', payload?.UserId);
     return this.http.post(url, null, { params: params });
   }
 
-    logout() {
+  updateProfilePicture(payload: any) {
+    let url = `${environment.authUrl}/updateProfilePicture_1_0`;
+    var a = this.storage_service.getData('user');
+    var userId = a?.UserId;
+    var userName = a?.UserName;
+    let body = new FormData();
+    body.append('file', payload?.file);
+    body.append('user_id', payload?.userId);
+    return this.http.post(url, body);
+  }
+
+  listRoles() {
+    let url = `${environment.authUrl}/listRoles_1_0`;
+    var user = this.storage_service.getData('user');
+    let params = new HttpParams()
+      .set('createdBy', user?.UserId)
+      .set('department', user?.roleList[0].department);
+    return this.http.get(url, { params: params });
+  }
+
+  updateUser(payload: any) {
+    var user = this.storage_service.getData('user');
+    let url = `${environment.authUrl}/updateUser_1_0/${user?.UserId}`;
+    // console.log(payload)
+    return this.http.put(url, payload);
+  }
+
+  getUserNamesByUserName(): Observable<any> {
+    // let url = 'http://192.168.0.231:8922/userDetails/getUserNamesByUserIds_1_0';
+    let url = environment.authUrl + '/getUserNamesByUserIds_1_0';
+    var user = this.storage_service.getData('user');
+    let params = new HttpParams().set('user_id', user?.UserId);
+    return this.http.get(url, { params: params });
+  }
+
+  getUserNamesBySubuser(usr: any): Observable<any> {
+    // let url = 'http://192.168.0.231:8922/userDetails/getUserNamesByUserIds_1_0';
+    let url = environment.authUrl + '/getUserNamesByUserIds_1_0';
+    let params = new HttpParams().set('user_id', usr?.UserId);
+    return this.http.get(url, { params: params });
+  }
+
+  deactivateUser(payload: any) {
+    let url = `${environment.authUrl}/deactivateUser_1_0/${payload?.userId}`;
+    return this.http.post(url, null);
+  }
+
+  createUserWithShortDetails(payload: any) {
+    let url = `${environment.authUrl}/createUserWithShortDetails_1_0`;
+    var user = this.storage_service.getData('user');
+
+    payload.realm = 'IVISUSA';
+    payload.employeeFlag = 'F';
+    payload.empId = '';
+    payload.safetyEscortFlag = 'F';
+    payload.firstTimeFlag = 'T';
+    payload.callingSystemDetail = 'portal';
+    payload.accountId = user.accountId ?? 0;
+    payload.createdBy = user.UserId;
+    payload.roleList = [parseInt(payload.roleList)];
+    return this.http.post(url, payload);
+  }
+
+  logout() {
     this.storage_service.clearData();
     this.router.navigate(['./login']);
   }
-
 }
