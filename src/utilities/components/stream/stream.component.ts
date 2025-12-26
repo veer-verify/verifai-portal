@@ -10,19 +10,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
 export class StreamComponent {
 
   @Input() videoData: any;
-
-  constructor(
-    private cdr: ChangeDetectorRef
-  ) { }
-
   @ViewChild('video') video!: ElementRef;
-  // @ViewChild('canvas') canvas!: ElementRef;
-
-  // ngOnChanges(): void {
-  //   // console.log(this.videoData);
-  //   this.requestICEServers();
-  // }
-
 
   peerConnection!: RTCPeerConnection;
   restartTimeout: any = null;
@@ -72,7 +60,7 @@ export class StreamComponent {
         };
         this.createOffer();
       }).catch((err) => {
-        // this.video.nativeElement.src = '/assets/Screen Recording 2024-12-07 102136.mp4';
+        this.video.nativeElement.src = '/gif/video.mp4';
         // this.hitStream = false;
         this.showLoader = false;
         this.onError(err.toString());

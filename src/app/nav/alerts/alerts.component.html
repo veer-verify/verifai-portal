@@ -14,6 +14,7 @@
         <option disabled>No cameras available</option>
         }
       </select>
+
       <select
         class="tag-select"
         [(ngModel)]="filterObj.actionTag"
@@ -33,6 +34,7 @@
           (change)="onFilterChange()"
         />
       </div>
+
       <div class="date-time">
         <span class="label">END</span>
         <input

@@ -3,10 +3,10 @@
   src: url("../public/fonts/neometric-2/Neometric-Regular.otf");
 }
 
-@font-face {
+/* @font-face {
   font-family: "Neometric Medium";
   src: url("../public/fonts/neometric-2/Neometric\ Medium\ \(Regular\).otf");
-}
+} */
 
 html,
 body {
@@ -87,17 +87,6 @@ button {
   text-transform: uppercase;
   color: #777;
 } */
-
-.date-time {
-  display: inline-flex;
-  align-items: center;
-  width: 200px;
-  gap: 6px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-  background-color: #fafafa;
-}
 
 .date-time input {
   border: none;

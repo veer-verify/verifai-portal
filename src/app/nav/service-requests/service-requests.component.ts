@@ -77,7 +77,6 @@ export class ServiceRequestsComponent {
     flex: 1,
     minWidth: 100,
     filter: false,
-    resizable: false,
   };
   gridOptions: GridOptions = {
     rowModelType: 'serverSide',
@@ -100,6 +99,7 @@ export class ServiceRequestsComponent {
   subcategoryList: any = [];
   showAssignDialog: boolean = false;
   ngOnInit() {
+    this.initilizeFilterForm();
     this.getTypes();
     this.loadCategories();
     this.storage_service.currentSite$
@@ -112,8 +112,9 @@ export class ServiceRequestsComponent {
         this.getcamerasForSiteId();
         this.datasource = this.createDatasource();
       });
+  }
 
-
+  initilizeFilterForm(): void {
     this.filterForm = this.fb.group({
       camera: [''],
       type: [''],
@@ -122,7 +123,7 @@ export class ServiceRequestsComponent {
       fromDate: [null],
       startTime: ['00:00'],
       toDate: [null],
-      endTime: ['00:00'],
+      endTime: ['00:00']
     });
   }
 
@@ -139,9 +140,10 @@ export class ServiceRequestsComponent {
   }
 
   filterSubs() {
+    this.filterForm.get('serviceSubCategory')?.setValue('');
+    // this.filterForm.patchValue({ serviceSubCategory: '' });
     const selectCatId = Number(this.filterForm.get('serviceCategory')?.value);
     this.subcategoryList = this.categoryList.find((cat: any) => cat.catId === selectCatId)?.subCategoryList || [];
-    this.filterForm.patchValue({ subAlert: '' });
   }
 
   durationStart = 0; // minutes
@@ -181,11 +183,9 @@ export class ServiceRequestsComponent {
   refreshGrid() {
     if (!this.gridApi) return;
     this.gridApi.refreshServerSide({ purge: true });
-    // console.log(this.gridApi);
   }
 
   showNewRequestModal: boolean = false;
-
   openNewRequestModal() {
     this.currentRequest = null;
     this.showNewRequestModal = true;
@@ -209,7 +209,6 @@ export class ServiceRequestsComponent {
         data: event.data
       });
     }
-
   }
 
   getcamerasForSiteId() {
@@ -227,7 +226,6 @@ export class ServiceRequestsComponent {
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
-
     if (this.datasource) {
       this.gridApi.setGridOption('serverSideDatasource', this.datasource);
     }
@@ -236,10 +234,8 @@ export class ServiceRequestsComponent {
   createDatasource() {
     return {
       getRows: (params: IServerSideGetRowsParams) => {
-        // console.log(params);
         const end = params.request.endRow || 0;
         const start = params.request.startRow || 0
-
         const pageSize = end - start;
         const pageNumber = start / pageSize + 1;
 
@@ -261,7 +257,6 @@ export class ServiceRequestsComponent {
                     : res?.totalPages * pageSize
                 });
                 params.api.hideOverlay();
-
               } else {
                 params.fail();
                 params.api.showNoRowsOverlay();

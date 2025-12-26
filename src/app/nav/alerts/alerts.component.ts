@@ -56,7 +56,6 @@ export class AlertsComponent {
     {
       field: 'clip',
       cellRenderer: (params: any) => {
-        // console.log(params)
         const isDisabled = params.data.files.length === 0;
         const disabledAttr = isDisabled ? 'disabled' : '';
         const style = isDisabled ? 'style="opacity: 0.5; pointer-events: none; filter: grayscale(1);"' : '';
@@ -70,9 +69,7 @@ export class AlertsComponent {
   datasource!: IServerSideDatasource;
   defaultColDef: ColDef = {
     flex: 1,
-    minWidth: 100,
-    filter: false,
-    resizable: false,
+    minWidth: 100
   };
   gridOptions: GridOptions = {
     rowModelType: 'serverSide',
