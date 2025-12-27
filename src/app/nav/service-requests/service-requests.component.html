@@ -1,5 +1,5 @@
 <div class="sub-header">
-  <span>ALL REQUESTS - {{ 0 }}</span>
+  <!-- <span>ALL REQUESTS - {{ 0 }}</span> -->
   <div>
     <button class="req-button me-3" (click)="openNewRequestModal()">
       NEW REQUEST
@@ -11,8 +11,8 @@
     <mat-menu #filterMenu="matMenu" panelClass="filter-menu">
       <ng-template matMenuContent>
         <div class="filter-header">
-          <p>FILTER</p>
-          <div class="close">X</div>
+          <span>FILTER</span>
+          <span class="material-symbols-outlined text-danger"> cancel </span>
         </div>
 
         <form

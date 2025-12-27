@@ -4,7 +4,7 @@
       <img
         [src]="profileImg | media | async"
         alt=""
-        onerror="this.src='icons/profile.svg'"
+        onerror="this.src='icons/def_profile_image.png'"
         style="width: 100%; height: 100%; border-radius: 50%"
       />
       <img src="icons/editicon2.svg" class="editicon" alt="" />
@@ -73,11 +73,14 @@
       </div>
       <div class="user-btns">
         <button class="logout-btn" (click)="logout()">
-          Logout
-          <img src="icons/logout.svg" alt="" />
+          <span class="material-symbols-outlined"> logout </span>
+          <span class="ms-1">LOGOUT</span>
         </button>
         <button class="edit-btn" (click)="editDetails()">
-          <img src="icons/edit.svg" alt="" width="16px" /> Edit
+          <span class="material-symbols-outlined text-danger me-1 fs-6">
+            edit
+          </span>
+          <span>Edit</span>
         </button>
       </div>
     </div>
@@ -86,7 +89,10 @@
   <div class="lower-container">
     <div class="low-heading">
       <strong>Total Users - {{ subUsers.length }}</strong>
-      <button class="add-btn" (click)="userAdd()">+ Add</button>
+      <button class="add-btn" (click)="userAdd()">
+        <span class="material-symbols-outlined"> add </span>
+        <span class="fs-6">ADD</span>
+      </button>
     </div>
 
     <hr />
@@ -94,34 +100,35 @@
     <div class="user-cards">
       @for(usr of subUsers; track usr){
       <div
-        class="card-container"
-        [ngClass]="usr.STATUS == '' ? 'dec-user' : ''"
-        (mouseenter)="showEditBtns($index)"
-        (mouseleave)="hideEditBtns($index)"
+        [ngClass]="
+          usr?.STATUS === 'IVISUSA'
+            ? 'card-container'
+            : 'card-container dec-user'
+        "
       >
         <img
-          [src]="
-            usr?.profileImageUrl
-              ? 'usr.profileImageUrl | media | async'
-              : 'icons/def_profile_image.png'
-          "
+          [src]="usr?.profileImageUrl | media | async"
           alt=""
+          onerror="this.src='icons/def_profile_image.png'"
           style="
             width: 40%;
             border-radius: 50%;
             border: 1px solid grey;
             padding: 10px;
+            margin-bottom: 10px;
           "
         />
-        <strong>{{ usr?.User_Name }}</strong>
-        <p style="text-align: center; opacity: 1">{{ usr.roleName }}</p>
+        <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
+        <p class="role-name">{{ usr.roleName }}</p>
         <button class="role-btn">Assigned Role</button>
-        <div
-          class="extra-btns"
-          [style.visibility]="editBtns[$index] ? 'visible' : 'hidden'"
-        >
-          <!-- <img src="icons/edit.svg" alt="" /> -->
-          <img src="icons/delete.svg" alt="" (click)="deleteUser(usr)" />
+
+        <div class="extra-btns">
+          <span
+            class="material-symbols-outlined text-danger"
+            (click)="deleteUser(usr)"
+          >
+            delete
+          </span>
         </div>
       </div>
       }

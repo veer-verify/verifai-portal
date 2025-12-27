@@ -11,10 +11,9 @@ export class AlertService {
   constructor(
     private snackBar: MatSnackBar,
     private configSrvc: ConfigService
-  )
-  {
+  ) {
     this.configSrvc.site_add_sub.subscribe({
-      next: (res: any) => {        
+      next: (res: any) => {
         this.siteAddData = res
       }
     })
@@ -83,8 +82,8 @@ export class AlertService {
   confirmDel() {
     return Swal.fire({
       // title: "Are you sure?",
-      text: "Do you Want to Deactivate This Rule?",
-      // icon: "warning",
+      text: "Do you Want to Deactivate This User?",
+      icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
@@ -92,30 +91,6 @@ export class AlertService {
     })
   }
 
-
-  confirmDe() {
-    return Swal.fire({
-      // title: "Are you sure?",
-      text: "Do you like to add a camera?",
-      // icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes"
-    })
-  }
-
-
-  cameralist: any = [];
-  getCams() {
-    return new Promise(() => {
-      this.configSrvc.dataFromSubheader.subscribe({
-        next: (res:any) => {
-          this.cameralist = res
-        }
-      });
-    })
-  }
 }
 
 

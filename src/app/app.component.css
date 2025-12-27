@@ -108,7 +108,9 @@
 }
 
 /* mat-menu */
+
 ::ng-deep .mat-mdc-menu-content {
+  font-family: "Neometric Regular", sans-serif !important;
   padding: 0 !important;
   /* overflow: hidden !important; */
 }

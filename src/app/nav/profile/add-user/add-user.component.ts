@@ -15,7 +15,7 @@ export class AddUserComponent {
     private fb: FormBuilder,
     private auth_service: AuthService,
     private alert_service: AlertService
-  ){}
+  ) { }
 
   @Output() closeModal: any = new EventEmitter<void>();
 
@@ -23,11 +23,10 @@ export class AddUserComponent {
 
   addUserForm!: FormGroup
 
-  ngOnInit(){
+  ngOnInit() {
     this.initForm();
-    console.log(this.roleList);
   }
-  
+
   initForm() {
     this.addUserForm = this.fb.group({
       firstName: [''],
@@ -39,23 +38,23 @@ export class AddUserComponent {
     });
   }
 
-  addUser(){
-    if(this.addUserForm.valid){
+  addUser() {
+    if (this.addUserForm.valid) {
       this.auth_service.createUserWithShortDetails(this.addUserForm.value).subscribe({
-        next: (res: any)=>{
-          if(res.statusCode === 200){
-          this.alert_service.success(res.message);
+        next: (res: any) => {
+          if (res.statusCode === 200) {
+            this.alert_service.success(res.message);
           }
-          else{
+          else {
             this.alert_service.error(res.message);
           }
         },
-        error: (err)=> this.alert_service.error(err)
+        error: (err) => this.alert_service.error(err)
       })
     }
   }
 
-  close(){
+  close() {
     this.closeModal.emit()
   }
 }
