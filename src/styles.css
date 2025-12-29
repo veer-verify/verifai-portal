@@ -229,6 +229,7 @@ button {
   display: inline-block;
   width: 34px;
   height: 18px;
+  margin: 0;
 }
 
 .switch input {

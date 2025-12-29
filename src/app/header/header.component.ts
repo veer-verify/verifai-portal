@@ -6,7 +6,7 @@ import { StorageService } from '../../utilities/services/storage.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
-import { AsyncPipe, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-header',
@@ -17,7 +17,8 @@ import { AsyncPipe, TitleCasePipe } from '@angular/common';
     FormsModule,
     SearchPipe,
     TitleCasePipe,
-    AsyncPipe
+    AsyncPipe,
+    UpperCasePipe
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -39,7 +40,9 @@ export class HeaderComponent implements OnInit {
 
   searchSite!: string;
   sitesList!: Observable<any>;
+  user: any;
   ngOnInit(): void {
+    this.user = this.storage_service.getData('user');
     this.sitesList = this.storage_service.siteData$;
   }
 

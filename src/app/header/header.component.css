@@ -3,7 +3,6 @@
   border-bottom: 1px solid #eeeeee;
   opacity: 1;
   height: 60px;
-  /* width: 100%; */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -24,7 +23,7 @@
 .nav-items {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .nav-items .icon {
@@ -38,6 +37,19 @@
 
 .nav-items .icon .material-symbols-outlined {
   vertical-align: -webkit-baseline-middle;
+}
+
+.user-role span {
+  display: block;
+}
+
+.user-role span:first-child {
+  font-size: 14px;
+}
+
+.user-role span:last-child {
+  font-size: 10px;
+  opacity: 0.5;
 }
 
 @media screen and (max-width: 768px) {

@@ -40,7 +40,7 @@ import { StreamComponent } from "../../../utilities/components/stream/stream.com
   templateUrl: './live-view.component.html',
   styleUrl: './live-view.component.css',
 })
-export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   // @HostListener('click', ['$event'])
   // onClick() {
   //   this.opensiteDialog == true ? this.opensiteDialog = false : null;
@@ -94,11 +94,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
-
-  camList = [];
+  camList: any = [];
   tempCamList = [];
   ngAfterViewInit(): void {
     this.storage_service.currentSite$
@@ -139,10 +135,22 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   change = true;
   navigate(type: string) {
+    this.selectedCam = '';
     this.change = false;
     setTimeout(() => {
       this.change = true;
       type === 'next' ? this.currentPage++ : this.currentPage--
+    }, 1000)
+  }
+
+  selectedCam: any = '';
+  call() {
+    this.adjustGrid(1);
+    const index = this.camList.findIndex((el: any) => el.cameraId === this.selectedCam);
+    this.change = false;
+    setTimeout(() => {
+      this.change = true;
+      this.currentPage = index + 1
     }, 1000)
   }
 

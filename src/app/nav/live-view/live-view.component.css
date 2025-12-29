@@ -5,7 +5,7 @@
   background: transparent linear-gradient(180deg, #ffffff 0%, #eeeeee 100%) 0%
     0% no-repeat padding-box;
   height: 40px;
-  padding: 10px;
+  padding: 10px 40px;
 }
 
 .grid-container {

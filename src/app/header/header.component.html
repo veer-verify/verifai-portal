@@ -70,11 +70,19 @@
         <span class="menu-item">Contact</span>
       </button>
     </mat-menu>
-    <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
-      <span class="material-symbols-outlined" style="font-size: 20px"
-        >person</span
-      >
-    </a>
+
+    <!-- profile section -->
+    <div class="d-flex align-items-center gap-1">
+      <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
+        <span class="material-symbols-outlined" style="font-size: 20px"
+          >person</span
+        >
+      </a>
+      <div class="user-role">
+        <span>{{ user?.UserName | uppercase }}</span>
+        <span>{{ user?.roleList[0].category | uppercase }}</span>
+      </div>
+    </div>
 
     <mat-menu #profileMenu="matMenu">
       <button

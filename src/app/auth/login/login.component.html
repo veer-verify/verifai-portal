@@ -39,10 +39,12 @@
         <section class="bottom-info">
           <div class="options">
             <input type="checkbox" (change)="showPassword = !showPassword" />
-            <label>Show Password</label>
+            <label class="m-0">Show Password</label>
           </div>
           <div class="forgot-password">
-            <button (click)="isLogin.set(false)">Forgot Password?</button>
+            <button (click)="isLogin.set(false)" class="text-danger">
+              Forgot Password?
+            </button>
           </div>
         </section>
 
