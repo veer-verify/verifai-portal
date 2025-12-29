@@ -43,7 +43,7 @@ export class AuthService {
     const obj = {
       email: payload.email,
       otp: payload?.otp,
-    }
+    };
     return this.http.post(url, obj);
   }
 
@@ -51,8 +51,8 @@ export class AuthService {
     const url = `${environment.authUrl}/UpdateForgotPassword_1_0`;
     const obj = {
       email: payload.email,
-      newPassword: payload?.newPassword
-    }
+      newPassword: payload?.newPassword,
+    };
     return this.http.put(url, obj);
   }
 
@@ -126,7 +126,7 @@ export class AuthService {
 
   updatePassword(payload: any) {
     let url = environment.authUrl + `/updatePassword_1_0`;
-    let user = this.storage_service.getData('user')
+    let user = this.storage_service.getData('user');
     let obj = {
       userName: user?.UserName,
       oldPassword: payload.oldPassword,
@@ -135,6 +135,36 @@ export class AuthService {
     };
     console.log(user);
     return this.http.put(url, obj);
+  }
+
+  getSitesListForGlobalAccountId(payload: any): Observable<any> {
+    // let url = 'http://192.168.0.231:8922/userDetails/getSitesListForGlobalAccountId_1_0/'
+    let url = environment.authUrl + '/getSitesListForGlobalAccountId_1_0/';
+    // var user = this.storageService.getEncrData('user');
+    let params = new HttpParams();
+    if (payload?.userId) {
+      params = params.set('userId', payload?.userId);
+    }
+    if (payload?.loginId) {
+      params = params.set('loginId', payload?.loginId);
+    }
+    if (payload?.assigned !== null) {
+      params = params.set('assigned', payload?.assigned);
+    }
+    params = params.set('callingSystemDetail', 'portal');
+    return this.http.get(url, { params: params });
+  }
+
+  applySitesMapping(payload: any) {
+    var user = this.storage_service.getData('user');
+    let url = `${environment.authUrl}/applySitesMapping_1_0`;
+    return this.http.post(url, payload);
+  }
+
+  unassignSiteForUser(payload: any) {
+    // let url = this.url1 + '/userDetails/unassignSiteForUser_1_0';
+    let url = `${environment.authUrl}/unassignSiteForUser_1_0`;
+    return this.http.post(url, payload);
   }
 
   logout() {

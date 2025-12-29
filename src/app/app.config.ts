@@ -10,6 +10,7 @@ import { TokenInterceptor } from '../utilities/interceptors/token.interceptor';
 
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { ServerSideRowModelApiModule, ServerSideRowModelModule } from 'ag-grid-enterprise';
+import { SearchPipe } from '../utilities/pipes/search.pipe';
 
 ModuleRegistry.registerModules([
   AllCommunityModule,

@@ -1,4 +1,8 @@
-.header-container {
+.small-screens {
+  display: none;
+}
+
+.all-screens {
   background: #ffffff 0% 0% no-repeat padding-box;
   border-bottom: 1px solid #eeeeee;
   opacity: 1;
@@ -165,4 +169,107 @@
 
 ::ng-deep.mat-mdc-menu-panel {
   background-color: #ffffff !important;
+}
+
+@media (max-width: 765px) {
+  .all-screens {
+    display: none;
+  }
+
+  .small-screens {
+    background: #ffffff 0% 0% no-repeat padding-box;
+    border-bottom: 1px solid #eeeeee;
+    opacity: 1;
+    height: 60px;
+    /* width: 100%; */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    padding: 0 40px;
+  }
+
+  .site-accordian {
+    margin: auto;
+  }
+
+  .side-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.466);
+    z-index: 999;
+  }
+
+  .side-navs {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side-list-group-item {
+    padding: 20px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .side-list-group-item:hover {
+    background-color: black;
+  }
+
+  /* DROPDOWN */
+  .side-dropdown {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dropdown-menu {
+    display: grid;
+    grid-template-rows: 0fr; /* collapsed */
+    overflow: hidden;
+    opacity: 0;
+    background: transparent;
+    transform: translateY(-4px);
+    transition: grid-template-rows 0.3s ease, opacity 0.2s ease,
+      transform 0.2s ease;
+      border: none;
+  }
+
+  .dropdown-menu.open {
+    grid-template-rows: 1fr; /* expanded */
+    opacity: 1;
+    transform: translateY(0);
+    margin-top: 40px;
+    margin-left: 20px;
+  }
+
+  /* REQUIRED: inner wrapper */
+  .dropdown-menu > div {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  .dropdown-menu a {
+    padding: 15px 30px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .dropdown-menu a:hover {
+    background-color: black;
+  }
+
+  .arrow {
+    float: right;
+    transition: transform 0.2s ease;
+  }
+
+  .arrow.open {
+    transform: rotate(180deg);
+  }
 }

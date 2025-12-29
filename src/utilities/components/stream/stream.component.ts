@@ -1,4 +1,7 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-stream',
@@ -8,6 +11,11 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StreamComponent {
+
+  constructor(
+    private http: HttpClient,
+    private alert_service: AlertService
+  ){}
 
   @Input() videoData: any;
   @Input() isChecked: any;
@@ -29,6 +37,7 @@ export class StreamComponent {
 
     this.hitStream = true;
     this.requestICEServers();
+    console.log(this.videoData);
   }
 
   ngAfterViewInit() {
@@ -315,6 +324,24 @@ export class StreamComponent {
     link.href = imgUrl;
     link.download = `${new Date()}.png`
     link.click();
+  }
+
+  playSiren1() {
+    this.http
+      .get(`${environment.sitesUrl}/play_1_0/${this.videoData.cameraId}`)
+      .subscribe(
+        (res: any) => {
+          if (res.statusCode === 200) {
+            this.alert_service.success(res.message);
+            // console.log()
+          } else {
+            this.alert_service.error(res.message);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          this.alert_service.error('Failed');
+        }
+      );
   }
 
   ngOnDestroy() {
