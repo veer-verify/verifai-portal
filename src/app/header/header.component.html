@@ -6,7 +6,7 @@
       </div>
       @if (storage_service.currentSite$ | async; as site) {
       <div class="site-accordian">
-        <a (click)="toggleSites()">{{ site.siteName }}</a>
+        <a (click)="toggleSites()" (click)="$event.stopPropagation()">{{ site.siteName }}</a>
 
         @if (showSite) {
         <div class="site-dropdown">

@@ -184,7 +184,7 @@ export class ProfileComponent {
     this.getSitesForGlobal({
       userId: this.filSubId,
       loginId: this.userData?.userId,
-      assigned: 0,
+      assigned: data.value,
     });
   }
 
