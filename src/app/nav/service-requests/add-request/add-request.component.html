@@ -1,7 +1,9 @@
 <div class="req-container">
   <div class="top-header">
     @if(currentRequestData){ EDIT REQUEST } @else{ CREATE NEW REQUEST }
-    <div class="close" (click)="close()">X</div>
+    <a (click)="close()">
+      <span class="material-symbols-outlined text-light"> cancel </span>
+    </a>
   </div>
 
   <div class="content">

@@ -10,6 +10,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inpu
 export class StreamComponent {
 
   @Input() videoData: any;
+  @Input() isChecked: any;
   @ViewChild('video') video!: ElementRef;
 
   peerConnection!: RTCPeerConnection;
@@ -319,6 +320,5 @@ export class StreamComponent {
   ngOnDestroy() {
     this.hitStream = false;
     this.peerConnection?.close();
-    // this.peerConnection = null;
   }
 }

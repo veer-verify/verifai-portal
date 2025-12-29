@@ -50,28 +50,28 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     {
       label: '1X1',
       noOfItems: 1,
-      path: 'icons/dot-1.svg',
+      path: 'icons/grid-1.svg',
     },
     {
       label: '2X2',
       noOfItems: 4,
-      path: 'icons/dot-2.svg',
+      path: 'icons/grid-2.svg',
     },
     {
       label: '3X3',
       noOfItems: 9,
-      path: 'icons/grid.svg',
+      path: 'icons/grid-3.svg',
     },
     {
       label: '4X4',
       noOfItems: 16,
-      path: 'icons/dot4.svg',
+      path: 'icons/grid-4.svg',
     },
-    {
-      label: '4X5',
-      noOfItems: 20,
-      path: 'icons/dot4.svg',
-    },
+    // {
+    //   label: '4X5',
+    //   noOfItems: 20,
+    //   path: 'icons/dot4.svg',
+    // },
   ];
 
   constructor(
