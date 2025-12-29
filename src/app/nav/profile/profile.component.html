@@ -1,12 +1,8 @@
 <div class="profile-container">
   <div class="upper-container">
     <a class="profile-image" (click)="update()">
-      <img
-        [src]="profileImg | media | async"
-        alt=""
-        onerror="this.src='icons/def_profile_image.png'"
-        style="width: 100%; height: 100%; border-radius: 50%"
-      />
+      <img [src]="profileImg | media | async" alt="" onerror="this.src='icons/def_profile_image.png'"
+        style="width: 100%; height: 100%; border-radius: 50%" />
       <img src="icons/editicon2.svg" class="editicon" alt="" />
     </a>
     <input type="file" name="myImage" accept="image/*" #profileInput style="
@@ -92,34 +88,24 @@
 
     <div class="user-cards">
       @for(usr of subUsers; track usr){
-      <div
-        [ngClass]="
+      <div [ngClass]="
           usr?.STATUS === 'IVISUSA'
             ? 'card-container'
             : 'card-container dec-user'
-        "
-      >
-        <img
-          [src]="usr?.profileImageUrl | media | async"
-          alt=""
-          onerror="this.src='icons/def_profile_image.png'"
-          style="
+        ">
+        <img [src]="usr?.profileImageUrl | media | async" alt="" onerror="this.src='icons/def_profile_image.png'" style="
             width: 40%;
             border-radius: 50%;
             border: 1px solid grey;
             padding: 10px;
             margin-bottom: 10px;
-          "
-        />
+          " />
         <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
         <p class="role-name">{{ usr.roleName }}</p>
-        <button class="role-btn">Assigned Role</button>
+        <button class="assign-btn" (click)="siteActions(usr.userId)">Assigned Sites</button>
 
         <div class="extra-btns">
-          <span
-            class="material-symbols-outlined text-danger"
-            (click)="deleteUser(usr)"
-          >
+          <span class="material-symbols-outlined text-danger" (click)="deleteUser(usr)">
             delete
           </span>
         </div>
@@ -144,45 +130,60 @@
       <input type="text" class="form-control" placeholder="Search" [(ngModel)]="siteSearch">
 
       <ng-container>
-        <div class="btn-group my-2 me-1" role="group" *ngFor="let item of filters">
+        @for(item of filters; track item){
+        <div class="btn-group my-2 me-1" role="group">
           <input type="radio" class="btn-check" [value]="item.id" [id]="item.id" (change)="filterSites(item)"
             [(ngModel)]="filter">
           <label class="btn btn-outline-dark" [for]="item.id">{{item.label}}</label>
         </div>
+        }
       </ng-container>
+      @let pipeSites = (userSites | search: siteSearch);
 
-      <ng-container *ngIf="userSites | search: siteSearch as pipeSites">
-        <div style="height: 40vh; overflow: auto;">
-          <div class="form-check select-site" *ngIf="filter !== 1 && pipeSites.length !== 0">
-            <input class="form-check-input" type="checkbox" id="all" [(ngModel)]="selectAllSites"
-              (ngModelChange)="toggleSites()">
-            <label class="form-check-label" for="all">Select All</label>
-          </div>
+      @if (pipeSites?.length) {
+      <div style="height: 40vh; overflow: auto;">
 
-          <div class="form-check select-site" *ngFor="let item of pipeSites">
-            <input class="form-check-input" type="checkbox" [id]="item.siteName" [(ngModel)]="item.assigned"
-              *ngIf="filter !== 1" (ngModelChange)="toggleAllIndividual()">
-            <label class="form-check-label" [for]="item.siteName">
-              {{ item.siteName }}
-            </label>
-          </div>
+        @if (filter !== 1 && pipeSites.length !== 0) {
+        <div class="form-check select-site">
+          <input class="form-check-input" type="checkbox" id="all" [(ngModel)]="selectAllSites"
+            (ngModelChange)="toggleSites()">
+          <label class="form-check-label" for="all">
+            Select All
+          </label>
         </div>
-      </ng-container>
+        }
+
+        @for (item of pipeSites; track item.siteId) {
+        <div class="form-check select-site">
+          @if (filter !== 1) {
+          <input class="form-check-input" type="checkbox" [id]="item.siteName" [(ngModel)]="item.assigned"
+            (ngModelChange)="toggleAllIndividual()">
+          }
+          <label class="form-check-label" [for]="item.siteName">
+            {{ item.siteName }}
+          </label>
+        </div>
+        }
+
+      </div>
+      }
 
     </div>
 
     <div class="d-flex justify-content-center my-2">
-      <button class="req-btn" (click)="applyMapping()" *ngIf="filter !== 1"
+      @if(filter !==1){
+      <button class="req-btn" (click)="applyMapping()"
         [disabled]="currentUser?.roleName === 'Client-Member' || currentUser?.roleName === 'Site-Admin'">
         {{ filter == 2 ? 'Unassign' : 'Assign' }}
       </button>
+    }
     </div>
   </mat-dialog-content>
 
   <!-- <mat-dialog-actions align="end">
     <button mat-button (click)="close(false)">Cancel</button>
   <button mat-raised-button color="warn" (click)="close(true)"> -->
-    <!-- Confirm -->
-    <!-- </button>
+  <!-- Confirm -->
+  <!-- </button>
   </mat-dialog-actions> -->
 </ng-template>

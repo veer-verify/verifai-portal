@@ -9,12 +9,14 @@ import { FormsModule } from '@angular/forms';
 import { UpdateuserComponent } from './update-user/updateuser.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
 import { SearchPipe } from '../../../utilities/pipes/search.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  imports: [MediaPipe, AsyncPipe, UpperCasePipe, TitleCasePipe, NgClass, FormsModule, UpdateuserComponent, AddUserComponent],
+  imports: [MediaPipe, AsyncPipe, UpperCasePipe, TitleCasePipe, NgClass, FormsModule, SearchPipe, UpdateuserComponent, AddUserComponent, MatDialogContent, MatDialogClose],
+  providers: [SearchPipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -178,10 +180,11 @@ export class ProfileComponent {
 
   filterSites(data: any) {
     // this.currentFilter = data;
+    // console.log({1:this.filSubId, 2:this.userData})
     this.getSitesForGlobal({
       userId: this.filSubId,
-      loginId: this.userData?.UserId,
-      assigned: data?.value,
+      loginId: this.userData?.userId,
+      assigned: 0,
     });
   }
 
@@ -315,6 +318,7 @@ export class ProfileComponent {
 
   getSitesForGlobal(data: any) {
     this.showLoader = true;
+    // console.log(data)
     this.auth_service.getSitesListForGlobalAccountId(data).subscribe({
       next: (res: any) => {
         this.showLoader = false;

@@ -16,14 +16,16 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { SanitizePipe } from '../../../utilities/pipes/sanitize.pipe';
 import { GlobalClickDirective } from '../../../utilities/directives/global-click.directive';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { StreamComponent } from "../../../utilities/components/stream/stream.component";
+import { StreamComponent } from '../../../utilities/components/stream/stream.component';
+import { environment } from '../../../environments/environment';
+import { AlertService } from '../../../utilities/services/alert.service';
 @Component({
   selector: 'app-live-view',
   imports: [
@@ -35,12 +37,14 @@ import { StreamComponent } from "../../../utilities/components/stream/stream.com
     ReactiveFormsModule,
     CommonModule,
     GlobalClickDirective,
-    StreamComponent
+    StreamComponent,
   ],
   templateUrl: './live-view.component.html',
   styleUrl: './live-view.component.css',
 })
-export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class LiveViewComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   // @HostListener('click', ['$event'])
   // onClick() {
   //   this.opensiteDialog == true ? this.opensiteDialog = false : null;
@@ -77,12 +81,15 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
   constructor(
     public configSrvc: ConfigService,
     private storage_service: StorageService,
-    private cdr: ChangeDetectorRef
-  ) { }
+    private cdr: ChangeDetectorRef,
+    private http: HttpClient,
+    private alert_service: AlertService
+  ) {}
 
   private destroy$ = new Subject<void>();
 
   isChecked: boolean = false;
+  paginatedCameraList: any = [];
   searchText: any;
   sitesList = [];
   @ViewChild('gridContainer') gridContainer!: ElementRef;
@@ -94,15 +101,16 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-
-  }
+  ngOnChanges(changes: SimpleChanges): void {}
 
   camList = [];
   tempCamList = [];
   ngAfterViewInit(): void {
     this.storage_service.currentSite$
-      .pipe(filter((site) => !!site), takeUntil(this.destroy$))
+      .pipe(
+        filter((site) => !!site),
+        takeUntil(this.destroy$)
+      )
       .subscribe((res) => {
         this.getCamerasForSiteId(res);
       });
@@ -110,13 +118,13 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
 
   getCamerasForSiteId(data: any) {
     this.tempCamList = [];
-    this.configSrvc.getCamerasForSiteId(data).subscribe({
-      next: (res: any) => {
-        this.camList = res;
-        this.tempCamList = this.camList;
-        this.adjustGrid(this.itemsPerPage);
-      },
-    });
+      this.configSrvc.getCamerasForSiteId(data).subscribe({
+        next: (res: any) => {
+          this.camList = res;
+          this.tempCamList = this.camList;
+          this.adjustGrid(this.itemsPerPage);
+        },
+      });
   }
 
   currentPage: number = 1;
@@ -134,7 +142,30 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.currentPage = 1;
     this.itemsPerPage = count;
     this.totalPages = Math.ceil(this.tempCamList.length / this.itemsPerPage);
-    el.style.gridTemplateColumns = `repeat(${Math.ceil(Math.sqrt(count))}, 1fr)`;
+    el.style.gridTemplateColumns = `repeat(${Math.ceil(
+      Math.sqrt(count)
+    )}, 1fr)`;
+  }
+
+  btnIndex!: number;
+
+  playSiren1(data: any) {
+    this.http
+      .get(`${environment.sitesUrl}/play_1_0/${data.cameraId}`)
+      .subscribe(
+        (res: any) => {
+          this.btnIndex = -1;
+          if (res.statusCode === 200) {
+            this.alert_service.success(res.message);
+          } else {
+            this.alert_service.error(res.message);
+          }
+        },
+        (err: HttpErrorResponse) => {
+          this.btnIndex = -1;
+          this.alert_service.error('Failed');
+        }
+      );
   }
 
   change = true;
@@ -142,8 +173,8 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnChanges, OnDe
     this.change = false;
     setTimeout(() => {
       this.change = true;
-      type === 'next' ? this.currentPage++ : this.currentPage--
-    }, 1000)
+      type === 'next' ? this.currentPage++ : this.currentPage--;
+    }, 1000);
   }
 
   ngOnDestroy(): void {
