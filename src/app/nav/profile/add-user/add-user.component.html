@@ -21,7 +21,7 @@
       <label for="role">Role</label>
       <select name="role" id="role" formControlName="roleList">
         @for(option of roleList; track option){
-        <option [value]="option?.roleId" style="color: black">
+        <option [value]="option?.deptId" style="color: black">
           {{ option?.name }}
         </option>
         }

@@ -102,7 +102,7 @@ export class LiveViewComponent
 
   ngOnChanges(changes: SimpleChanges): void { }
 
-  camList = [];
+  camList: any = [];
   tempCamList = [];
   ngAfterViewInit(): void {
     this.storage_service.currentSite$

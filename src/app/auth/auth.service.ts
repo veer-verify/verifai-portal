@@ -79,8 +79,8 @@ export class AuthService {
     let url = `${environment.authUrl}/listRoles_1_0`;
     var user = this.storage_service.getData('user');
     let params = new HttpParams()
-      .set('createdBy', user?.UserId)
-      .set('department', user?.roleList[0].department);
+    .set('createdBy', user?.UserId)
+    .set('department', user?.roleList[0].department);
     return this.http.get(url, { params: params });
   }
 
@@ -166,6 +166,7 @@ export class AuthService {
     let url = `${environment.authUrl}/unassignSiteForUser_1_0`;
     return this.http.post(url, payload);
   }
+
 
   logout() {
     this.storage_service.clearData();
