@@ -10,10 +10,10 @@ export class MediaPipe implements PipeTransform {
 
   http = inject(HttpClient);
   storage_service = inject(StorageService);
+
   async transform(src: string): Promise<any> {
-    const user = this.storage_service.getData('user');
-    const headers = new HttpHeaders({ Authorization: `Bearer ${user?.AccessToken}` })
-    const blob = await firstValueFrom(this.http.get(src, { headers, responseType: 'blob' }));
+    if (!src) return;
+    const blob = await firstValueFrom(this.http.get(src, { responseType: 'blob' }));
     return new Promise((reslove, reject) => {
       const fileReader = new FileReader();
       if (blob) {

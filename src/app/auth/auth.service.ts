@@ -14,7 +14,7 @@ export class AuthService {
     private http: HttpClient,
     private storage_service: StorageService,
     private router: Router
-  ) {}
+  ) { }
 
   // private storage_service = inject(StorageService);
   login(payload: User): Observable<any> {
@@ -87,24 +87,21 @@ export class AuthService {
   updateUser(payload: any) {
     var user = this.storage_service.getData('user');
     let url = `${environment.authUrl}/updateUser_1_0/${user?.UserId}`;
-    // console.log(payload)
     return this.http.put(url, payload);
   }
 
   getUserNamesByUserName(): Observable<any> {
-    // let url = 'http://192.168.0.231:8922/userDetails/getUserNamesByUserIds_1_0';
-    let url = environment.authUrl + '/getUserNamesByUserIds_1_0';
     var user = this.storage_service.getData('user');
+    let url = environment.authUrl + '/getUserNamesByUserIds_1_0';
     let params = new HttpParams().set('user_id', user?.UserId);
-    return this.http.get(url, { params: params });
+    return this.http.get(url, { params });
   }
 
-  getUserNamesBySubuser(usr: any): Observable<any> {
-    // let url = 'http://192.168.0.231:8922/userDetails/getUserNamesByUserIds_1_0';
-    let url = environment.authUrl + '/getUserNamesByUserIds_1_0';
-    let params = new HttpParams().set('user_id', usr?.UserId);
-    return this.http.get(url, { params: params });
-  }
+  // getUserNamesBySubuser(usr: any): Observable<any> {
+  //   let url = environment.authUrl + '/getUserNamesByUserIds_1_0';
+  //   let params = new HttpParams().set('user_id', usr?.UserId);
+  //   return this.http.get(url, { params: params });
+  // }
 
   deactivateUser(payload: any) {
     let url = `${environment.authUrl}/deactivateUser_1_0/${payload?.userId}`;

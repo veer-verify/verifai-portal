@@ -111,4 +111,71 @@
       </div>
     </aside>
   </div>
+
+  <!-- nav-list -->
+  <div class="nav-items">
+    <a
+      class="list-group-item"
+      routerLink="/dashboard/live-view"
+      routerLinkActive="active"
+      >live view</a
+    >
+    <a
+      class="list-group-item"
+      routerLink="/dashboard/alerts"
+      routerLinkActive="active"
+      >Alerts</a
+    >
+    <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
+      <span class="material-symbols-outlined" style="font-size: 20px"
+        >call</span
+      >
+    </a>
+
+    <mat-menu #requestMenu="matMenu">
+      <button
+        routerLink="/dashboard/service-requests"
+        routerLinkActive="active"
+        mat-menu-item
+      >
+        <span class="menu-item">Requests</span>
+      </button>
+      <button
+        routerLink="/dashboard/terms-conditions"
+        routerLinkActive="active"
+        mat-menu-item
+      >
+        <span class="menu-item">T&C</span>
+      </button>
+      <button
+        routerLink="/dashboard/contact"
+        routerLinkActive="active"
+        mat-menu-item
+      >
+        <span class="menu-item">Contact</span>
+      </button>
+    </mat-menu>
+    <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
+      <span class="material-symbols-outlined" style="font-size: 20px"
+        >person</span
+      >
+    </a>
+
+    <mat-menu #profileMenu="matMenu">
+      <button
+        routerLink="/dashboard/profile"
+        routerLinkActive="active"
+        mat-menu-item
+      >
+        <span class="menu-item">Profile</span>
+      </button>
+      <button
+        routerLink="/dashboard/change-password"
+        routerLinkActive="active"
+        mat-menu-item
+      >
+        <span class="menu-item">Change Password</span>
+      </button>
+    </mat-menu>
+  </div>
 </div>

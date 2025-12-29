@@ -284,14 +284,18 @@ export class ServiceRequestsComponent {
 
 @Component({
   selector: 'app-assign-request',
-  imports: [FormsModule, ReactiveFormsModule, MatDialogClose, CommonModule],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogClose,
+    CommonModule
+  ],
   standalone: true,
   template: `
   <section>
     <header class="dialog-header">
       <a>Assign Service Request</a>
-      <a mat-dialog-close><img src="icons/cancel_24dp_999999.svg" width="16px"
-    /></a>
+      <a mat-dialog-close><span class="material-symbols-outlined">cancel</span></a>
     </header>
     
     <main class="dialog">
@@ -311,23 +315,12 @@ export class ServiceRequestsComponent {
         </div>
         
         <div class="btn-sec">
-          <button type="button" (click)="assign()">Assign</button>
+          <button type="button" class="btn-primary" (click)="assign()">Assign</button>
         </div>
       </form>
     </main>
   </section>
-  `,
-  styles: [`
-    .btn-sec {
-      display: flex;
-      justify-content: center;
-    }
-    
-    .btn-sec button {
-      border: 1px solid;
-      padding: 4px;
-    }
-    `]
+  `
 })
 
 export class AssignRequestComponent {

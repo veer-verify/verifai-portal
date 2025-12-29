@@ -1,39 +1,41 @@
 <div class="uuser-container">
-    <div class="top-header">
-        ADD USER
-        <div class="close" (click)="close()">X</div>
-    </div>
+  <div class="top-header">
+    ADD USER
+    <div class="close" (click)="close()">X</div>
+  </div>
 
-    <div class="content">
-        <form [formGroup]="addUserForm" (ngSubmit)="addUser()" action="">
+  <div class="content">
+    <form [formGroup]="addUserForm" (ngSubmit)="addUser()" action="">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" formControlName="firstName" />
 
-            <label for="firstName">First Name</label>
-            <input type="text" id="firstName" formControlName="firstName">
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" formControlName="lastName" />
 
-            <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" formControlName="lastName">
+      <label for="userName">Username</label>
+      <input type="text" id="userName" formControlName="userName" />
 
-            <label for="userName">Username</label>
-            <input type="text" id="userName" formControlName="userName">
+      <label for="emailId">Email</label>
+      <input type="text" id="emailId" formControlName="emailId" />
 
-            <label for="emailId">Email</label>
-            <input type="text" id="emailId" formControlName="emailId">
+      <label for="role">Role</label>
+      <select name="role" id="role" formControlName="roleList">
+        @for(option of roleList; track option){
+        <option [value]="option?.roleId" style="color: black">
+          {{ option?.name }}
+        </option>
+        }
+      </select>
 
-            <label for="role">Role</label>
-            <select name="role" id="role" formControlName="roleList">
-                @for(option of roleList; track option){
-                    <option [value]=option?.roleId style="color: black;">{{option?.name}}</option>
-                }
-            </select>
+      <label for="remarks">Remarks</label>
+      <input type="text" id="remarks" formControlName="remarks" />
 
-            <label for="remarks">Remarks</label>
-            <input type="text" id="remarks" formControlName="remarks">
-
-            <div class="form-btns">
-                <button class="btn-secondary" (click)="close()">Cancel</button>
-                <button type="submit" class="btn-primary">Add</button>
-            </div>
-
-        </form>
-    </div>
+      <div class="form-btns">
+        <button type="reset" class="btn-secondary" (click)="close()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-primary">Add</button>
+      </div>
+    </form>
+  </div>
 </div>

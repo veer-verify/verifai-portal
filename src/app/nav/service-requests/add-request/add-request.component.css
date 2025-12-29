@@ -18,41 +18,12 @@
   width: 100%;
 }
 
-.close {
-  background-color: white;
-  color: #ed3237;
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-  padding: 2px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
-
-.close:hover {
-  background-color: #ed3237;
-  color: white;
-  /* border: 1px solid rgb(121, 121, 121); */
-}
-
 .content {
   flex: 1 1 auto;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 20px;
 }
-
-label {
-  display: block;
-  margin-top: 6px;
-  opacity: 0.8;
-  font-size: 12px;
-  /* font-weight: 600; */
-}
-
-/* option {
-  font-size: 16px;
-} */
 
 .priority-btns {
   display: flex;

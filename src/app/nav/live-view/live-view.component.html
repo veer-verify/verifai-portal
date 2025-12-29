@@ -18,8 +18,8 @@
         "
         (click)="adjustGrid(item.noOfItems)"
       >
-        <!-- <img [src]="item.path" width="16px" alt=""> -->
-        {{ item?.label }}
+        <img [src]="item.path" width="16px" alt="" />
+        <!-- {{ item?.label }} -->
       </a>
       }
     </div>
@@ -53,7 +53,7 @@
   @for(item of getPaginatedList(); track $index) {
   <div class="grid-item">
     @if (change) {
-    <app-stream [videoData]="item"></app-stream>
+    <app-stream [videoData]="item" [isChecked]="isChecked"></app-stream>
     <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
     }
 
@@ -89,9 +89,9 @@
             </div>
         } -->
 
-    @if (isChecked) {
+    <!-- @if (isChecked) {
     <div class="info">{{ item?.name }}</div>
-    }
+    } -->
     <!-- <div class="cam-info">{{item?.name}}</div> -->
   </div>
   }

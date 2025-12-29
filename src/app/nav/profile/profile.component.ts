@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
-import { AsyncPipe, CommonModule, NgClass, UpperCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { FormsModule } from '@angular/forms';
@@ -14,19 +14,7 @@ import { SearchPipe } from '../../../utilities/pipes/search.pipe';
 
 @Component({
   selector: 'app-profile',
-  imports: [
-    MediaPipe,
-    AsyncPipe,
-    UpperCasePipe,
-    NgClass,
-    FormsModule,
-    UpdateuserComponent,
-    AddUserComponent,
-    MatDialogModule,
-    SearchPipe,
-    CommonModule
-  ],
-  providers: [SearchPipe],
+  imports: [MediaPipe, AsyncPipe, UpperCasePipe, TitleCasePipe, NgClass, FormsModule, UpdateuserComponent, AddUserComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -45,11 +33,11 @@ export class ProfileComponent {
   showLoader = false;
   address: any = [];
   raw_address: any;
-  sitesList: any;
+  sitesList: any = [];
   subUsers: any = [];
   isEdit = false;
   userRoles: any;
-  editBtns: any;
+  // editBtns: any;
   addBtn = false;
   assignSites = false;
   allSites: any;
@@ -75,32 +63,26 @@ export class ProfileComponent {
 
   @ViewChild('sitesAssign') sitesAssign!: TemplateRef<any>;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.auth_service.getUserInfoForId().subscribe((res: any) => {
       this.userData = res;
-      this.raw_address = [
-        this.userData?.address_line1,
-        this.userData?.address_line2,
-        this.userData?.city,
-        this.userData?.district,
-        this.userData?.state,
-        this.userData?.country,
-      ];
-      this.address = this.raw_address.filter(Boolean);
-      console.log(this.userData);
+      this.raw_address = [this.userData?.address_line1, this.userData?.address_line2, this.userData?.city, this.userData?.district, this.userData?.state, this.userData?.country]
+      this.address = this.raw_address.filter(Boolean)
       this.profileImg = this.userData?.profileImage;
     });
+
     this.storage_service.siteData$.subscribe((res: any) => {
       this.sitesList = res;
     });
+
     this.auth_service.listRoles().subscribe((res: any) => {
-      this.userRoles = res?.roleList;
+      this.userRoles = res.roleList;
     });
+
     this.auth_service.getUserNamesByUserName().subscribe((res: any) => {
       this.subUsers = res.data;
-      // console.log(this.subUsers);
-      this.editBtns = new Array(this.subUsers.length).fill(false);
-    });
+      // this.editBtns = new Array(this.subUsers.length).fill(false);
+    })
   }
 
   @ViewChild('profileInput') profileinput!: ElementRef;
@@ -182,13 +164,13 @@ export class ProfileComponent {
     this.siteData = this.storage_service.siteData$.getValue();
   }
 
-  showEditBtns(idx: number) {
-    this.editBtns[idx] = true;
-  }
+  // showEditBtns(idx: number) {
+  //   this.editBtns[idx] = true;
+  // }
 
-  hideEditBtns(idx: number) {
-    this.editBtns[idx] = false;
-  }
+  // hideEditBtns(idx: number) {
+  //   this.editBtns[idx] = false;
+  // }
 
   userAdd() {
     this.addBtn = true;
@@ -367,8 +349,6 @@ export class ProfileComponent {
   }
 
   deleteUser(data: any) {
-    // data = Number(data);
-    console.log(data);
     this.alert_service.confirmDel().then((result: any) => {
       if (result.isConfirmed) {
         this.auth_service.deactivateUser(data?.userId).subscribe({
