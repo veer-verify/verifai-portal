@@ -14,6 +14,8 @@ export class RequestService {
     private storage_service: StorageService
   ) { }
 
+  baseurl = "http://usmgmt.iviscloud.net:777/"
+
   getHelpDeskCategories() {
     let url = `${environment.helpdeskUrl}/categoryList_1_0`;
     return this.http.get(url);
@@ -128,4 +130,30 @@ export class RequestService {
     // }
     return this.http.put(url, payload);
   }
+
+  showOptions1() {
+    const y = <any>(document.getElementById("modalcontent"));
+    const x = <any>(document.getElementById("topple"));
+    (<any>y).appendChild(x);
+    const z = (y.children[0]);
+    z.style.display = "block";
+    z.style.margin = 20 + "px";
+    z.style.width = 100 + "%";
+    const p = (y.parentNode);
+    p.style.display = "flex";
+  }
+
+  gettnc() {
+    let url = this.baseurl + 'businessInterface/User/getTandC_1_0';
+    var a = this.storage_service.getData('user');
+    let body = new FormData();
+    body.append('callingUsername', a?.UserName);
+    body.append('accesstoken', 'abc');
+    body.append('callingSystemDetail', 'admin');
+    // body.forEach((value,key) => {
+    //     console.log(key+" "+value)
+    // });
+    return this.http.post(url, body)
+  }
+
 }

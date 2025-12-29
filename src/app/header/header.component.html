@@ -1,8 +1,66 @@
 <div class="header-container" appGlobalClick>
-  <div class="d-flex gap-5">
-    <div>
-      <img src="themes/verifai/logo-black.png" alt="" width="100px" />
+  <div class="all-screens">
+    <div class="d-flex gap-5">
+      <div>
+        <img src="themes/verifai/logo-black.png" alt="" width="100px" />
+      </div>
+      @if (storage_service.currentSite$ | async; as site) {
+      <div class="site-accordian">
+        <a (click)="toggleSites()">{{ site.siteName }}</a>
+
+        @if (showSite) {
+        <div class="site-dropdown">
+          <input type="search" [(ngModel)]="searchSite" #siteInput />
+          @for (item of sitesList | async | search: searchSite; track $index) {
+          <a (click)="updateSite(item)">
+            <img src="icons/dot-1.svg" width="8px" class="me-1" />
+            {{ item.siteName }}
+          </a>
+          } @empty {
+          <p class="text-center bg-secondary">{{ "no sites!" | titlecase }}</p>
+          }
+        </div>
+        }
+        <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
+      </div>
+      }
     </div>
+
+    <!-- nav-list -->
+    <div class="nav-items">
+      <a class="list-group-item" routerLink="/dashboard/live-view" routerLinkActive="active">live view</a>
+      <a class="list-group-item" routerLink="/dashboard/alerts" routerLinkActive="active">Alerts</a>
+      <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
+        <span class="material-symbols-outlined" style="font-size: 20px">call</span>
+      </a>
+
+      <mat-menu #requestMenu="matMenu">
+        <button routerLink="/dashboard/service-requests" mat-menu-item>
+          <span class="menu-item">Requests</span>
+        </button>
+        <button routerLink="/dashboard/terms-conditions" mat-menu-item>
+          <span class="menu-item">T&C</span>
+        </button>
+        <button routerLink="/dashboard/contact" mat-menu-item>
+          <span class="menu-item">Contact</span>
+        </button>
+      </mat-menu>
+      <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
+        <span class="material-symbols-outlined" style="font-size: 20px">person</span>
+      </a>
+
+      <mat-menu #profileMenu="matMenu">
+        <button routerLink="/dashboard/profile" mat-menu-item>
+          <span class="menu-item">Profile</span>
+        </button>
+        <button routerLink="/dashboard/change-password" mat-menu-item>
+          <span class="menu-item">Change Password</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <div class="small-screens">
+    <div class="hamburger">☰</div>
     @if (storage_service.currentSite$ | async; as site) {
     <div class="site-accordian">
       <a (click)="toggleSites()">{{ site.siteName }}</a>
@@ -20,57 +78,37 @@
         }
       </div>
       }
-      <span class="material-symbols-outlined" (click)="toggleSites()"
-        >keyboard_arrow_down</span
-      >
+      <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
     </div>
     }
-  </div>
+    <aside class="side-bar">
+      <div>
+        <img src="themes/verifai/logo-black.png" alt="" width="100px" style="margin:auto; padding:10px;" />
+      </div>
 
-  <!-- nav-list -->
-  <div class="nav-items">
-    <a
-      class="list-group-item"
-      routerLink="/dashboard/live-view"
-      routerLinkActive="active"
-      >live view</a
-    >
-    <a
-      class="list-group-item"
-      routerLink="/dashboard/alerts"
-      routerLinkActive="active"
-      >Alerts</a
-    >
-    <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
-      <span class="material-symbols-outlined" style="font-size: 20px"
-        >call</span
-      >
-    </a>
+      <div class="side-navs">
 
-    <mat-menu #requestMenu="matMenu">
-      <button routerLink="/dashboard/service-requests" mat-menu-item>
-        <span class="menu-item">Requests</span>
-      </button>
-      <button routerLink="/dashboard/terms-conditions" mat-menu-item>
-        <span class="menu-item">T&C</span>
-      </button>
-      <button routerLink="/dashboard/contact" mat-menu-item>
-        <span class="menu-item">Contact</span>
-      </button>
-    </mat-menu>
-    <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
-      <span class="material-symbols-outlined" style="font-size: 20px"
-        >person</span
-      >
-    </a>
+        <a class="side-list-group-item" routerLink="/dashboard/live-view" routerLinkActive="active">
+          Live View
+        </a>
 
-    <mat-menu #profileMenu="matMenu">
-      <button routerLink="/dashboard/profile" mat-menu-item>
-        <span class="menu-item">Profile</span>
-      </button>
-      <button routerLink="/dashboard/change-password" mat-menu-item>
-        <span class="menu-item">Change Password</span>
-      </button>
-    </mat-menu>
+        <a class="side-list-group-item" routerLink="/dashboard/alerts" routerLinkActive="active">
+          Alerts
+        </a>
+
+        <!-- DROPDOWN -->
+        <div class="side-dropdown">
+          <div class="side-list-group-item dropdown-title" (click)="toggleDropdown()">
+            Settings
+            <span class="arrow" [class.open]="isDropdownOpen">▾</span>
+          </div>
+          <div class="dropdown-menu" [class.open]="isDropdownOpen">
+            <a routerLink="/dashboard/profile">Profile</a>
+            <a routerLink="/dashboard/users">Users</a>
+            <a routerLink="/dashboard/security">Security</a>
+          </div>
+        </div>
+      </div>
+    </aside>
   </div>
 </div>

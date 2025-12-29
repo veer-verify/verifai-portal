@@ -202,7 +202,7 @@
   padding: 10px;
 }
 
-.role-btn {
+.assign-btn {
   font-size: 12px;
   padding: 5px;
   background: linear-gradient(
@@ -214,10 +214,49 @@
   margin: 5px 0;
 }
 
+.dialog-header{
+  display: flex;
+  align-items: center;
+}
+
+.btn-check:checked + .btn-outline-dark{
+  background-color: #ed3237;
+  border: none;
+}
+
+input[type="checkbox"]:checked{
+  background-color: #ed3237;
+  border: none;
+  box-shadow: none;
+}
+
+.req-btn{
+  padding: 10px;
+  background-color: #ed3237;
+  border-radius: 8px;
+  color: white;
+}
+
 app-updateuser,
 app-add-user {
   position: fixed;
   top: 0;
   right: 0;
   z-index: 1000;
+}
+
+@media (max-width: 720px){
+  .upper-container{
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 550px){
+  .user-details{
+    flex-direction: column;
+  }
+
+  .user-btns{
+    flex-direction: row;
+  }
 }

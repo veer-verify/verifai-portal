@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="86.569" height="86.569" viewBox="0.403 0.403 40.667 40.566" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="Rectangle_130" x="0" y="0" width="86.569" height="86.569" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" dy="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feFlood flood-opacity="0.051"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Group_101" data-name="Group 101" transform="matrix(0.707107, 0.707107, -0.707107, 0.707107, -737.551147, -946.855164)">
+    <g transform="matrix(0.71, -0.71, 0.71, 0.71, 1165.86, 148)" filter="url(#Rectangle_130)">
+      <g id="Rectangle_130-2" data-name="Rectangle 130" transform="translate(38.28 10) rotate(45)" fill="#fff" stroke="#efefef" stroke-width="1">
+        <rect width="40" height="40" rx="20" stroke="none"/>
+        <rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="none"/>
+      </g>
+    </g>
+    <path id="plus" d="M12.833,12.833v5.833a.833.833,0,0,1-1.667,0V12.833H5.333a.833.833,0,1,1,0-1.667h5.833V5.333a.833.833,0,1,1,1.667,0v5.833h5.833a.833.833,0,0,1,0,1.667Z" transform="translate(1208.5 136.5)" fill-rule="evenodd"/>
+  </g>
+</svg>

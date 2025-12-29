@@ -30,6 +30,13 @@ export class HeaderComponent implements OnInit {
     public storage_service: StorageService
   ) { }
 
+  isDropdownOpen = false;
+
+toggleDropdown() {
+  this.isDropdownOpen = !this.isDropdownOpen;
+}
+
+
   // @HostListener('click') onClick() {
   //   console.log('click')
   //   if (this.showSite) {

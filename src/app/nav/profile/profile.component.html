@@ -1,29 +1,18 @@
 <div class="profile-container">
   <div class="upper-container">
     <a class="profile-image" (click)="update()">
-      <img
-        [src]="profileImg | media | async"
-        alt=""
-        onerror="this.src='icons/profile.svg'"
-        style="width: 100%; height: 100%; border-radius: 50%"
-      />
+      <img [src]="profileImg | media | async" alt="" onerror="this.src='icons/profile.svg'"
+        style="width: 100%; height: 100%; border-radius: 50%" />
       <img src="icons/editicon2.svg" class="editicon" alt="" />
     </a>
-    <input
-      type="file"
-      name="myImage"
-      accept="image/*"
-      #profileInput
-      style="
+    <input type="file" name="myImage" accept="image/*" #profileInput style="
         position: absolute;
         left: 0px;
         width: 1px;
         height: 1px;
         opacity: 0;
         pointer-events: none;
-      "
-      (change)="onFileChange($event)"
-    />
+      " (change)="onFileChange($event)" />
 
     <!-- user info -->
     <div class="user-details">
@@ -93,33 +82,22 @@
 
     <div class="user-cards">
       @for(usr of subUsers; track usr){
-      <div
-        class="card-container"
-        [ngClass]="usr.STATUS == '' ? 'dec-user' : ''"
-        (mouseenter)="showEditBtns($index)"
-        (mouseleave)="hideEditBtns($index)"
-      >
-        <img
-          [src]="
+      <div class="card-container" [ngClass]="usr.STATUS == '' ? 'dec-user' : ''" (mouseenter)="showEditBtns($index)"
+        (mouseleave)="hideEditBtns($index)">
+        <img [src]="
             usr?.profileImageUrl
               ? 'usr.profileImageUrl | media | async'
               : 'icons/def_profile_image.png'
-          "
-          alt=""
-          style="
+          " alt="" style="
             width: 40%;
             border-radius: 50%;
             border: 1px solid grey;
             padding: 10px;
-          "
-        />
+          " />
         <strong>{{ usr?.User_Name }}</strong>
         <p style="text-align: center; opacity: 1">{{ usr.roleName }}</p>
-        <button class="role-btn">Assigned Role</button>
-        <div
-          class="extra-btns"
-          [style.visibility]="editBtns[$index] ? 'visible' : 'hidden'"
-        >
+        <button class="assign-btn" (click)="siteActions(usr.userId)">Assigned Sites</button>
+        <div class="extra-btns" [style.visibility]="editBtns[$index] ? 'visible' : 'hidden'">
           <!-- <img src="icons/edit.svg" alt="" /> -->
           <img src="icons/delete.svg" alt="" (click)="deleteUser(usr)" />
         </div>
@@ -131,8 +109,58 @@
 @if(isEdit){
 <app-updateuser (closeModal)="closeUpdateUserModal($event)"></app-updateuser>
 } @if(addBtn){
-<app-add-user
-  (closeModal)="closeAddUserModal($event)"
-  [roleList]="userRoles"
-></app-add-user>
+<app-add-user (closeModal)="closeAddUserModal($event)" [roleList]="userRoles"></app-add-user>
 }
+<ng-template #sitesAssign>
+  <div class="dialog-header">
+    <p>Map Sites</p>
+    <p><img src="icons/close.svg" class="pointer" width="20" alt="" mat-dialog-close></p>
+  </div>
+
+  <mat-dialog-content>
+    <div class="dialog-content" style="width: 500px;">
+      <input type="text" class="form-control" placeholder="Search" [(ngModel)]="siteSearch">
+
+      <ng-container>
+        <div class="btn-group my-2 me-1" role="group" *ngFor="let item of filters">
+          <input type="radio" class="btn-check" [value]="item.id" [id]="item.id" (change)="filterSites(item)"
+            [(ngModel)]="filter">
+          <label class="btn btn-outline-dark" [for]="item.id">{{item.label}}</label>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="userSites | search: siteSearch as pipeSites">
+        <div style="height: 40vh; overflow: auto;">
+          <div class="form-check select-site" *ngIf="filter !== 1 && pipeSites.length !== 0">
+            <input class="form-check-input" type="checkbox" id="all" [(ngModel)]="selectAllSites"
+              (ngModelChange)="toggleSites()">
+            <label class="form-check-label" for="all">Select All</label>
+          </div>
+
+          <div class="form-check select-site" *ngFor="let item of pipeSites">
+            <input class="form-check-input" type="checkbox" [id]="item.siteName" [(ngModel)]="item.assigned"
+              *ngIf="filter !== 1" (ngModelChange)="toggleAllIndividual()">
+            <label class="form-check-label" [for]="item.siteName">
+              {{ item.siteName }}
+            </label>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+
+    <div class="d-flex justify-content-center my-2">
+      <button class="req-btn" (click)="applyMapping()" *ngIf="filter !== 1"
+        [disabled]="currentUser?.roleName === 'Client-Member' || currentUser?.roleName === 'Site-Admin'">
+        {{ filter == 2 ? 'Unassign' : 'Assign' }}
+      </button>
+    </div>
+  </mat-dialog-content>
+
+  <!-- <mat-dialog-actions align="end">
+    <button mat-button (click)="close(false)">Cancel</button>
+  <button mat-raised-button color="warn" (click)="close(true)"> -->
+    <!-- Confirm -->
+    <!-- </button>
+  </mat-dialog-actions> -->
+</ng-template>
