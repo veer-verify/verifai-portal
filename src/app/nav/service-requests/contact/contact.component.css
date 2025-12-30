@@ -1,0 +1,93 @@
+.contact-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  align-items: stretch;
+  background-color: #ed3237;
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(237, 50, 55, 0.3);
+  max-width: 900px;
+  width: 100%;
+}
+
+.card1,
+.card2 {
+  padding: 30px;
+  background-color: white;
+  border-radius: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  min-height: 240px;
+}
+
+.card1:hover,
+.card2:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  width: 100%;
+}
+
+.head img {
+  width: 28px;
+  height: 28px;
+  opacity: 0.7;
+}
+
+.head strong {
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: #ed3237;
+  font-weight: 600;
+}
+
+.content {
+  width: 100%;
+  line-height: 1.7;
+}
+
+.content strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.content p {
+  margin: 0;
+  color: #5a6c7d;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  .card1,
+  .card2 {
+    width: 100%;
+  }
+}

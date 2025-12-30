@@ -49,6 +49,25 @@ export class LiveViewComponent
   //   this.opensiteDialog == true ? this.opensiteDialog = false : null;
   // }
 
+  showSites = false;
+  searchSite!: string;
+  sitesList = []
+  siteList: any = []
+  showSideSites(){
+    this.showSites = true;
+    this.siteList = this.storage_service.siteData$.value;
+    console.log(this.siteList)
+  }
+
+  close(){
+    this.showSites= false;
+  }
+
+  updateSite(site: any){
+    this.showSites = false;
+    this.storage_service.currentSite$.next(site);
+  }
+
   gridTypes = [
     {
       label: '1X1',
@@ -90,7 +109,6 @@ export class LiveViewComponent
   isChecked: boolean = false;
   paginatedCameraList: any = [];
   searchText: any;
-  sitesList = [];
   @ViewChild('gridContainer') gridContainer!: ElementRef;
   ngOnInit(): void {
     this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({

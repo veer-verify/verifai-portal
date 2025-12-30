@@ -217,6 +217,23 @@ export class ProfileComponent {
       });
   }
 
+  newSiteActions(data:any){
+    this.filter = 1;
+    this.dialog.open(this.sitesAssign);
+    this.filSubId = data.userId;
+    let obj = {
+      userId: this.filSubId,
+      loginId: this.userData?.UserId,
+      assigned: 0,
+    };
+    this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
+      next: (res: any) => {
+        this.filterSites({userId: res.userId, value: 0})
+        // console.log(res.userId);
+      },
+    });
+  }
+
   closeSiteMapping() {
     this.showSiteMapping = false;
   }
@@ -353,9 +370,10 @@ export class ProfileComponent {
   }
 
   deleteUser(data: any) {
+    console.log(data);
     this.alert_service.confirmDel().then((result: any) => {
       if (result.isConfirmed) {
-        this.auth_service.deactivateUser(data?.userId).subscribe({
+        this.auth_service.deactivateUser(data).subscribe({
           next: (res: any) => {
             if (res.statusCode === 200) this.alert_service.success(res.message);
             else this.alert_service.error(res.message);

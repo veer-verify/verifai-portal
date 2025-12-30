@@ -19,6 +19,12 @@ export class AddUserComponent {
 
   @Output() closeModal: any = new EventEmitter<void>();
 
+ @Output() siteActions = new EventEmitter<any>();
+
+triggerSiteAction(data: any) {
+  this.siteActions.emit(data);
+}
+
   roleList: any;
 
   addUserForm!: FormGroup
@@ -48,8 +54,11 @@ export class AddUserComponent {
     if (this.addUserForm.valid) {
       this.auth_service.createUserWithShortDetails(this.addUserForm.value).subscribe({
         next: (res: any) => {
+          console.log(res);
           if (res.statusCode === 200) {
-            this.alert_service.success(res.message);
+            this.alert_service.confirm('Do you want to map sites to the user ?').then((result: any)=>{
+              if(result.isConfirmed) this.triggerSiteAction(res)
+            })
           }
           else {
             this.alert_service.error(res.message);

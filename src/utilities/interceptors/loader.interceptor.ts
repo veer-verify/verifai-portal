@@ -10,11 +10,11 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
 
   storage_service.loader$.next(true);
   return next(req).pipe(
-    catchError((err: HttpErrorResponse) => {
-      console.log(err)
-      router.navigateByUrl('/');
-      return throwError(() => new Error('Something went wrong on the server!'));
-    }),
+    // catchError((err: HttpErrorResponse) => {
+    //   console.log(err)
+    //   router.navigateByUrl('/');
+    //   return throwError(() => new Error('Something went wrong on the server!'));
+    // }),
     finalize(() => {
       storage_service.loader$.next(false);
     })

@@ -117,7 +117,7 @@
 @if(isEdit){
 <app-updateuser (closeModal)="closeUpdateUserModal($event)"></app-updateuser>
 } @if(addBtn){
-<app-add-user (closeModal)="closeAddUserModal($event)"></app-add-user>
+<app-add-user (closeModal)="closeAddUserModal($event)" (siteActions)="newSiteActions($event)"></app-add-user>
 }
 <ng-template #sitesAssign>
   <div class="dialog-header">
