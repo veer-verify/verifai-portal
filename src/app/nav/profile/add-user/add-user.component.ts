@@ -19,12 +19,18 @@ export class AddUserComponent {
 
   @Output() closeModal: any = new EventEmitter<void>();
 
-  @Input() roleList: any;
+  roleList: any;
 
   addUserForm!: FormGroup
 
   ngOnInit() {
     this.initForm();
+    this.auth_service.listRoles().subscribe((res:any)=>{
+      console.log(res);
+      if(res.statusCode===200) {
+        this.roleList = res.roleList;
+      }
+    })
   }
 
   initForm() {
