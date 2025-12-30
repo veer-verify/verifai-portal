@@ -109,6 +109,17 @@ export class RequestService {
     return this.http.put(url, null);
   }
 
+  listSupportUsers(payload: any): Observable<any> {
+    let url = environment.authUrl + '/listSupportAdminUsers_1_0';
+    let params = new HttpParams().set('typeName', 'IVIS_Sopport_Roles');
+
+    params = params.set('typeName', 'IVIS_Sopport_Roles')
+    if (payload?.department) {
+      params = params.set('department', payload?.department)
+    }
+    return this.http.get(url, { params: params });
+  }
+
   assignServiceRequest(payload: any): Observable<any> {
     let url = `${environment.helpdeskUrl}/assignServiceRequest_1_0`;
     var user = this.storage_service.getData('user');

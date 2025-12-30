@@ -98,6 +98,7 @@ export class AddRequestComponent {
   createTicket() {
     if (this.currentRequestData) {
       this.ticketForm.markAllAsTouched();
+      console.log(this.currentRequestData.serviceReqId)
       const formData = this.ticketForm.value;
       formData.site_id = this.storage_service.currentSite$;
       this.request_service
