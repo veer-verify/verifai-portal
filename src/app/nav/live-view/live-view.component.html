@@ -1,7 +1,7 @@
 <section class="sub-header">
-  <div class="hamburger" (click)="showSideSites()">☰</div>
+  <!-- <div class="hamburger" (click)="showSideSites()">☰</div> -->
   @if (camList.length) {
-    <div class="site-info">
+  <div class="site-info">
     <select class="w-100" [(ngModel)]="selectedCam" (change)="call()">
       <option value="">All ({{ camList.length }})</option>
       @for (item of camList; track $index) {
@@ -16,11 +16,14 @@
   <div class="d-flex gap-3">
     <div class="d-inline-flex align-items-center gap-2">
       @for (item of gridTypes; track $index) {
-      <a [ngClass]="
+      <a
+        [ngClass]="
           itemsPerPage == item.noOfItems
             ? 'grid-highlight active'
             : 'grid-highlight'
-        " (click)="adjustGrid(item.noOfItems)">
+        "
+        (click)="adjustGrid(item.noOfItems)"
+      >
         <img [src]="item.path" width="16px" alt="" />
         <!-- {{ item?.label }} -->
       </a>
@@ -29,17 +32,20 @@
 
     <div class="d-inline-flex align-items-center">
       <button (click)="navigate('prev')" [disabled]="currentPage === 1">
-        <span class="material-symbols-outlined"> keyboard_arrow_left </span>
+        <span class="material-symbols-outlined">keyboard_arrow_left </span>
       </button>
       <a>{{`${currentPage} - ${totalPages}`}}</a>
-      <button (click)="navigate('next')" [disabled]="currentPage === totalPages">
-        <span class="material-symbols-outlined"> keyboard_arrow_right </span>
+      <button
+        (click)="navigate('next')"
+        [disabled]="currentPage === totalPages"
+      >
+        <span class="material-symbols-outlined">keyboard_arrow_right </span>
       </button>
     </div>
   </div>
 
   <div class="d-inline-flex align-items-center gap-2">
-    <span class="label" [class.analyticsred]="isChecked">camera info</span>
+    <span class="hover-bar" [class.analyticsred]="isChecked">camera info</span>
     <label class="switch">
       <input type="checkbox" [(ngModel)]="isChecked" />
       <span class="slider"></span>
@@ -51,7 +57,7 @@
 <!-- camera container -->
 <section class="grid-container" #gridContainer appGlobalClick>
   @for(item of getPaginatedList(); track $index) {
-  <div class="grid-item">
+  <div class="grid-item" #gridItem>
     @if (change) {
     <app-stream [videoData]="item" [isChecked]="isChecked"></app-stream>
     <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
@@ -99,22 +105,20 @@
 
 <div class="side-sites" [hidden]="!showSites">
   <div class="header">
-    TOTAL SITES({{siteList.length}})
+    TOTAL SITES({{ siteList.length }})
     <div class="close" (click)="close()">←</div>
   </div>
   <div class="sites-content">
-      @for(item of siteList; track item){
-        <div class="site-list-item">
-          <a (click)="updateSite(item)">
-          @if(item.siteName.length <=35){
-            {{item.siteName}}
-          }
-          @else {
-            {{item.siteName.slice(0,35)}}...
-          }
-          </a>
-          <div class="show-cameras">+</div>
-        </div>
-      }
+    @for(item of siteList; track item){
+    <div class="site-list-item">
+      <a (click)="updateSite(item)">
+        @if(item.siteName.length <=35){
+        {{ item.siteName }}
+        } @else {
+        {{ item.siteName.slice(0, 35) }}... }
+      </a>
+      <div class="show-cameras">+</div>
+    </div>
+    }
   </div>
 </div>

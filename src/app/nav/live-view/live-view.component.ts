@@ -8,8 +8,10 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
+  QueryList,
   SimpleChanges,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { HeaderComponent } from '../../header/header.component';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -53,17 +55,16 @@ export class LiveViewComponent
   searchSite!: string;
   sitesList = []
   siteList: any = []
-  showSideSites(){
+  showSideSites() {
     this.showSites = true;
     this.siteList = this.storage_service.siteData$.value;
-    console.log(this.siteList)
   }
 
-  close(){
-    this.showSites= false;
+  close() {
+    this.showSites = false;
   }
 
-  updateSite(site: any){
+  updateSite(site: any) {
     this.showSites = false;
     this.storage_service.currentSite$.next(site);
   }
@@ -153,7 +154,15 @@ export class LiveViewComponent
     return this.tempCamList.slice(start, end);
   }
 
+  @ViewChildren('gridItem') gridItem!: QueryList<ElementRef>;
   adjustGrid(count: number): void {
+    // if (count === 1) {
+    //   const list = this.gridItem.toArray();
+    //   list.forEach((item) => {
+    //     item.nativeElement.height = '600px';
+    //     console.log(item.nativeElement)
+    //   })
+    // }
     const el = this.gridContainer.nativeElement;
 
     this.currentPage = 1;
@@ -188,8 +197,10 @@ export class LiveViewComponent
   change = true;
   navigate(type: string) {
     this.selectedCam = '';
+    this.storage_service.loader$.next(true);
     this.change = false;
     setTimeout(() => {
+      this.storage_service.loader$.next(false);
       this.change = true;
       type === 'next' ? this.currentPage++ : this.currentPage--;
     }, 1000);
@@ -197,13 +208,18 @@ export class LiveViewComponent
 
   selectedCam: any = '';
   call() {
-    this.adjustGrid(1);
-    const index = this.camList.findIndex((el: any) => el.cameraId === this.selectedCam);
-    this.change = false;
-    setTimeout(() => {
-      this.change = true;
-      this.currentPage = index + 1
-    }, 1000)
+    if (this.selectedCam === '') {
+      this.adjustGrid(9)
+    } else {
+      this.adjustGrid(1);
+      const index = this.camList.findIndex((el: any) => el.cameraId === this.selectedCam);
+      this.change = false;
+      setTimeout(() => {
+        this.change = true;
+        this.currentPage = index + 1
+      }, 1000)
+    };
+
   }
 
   ngOnDestroy(): void {

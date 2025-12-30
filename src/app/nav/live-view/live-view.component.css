@@ -1,4 +1,5 @@
 .sub-header {
+  font-family: "Neometric Medium", sans-serif !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,7 +9,13 @@
   padding: 10px 40px;
 }
 
-.side-sites{
+.hover-bar {
+  font-family: "Neometric Medium", sans-serif !important;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.side-sites {
   position: absolute;
   top: 60px;
   left: 0;
@@ -19,48 +26,47 @@
   flex-direction: column;
 }
 
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   background-color: #ed3237;
   color: white;
   padding: 10px;
-  flex:1;
+  flex: 1;
 }
 
-
-.close{
+.close {
   cursor: pointer;
 }
 
-.close:hover{
+.close:hover {
   background-color: #ed3237 !important;
   color: white !important;
 }
 
-.sites-content{
+.sites-content {
   background-color: white;
   /* height: 100%; */
   overflow-y: auto;
   padding: 10px;
 }
 
-.site-list-item{
+.site-list-item {
   padding: 10px;
   display: flex;
   justify-content: space-between;
   border-bottom: 2px solid #ed323896;
 }
 
-.site-list-item a{
+.site-list-item a {
   cursor: pointer;
 }
 
-.show-cameras{
+.show-cameras {
   cursor: pointer;
 }
 
-.hamburger{
+.hamburger {
   color: #ed3237;
   padding: 0 10px;
   border: 1px solid rgba(0, 0, 0, 0.39);

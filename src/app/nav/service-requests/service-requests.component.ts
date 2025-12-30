@@ -8,6 +8,7 @@ import {
   GridReadyEvent,
   IServerSideDatasource,
   IServerSideGetRowsParams,
+  themeQuartz,
 } from 'ag-grid-community';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { StorageService } from '../../../utilities/services/storage.service';
@@ -23,7 +24,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDialog, MatDialogClose } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-service-requests',
@@ -38,6 +39,7 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatNativeDateModule,
   ],
+  providers: [DatePipe],
   templateUrl: './service-requests.component.html',
   styleUrl: './service-requests.component.css',
 })
@@ -49,18 +51,28 @@ export class ServiceRequestsComponent {
     private config_service: ConfigService,
     private request_service: RequestService,
     private fb: FormBuilder,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private datePipe: DatePipe
   ) { }
 
 
   gridApi!: GridApi;
   datasource!: IServerSideDatasource;
+  myTheme = themeQuartz.withParams({
+    headerTextColor: '#FFFFFF',
+    headerBackgroundColor: 'rgba(0,0,0,0.5)',
+    headerColumnResizeHandleColor: '#ffffff',
+    rowBorder: true
+  });
   columnDefs: ColDef[] = [
     { field: 'serviceReqId' },
     { field: 'siteName' },
-    { field: 'service_cat_name' },
-    { field: 'service_subcat_name' },
-    { field: 'createdTime' },
+    { field: 'service_cat_name', headerName: 'Category' },
+    { field: 'service_subcat_name', headerName: 'Sub Category' },
+    {
+      field: 'createdTime',
+      cellRenderer: (col: any) => this.datePipe.transform(col.data?.createdTime, 'short')
+    },
     { field: 'createdByName' },
     {
       field: 'action',
@@ -81,6 +93,7 @@ export class ServiceRequestsComponent {
     filter: false,
   };
   gridOptions: GridOptions = {
+    theme: this.myTheme,
     rowModelType: 'serverSide',
     defaultColDef: this.defaultColDef,
     pagination: true,
@@ -127,6 +140,10 @@ export class ServiceRequestsComponent {
       toDate: [null],
       endTime: ['00:00']
     });
+  }
+
+  resetForm() {
+    this.filterForm.reset();
   }
 
   editRequest() {

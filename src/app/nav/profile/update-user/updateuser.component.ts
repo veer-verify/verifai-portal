@@ -19,13 +19,13 @@ export class UpdateuserComponent {
     private fb: FormBuilder,
     private auth_service: AuthService,
     private alert_service: AlertService
-  ){}
+  ) { }
 
   userData: any;
 
-  ngOnInit(){
+  ngOnInit() {
     this.initForm();
-    this.auth_service.getUserInfoForId().subscribe((res: any)=>{
+    this.auth_service.getUserInfoForId().subscribe((res: any) => {
       this.userData = res;
       this.userForm.patchValue({
         firstName: this.userData?.firstName,
@@ -42,20 +42,21 @@ export class UpdateuserComponent {
     })
   }
 
-  userForm!:FormGroup
+  userForm!: FormGroup
 
 
   initForm() {
     this.userForm = this.fb.group({
-      firstName: [''],
-      lastName: [''],
-      contactNo1: [''],
-      address_line1: [''],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      contactNo1: ['', Validators.required],
+      contactNo2: [''],
+      address_line1: ['', Validators.required],
       address_line2: [''],
-      city: [''],
-      district: [''],
-      state: [''],
-      country: [''],
+      city: ['', Validators.required],
+      district: ['', Validators.required],
+      state: ['', Validators.required],
+      country: ['', Validators.required],
       pin: ['']
     });
   }
@@ -64,20 +65,22 @@ export class UpdateuserComponent {
     this.closeModal.emit(false);
   }
 
-  updateUser(){
+  updateUser() {
+    if (this.userForm.invalid) return this.alert_service.error('Please fill valid details!');
+
     const obj = {
       ...this.userData,
       ...this.userForm.value
     }
-    this.auth_service.updateUser(obj).subscribe((res:any)=>{
-      if(res.statusCode === 200){
+    this.auth_service.updateUser(obj).subscribe((res: any) => {
+      if (res.statusCode === 200) {
         this.alert_service.success('User Details Updated Successfully');
         this.close();
-        this.auth_service.getUserInfoForId().subscribe((res: any)=>{
+        this.auth_service.getUserInfoForId().subscribe((res: any) => {
           this.userData = res
         })
       }
-      else{
+      else {
         this.alert_service.error(res.message)
       }
     })

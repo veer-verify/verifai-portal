@@ -8,7 +8,7 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, IServerSideDatasource } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, IServerSideDatasource, themeQuartz } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { gridOptions, handleResponse } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -48,11 +48,18 @@ export class AlertsComponent {
   camerasList: any = [];
   actionTags: any = [];
 
+  myTheme = themeQuartz.withParams({
+    headerTextColor: '#FFFFFF',
+    headerBackgroundColor: 'rgba(0,0,0,0.5)',
+    headerColumnResizeHandleColor: '#ffffff',
+    rowBorder: true
+  });
+
   columnDefs: ColDef[] = [
     { field: 'name' },
     { field: 'eventDate' },
-    { field: 'eventFromTime' },
-    { field: 'eventToTime' },
+    { field: 'eventFromTime', headerName: 'Start Time' },
+    { field: 'eventToTime', headerName: 'End Time' },
     { field: 'duration' },
     { field: 'objectName' },
     { field: 'actionTag' },
@@ -75,6 +82,7 @@ export class AlertsComponent {
     minWidth: 100
   };
   gridOptions: GridOptions = {
+    theme: this.myTheme,
     rowModelType: 'serverSide',
     defaultColDef: this.defaultColDef,
     pagination: true,
@@ -83,6 +91,10 @@ export class AlertsComponent {
     overlayNoRowsTemplate: '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
     noRowsOverlayComponentParams: { message: 'Your custom message' }
   };
+
+  resetForm() {
+    this.filterForm.reset();
+  }
 
   filterForm!: FormGroup;
   ngOnInit() {

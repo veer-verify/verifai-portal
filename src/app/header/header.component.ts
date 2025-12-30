@@ -13,7 +13,6 @@ import { AsyncPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
   imports: [
     RouterModule,
     MatMenuModule,
-    GlobalClickDirective,
     FormsModule,
     SearchPipe,
     TitleCasePipe,

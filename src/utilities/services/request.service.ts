@@ -22,6 +22,7 @@ export class RequestService {
   }
 
   addHelpDeskRequest(payload: any, file?: any): Observable<any> {
+    console.log(payload)
     let url = `${environment.helpdeskUrl}/addService_1_0`;
     var user = this.storage_service.getData('user');
     let formData = new FormData();
@@ -49,6 +50,7 @@ export class RequestService {
   }
 
   updateHelpDeskRequest(payload: any): Observable<any> {
+    console.log(payload)
     let url = `${environment.helpdeskUrl}/updateService_1_0/${payload?.serviceReqId}`;
     var user = this.storage_service.getData('user');
     let formData = new FormData();
@@ -61,7 +63,9 @@ export class RequestService {
     formData.append('editedBy', user?.UserId);
     formData.append('modifiedBy', user?.UserId);
     formData.append('description', payload.description);
-    formData.append('PrefTimeToCall', payload.PrefTimeToCall);
+    if (payload?.PrefTimeToCall) {
+      formData.append('PrefTimeToCall', payload.PrefTimeToCall);
+    }
     formData.append('priority', payload.priority);
     formData.append('remarks', payload.remarks);
     formData.append('status', payload.status);

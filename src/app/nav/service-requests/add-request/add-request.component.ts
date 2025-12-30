@@ -12,6 +12,7 @@ import { RequestService } from '../../../../utilities/services/request.service';
 import { StorageService } from '../../../../utilities/services/storage.service';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { filter, Observable } from 'rxjs';
+import { AlertService } from '../../../../utilities/services/alert.service';
 
 @Component({
   selector: 'app-new-request',
@@ -23,7 +24,8 @@ export class AddRequestComponent {
   constructor(
     private request_service: RequestService,
     public storage_service: StorageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alert_service: AlertService
   ) { }
 
   ticketForm!: FormGroup;
@@ -97,20 +99,12 @@ export class AddRequestComponent {
 
   createTicket() {
     if (this.currentRequestData) {
-      this.ticketForm.markAllAsTouched();
-      const formData = this.ticketForm.value;
-      formData.site_id = this.storage_service.currentSite$;
+      if (this.ticketForm.invalid) return this.alert_service.error('Please fill all the fields!');
+      // this.ticketForm.markAllAsTouched();
+      // const formData = this.ticketForm.value;
+      // formData.site_id = this.storage_service.currentSite$;
       this.request_service
-        .updateHelpDeskRequest({
-          serviceReqId: Number(this.currentRequestData.serviceReqId),
-          siteId: Number(formData.siteId),
-          service_cat_id: Number(formData.service_cat_id),
-          service_subcat_id: Number(formData.service_subcat_id),
-          description: formData.description,
-          remarks: formData.remarks,
-          status: this.currentRequestData.status,
-          priority: formData.priority,
-        })
+        .updateHelpDeskRequest({ ...this.ticketForm.value, ...{ status: this.currentRequestData.status, serviceReqId: this.currentRequestData.serviceReqId } })
         .subscribe({
           next: (res) => {
             this.close();
@@ -119,26 +113,19 @@ export class AddRequestComponent {
             console.error('Error updating request', err);
           },
         });
-      this.ticketForm.reset();
+      // this.ticketForm.reset();
     } else {
-      if (this.ticketForm.invalid) {
-        this.ticketForm.markAllAsTouched();
-        return;
-      }
+      if (this.ticketForm.invalid) return this.alert_service.error('Please fill all the fields!');
+      // this.ticketForm.markAllAsTouched();
 
-      const formData = this.ticketForm.value;
-      formData.site_id = this.storage_service.currentSite$;
-      this.ticketForm.reset();
+      // }
+
+      // const formData = this.ticketForm.value;
+      // formData.site_id = this.storage_service.currentSite$;
+      // this.ticketForm.reset();
 
       this.request_service
-        .addHelpDeskRequest({
-          siteId: formData.siteId,
-          service_cat_id: formData.category,
-          service_subcat_id: formData.service_subcat_id,
-          priority: formData.priority,
-          description: formData.description,
-          remarks: formData.remarks,
-        })
+        .addHelpDeskRequest(this.ticketForm.value)
         .subscribe({
           next: (res) => {
             this.close();

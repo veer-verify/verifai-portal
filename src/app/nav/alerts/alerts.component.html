@@ -55,7 +55,11 @@
 
     <span>ALL ALERTS</span>
     <div>
-      <button class="filter" [matMenuTriggerFor]="filterMenu">
+      <button
+        class="filter"
+        [matMenuTriggerFor]="filterMenu"
+        (click)="resetForm()"
+      >
         <img src="icons/filter.svg" alt="" />
       </button>
 

@@ -2,10 +2,11 @@ import { Component, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { AuthService } from '../../../auth/auth.service';
 import { AlertService } from '../../../../utilities/services/alert.service';
+import { RouterLink, RouterModule } from "@angular/router";
 
 @Component({
   selector: 'app-change-password',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
 })
@@ -14,7 +15,7 @@ export class ChangePasswordComponent {
     private fb: FormBuilder,
     private auth_service: AuthService,
     private alert_service: AlertService
-  ){}
+  ) { }
 
   showOldPassword = signal(false);
   showNewPassword = signal(false);
@@ -22,33 +23,33 @@ export class ChangePasswordComponent {
 
   changePasswordForm!: FormGroup
 
-  ngOnInit(){
+  ngOnInit() {
     this.inItForm();
   }
 
-  inItForm(){
-    this.changePasswordForm=this.fb.group({
-      oldPassword: ['',Validators.required],
-      newPassword: ['',Validators.required],
-      confirmPassword: ['',Validators.required]
+  inItForm() {
+    this.changePasswordForm = this.fb.group({
+      oldPassword: ['', Validators.required],
+      newPassword: ['', Validators.required],
+      confirmPassword: ['', Validators.required]
     })
   }
 
-  changePassword(){
+  changePassword() {
     const { newPassword, confirmPassword } = this.changePasswordForm.value;
-    if(this.changePasswordForm.valid && newPassword === confirmPassword){
+    if (this.changePasswordForm.valid && newPassword === confirmPassword) {
       this.auth_service.updatePassword(this.changePasswordForm.value).subscribe({
-        next: (res: any)=>{
-          if(res.status_code==="200"){
+        next: (res: any) => {
+          if (res.status_code === "200") {
             this.alert_service.success(res.message);
             this.auth_service.logout();
           }
           else this.alert_service.error(res.message);
         },
-        error: (err)=> this.alert_service.error(err)
+        error: (err) => this.alert_service.error(err)
       });
     }
-    else{
+    else {
       this.alert_service.error('Please Enter Valid Details')
     }
   }
