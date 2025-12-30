@@ -28,7 +28,7 @@ export class ProfileComponent {
     private router: Router,
     private dialog: MatDialog,
     private searchPipe: SearchPipe
-  ) {}
+  ) { }
 
   profileImg: any;
   userData: any;
@@ -157,7 +157,7 @@ export class ProfileComponent {
           this.getSitesListForUserName();
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -181,6 +181,7 @@ export class ProfileComponent {
   filterSites(data: any) {
     // this.currentFilter = data;
     // console.log({1:this.filSubId, 2:this.userData})
+    this.siteSearch = '';
     this.getSitesForGlobal({
       userId: this.filSubId,
       loginId: this.userData?.userId,
@@ -191,7 +192,7 @@ export class ProfileComponent {
   selectAllSites: boolean = false;
   userSites: any = [];
   currentUser: any;
-  filter=1;
+  filter = 1;
   userIndex: any;
 
   showSiteMapping: boolean = false;
@@ -213,7 +214,7 @@ export class ProfileComponent {
         assigned: null,
       })
       .subscribe({
-        next: (res: any) => {},
+        next: (res: any) => { },
       });
   }
 
@@ -363,7 +364,7 @@ export class ProfileComponent {
     };
     this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
       next: (res: any) => {
-        this.filterSites({userId: res.userId, value: 0})
+        this.filterSites({ userId: res.userId, value: 0 })
         // console.log(res.userId);
       },
     });

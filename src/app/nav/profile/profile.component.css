@@ -124,6 +124,8 @@
   padding: 4px 8px;
   border: 1px solid #0000001a;
   border-radius: 6px;
+  font-weight: 700;
+
   /* box-shadow: rgba(61, 61, 61, 0.24) 0px 3px 8px; */
   font-size: 12px;
   display: inline-flex;
@@ -167,15 +169,17 @@
 .low-heading {
   display: flex;
   justify-content: space-between;
+  font-size: 14px;
 }
 
 .add-btn {
   display: inline-flex;
   align-items: center;
-  font-weight: 600;
+  font-weight: 700;
   background: #ffffff 0% 0% no-repeat padding-box;
   border: 1px solid #0000001a;
   border-radius: 6px;
+  font-size: 14px;
 }
 
 .user-cards {
@@ -230,27 +234,32 @@
   margin: 5px 0;
 }
 
-.dialog-header{
+.dialog-header {
   display: flex;
   align-items: center;
 }
 
-.btn-check:checked + .btn-outline-dark{
+.btn-check:checked + .btn-outline-dark {
   background-color: #ed3237;
   border: none;
 }
 
-input[type="checkbox"]:checked{
+input[type="checkbox"]:checked {
   background-color: #ed3237;
   border: none;
   box-shadow: none;
 }
 
-.req-btn{
-  padding: 10px;
+.req-btn {
+  padding: 8px;
   background-color: #ed3237;
-  border-radius: 8px;
+  border-radius: 4px;
   color: white;
+  font-size: 12px;
+}
+
+.btn-group .btn {
+  font-size: 14px;
 }
 
 app-updateuser,
@@ -261,18 +270,18 @@ app-add-user {
   z-index: 1000;
 }
 
-@media (max-width: 720px){
-  .upper-container{
+@media (max-width: 720px) {
+  .upper-container {
     flex-direction: column;
   }
 }
 
-@media (max-width: 550px){
-  .user-details{
+@media (max-width: 550px) {
+  .user-details {
     flex-direction: column;
   }
 
-  .user-btns{
+  .user-btns {
     flex-direction: row;
   }
 }
