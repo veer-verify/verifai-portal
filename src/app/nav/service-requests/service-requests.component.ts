@@ -64,7 +64,9 @@ export class ServiceRequestsComponent {
     { field: 'createdByName' },
     {
       field: 'action',
-      cellRenderer: () => '<button class="btn-open text-primary">Assign</button>'
+      cellRenderer: () => '<button class="btn-open text-primary">Assign</button>',
+      editable: false,
+      sortable: false,
     },
     {
       field: 'edit',

@@ -105,13 +105,6 @@ export class RequestService {
   }
 
   deleteHelpDeskRequests(payload: any): Observable<any> {
-    // var payload = {
-    //   userName: a.UserName,
-    //   accessToken: 'abc',
-    //   calling_System_Detail: "portal",
-    //   siteId: b.siteId,
-    //   serviceId: serviceid
-    // }
     let url = `${environment.helpdeskUrl}/deleteServiceRequest_1_0/${payload?.serviceReqId}`;
     return this.http.put(url, null);
   }
@@ -129,31 +122,6 @@ export class RequestService {
     //   modifiedBy: user?.UserId
     // }
     return this.http.put(url, payload);
-  }
-
-  showOptions1() {
-    const y = <any>(document.getElementById("modalcontent"));
-    const x = <any>(document.getElementById("topple"));
-    (<any>y).appendChild(x);
-    const z = (y.children[0]);
-    z.style.display = "block";
-    z.style.margin = 20 + "px";
-    z.style.width = 100 + "%";
-    const p = (y.parentNode);
-    p.style.display = "flex";
-  }
-
-  gettnc() {
-    let url = this.baseurl + 'businessInterface/User/getTandC_1_0';
-    var a = this.storage_service.getData('user');
-    let body = new FormData();
-    body.append('callingUsername', a?.UserName);
-    body.append('accesstoken', 'abc');
-    body.append('callingSystemDetail', 'admin');
-    // body.forEach((value,key) => {
-    //     console.log(key+" "+value)
-    // });
-    return this.http.post(url, body)
   }
 
 }

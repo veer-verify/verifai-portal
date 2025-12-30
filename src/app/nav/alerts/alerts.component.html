@@ -1,7 +1,7 @@
 <main>
   <!-- filters -->
-  <div class="toolbar">
-    <div class="left">
+  <div class="tool-bar">
+    <!-- <div class="left">
       <select
         class="tag-select"
         [(ngModel)]="filterObj.cameraId"
@@ -43,14 +43,76 @@
           (change)="onFilterChange()"
         />
       </div>
-    </div>
+    </div> -->
 
-    <div class="right">
+    <!-- <div class="right">
       <span class="label" [class.analyticsred]="isChecked">ANALYTICS</span>
       <label class="switch">
         <input type="checkbox" [(ngModel)]="isChecked" />
         <span class="slider"> </span>
       </label>
+    </div> -->
+
+    <span>ALL ALERTS</span>
+    <div>
+      <button class="filter" [matMenuTriggerFor]="filterMenu">
+        <img src="icons/filter.svg" alt="" />
+      </button>
+
+      <mat-menu #filterMenu="matMenu" panelClass="filter-menu">
+        <ng-template matMenuContent>
+          <div class="filter-header">
+            <span>FILTER</span>
+            <span class="material-symbols-outlined text-danger"> cancel </span>
+          </div>
+
+          <form
+            class="filter-content"
+            [formGroup]="filterForm"
+            (click)="$event.stopPropagation()"
+          >
+            <label>Camera</label>
+            <select formControlName="cameraId">
+              <option value="" disabled>Select</option>
+              @for(cam of camerasList; track cam){
+              <option [value]="cam.cameraId">{{ cam.name }}</option>
+              }
+            </select>
+
+            <label class="mt-3">Action</label>
+            <select formControlName="actionTag">
+              <option value="" disabled>Select</option>
+              @for(cat of actionTags; track cat){
+              <option [value]="cat.keyId">{{ cat.value }}</option>
+              }
+            </select>
+
+            <label class="mt-3">Start Date</label>
+            <div class="date-time">
+              <label class="m-0">START</label>
+              <input type="date" formControlName="fromDate" />
+            </div>
+
+            <label class="mt-3">End Date</label>
+            <div class="date-time">
+              <label class="m-0">END</label>
+              <input type="date" formControlName="toDate" />
+            </div>
+
+            <div class="filter-btns">
+              <button
+                class="btn-secondary"
+                (click)="filterForm.reset(); onFilterChange()"
+              >
+                RESET
+              </button>
+              <button class="btn-primary" (click)="onFilterChange()">
+                APPLY
+              </button>
+            </div>
+          </form>
+        </ng-template>
+      </mat-menu>
     </div>
   </div>
 

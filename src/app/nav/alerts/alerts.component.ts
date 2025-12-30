@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { TableComponent } from '../../../utilities/components/table/table.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
@@ -13,6 +13,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { gridOptions, handleResponse } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-alerts',
@@ -23,7 +24,8 @@ import { MediaDialogComponent } from '../../../utilities/components/media-dialog
     ReactiveFormsModule,
     FormsModule,
     AgGridAngular,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
@@ -36,7 +38,8 @@ export class AlertsComponent {
     private storage_service: StorageService,
     private config_service: ConfigService,
     private incident_service: IncidentService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private fb: FormBuilder
   ) { }
 
   currentSite: any;
@@ -80,7 +83,10 @@ export class AlertsComponent {
     overlayNoRowsTemplate: '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
     noRowsOverlayComponentParams: { message: 'Your custom message' }
   };
+
+  filterForm!: FormGroup;
   ngOnInit() {
+    this.initilizeFilterForm()
     this.getTypes();
     this.storage_service.currentSite$
       .pipe(
@@ -93,6 +99,16 @@ export class AlertsComponent {
         this.datasource = this.createDatasource();
         // this.gridApi.refreshServerSide({ purge: true });
       });
+  }
+
+
+  initilizeFilterForm(): void {
+    this.filterForm = this.fb.group({
+      cameraId: [''],
+      actionTag: [''],
+      fromDate: [''],
+      toDate: ['']
+    });
   }
 
   onCellClicked(event: CellClickedEvent) {
@@ -119,12 +135,7 @@ export class AlertsComponent {
     }
   }
 
-  filterObj = {
-    cameraId: '',
-    actionTag: '',
-    fromDate: '',
-    toDate: ''
-  }
+
   createDatasource() {
     return {
       getRows: (params: any) => {
@@ -134,7 +145,7 @@ export class AlertsComponent {
         this.incident_service
           .incidentList({
             ...this.currentSite,
-            ...this.filterObj,
+            ...this.filterForm.value,
             page: pageNumber,
             pageSize: pageSize
           })

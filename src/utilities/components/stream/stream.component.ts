@@ -15,7 +15,7 @@ export class StreamComponent {
   constructor(
     private http: HttpClient,
     private alert_service: AlertService
-  ){}
+  ) { }
 
   @Input() videoData: any;
   @Input() isChecked: any;
@@ -37,7 +37,6 @@ export class StreamComponent {
 
     this.hitStream = true;
     this.requestICEServers();
-    console.log(this.videoData);
   }
 
   ngAfterViewInit() {
@@ -70,7 +69,7 @@ export class StreamComponent {
         };
         this.createOffer();
       }).catch((err) => {
-        this.video.nativeElement.src = '/gif/video.mp4';
+        this.video.nativeElement.src = '/gif/error.mp4';
         // this.hitStream = false;
         this.showLoader = false;
         this.onError(err.toString());

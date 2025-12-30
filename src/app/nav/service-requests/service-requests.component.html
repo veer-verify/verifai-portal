@@ -1,13 +1,15 @@
-<div class="sub-header">
-  <!-- <span>ALL REQUESTS - {{ 0 }}</span> -->
-  <div>
+<div class="tool-bar">
+  <span>ALL REQUESTS</span>
+
+  <div class="d-inline-flex">
     <button class="req-button me-3" (click)="openNewRequestModal()">
       NEW REQUEST
     </button>
 
     <button class="filter" [matMenuTriggerFor]="filterMenu">
-      <img src="icons/filter.svg" alt="" />
+      <img src="icons/filter.svg" alt="" width="16px" />
     </button>
+
     <mat-menu #filterMenu="matMenu" panelClass="filter-menu">
       <ng-template matMenuContent>
         <div class="filter-header">
@@ -18,7 +20,6 @@
         <form
           class="filter-content"
           [formGroup]="filterForm"
-          (ngSubmit)="onFilterChange()"
           (click)="$event.stopPropagation()"
         >
           <label>Camera</label>
@@ -98,8 +99,15 @@
           </div> -->
 
           <div class="filter-btns">
-            <button type="reset" class="btn-secondary">RESET</button>
-            <button type="submit" class="btn-primary">APPLY</button>
+            <button
+              class="btn-secondary"
+              (click)="filterForm.reset(); onFilterChange()"
+            >
+              RESET
+            </button>
+            <button class="btn-primary" (click)="onFilterChange()">
+              APPLY
+            </button>
           </div>
         </form>
       </ng-template>

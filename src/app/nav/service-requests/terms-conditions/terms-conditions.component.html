@@ -1,22 +1,10 @@
-<div class="title1">
-    Terms and Conditions
-</div>
-<hr id="hr1">
-<div class="tables">
-    <!-- <div class="childBox" style="padding: 5%; border-radius: 6px; margin-top: 0;"> -->
-    <div>
-        <!-- <div *ngIf="sanitizedURL" style="border-top: 3px solid #4C4F52;border-bottom: 3px solid #4C4F52;"> -->
-        <!-- <h5>iframe whit local url</h5> -->
-        <!-- <iframe width="500" height="600" [attr.src]="sanitizedURL" type="application/pdf"></iframe> -->
-        <!-- <h5>object whit local url</h5> -->
-        <!-- <object [attr.data]="sanitizedURL" type="application/pdf" width="100%" height="500px"></object> -->
-        <!-- <h5>embed whit local url</h5> -->
-        <!-- <embed [attr.src]="sanitizedURL" type="application/pdf" width="100%" height="500px"> -->
-        <!-- <iframe src="http://usmgmt.iviscloud.net:444/ivis-us-allsiteimages/Terms&Conditions/Terms-and-Conditions.pdf#zoom=120&toolbar=0"  class="tncblock" id="embed"></iframe> -->
-        <iframe
-            [src]="sanitizeUrl('http://usstaging.ivisecurity.com:8080/common/downloadFile_1_0?assetName=Terms-and-Conditions.pdf&requestName=Terms%26Conditions')"
-            class="tncblock" id="embed"></iframe>
-        <!-- <embed src="http://usstaging.ivisecurity.com:8080/common/downloadFile_1_0?assetName=Terms-and-Conditions.pdf&requestName=Terms%26Conditions" type=""> -->
-    </div>
-    <!-- </div> -->
+<div class="title1">Terms and Conditions</div>
+<hr id="hr1" />
+<div class="tables bg-danger">
+  <pdf-viewer
+    [src]="pdfSrc"
+    [render-text]="true"
+    [original-size]="false"
+    class="tncblock"
+  ></pdf-viewer>
 </div>

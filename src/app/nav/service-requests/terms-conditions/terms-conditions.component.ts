@@ -6,6 +6,9 @@ import { RequestService } from '../../../../utilities/services/request.service';
 import { SanitizePipe } from '../../../../utilities/pipes/sanitize.pipe';
 import { AuthService } from '../../../auth/auth.service';
 import { ConfigService } from '../../../../utilities/services/config.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { StorageService } from '../../../../utilities/services/storage.service';
 
 @Component({
   selector: 'app-terms-conditions',
@@ -14,43 +17,27 @@ import { ConfigService } from '../../../../utilities/services/config.service';
   styleUrl: './terms-conditions.component.css',
 })
 export class TermsConditionsComponent {
-  
+
   constructor(
-    private domsanitizer: DomSanitizer,
     private request_service: RequestService,
-    private config_service: ConfigService
-  ) {}
+    private config_service: ConfigService,
+    private http: HttpClient,
+    private storage_service: StorageService
+  ) { }
 
   sanitizedURL: any;
-
-  pdf() {
-    this.request_service.gettnc().subscribe((res: any) => {
-      if (res.Status == "Success") {
-        var zoom = '';
-        if (window.innerWidth > 1300) { zoom = 'zoom=120&' }
-        else { zoom = '' }
-        this.sanitizedURL = this.domsanitizer.bypassSecurityTrustResourceUrl(res.url + `#${zoom}toolbar=0&transparent=1`);
-      } else {
-        return res;
+  pdfSrc: any;
+  ngOnInit(): void {
+    let url = `${environment.commonDownUrl}/downloadFile_1_0?requestName=TermsandConditions&assetName=TermsandConditions.pdf`;
+    this.http.get(url, { responseType: 'blob' }).subscribe(
+      (data: Blob) => {
+        const fileURL = URL.createObjectURL(data);
+        console.log(fileURL)
+        this.pdfSrc = fileURL;
+      },
+      (error) => {
+        console.error('Error fetching PDF:', error);
       }
-      // if (res.Message == "Invalid accessToken") { this.config_service.refresh(); }
-    });
+    );
   }
-
-  sanitizedUrls: Map<string, SafeResourceUrl> = new Map();
-  sanitizeUrl(url: string | undefined): SafeResourceUrl | null {
-    if (url === undefined) {
-      return null;
-    } else {
-      let sanitizedUrl = this.sanitizedUrls.get(url);
-      if (!sanitizedUrl) {
-        sanitizedUrl = this.domsanitizer.bypassSecurityTrustResourceUrl(url);
-        this.sanitizedUrls.set(url, sanitizedUrl);
-      }
-      return sanitizedUrl;
-    }
-  }
-
-  showOptions1() { return this.request_service.showOptions1() }
-
 }

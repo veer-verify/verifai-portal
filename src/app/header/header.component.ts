@@ -28,21 +28,21 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public storage_service: StorageService
+    public storage_service: StorageService,
+    private elementRef: ElementRef
   ) { }
   isDropdownOpen = false;
 
-toggleDropdown() {
-  this.isDropdownOpen = !this.isDropdownOpen;
-}
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
 
 
-  // @HostListener('click') onClick() {
-  //   console.log('click')
-  //   if (this.showSite) {
-  //     this.showSite = false
-  //   }
-  // }
+  @HostListener('document:click', ['$event']) onClick(event: MouseEvent) {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.showSite = false
+    }
+  }
 
   searchSite!: string;
   sitesList!: Observable<any>;
@@ -57,12 +57,6 @@ toggleDropdown() {
     this.showSite = !this.showSite;
     this.storage_service.currentSite$.next(site);
   }
-
-  @HostListener('document:click')
-onDocumentClick() {
-  this.showSite = false;
-}
-
 
   @ViewChild('siteInput', { static: false }) siteInput!: ElementRef;
   toggleSites(): void {
