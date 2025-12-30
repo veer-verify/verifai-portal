@@ -107,8 +107,11 @@
   color: #000000 !important;
 }
 
-/* mat-menu */
+::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-content {
+  font-family: "Neometric Regular", sans-serif !important;
+}
 
+/* mat-menu */
 ::ng-deep .mat-mdc-menu-content {
   font-family: "Neometric Regular", sans-serif !important;
   padding: 0 !important;

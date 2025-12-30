@@ -1,10 +1,7 @@
-import { PDFViewer } from './../../../../../node_modules/pdfjs-dist/types/web/pdf_viewer.d';
 import { Component } from '@angular/core';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RequestService } from '../../../../utilities/services/request.service';
 import { SanitizePipe } from '../../../../utilities/pipes/sanitize.pipe';
-import { AuthService } from '../../../auth/auth.service';
 import { ConfigService } from '../../../../utilities/services/config.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -12,7 +9,7 @@ import { StorageService } from '../../../../utilities/services/storage.service';
 
 @Component({
   selector: 'app-terms-conditions',
-  imports: [PdfViewerModule, SanitizePipe],
+  imports: [PdfViewerModule],
   templateUrl: './terms-conditions.component.html',
   styleUrl: './terms-conditions.component.css',
 })
@@ -32,7 +29,6 @@ export class TermsConditionsComponent {
     this.http.get(url, { responseType: 'blob' }).subscribe(
       (data: Blob) => {
         const fileURL = URL.createObjectURL(data);
-        console.log(fileURL)
         this.pdfSrc = fileURL;
       },
       (error) => {

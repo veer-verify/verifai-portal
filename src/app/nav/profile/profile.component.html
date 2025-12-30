@@ -1,18 +1,29 @@
 <div class="profile-container">
   <div class="upper-container">
     <a class="profile-image" (click)="update()">
-      <img [src]="profileImg | media | async" alt="" onerror="this.src='icons/def_profile_image.png'"
-        style="width: 100%; height: 100%; border-radius: 50%" />
+      <img
+        [src]="profileImg | media | async"
+        alt=""
+        onerror="this.src='icons/def_profile_image.png'"
+        style="width: 100%; height: 100%; border-radius: 50%"
+      />
       <img src="icons/editicon2.svg" class="editicon" alt="" />
     </a>
-    <input type="file" name="myImage" accept="image/*" #profileInput style="
+    <input
+      type="file"
+      name="myImage"
+      accept="image/*"
+      #profileInput
+      style="
         position: absolute;
         left: 0px;
         width: 1px;
         height: 1px;
         opacity: 0;
         pointer-events: none;
-      " (change)="onFileChange($event)" />
+      "
+      (change)="onFileChange($event)"
+    />
 
     <!-- user info -->
     <div class="user-details">
@@ -69,7 +80,7 @@
           <span class="material-symbols-outlined text-danger me-1 fs-6">
             edit
           </span>
-          <span>Edit</span>
+          <span>EDIT</span>
         </button>
       </div>
     </div>
@@ -79,8 +90,8 @@
     <div class="low-heading">
       <strong>Total Users - {{ subUsers.length }}</strong>
       <button class="add-btn" (click)="userAdd()">
-        <span class="material-symbols-outlined"> add </span>
-        <span class="fs-6">ADD</span>
+        <span class="material-symbols-outlined text-danger"> add </span>
+        <span>ADD</span>
       </button>
     </div>
 
@@ -88,24 +99,36 @@
 
     <div class="user-cards">
       @for(usr of subUsers; track usr){
-      <div [ngClass]="
+      <div
+        [ngClass]="
           usr?.STATUS === 'IVISUSA'
             ? 'card-container'
             : 'card-container dec-user'
-        ">
-        <img [src]="usr?.profileImageUrl | media | async" alt="" onerror="this.src='icons/def_profile_image.png'" style="
+        "
+      >
+        <img
+          [src]="usr?.profileImageUrl | media | async"
+          alt=""
+          onerror="this.src='icons/def_profile_image.png'"
+          style="
             width: 40%;
             border-radius: 50%;
             border: 1px solid grey;
             padding: 10px;
             margin-bottom: 10px;
-          " />
+          "
+        />
         <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
         <p class="role-name">{{ usr.roleName }}</p>
-        <button class="assign-btn" (click)="siteActions(usr.userId)">Assign Sites</button>
+        <button class="assign-btn" (click)="siteActions(usr.userId)">
+          Assign Sites
+        </button>
 
         <div class="extra-btns">
-          <span class="material-symbols-outlined text-danger" (click)="deleteUser(usr)">
+          <span
+            class="material-symbols-outlined text-danger"
+            (click)="deleteUser(usr)"
+          >
             delete
           </span>
         </div>
@@ -114,71 +137,94 @@
     </div>
   </div>
 </div>
+
 @if(isEdit){
 <app-updateuser (closeModal)="closeUpdateUserModal($event)"></app-updateuser>
 } @if(addBtn){
 <app-add-user (closeModal)="closeAddUserModal($event)"></app-add-user>
 }
+
 <ng-template #sitesAssign>
   <div class="dialog-header">
-    <p>Map Sites</p>
-    <p><img src="icons/close.svg" class="pointer" width="20" alt="" mat-dialog-close></p>
+    <span>Map Sites</span>
+    <a mat-dialog-close
+      ><span class="material-symbols-outlined">cancel</span></a
+    >
   </div>
 
-  <mat-dialog-content>
-    <div class="dialog-content" style="width: 500px;">
-      <input type="text" class="form-control" placeholder="Search" [(ngModel)]="siteSearch">
+  <!-- <mat-dialog-content> -->
+  <div class="dialog">
+    <input type="text" placeholder="Search" [(ngModel)]="siteSearch" />
 
-      <ng-container>
-        @for(item of filters; track item){
-        <div class="btn-group my-2 me-1" role="group">
-          <input type="radio" class="btn-check" [value]="item.id" [id]="item.id" (change)="filterSites(item)"
-            [(ngModel)]="filter">
-          <label class="btn btn-outline-dark" [for]="item.id">{{item.label}}</label>
-        </div>
-        }
-      </ng-container>
-      @let pipeSites = (userSites | search: siteSearch);
-
-      @if (pipeSites?.length) {
-      <div style="height: 40vh; overflow: auto;">
-
-        @if (filter !== 1 && pipeSites.length !== 0) {
-        <div class="form-check select-site">
-          <input class="form-check-input" type="checkbox" id="all" [(ngModel)]="selectAllSites"
-            (ngModelChange)="toggleSites()">
-          <label class="form-check-label" for="all">
-            Select All
-          </label>
-        </div>
-        }
-
-        @for (item of pipeSites; track item.siteId) {
-        <div class="form-check select-site">
-          @if (filter !== 1) {
-          <input class="form-check-input" type="checkbox" [id]="item.siteName" [(ngModel)]="item.assigned"
-            (ngModelChange)="toggleAllIndividual()">
-          }
-          <label class="form-check-label" [for]="item.siteName">
-            {{ item.siteName }}
-          </label>
-        </div>
-        }
-
+    <ng-container>
+      @for(item of filters; track item){
+      <div class="btn-group my-2 me-1" role="group">
+        <input
+          type="radio"
+          class="btn-check"
+          [value]="item.id"
+          [id]="item.id"
+          (change)="filterSites(item)"
+          [(ngModel)]="filter"
+        />
+        <label class="btn btn-outline-dark" [for]="item.id">{{
+          item.label
+        }}</label>
       </div>
       }
+    </ng-container>
 
+    @let pipeSites = (userSites | search: siteSearch); @if (pipeSites?.length) {
+    <div style="height: 30vh; overflow: auto">
+      @if (filter !== 1 && pipeSites.length !== 0) {
+      <div class="form-check select-site">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="all"
+          [(ngModel)]="selectAllSites"
+          (ngModelChange)="toggleSites()"
+        />
+        <label class="form-check-label" for="all"> Select All </label>
+      </div>
+      } @for (item of pipeSites; track item.siteId) {
+      <div class="form-check select-site">
+        @if (filter !== 1) {
+        <input
+          class="form-check-input"
+          type="checkbox"
+          [id]="item.siteName"
+          [(ngModel)]="item.assigned"
+          (ngModelChange)="toggleAllIndividual()"
+        />
+        }
+        <label class="form-check-label" [for]="item.siteName">
+          {{ item.siteName }}
+        </label>
+      </div>
+      }
     </div>
+    } @else {
+    <p class="text-center" style="height: 30vh">No Sites!</p>
+    }
 
     <div class="d-flex justify-content-center my-2">
       @if(filter !==1){
-      <button class="req-btn" (click)="applyMapping()"
-        [disabled]="currentUser?.roleName === 'Client-Member' || currentUser?.roleName === 'Site-Admin'">
-        {{ filter == 2 ? 'Unassign' : 'Assign' }}
+      <button
+        class="req-btn"
+        (click)="applyMapping()"
+        [disabled]="
+          currentUser?.roleName === 'Client-Member' ||
+          currentUser?.roleName === 'Site-Admin'
+        "
+      >
+        {{ filter == 2 ? "Unassign" : "Assign" }}
       </button>
-    }
+      }
     </div>
-  </mat-dialog-content>
+  </div>
+
+  <!-- </mat-dialog-content> -->
 
   <!-- <mat-dialog-actions align="end">
     <button mat-button (click)="close(false)">Cancel</button>

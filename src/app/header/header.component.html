@@ -51,13 +51,25 @@
       </a>
 
       <mat-menu #requestMenu="matMenu">
-        <button routerLink="/dashboard/service-requests" mat-menu-item>
+        <button
+          routerLink="/dashboard/service-requests"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Requests</span>
         </button>
-        <button routerLink="/dashboard/terms-conditions" mat-menu-item>
+        <button
+          routerLink="/dashboard/terms-conditions"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">T&C</span>
         </button>
-        <button routerLink="/dashboard/contact" mat-menu-item>
+        <button
+          routerLink="/dashboard/contact"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Contact</span>
         </button>
       </mat-menu>
@@ -68,10 +80,18 @@
       </a>
 
       <mat-menu #profileMenu="matMenu">
-        <button routerLink="/dashboard/profile" mat-menu-item>
+        <button
+          routerLink="/dashboard/profile"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Profile</span>
         </button>
-        <button routerLink="/dashboard/change-password" mat-menu-item>
+        <button
+          routerLink="/dashboard/change-password"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Change Password</span>
         </button>
       </mat-menu>
