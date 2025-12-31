@@ -1,7 +1,7 @@
 <section class="sub-header">
-  <!-- <div class="hamburger" (click)="showSideSites()">☰</div> -->
   @if (camList.length) {
-  <div class="site-info">
+    <div class="site-info">
+    <div class="hamburger" (click)="showSideSites()">☰</div>
     <select class="w-100" [(ngModel)]="selectedCam" (change)="call()">
       <option value="">All ({{ camList.length }})</option>
       @for (item of camList; track $index) {
