@@ -296,7 +296,6 @@ export class ServiceRequestsComponent {
                 });
                 params.api.hideOverlay();
                 this.requestData = res;
-                console.log(this.requestData);
               } else {
                 params.fail();
                 params.api.showNoRowsOverlay();
@@ -383,10 +382,10 @@ export class AssignRequestComponent {
   }
 
   ngOnInit() {
+    this.assignForm.patchValue({ assignee: this.currentRow?.assignedTo })
     this.request_service
       .listSupportUsers(this.storage_service.getData('user'))
       .subscribe((res: any) => {
-        console.log(res);
         if (res.statusCode === 200) {
           if (res?.assignedTo) {
             this.usersList = res.roleDetails
@@ -404,6 +403,7 @@ export class AssignRequestComponent {
   }
 
   assign() {
+    if (this.assignForm.invalid) return this.alert_service.error('Please fill valid details!');
     const formData = this.assignForm.value;
     // console.log(this.currentRow)
     this.request_service
