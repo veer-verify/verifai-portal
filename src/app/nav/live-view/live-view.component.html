@@ -103,7 +103,7 @@
   }
 </section>
 
-<div class="side-sites" [hidden]="!showSites">
+<div class="side-sites" [hidden]="!showSites" [ngClass]="exit ? 'exit' : ''">
   <div class="header">
     TOTAL SITES({{ siteList.length }})
     <div class="close" (click)="close()">←</div>
@@ -117,7 +117,6 @@
         } @else {
         {{ item.siteName.slice(0, 35) }}... }
       </a>
-      <div class="show-cameras">+</div>
     </div>
     }
   </div>

@@ -152,7 +152,6 @@ export class AddRequestComponent {
       description: data.value.description,
       remarks: data.value.remarks,
     };
-    console.log('Form Data:', formData);
 
     this.request_service.addHelpDeskRequest(formData).subscribe({
       next: (res) => {

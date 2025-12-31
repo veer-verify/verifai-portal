@@ -55,13 +55,18 @@ export class LiveViewComponent
   searchSite!: string;
   sitesList = []
   siteList: any = []
-  showSideSites() {
+  exit=false;
+  showSideSites(){
     this.showSites = true;
     this.siteList = this.storage_service.siteData$.value;
   }
 
-  close() {
-    this.showSites = false;
+  close(){
+    this.exit = true;
+    setTimeout(()=>{
+      this.showSites= false;
+      this.exit= false;
+    },300);
   }
 
   updateSite(site: any) {
