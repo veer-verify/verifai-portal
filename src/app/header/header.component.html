@@ -1,34 +1,33 @@
-<div class="header-container">
+<main>
   <div class="all-screens">
-    <div class="d-flex gap-5">
-      <div>
-        <img src="themes/verifai/logo-black.png" alt="" width="100px" />
-      </div>
-      @if (storage_service.currentSite$ | async; as site) {
-      <div class="site-accordian">
-        <a (click)="toggleSites()" (click)="$event.stopPropagation()">{{
-          site.siteName
-        }}</a>
+    <div class="logo">
+      <img src="themes/verifai/logo-black.png" alt="" width="130px" />
+    </div>
 
-        @if (showSite) {
-        <div class="site-dropdown">
-          <input type="search" [(ngModel)]="searchSite" #siteInput />
-          @for (item of sitesList | async | search: searchSite; track $index) {
-          <a (click)="updateSite(item)">
-            <img src="icons/dot-1.svg" width="8px" class="me-1" />
-            {{ item.siteName }}
-          </a>
-          } @empty {
-          <p class="text-center bg-secondary">{{ "no sites!" | titlecase }}</p>
-          }
-        </div>
+    @if (storage_service.currentSite$ | async; as site) {
+    <div class="site-accordian">
+      <a (click)="toggleSites()" (click)="$event.stopPropagation()">{{
+        site.siteName
+      }}</a>
+
+      @if (showSite) {
+      <div class="site-dropdown">
+        <input type="search" [(ngModel)]="searchSite" #siteInput />
+        @for (item of sitesList | async | search: searchSite; track $index) {
+        <a (click)="updateSite(item)">
+          <img src="icons/dot-1.svg" width="8px" class="me-1" />
+          {{ item.siteName }}
+        </a>
+        } @empty {
+        <p class="text-center bg-secondary">{{ "no sites!" | titlecase }}</p>
         }
-        <span class="material-symbols-outlined" (click)="toggleSites()"
-          >keyboard_arrow_down</span
-        >
       </div>
       }
+      <span class="material-symbols-outlined" (click)="toggleSites()"
+        >keyboard_arrow_down</span
+      >
     </div>
+    }
 
     <!-- nav-list -->
     <div class="nav-items">
@@ -50,6 +49,7 @@
         >
       </a>
 
+      <!-- request menu -->
       <mat-menu #requestMenu="matMenu">
         <button
           routerLink="/dashboard/service-requests"
@@ -73,12 +73,22 @@
           <span class="menu-item">Contact</span>
         </button>
       </mat-menu>
-      <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
-        <span class="material-symbols-outlined" style="font-size: 20px"
-          >person</span
-        >
-      </a>
 
+      <div class="d-inline-flex align-items-center gap-1">
+        <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
+          <span class="material-symbols-outlined" style="font-size: 20px"
+            >person</span
+          >
+        </a>
+        <span class="d-inline-flex flex-column">
+          <span style="font-size: 12px">{{ user?.UserName | uppercase }}</span>
+          <span class="text-secondary" style="font-size: 10px">{{
+            user?.roleList[0].category
+          }}</span>
+        </span>
+      </div>
+
+      <!-- profile-menu -->
       <mat-menu #profileMenu="matMenu">
         <button
           routerLink="/dashboard/profile"
@@ -122,6 +132,8 @@
       >
     </div>
     }
+
+    <!-- side-bar -->
     <aside class="side-bar">
       <div>
         <img
@@ -167,4 +179,4 @@
       </div>
     </aside>
   </div>
-</div>
+</main>

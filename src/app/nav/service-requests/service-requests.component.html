@@ -6,7 +6,11 @@
       NEW REQUEST
     </button>
 
-    <button class="filter" [matMenuTriggerFor]="filterMenu">
+    <button
+      class="filter"
+      [matMenuTriggerFor]="filterMenu"
+      (click)="resetForm()"
+    >
       <img src="icons/filter.svg" alt="" width="16px" />
     </button>
 

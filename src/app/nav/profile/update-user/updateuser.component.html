@@ -1,47 +1,47 @@
 <div class="uuser-container">
-    <div class="top-header">
-        UPDATE USER
-        <div class="close" (click)="close()">X</div>
-    </div>
+  <div class="top-header">
+    UPDATE USER
+    <a (click)="close()">
+      <span class="material-symbols-outlined text-light"> cancel </span>
+    </a>
+  </div>
 
-    <div class="content">
-        <form [formGroup]="userForm" (ngSubmit)="updateUser()" action="">
+  <div class="content">
+    <form [formGroup]="userForm" (ngSubmit)="updateUser()" action="">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" formControlName="firstName" />
 
-            <label for="firstName">First Name</label>
-            <input type="text" id="firstName" formControlName="firstName">
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" formControlName="lastName" />
 
-            <label for="lastName">Last Name</label>
-            <input type="text" id="lastName" formControlName="lastName">
+      <label for="contactNo1">Phone Number</label>
+      <input type="text" id="contactNo1" formControlName="contactNo1" />
 
-            <label for="contactNo1">Phone Number</label>
-            <input type="text" id="contactNo1" formControlName="contactNo1">
+      <label for="address_line1">Address Line 1</label>
+      <input type="text" id="address_line1" formControlName="address_line1" />
 
-            <label for="address_line1">Address Line 1</label>
-            <input type="text" id="address_line1" formControlName="address_line1">
+      <label for="address_lin2">Address Line 2</label>
+      <input type="text" id="address_line2" formControlName="address_line2" />
 
-            <label for="address_lin2">Address Line 2</label>
-            <input type="text" id="address_line2" formControlName="address_line2">
+      <label for="city">City</label>
+      <input type="text" id="city" formControlName="city" />
 
-            <label for="city">City</label>
-            <input type="text" id="city" formControlName="city">
+      <label for="district">District</label>
+      <input type="text" id="district" formControlName="district" />
 
-            <label for="district">District</label>
-            <input type="text" id="district" formControlName="district">
+      <label for="state">State</label>
+      <input type="text" id="state" formControlName="state" />
 
-            <label for="state">State</label>
-            <input type="text" id="state" formControlName="state">
+      <label for="country">Country</label>
+      <input type="text" id="country" formControlName="country" />
 
-            <label for="country">Country</label>
-            <input type="text" id="country" formControlName="country">
+      <label for="pin">Pincode</label>
+      <input type="text" id="pin" formControlName="pin" />
 
-            <label for="pin">Pincode</label>
-            <input type="text" id="pin" formControlName="pin">
-
-            <div class="form-btns">
-                <button class="btn-secondary" (click)="close()">Cancel</button>
-                <button type="submit" class="btn-primary">Update</button>
-            </div>
-
-        </form>
-    </div>
+      <div class="form-btns">
+        <button class="btn-secondary" (click)="close()">Cancel</button>
+        <button type="submit" class="btn-primary">Update</button>
+      </div>
+    </form>
+  </div>
 </div>

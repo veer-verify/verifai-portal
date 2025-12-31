@@ -25,6 +25,10 @@ video {
   cursor: pointer;
 }
 
+.info span {
+  opacity: 0.7;
+}
+
 .eye-logo {
   position: absolute;
   top: 50%;

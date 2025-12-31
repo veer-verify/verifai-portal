@@ -4,7 +4,16 @@
 </div>
 } @if (isChecked) {
 <div class="info">
-  <span>{{ videoData?.name }}</span>
+  <span
+    ><img
+      src="icons/camera-grey.svg"
+      alt=""
+      title="Siren"
+      width="16px"
+      class="me-2"
+      (click)="playSiren1()"
+    />{{ videoData?.name }}</span
+  >
   <span>
     <a (click)="capture()"
       ><img
@@ -14,7 +23,14 @@
         width="16px"
         class="me-2"
     /></a>
-    <a><img src="icons/siren.svg" alt="" title="Siren" width="16px" (click)="playSiren1()"/></a>
+    <a
+      ><img
+        src="icons/siren.svg"
+        alt=""
+        title="Siren"
+        width="16px"
+        (click)="playSiren1()"
+    /></a>
   </span>
 </div>
 }

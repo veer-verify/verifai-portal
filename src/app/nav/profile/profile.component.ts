@@ -66,12 +66,8 @@ export class ProfileComponent {
   @ViewChild('sitesAssign') sitesAssign!: TemplateRef<any>;
 
   ngOnInit(): void {
-    this.auth_service.getUserInfoForId().subscribe((res: any) => {
-      this.userData = res;
-      this.raw_address = [this.userData?.address_line1, this.userData?.address_line2, this.userData?.city, this.userData?.district, this.userData?.state, this.userData?.country]
-      this.address = this.raw_address.filter(Boolean)
-      this.profileImg = this.userData?.profileImage;
-    });
+    this.getUserInfoForId();
+    this.getUserNamesByUserName();
 
     this.storage_service.siteData$.subscribe((res: any) => {
       this.sitesList = res;
@@ -81,6 +77,19 @@ export class ProfileComponent {
       this.userRoles = res.roleList;
     });
 
+
+  }
+
+  getUserInfoForId() {
+    this.auth_service.getUserInfoForId().subscribe((res: any) => {
+      this.userData = res;
+      this.raw_address = [this.userData?.address_line1, this.userData?.address_line2, this.userData?.city, this.userData?.district, this.userData?.state, this.userData?.country]
+      this.address = this.raw_address.filter(Boolean)
+      this.profileImg = this.userData?.profileImage;
+    });
+  }
+
+  getUserNamesByUserName() {
     this.auth_service.getUserNamesByUserName().subscribe((res: any) => {
       this.subUsers = res.data;
       // this.editBtns = new Array(this.subUsers.length).fill(false);
@@ -218,7 +227,9 @@ export class ProfileComponent {
       });
   }
 
-  newSiteActions(data:any){
+  newSiteActions(data: any) {
+
+    this.getUserNamesByUserName()
     this.filter = 1;
     this.dialog.open(this.sitesAssign);
     this.filSubId = data.userId;
@@ -229,8 +240,7 @@ export class ProfileComponent {
     };
     this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
       next: (res: any) => {
-        this.filterSites({userId: res.userId, value: 0})
-        // console.log(res.userId);
+        this.filterSites({ userId: res.userId, value: 0 })
       },
     });
   }

@@ -7,7 +7,7 @@
   </div>
 
   <div class="content">
-    <form [formGroup]="ticketForm" (ngSubmit)="createTicket()" action="">
+    <form [formGroup]="ticketForm" (ngSubmit)="createTicket()">
       <!-- site -->
       <label for="site">Site</label>
       <select name="site" id="site" formControlName="siteId">
@@ -27,7 +27,6 @@
         @for(cat of categories; track cat.catId) {
         <option [value]="cat.catId">{{ cat.catName }}</option>
         }
-        <option value="example">Category 1</option>
       </select>
 
       <!-- sub category -->
@@ -104,12 +103,7 @@
         >
           CANCEL
         </button>
-        <button
-          class="btn-primary"
-          style="width: 50%"
-          type="submit"
-          [disabled]="ticketForm.invalid"
-        >
+        <button class="btn-primary" style="width: 50%" type="submit">
           @if(currentRequestData){ UPDATE } @else{ CREATE }
         </button>
       </div>
