@@ -32,7 +32,6 @@ triggerSiteAction(data: any) {
   ngOnInit() {
     this.initForm();
     this.auth_service.listRoles().subscribe((res:any)=>{
-      console.log(res);
       if(res.statusCode===200) {
         this.roleList = res.roleList;
       }
@@ -54,7 +53,6 @@ triggerSiteAction(data: any) {
     if (this.addUserForm.valid) {
       this.auth_service.createUserWithShortDetails(this.addUserForm.value).subscribe({
         next: (res: any) => {
-          console.log(res);
           if (res.statusCode === 200) {
             this.alert_service.confirm('Do you want to map sites to the user ?').then((result: any)=>{
               if(result.isConfirmed) this.triggerSiteAction(res)

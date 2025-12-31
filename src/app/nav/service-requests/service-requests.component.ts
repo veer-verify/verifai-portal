@@ -279,7 +279,6 @@ export class ServiceRequestsComponent {
                 });
                 params.api.hideOverlay();
                 this.requestData = res;
-                console.log(this.requestData);
               } else {
                 params.fail();
                 params.api.showNoRowsOverlay();
@@ -369,7 +368,6 @@ export class AssignRequestComponent {
     this.request_service
       .listSupportUsers(this.storage_service.getData('user'))
       .subscribe((res: any) => {
-        console.log(res);
         if (res.statusCode === 200) {
           if (res?.assignedTo) {
             this.usersList = res.roleDetails

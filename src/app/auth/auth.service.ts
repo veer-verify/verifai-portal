@@ -133,7 +133,6 @@ export class AuthService {
       newPassword: payload.newPassword,
       firstTime: 'F',
     };
-    console.log(user);
     return this.http.put(url, obj);
   }
 

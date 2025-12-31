@@ -98,7 +98,6 @@ export class AddRequestComponent {
   createTicket() {
     if (this.currentRequestData) {
       this.ticketForm.markAllAsTouched();
-      console.log(this.currentRequestData.serviceReqId)
       const formData = this.ticketForm.value;
       formData.site_id = this.storage_service.currentSite$;
       this.request_service
@@ -166,7 +165,6 @@ export class AddRequestComponent {
       description: data.value.description,
       remarks: data.value.remarks,
     };
-    console.log('Form Data:', formData);
 
     this.request_service.addHelpDeskRequest(formData).subscribe({
       next: (res) => {
