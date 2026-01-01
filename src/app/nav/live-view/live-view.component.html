@@ -103,20 +103,27 @@
   }
 </section>
 
-<div class="side-sites" [hidden]="!showSites" [ngClass]="exit ? 'exit' : ''">
+<div class="side-sites" [hidden]="!showSites">
   <div class="header">
-    TOTAL SITES({{ siteList.length }})
-    <div class="close" (click)="close()">←</div>
+    TOTAL SITES - {{ siteList.length }}
+    <a class="close" (click)="close()"
+      ><span class="material-symbols-outlined"> arrow_left_alt </span></a
+    >
   </div>
   <div class="sites-content">
     @for(item of siteList; track item){
     <div class="site-list-item">
-      <a (click)="updateSite(item)">
+      @if(storage_service.currentSite$ | async; as site) {
+      <a
+        (click)="updateSite(item)"
+        [style.color]="item?.siteId === site.siteId ? '#ef7146' : ''"
+      >
         @if(item.siteName.length <=35){
         {{ item.siteName }}
         } @else {
         {{ item.siteName.slice(0, 35) }}... }
       </a>
+      }
     </div>
     }
   </div>

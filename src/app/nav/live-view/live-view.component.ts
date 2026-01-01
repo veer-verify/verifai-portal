@@ -45,7 +45,7 @@ import { AlertService } from '../../../utilities/services/alert.service';
   styleUrl: './live-view.component.css',
 })
 export class LiveViewComponent
-  implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy {
   // @HostListener('click', ['$event'])
   // onClick() {
   //   this.opensiteDialog == true ? this.opensiteDialog = false : null;
@@ -55,18 +55,13 @@ export class LiveViewComponent
   searchSite!: string;
   sitesList = []
   siteList: any = []
-  exit=false;
-  showSideSites(){
+  showSideSites() {
     this.showSites = true;
     this.siteList = this.storage_service.siteData$.value;
   }
 
-  close(){
-    this.exit = true;
-    setTimeout(()=>{
-      this.showSites= false;
-      this.exit= false;
-    },300);
+  close() {
+    this.showSites = false;
   }
 
   updateSite(site: any) {
@@ -104,7 +99,7 @@ export class LiveViewComponent
 
   constructor(
     public configSrvc: ConfigService,
-    private storage_service: StorageService,
+    public storage_service: StorageService,
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private alert_service: AlertService
@@ -123,8 +118,6 @@ export class LiveViewComponent
       },
     });
   }
-
-  ngOnChanges(changes: SimpleChanges): void { }
 
   camList: any = [];
   tempCamList = [];

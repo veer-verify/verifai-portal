@@ -114,7 +114,7 @@
   cursor: pointer;
   user-select: none;
   background-color: #ed3237;
-  padding: 4px 8px;
+  padding: 6px 8px;
   font-size: 14px;
   border-radius: 6px;
   color: #ffffff;
@@ -134,7 +134,8 @@
 
 .site-dropdown {
   position: absolute;
-  top: 50px;
+  top: 36px;
+  left: 0;
   max-height: 50vh;
   overflow-y: auto;
   width: 300px;
