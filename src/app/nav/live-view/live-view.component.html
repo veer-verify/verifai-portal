@@ -1,6 +1,6 @@
 <section class="sub-header">
   @if (camList.length) {
-    <div class="site-info">
+  <div class="site-info">
     <div class="hamburger" (click)="showSideSites()">☰</div>
     <select class="w-100" [(ngModel)]="selectedCam" (change)="call()">
       <option value="">All ({{ camList.length }})</option>
@@ -107,23 +107,21 @@
   }
 </section>
 
-<div class="side-sites" [hidden]="!showSites" [ngClass]="exit? 'exit':''">
+<div class="side-sites" [hidden]="!showSites" [ngClass]="exit ? 'exit' : ''">
   <div class="header">
     TOTAL SITES({{ siteList.length }})
     <div class="close" (click)="close()">←</div>
   </div>
   <div class="sites-content">
-      @for(item of siteList; track item){
-        <div class="site-list-item">
-          <a (click)="updateSite(item)">
-          @if(item.siteName.length <=35){
-            {{item.siteName}}
-          }
-          @else {
-            {{item.siteName.slice(0,35)}}...
-          }
-          </a>
-        </div>
-      }
+    @for(item of siteList; track item){
+    <div class="site-list-item">
+      <a (click)="updateSite(item)">
+        @if(item.siteName.length <=35){
+        {{ item.siteName }}
+        } @else {
+        {{ item.siteName.slice(0, 35) }}... }
+      </a>
+    </div>
+    }
   </div>
 </div>

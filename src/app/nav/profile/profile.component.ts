@@ -381,7 +381,8 @@ export class ProfileComponent {
   }
 
   deleteUser(data: any) {
-    this.alert_service.confirmDel().then((result: any) => {
+    console.log(data);
+    this.alert_service.confirm('Do you Want to Deactivate This User?').then((result: any) => {
       if (result.isConfirmed) {
         this.auth_service.deactivateUser(data).subscribe({
           next: (res: any) => {

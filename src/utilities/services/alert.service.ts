@@ -7,23 +7,16 @@ import { ConfigService } from './config.service';
   providedIn: 'root'
 })
 export class AlertService {
-  siteAddData: any;
-  constructor(
-    private snackBar: MatSnackBar,
-    private configSrvc: ConfigService
-  ) {
-    this.configSrvc.site_add_sub.subscribe({
-      next: (res: any) => {
-        this.siteAddData = res
-      }
+
+  warn(message: any) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Are you sure!',
+      text: message,
+      showCloseButton: true
     })
   }
 
-
-
-
-
-  /* sweet alert */
   error(message: any) {
     Swal.fire({
       icon: 'error',
@@ -32,21 +25,6 @@ export class AlertService {
       showCloseButton: true
     })
   }
-
-
-  confirm(message: string) {
-  return Swal.fire({
-    icon: 'warning',
-    text: `${message}`,
-    showCancelButton: true,
-    confirmButtonText: 'Yes',
-    cancelButtonText: 'No',
-    confirmButtonColor: '#ed3237',
-    cancelButtonColor: '#6c757d',
-    reverseButtons: true,
-    allowOutsideClick: false
-  });
-}
 
   success(message: any) {
     Swal.fire({
@@ -58,49 +36,26 @@ export class AlertService {
     })
   }
 
+  confirm(message: string) {
+    return Swal.fire({
+      icon: 'warning',
+      text: `${message}`,
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+      confirmButtonColor: '#ed3237',
+      cancelButtonColor: '#6c757d',
+      reverseButtons: true,
+      allowOutsideClick: false
+    });
+  }
+
   wait() {
     Swal.fire({
       text: "Please wait",
       imageUrl: "gif/ajax-loading-gif.gif",
       showConfirmButton: false,
       allowOutsideClick: false
-    })
-  }
-
-
-  updateCam() {
-    return Swal.fire({
-      // title: "Are you sure?",
-      text: "Do you want to Update Camera?",
-      // icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes"
-    })
-  }
-
-  confirmDelete() {
-    return Swal.fire({
-      // title: "Are you sure?",
-      text: "To activate this object-based rule, you need to add a camera for the device. Would you like to add a camera?",
-      // icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes"
-    })
-  }
-
-  confirmDel() {
-    return Swal.fire({
-      // title: "Are you sure?",
-      text: "Do you Want to Deactivate This User?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes"
     })
   }
 
