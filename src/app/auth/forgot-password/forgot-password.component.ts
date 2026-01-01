@@ -96,7 +96,12 @@ export class ForgotPasswordComponent {
     if (this.forgotEmailForm.invalid) return;
     this.auth.generateOTP(this.forgotEmailForm.value).subscribe({
       next: (res) => {
+        if(res.statusCode===200){
         this.currentPage = 'validate_otp';
+        }
+        else{
+          this.alertSrvc.error(res.message);
+        }
       },
       error: (err) => {
         console.log(err)

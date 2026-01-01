@@ -24,7 +24,11 @@
         "
         (click)="adjustGrid(item.noOfItems)"
       >
-        <img [src]="item.path" width="16px" alt="" />
+        <img [src]="
+          itemsPerPage == item.noOfItems
+            ? item.activePath
+            : item.path
+        " width="16px" alt="" />
         <!-- {{ item?.label }} -->
       </a>
       }
@@ -57,7 +61,7 @@
 <!-- camera container -->
 <section class="grid-container" #gridContainer appGlobalClick>
   @for(item of getPaginatedList(); track $index) {
-  <div class="grid-item" #gridItem>
+  <div class="grid-item" [ngClass]="itemsPerPage===1? 'single-view' : ''" #gridItem>
     @if (change) {
     <app-stream [videoData]="item" [isChecked]="isChecked"></app-stream>
     <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->

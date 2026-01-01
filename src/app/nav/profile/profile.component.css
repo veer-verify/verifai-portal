@@ -172,6 +172,18 @@
   font-size: 14px;
 }
 
+.user-toggles{
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.self, .others{
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
 .add-btn {
   display: inline-flex;
   align-items: center;

@@ -99,6 +99,10 @@
   display: block;
 }
 
+.single-view{
+  height: calc(100vh - 100px);
+}
+
 .cam-info {
   display: none;
   position: absolute;
@@ -123,10 +127,10 @@
   color: red;
 }
 
-.active {
+/* .active {
   border: 1px solid #a8a8a8;
   border-radius: 4px;
-}
+} */
 
 ::placeholder {
   font-style: normal;
