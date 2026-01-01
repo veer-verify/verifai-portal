@@ -50,6 +50,20 @@
   color: #ff3b30;
 }
 
+/* Header cells */
+.custom-grid .ag-header-cell,
+.custom-grid .ag-header-group-cell {
+  padding: 8px 12px;
+}
+
+/* Row cells */
+.custom-grid .ag-cell {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+}
+
+
 select::-webkit-scrollbar {
   width: 8px;
 }

@@ -55,11 +55,7 @@
 
     <span>ALL ALERTS</span>
     <div>
-      <button
-        class="filter"
-        [matMenuTriggerFor]="filterMenu"
-        (click)="resetForm()"
-      >
+      <button class="filter" [matMenuTriggerFor]="filterMenu" (click)="resetForm()">
         <img src="icons/filter.svg" alt="" />
       </button>
 
@@ -70,11 +66,7 @@
             <span class="material-symbols-outlined text-danger"> cancel </span>
           </div>
 
-          <form
-            class="filter-content"
-            [formGroup]="filterForm"
-            (click)="$event.stopPropagation()"
-          >
+          <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
             <label>Camera</label>
             <select formControlName="cameraId">
               <option value="" disabled>Select</option>
@@ -104,10 +96,7 @@
             </div>
 
             <div class="filter-btns">
-              <button
-                class="btn-secondary"
-                (click)="filterForm.reset(); onFilterChange()"
-              >
+              <button class="btn-secondary" (click)="filterForm.reset(); onFilterChange()">
                 RESET
               </button>
               <button class="btn-primary" (click)="onFilterChange()">
@@ -121,16 +110,9 @@
   </div>
 
   <!-- table -->
-  <div
-    style="height: calc(100vh - 120px); display: flex; flex-direction: column"
-  >
-    <ag-grid-angular
-      style="height: 100%"
-      [columnDefs]="columnDefs"
-      [serverSideDatasource]="datasource"
-      [gridOptions]="gridOptions"
-      (gridReady)="onGridReady($event)"
-      (cellClicked)="onCellClicked($event)"
-    ></ag-grid-angular>
+  <div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
+    <ag-grid-angular class="custom-grid" style="height: 100%" [columnDefs]="columnDefs"
+      [serverSideDatasource]="datasource" [gridOptions]="gridOptions" (gridReady)="onGridReady($event)"
+      (cellClicked)="onCellClicked($event)"></ag-grid-angular>
   </div>
 </main>
