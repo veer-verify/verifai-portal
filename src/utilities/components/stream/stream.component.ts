@@ -43,6 +43,7 @@ export class StreamComponent {
     this.video.nativeElement.controls = false;
     this.video.nativeElement.autoplay = true;
     this.video.nativeElement.playsInline = true;
+    this.video.nativeElement.muted = true;
   }
 
   showLoader: boolean = false;

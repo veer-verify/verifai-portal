@@ -110,7 +110,7 @@
   display: block;
 }
 
-.single-view{
+.single-view {
   height: calc(100vh - 100px);
 }
 
@@ -134,7 +134,7 @@
 
 .grid-highlight {
   cursor: pointer;
-  padding: 2px 6px;
+  /* padding: 2px 6px; */
   color: red;
 }
 
