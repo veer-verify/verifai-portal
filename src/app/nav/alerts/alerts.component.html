@@ -55,11 +55,7 @@
 
     <span>ALL ALERTS</span>
     <div>
-      <button
-        class="filter"
-        [matMenuTriggerFor]="filterMenu"
-        (click)="resetForm()"
-      >
+      <button class="filter" [matMenuTriggerFor]="filterMenu" (click)="resetForm()">
         <span class="material-symbols-outlined text-danger"> filter_list </span>
       </button>
 
@@ -70,11 +66,7 @@
             <span class="material-symbols-outlined text-danger"> cancel </span>
           </div>
 
-          <form
-            class="filter-content"
-            [formGroup]="filterForm"
-            (click)="$event.stopPropagation()"
-          >
+          <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
             <label>Camera</label>
             <select formControlName="cameraId">
               <option value="" disabled>Select</option>
@@ -103,11 +95,32 @@
               <input type="date" formControlName="toDate" />
             </div>
 
+            <label class="mt-3">Duration</label>
+
+            <div class="duration-wrapper">
+              <div class="duration-values">
+                <span>{{ formatTime(filterForm.value.durationStart) }}</span>
+                <span>{{ formatTime(filterForm.value.durationEnd) }}</span>
+              </div>
+
+              <div class="range-container" [style.--start]="filterForm.value.durationStart"
+                [style.--end]="filterForm.value.durationEnd">
+                <input type="range" min="0" max="120" step="1" formControlName="durationStart"
+                  (input)="syncDuration()" />
+
+                <input type="range" min="0" max="120" step="1" formControlName="durationEnd" (input)="syncDuration()" class="thumb2"/>
+              </div>
+
+
+              <div class="duration-labels">
+                <span>00:00</span>
+                <span>120:00</span>
+              </div>
+            </div>
+
+
             <div class="filter-btns">
-              <button
-                class="btn-secondary"
-                (click)="filterForm.reset(); onFilterChange()"
-              >
+              <button class="btn-secondary" (click)="filterForm.reset(); onFilterChange()">
                 RESET
               </button>
               <button class="btn-primary" (click)="onFilterChange()">
@@ -121,17 +134,9 @@
   </div>
 
   <!-- table -->
-  <div
-    style="height: calc(100vh - 120px); display: flex; flex-direction: column"
-  >
-    <ag-grid-angular
-      class="custom-grid"
-      style="height: 100%"
-      [columnDefs]="columnDefs"
-      [serverSideDatasource]="datasource"
-      [gridOptions]="gridOptions"
-      (gridReady)="onGridReady($event)"
-      (cellClicked)="onCellClicked($event)"
-    ></ag-grid-angular>
+  <div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
+    <ag-grid-angular class="custom-grid" style="height: 100%" [columnDefs]="columnDefs"
+      [serverSideDatasource]="datasource" [gridOptions]="gridOptions" (gridReady)="onGridReady($event)"
+      (cellClicked)="onCellClicked($event)"></ag-grid-angular>
   </div>
 </main>

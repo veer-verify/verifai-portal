@@ -195,10 +195,183 @@
   cursor: pointer;
 }
 
+.request-info-container{
+  position: absolute;
+  top: 0;
+  right: 0;
+  /* transform: translateX(-100%); */
+  z-index: 1000;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  animation: slideIn 0.3s forwards;
+  overflow: hidden;
+}
+
+.heading{
+  display: flex;
+  background-color: #ed3237;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: white;
+  /* flex: 1; */
+}
+
+.close{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+  text-align: center;
+  color: black;
+}
+
+.data-content{
+  flex: 9;
+  padding: 10px;
+  background-color: white;
+}
+
+.status{
+  padding: 5px;
+  background-color: #3A86C7;
+  color: white;
+  font-size: 12px;
+  border-radius: 8px;
+  width: 80px;
+  text-align: center;
+  margin-left: 25px;
+}
+
+.info-row {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 120px 20px 1fr; /* label | dash | value */
+  align-items: center;
+  column-gap: 20px;
+  font-size: 12px;
+  padding: 5px 20px;
+}
+
+.info-row > p {
+  margin: 0;
+}
+
+/* Optional: style the dash */
+.info-row > p:nth-child(2) {
+  text-align: center;
+}
+
+.info-row > p:first-child{
+  opacity: 0.6;
+}
+
+.exit-info{
+  animation: slideOut 0.5s forwards;
+}
+
+.info-row *{
+  animation: fadeIn 3s forwards;
+}
+
+.fade-exit-info *{
+  animation: fadeOut 0.3s forwards;
+}
+
+.date-time {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background-color: #fafafa;
+}
+
+.date-time .label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  min-width: 45px;
+}
+
+.date-time-inputs {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.date-time-inputs input {
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  padding: 4px 6px;
+  outline: none;
+}
+
+.date-time-inputs input[type="date"] {
+  width: 60%;
+}
+
+.date-time-inputs input[type="time"] {
+  width: 40%;
+}
+
+.date-time-inputs .divider {
+  width: 1px;
+  height: 18px;
+  background: #ddd;
+  margin: 0 6px;
+}
+
 app-new-request {
   position: absolute;
   top: 0;
   right: 0;
   /* transform: translateX(-100%); */
   z-index: 1000;
+}
+
+
+@keyframes slideIn{
+  from{
+    width: 0;
+  }
+
+  to{
+    width: 400px;
+  }
+}
+
+@keyframes slideOut{
+  from{
+    width: 400px;
+  }
+  to{
+    width: 0;
+  }
+}
+
+@keyframes fadeIn{
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut{
+  from{
+    opacity: 1;
+  }
+  to{
+    opacity: 0;
+  }
 }

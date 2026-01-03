@@ -50,6 +50,150 @@
   color: #ff3b30;
 }
 
+.duration-wrapper {
+  margin-top: 8px;
+}
+
+.duration-values {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.range-container {
+  position: relative;
+  height: 6px;
+  margin: 14px 0;
+
+  --min: 0;
+  --max: 120;
+}
+
+.range-container input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 14px;              /* thumb height */
+  transform: translateY(-50%);
+  background: transparent;
+  margin: 0;
+  pointer-events: none;
+  outline: none;
+  border: none;
+}
+
+/* base track */
+.range-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #ddd;
+  border-radius: 4px;
+}
+
+/* 🎯 gradient between sliders */
+.range-container::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  border-radius: 4px;
+
+  left: calc(
+    (var(--start) - var(--min)) / (var(--max) - var(--min)) * 100%
+  );
+  width: calc(
+    (var(--end) - var(--start)) / (var(--max) - var(--min)) * 100%
+  );
+
+  background: linear-gradient(to right, black, #ed3237);
+}
+
+/* sliders */
+.range-container input[type="range"] {
+  position: absolute;
+  width: 100%;
+  background: none;
+  pointer-events: none;
+}
+
+/* thumb */
+.range-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: auto;
+
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: black;
+  /* border: 2px solid #000; */
+  margin-top: -4px;
+}
+
+.thumb2::-webkit-slider-thumb{
+  background: #ed3237;
+}
+
+.range-container input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  height: 14px;
+  width: 14px;
+  border-radius: 50%;
+  background: #ed3237;
+  /* border: 2px solid #000; */
+}
+
+/* REMOVE native track (Chrome, Edge, Safari) */
+.range-container input[type="range"]::-webkit-slider-runnable-track {
+  background: transparent;
+  height: 6px;
+}
+
+/* REMOVE native track (Firefox) */
+.range-container input[type="range"]::-moz-range-track {
+  background: transparent;
+  height: 6px;
+}
+
+/* REMOVE native track (IE / old Edge) */
+.range-container input[type="range"]::-ms-track {
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+  height: 6px;
+}
+
+.range-container::before,
+.range-container::after {
+  z-index: 1;
+}
+
+.range-container input[type="range"] {
+  z-index: 2;
+}
+
+.range-container input[type="range"]::-webkit-slider-thumb {
+  margin-top: -4px; /* aligns thumb to 6px track */
+}
+
+.range-container input[type="range"]::-moz-range-thumb {
+  margin-top: 0;
+}
+
+.duration-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #777;
+  margin-top: 4px;
+}
+
+
 /* Header cells */
 .custom-grid .ag-header-cell,
 .custom-grid .ag-header-group-cell {
