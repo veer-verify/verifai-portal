@@ -1,22 +1,22 @@
-const dev_url: string = 'https://usstaging.ivisecurity.com';
+const prod_url: string = 'https://prod.ivisecurity.com';
 const local_url: string = 'http://192.168.0.235:3002';
 
 export const environment = {
-    configUrl: 'http://usstaging.ivisecurity.com:8943',
-    incidentUrl: 'http://usstaging.ivisecurity.com:8945',
+    // configUrl: 'http://usstaging.ivisecurity.com:8943',
+    // incidentUrl: 'http://usstaging.ivisecurity.com:8945',
 
-    authUrl: `${dev_url}/userDetails`,
-    sitesUrl: `${dev_url}/vipsites`,
-    metadataUrl: `${dev_url}/metadata`,
-    commonDownUrl: `${dev_url}/common`,
-    adsUrl: `${dev_url}/proximityAdsMain`,
-    rulesUrl: `${dev_url}/proximityAdsRules `,
-    insightsUrl: `${dev_url}/insights`,
-    timelapseUrl: `${dev_url}/timeLapse`,
-    sensorUrl: `${dev_url}/sensors`,
-    simsUrl: `${dev_url}/simDevices`,
-    faqUrl: `${dev_url}/faq`,
-    inventoryUrl: `${dev_url}/inventory`,
-    helpdeskUrl: `${dev_url}/supportRequests`,
-    incidentsUrl: `${dev_url}/guard_monitoring`,
+    authUrl: `${prod_url}/userDetails`,
+    sitesUrl: `${prod_url}/vipsites`,
+    metadataUrl: `${prod_url}/metadata`,
+    commonDownUrl: `${prod_url}/common`,
+    adsUrl: `${prod_url}/proximityAdsMain`,
+    rulesUrl: `${prod_url}/proximityAdsRules `,
+    insightsUrl: `${prod_url}/insights`,
+    timelapseUrl: `${prod_url}/timeLapse`,
+    sensorUrl: `${prod_url}/sensors`,
+    simsUrl: `${prod_url}/simDevices`,
+    faqUrl: `${prod_url}/faq`,
+    inventoryUrl: `${prod_url}/inventory`,
+    helpdeskUrl: `${prod_url}/supportRequests`,
+    incidentsUrl: `${prod_url}/guard_monitoring`,
 };
