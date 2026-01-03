@@ -4,7 +4,7 @@
 
 .all-screens {
   background: #ffffff 0% 0% no-repeat padding-box;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #e4dfdf;
   opacity: 1;
   height: 60px;
   display: flex;
@@ -79,11 +79,10 @@
   text-transform: uppercase;
   font-weight: 400;
   font-size: 12px;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .active {
-  /* background-color: #fff; */
   border-radius: 5px;
   color: #ed3237;
   opacity: 1;

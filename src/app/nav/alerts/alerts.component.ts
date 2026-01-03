@@ -56,12 +56,12 @@ export class AlertsComponent {
   });
 
   columnDefs: ColDef[] = [
-    { field: 'name' },
+    { field: 'name', headerName: 'Camera' },
     { field: 'eventDate' },
     { field: 'eventFromTime', headerName: 'Start Time' },
     { field: 'eventToTime', headerName: 'End Time' },
     { field: 'duration' },
-    { field: 'objectName' },
+    { field: 'objectName', headerName: 'Object Identified' },
     { field: 'actionTag' },
     {
       field: 'clip',

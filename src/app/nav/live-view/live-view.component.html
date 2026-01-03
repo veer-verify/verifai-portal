@@ -18,15 +18,13 @@
       @for (item of gridTypes; track $index) {
       <a
         [ngClass]="
-          itemsPerPage == item.noOfItems
-            ? 'grid-highlight active'
-            : 'grid-highlight'
+          itemsPerPage == item.noOfItems ? 'grid-highlight' : 'grid-highlight'
         "
         (click)="adjustGrid(item.noOfItems)"
       >
         <img
           [src]="itemsPerPage == item.noOfItems ? item.activePath : item.path"
-          width="18px"
+          width="16px"
           alt=""
         />
         <!-- {{ item?.label }} -->

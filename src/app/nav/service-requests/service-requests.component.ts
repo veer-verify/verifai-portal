@@ -69,17 +69,17 @@ export class ServiceRequestsComponent {
     rowBorder: true
   });
   columnDefs: ColDef[] = [
-    { field: 'serviceReqId' },
-    { field: 'siteName' },
+    { field: 'serviceReqId', headerName: 'Id' },
+    { field: 'siteName', headerName: 'Site' },
+    { field: 'createdTime', headerName: 'Date', cellRenderer: (col: any) => this.datePipe.transform(col.data?.createdTime, 'short') },
     { field: 'service_cat_name', headerName: 'Category' },
     { field: 'service_subcat_name', headerName: 'Sub Category' },
+    { field: 'priority', },
+    { field: 'createdByName', headerName: 'Assigned By' },
+    // { field: 'assignedToName', headerName: 'Assigned To' },
     {
-      field: 'createdTime',
-      cellRenderer: (col: any) => this.datePipe.transform(col.data?.createdTime, 'short')
-    },
-    { field: 'createdByName' },
-    {
-      field: 'action',
+      field: 'assignedToName',
+      headerName: 'Assigned To',
       cellRenderer: (col: any) => {
         if (col.data.assignedToName) {
           return `<button class="btn-open text-primary">${col.data.assignedToName}</button>`;
@@ -90,10 +90,18 @@ export class ServiceRequestsComponent {
       editable: false,
       sortable: false,
     },
+    // {
+    //   field: '',
+    //   cellRenderer: () =>
+    //     '<span class="material-symbols-outlined btn-view" style="vertical-align: middle; opacity: 0.7;">info</span>',
+    //   editable: false,
+    //   sortable: false,
+    // },
     {
-      field: 'edit',
+      field: 'Action',
       cellRenderer: () =>
-        '<span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>',
+        `<span class="material-symbols-outlined btn-view me-1" style="vertical-align: middle; opacity: 0.7;">info</span>
+      <span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>`,
       editable: false,
       sortable: false,
     },
