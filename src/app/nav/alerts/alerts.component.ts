@@ -8,7 +8,15 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { filter, Subject, takeUntil } from 'rxjs';
-import { CellClickedEvent, ColDef, GridApi, GridOptions, GridReadyEvent, IServerSideDatasource, themeQuartz } from 'ag-grid-community';
+import {
+  CellClickedEvent,
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+  IServerSideDatasource,
+  themeQuartz,
+} from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { gridOptions, handleResponse } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -25,13 +33,12 @@ import { MatMenuModule } from '@angular/material/menu';
     FormsModule,
     AgGridAngular,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
 })
 export class AlertsComponent {
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -40,7 +47,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   currentSite: any;
   incidentdata: any = [];
@@ -52,7 +59,7 @@ export class AlertsComponent {
     headerTextColor: '#FFFFFF',
     headerBackgroundColor: 'rgba(0,0,0,0.5)',
     headerColumnResizeHandleColor: '#ffffff',
-    rowBorder: true
+    rowBorder: true,
   });
 
   columnDefs: ColDef[] = [
@@ -68,18 +75,20 @@ export class AlertsComponent {
       cellRenderer: (params: any) => {
         const isDisabled = params.data.files.length === 0;
         const disabledAttr = isDisabled ? 'disabled' : '';
-        const style = isDisabled ? 'style="opacity: 0.5; pointer-events: none; filter: grayscale(1);"' : '';
+        const style = isDisabled
+          ? 'style="opacity: 0.5; pointer-events: none; filter: grayscale(1);"'
+          : '';
         return `<img src="icons/play-circle-fill.svg" class="btn-open" ${disabledAttr} ${style} />`;
       },
       editable: false,
-      sortable: false
+      sortable: false,
     },
   ];
   gridApi!: GridApi;
   datasource!: IServerSideDatasource;
   defaultColDef: ColDef = {
     flex: 1,
-    minWidth: 100
+    minWidth: 100,
   };
   gridOptions: GridOptions = {
     theme: this.myTheme,
@@ -88,8 +97,9 @@ export class AlertsComponent {
     pagination: true,
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
-    overlayNoRowsTemplate: '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
-    noRowsOverlayComponentParams: { message: 'Your custom message' }
+    overlayNoRowsTemplate:
+      '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
+    noRowsOverlayComponentParams: { message: 'Your custom message' },
   };
 
   resetForm() {
@@ -98,7 +108,7 @@ export class AlertsComponent {
 
   filterForm!: FormGroup;
   ngOnInit() {
-    this.initilizeFilterForm()
+    this.initilizeFilterForm();
     this.getTypes();
     this.storage_service.currentSite$
       .pipe(
@@ -113,26 +123,49 @@ export class AlertsComponent {
       });
   }
 
-
   initilizeFilterForm(): void {
     this.filterForm = this.fb.group({
       cameraId: [''],
       actionTag: [''],
       fromDate: [''],
-      toDate: ['']
+      toDate: [''],
+      durationStart: [0],
+      durationEnd: [55],
     });
   }
 
+  formatTime(minutes: number): string {
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hrs.toString().padStart(2, '0')}:${mins
+      .toString()
+      .padStart(2, '0')}`;
+  }
+
+  syncDuration() {
+    const start = this.filterForm.value.durationStart;
+    const end = this.filterForm.value.durationEnd;
+
+    if (start > end) {
+      this.filterForm.patchValue({ durationStart: end });
+    }
+  }
+
   onCellClicked(event: CellClickedEvent) {
-    if (event.event?.target instanceof HTMLElement && event.event?.target.classList.contains('btn-open')) {
+    if (
+      event.event?.target instanceof HTMLElement &&
+      event.event?.target.classList.contains('btn-open')
+    ) {
       this.dialog.open(MediaDialogComponent, { data: event.data });
     }
   }
 
   getcamerasForSiteId() {
-    this.config_service.getCamerasForSiteId(this.currentSite).subscribe((res: any) => {
-      this.camerasList = res;
-    });
+    this.config_service
+      .getCamerasForSiteId(this.currentSite)
+      .subscribe((res: any) => {
+        this.camerasList = res;
+      });
   }
 
   getTypes() {
@@ -147,7 +180,6 @@ export class AlertsComponent {
     }
   }
 
-
   createDatasource() {
     return {
       getRows: (params: any) => {
@@ -159,7 +191,7 @@ export class AlertsComponent {
             ...this.currentSite,
             ...this.filterForm.value,
             page: pageNumber,
-            pageSize: pageSize
+            pageSize: pageSize,
           })
           .subscribe({
             next: (res) => {
@@ -169,14 +201,14 @@ export class AlertsComponent {
                   rowData: res.IncidentList,
                   rowCount: isLastPage
                     ? params.request.startRow + res.IncidentList.length
-                    : res.totalPages * pageSize
+                    : res.totalPages * pageSize,
                 });
                 params.api.hideOverlay();
               } else {
                 params.fail();
                 params.api.showNoRowsOverlay();
               }
-            }
+            },
           });
       },
     };

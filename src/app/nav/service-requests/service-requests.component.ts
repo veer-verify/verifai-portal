@@ -43,6 +43,8 @@ import { AlertService } from '../../../utilities/services/alert.service';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
+    DatePipe,
+    CommonModule,
   ],
   providers: [DatePipe],
   templateUrl: './service-requests.component.html',
@@ -58,7 +60,7 @@ export class ServiceRequestsComponent {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private datePipe: DatePipe
-  ) { }
+  ) {}
 
   gridApi!: GridApi;
   datasource!: IServerSideDatasource;
@@ -66,15 +68,20 @@ export class ServiceRequestsComponent {
     headerTextColor: '#FFFFFF',
     headerBackgroundColor: 'rgba(0,0,0,0.5)',
     headerColumnResizeHandleColor: '#ffffff',
-    rowBorder: true
+    rowBorder: true,
   });
   columnDefs: ColDef[] = [
     { field: 'serviceReqId', headerName: 'Id' },
     { field: 'siteName', headerName: 'Site' },
-    { field: 'createdTime', headerName: 'Date', cellRenderer: (col: any) => this.datePipe.transform(col.data?.createdTime, 'short') },
+    {
+      field: 'createdTime',
+      headerName: 'Date',
+      cellRenderer: (col: any) =>
+        this.datePipe.transform(col.data?.createdTime, 'short'),
+    },
     { field: 'service_cat_name', headerName: 'Category' },
     { field: 'service_subcat_name', headerName: 'Sub Category' },
-    { field: 'priority', },
+    { field: 'priority' },
     { field: 'createdByName', headerName: 'Assigned By' },
     // { field: 'assignedToName', headerName: 'Assigned To' },
     {
@@ -99,7 +106,7 @@ export class ServiceRequestsComponent {
     // },
     {
       field: 'Action',
-      cellRenderer: () =>
+      cellRenderer: (rowData: any) =>
         `<span class="material-symbols-outlined btn-view me-1" style="vertical-align: middle; opacity: 0.7;">info</span>
       <span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>`,
       editable: false,
@@ -132,6 +139,10 @@ export class ServiceRequestsComponent {
   subcategoryList: any = [];
   showAssignDialog: boolean = false;
   requestData: any;
+  viewRequestInfo = false;
+  rowRequestData: any;
+  closeRequestInfo = false;
+
   ngOnInit() {
     this.initilizeFilterForm();
     this.getTypes();
@@ -148,16 +159,19 @@ export class ServiceRequestsComponent {
       });
   }
 
+  showInfo(requestData: any) {
+    console.log(requestData);
+  }
+
   initilizeFilterForm(): void {
     this.filterForm = this.fb.group({
       camera: [''],
-      type: [''],
       serviceCategory: [''],
       serviceSubCategory: [''],
-      fromDate: [null],
-      startTime: ['00:00'],
-      toDate: [null],
-      endTime: ['00:00'],
+      fromDate: [''],
+      fromTime: ['00:00:00'],
+      toDate: [''],
+      toTime: ['00:00:00'],
     });
   }
 
@@ -214,9 +228,9 @@ export class ServiceRequestsComponent {
     return `${(this.durationEnd / this.maxDuration) * 100}%`;
   }
 
-  onStatusFilterChange() { }
+  onStatusFilterChange() {}
 
-  onPriorityFilterChange() { }
+  onPriorityFilterChange() {}
 
   filterForm!: FormGroup;
 
@@ -236,8 +250,24 @@ export class ServiceRequestsComponent {
     this.refreshGrid();
   }
 
+  close() {
+    this.closeRequestInfo = true;
+    setTimeout(() => {
+      this.viewRequestInfo = false;
+      this.closeRequestInfo = false;
+    }, 500);
+  }
+
   currentRequest: any;
   onCellClicked(event: CellClickedEvent) {
+    if (
+      event.event?.target instanceof HTMLElement &&
+      event.event?.target.classList.contains('btn-view')
+    ) {
+      this.viewRequestInfo = true;
+      this.rowRequestData = event.data;
+      console.log(this.rowRequestData);
+    }
     if (
       event.event?.target instanceof HTMLElement &&
       event.event?.target.classList.contains('btn-edit')
@@ -390,7 +420,7 @@ export class AssignRequestComponent {
   }
 
   ngOnInit() {
-    this.assignForm.patchValue({ assignee: this.currentRow?.assignedTo })
+    this.assignForm.patchValue({ assignee: this.currentRow?.assignedTo });
     this.request_service
       .listSupportUsers(this.storage_service.getData('user'))
       .subscribe((res: any) => {
@@ -411,7 +441,8 @@ export class AssignRequestComponent {
   }
 
   assign() {
-    if (this.assignForm.invalid) return this.alert_service.error('Please fill valid details!');
+    if (this.assignForm.invalid)
+      return this.alert_service.error('Please fill valid details!');
     const formData = this.assignForm.value;
     // console.log(this.currentRow)
     this.request_service
