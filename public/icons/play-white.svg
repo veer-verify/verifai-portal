@@ -1,0 +1,11 @@
+<svg id="play-circle-fill" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="35" height="35" viewBox="0 0 35 35">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fff"/>
+      <stop offset="1" stop-color="#eee"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_355" data-name="Group 355">
+    <path id="Path_765" data-name="Path 765" d="M35,17.5A17.5,17.5,0,1,1,17.5,0,17.5,17.5,0,0,1,35,17.5ZM14.853,11.141a1.094,1.094,0,0,0-1.728.89V22.969a1.094,1.094,0,0,0,1.728.89l7.656-5.469a1.094,1.094,0,0,0,0-1.781Z" fill="url(#linear-gradient)"/>
+  </g>
+</svg>
