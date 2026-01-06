@@ -11,6 +11,7 @@ import { ProfileComponent } from './nav/profile/profile.component';
 import { ChangePasswordComponent } from './nav/profile/change-password/change-password.component';
 import { TermsConditionsComponent } from './nav/service-requests/terms-conditions/terms-conditions.component';
 import { ContactComponent } from './nav/service-requests/contact/contact.component';
+import { NvrComponent } from './nav/nvr/nvr.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
@@ -46,6 +47,10 @@ export const routes: Routes = [
             {
                 path: 'timelapse',
                 component: TimelapseComponent
+            },
+            {
+                path: 'nvr',
+                component: NvrComponent
             },
             {
                 path: 'profile',

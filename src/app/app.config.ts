@@ -10,6 +10,7 @@ import { TokenInterceptor } from '../utilities/interceptors/token.interceptor';
 
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { ServerSideRowModelApiModule, ServerSideRowModelModule } from 'ag-grid-enterprise';
+import { DatePipe } from '@angular/common';
 
 ModuleRegistry.registerModules([
   AllCommunityModule,
@@ -25,5 +26,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([loaderInterceptor, TokenInterceptor])),
     provideNativeDateAdapter(),
     provideAnimations(),
+    DatePipe
   ]
 };

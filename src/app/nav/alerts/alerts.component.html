@@ -108,7 +108,8 @@
                 <input type="range" min="0" max="120" step="1" formControlName="durationStart"
                   (input)="syncDuration()" />
 
-                <input type="range" min="0" max="120" step="1" formControlName="durationEnd" (input)="syncDuration()" class="thumb2"/>
+                <input type="range" min="0" max="120" step="1" formControlName="durationEnd" (input)="syncDuration()"
+                  class="thumb2" />
               </div>
 
 
@@ -134,9 +135,23 @@
   </div>
 
   <!-- table -->
-  <div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
-    <ag-grid-angular class="custom-grid" style="height: 100%" [columnDefs]="columnDefs"
-      [serverSideDatasource]="datasource" [gridOptions]="gridOptions" (gridReady)="onGridReady($event)"
-      (cellClicked)="onCellClicked($event)"></ag-grid-angular>
+  <div style="height: calc(100vh - 165px); display: flex; flex-direction: column">
+    <ag-grid-angular class="custom-grid" style="height: 100%" [columnDefs]="columnDefs" [gridOptions]="gridOptions"
+      [rowData]="rowData" (cellClicked)="onCellClicked($event)"></ag-grid-angular>
   </div>
+  <div class="pagination">
+    <select (change)="changePageSize($event)">
+      <option value="10">10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+    </select>
+    <div class="direcs">
+      <div class="first direc" (click)="changePage(1)" [class.disabled]="pageNumber === 1"><img src="icons/first-page.svg" alt=""></div>
+      <div class="prev direc" (click)="changePage(pageNumber - 1)" [class.disabled]="pageNumber === 1"><img src="icons/page-prev.svg" alt=""></div>
+      <div class="page-det">Page {{pageNumber}}/{{totalPages-1}}</div>
+      <div class="next direc" (click)="changePage(pageNumber + 1)" [class.disabled]="pageNumber === totalPages - 1"><img src="icons/next-page.svg" alt=""></div>
+      <div class="last direc" (click)="changePage(totalPages - 1)" [class.disabled]="pageNumber === totalPages - 1"><img src="icons/last-page.svg" alt=""></div>
+    </div>
+  </div>
+
 </main>

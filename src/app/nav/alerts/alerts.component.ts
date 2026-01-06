@@ -54,6 +54,10 @@ export class AlertsComponent {
   isChecked: boolean = false;
   camerasList: any = [];
   actionTags: any = [];
+  pageSize: any = 10;
+  pageNumber: any = 1;
+  rowData: any;
+  totalPages = 0;
 
   myTheme = themeQuartz.withParams({
     headerTextColor: '#FFFFFF',
@@ -92,9 +96,9 @@ export class AlertsComponent {
   };
   gridOptions: GridOptions = {
     theme: this.myTheme,
-    rowModelType: 'serverSide',
+    // rowModelType: '',
     defaultColDef: this.defaultColDef,
-    pagination: true,
+    pagination: false,
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
     overlayNoRowsTemplate:
@@ -118,7 +122,8 @@ export class AlertsComponent {
       .subscribe((site) => {
         this.currentSite = site;
         this.getcamerasForSiteId();
-        this.datasource = this.createDatasource();
+        this.getAlerts();
+        // this.datasource = this.createDatasource();
         // this.gridApi.refreshServerSide({ purge: true });
       });
   }
@@ -173,11 +178,40 @@ export class AlertsComponent {
     this.actionTags = res[0]?.metadata;
   }
 
-  onGridReady(params: GridReadyEvent) {
-    this.gridApi = params.api;
-    if (this.datasource) {
-      this.gridApi.setGridOption('serverSideDatasource', this.datasource);
-    }
+  // onGridReady(params: GridReadyEvent) {
+  //   this.gridApi = params.api;
+  //   if (this.datasource) {
+  //     this.gridApi.setGridOption('serverSideDatasource', this.datasource);
+  //   }
+  // }
+
+  getAlerts() {
+    this.incident_service
+      .incidentList({
+        ...this.currentSite,
+        ...this.filterForm.value,
+        page: this.pageNumber,
+        pageSize: this.pageSize,
+      })
+      .subscribe({
+        next: (res) => {
+          if (res.statusCode === 200) {
+            this.rowData = res.IncidentList;
+            this.totalPages = res.totalPages;
+          }
+        },
+      });
+  }
+
+
+  changePageSize(pSize: any){
+    this.pageSize = pSize.target.value;
+    this.getAlerts();
+  }
+
+  changePage(pNum: any){
+    this.pageNumber = pNum;
+    this.getAlerts();
   }
 
   createDatasource() {
