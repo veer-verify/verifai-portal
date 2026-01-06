@@ -74,25 +74,25 @@ export class LiveViewComponent
       label: '1X1',
       noOfItems: 1,
       path: 'icons/grid-1.svg',
-      activePath : 'icons/grid-1-active.svg'
+      activePath: 'icons/grid-1-active.svg'
     },
     {
       label: '2X2',
       noOfItems: 4,
       path: 'icons/grid-2.svg',
-      activePath : 'icons/grid-2-active.svg'
+      activePath: 'icons/grid-2-active.svg'
     },
     {
       label: '3X3',
       noOfItems: 9,
       path: 'icons/grid-3.svg',
-      activePath : 'icons/grid-3-active.svg'
+      activePath: 'icons/grid-3-active.svg'
     },
     {
       label: '4X4',
       noOfItems: 16,
       path: 'icons/grid-4.svg',
-      activePath : 'icons/grid-4-active.svg'
+      activePath: 'icons/grid-4-active.svg'
     },
     // {
     //   label: '4X5',
@@ -148,7 +148,7 @@ export class LiveViewComponent
   }
 
   currentPage: number = 1;
-  itemsPerPage: number = 4;
+  itemsPerPage: number = 9;
   totalPages: number = 0;
   getPaginatedList(): Array<any> {
     const start = (this.currentPage - 1) * this.itemsPerPage;

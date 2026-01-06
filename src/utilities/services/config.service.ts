@@ -20,7 +20,7 @@ export class ConfigService {
   public site_add_sub: BehaviorSubject<any> = new BehaviorSubject({});
 
   public getSitesListForUserName(): Observable<any> {
-    const url = `${environment.sitesUrl}/getSitesListForUserName_1_0/`;
+    const url = `${environment.sitesUrl}/getSitesListForUserName_2_0/`;
     const user = this.storageSrvc.getData('user');
     const params = new HttpParams().set('userName', user?.UserName);
     return this.http.get(url, { params });

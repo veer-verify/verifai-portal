@@ -60,7 +60,7 @@ export class ServiceRequestsComponent {
     private fb: FormBuilder,
     private dialog: MatDialog,
     private datePipe: DatePipe
-  ) {}
+  ) { }
 
   gridApi!: GridApi;
   datasource!: IServerSideDatasource;
@@ -228,9 +228,9 @@ export class ServiceRequestsComponent {
     return `${(this.durationEnd / this.maxDuration) * 100}%`;
   }
 
-  onStatusFilterChange() {}
+  onStatusFilterChange() { }
 
-  onPriorityFilterChange() {}
+  onPriorityFilterChange() { }
 
   filterForm!: FormGroup;
 
@@ -281,9 +281,14 @@ export class ServiceRequestsComponent {
       event.event?.target.classList.contains('btn-open')
     ) {
       this.showAssignDialog = true;
-      this.dialog.open(AssignRequestComponent, {
+      const assignDialog = this.dialog.open(AssignRequestComponent, {
         data: event.data,
+        disableClose: true
       });
+
+      assignDialog.afterClosed().subscribe((result) => {
+        console.log(result)
+      })
     }
   }
 
@@ -366,7 +371,7 @@ export class ServiceRequestsComponent {
       <header class="dialog-header">
         <a>Assign Service Request</a>
         <a mat-dialog-close
-          ><span class="material-symbols-outlined">cancel</span></a
+          ><span class="material-symbols-outlined text-danger">cancel</span></a
         >
       </header>
 
@@ -391,7 +396,7 @@ export class ServiceRequestsComponent {
           </div>
 
           <div class="btn-sec">
-            <button type="button" class="btn-primary" (click)="assign()">
+            <button type="button" class="btn-primary" (click)="assign()" mat-dialog-close>
               Assign
             </button>
           </div>
@@ -421,6 +426,10 @@ export class AssignRequestComponent {
 
   ngOnInit() {
     this.assignForm.patchValue({ assignee: this.currentRow?.assignedTo });
+    this.listSupportUsers()
+  }
+
+  listSupportUsers() {
     this.request_service
       .listSupportUsers(this.storage_service.getData('user'))
       .subscribe((res: any) => {
@@ -444,7 +453,6 @@ export class AssignRequestComponent {
     if (this.assignForm.invalid)
       return this.alert_service.error('Please fill valid details!');
     const formData = this.assignForm.value;
-    // console.log(this.currentRow)
     this.request_service
       .assignServiceRequest({
         assignedBy: this.storage_service.getData('user').userId,
@@ -455,10 +463,11 @@ export class AssignRequestComponent {
         status: this.currentRow.status,
       })
       .subscribe((res: any) => {
-        // console.log(res);
         if (res.statusCode === 200) {
           this.alert_service.success(res.message);
-        } else this.alert_service.error(res.message);
+        } else {
+          this.alert_service.error(res.message)
+        };
       });
   }
 }

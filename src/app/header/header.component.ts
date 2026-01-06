@@ -68,5 +68,9 @@ export class HeaderComponent implements OnInit {
     }, 500);
   }
 
+  logout() {
+    this.router.navigate(['/login']);
+    this.storage_service.clearData();
+  }
 
 }

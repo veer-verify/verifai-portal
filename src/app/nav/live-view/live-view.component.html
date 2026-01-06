@@ -3,7 +3,7 @@
   <div class="site-info">
     <div class="hamburger" (click)="showSideSites()">☰</div>
     <select class="w-100" [(ngModel)]="selectedCam" (change)="call()">
-      <option value="">All ({{ camList.length }})</option>
+      <option value="">All Cameras ({{ camList.length }})</option>
       @for (item of camList; track $index) {
       <option [value]="item?.cameraId" #val>
         {{ item?.name }}

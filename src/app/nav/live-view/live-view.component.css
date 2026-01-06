@@ -19,7 +19,7 @@
   position: absolute;
   top: 60px;
   left: 0;
-  z-index: 9;
+  z-index: 99;
   width: 340px;
   height: calc(100vh - 60px);
   display: flex;
@@ -138,6 +138,7 @@
   padding: 2px 6px;
   border: 1px solid #a8a8a8;
   border-radius: 4px;
+  opacity: 0.8;
 }
 
 ::placeholder {
