@@ -19,12 +19,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   constructor() {
     this.showLoader = this.storage_service.loader$.pipe(delay(0));
-  }
+  };
 
   ngOnInit(): void {
-  }
+
+  };
 
   ngAfterViewInit(): void {
+  };
 
-  }
 }

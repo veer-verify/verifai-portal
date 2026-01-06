@@ -281,9 +281,14 @@ export class ServiceRequestsComponent {
       event.event?.target.classList.contains('btn-open')
     ) {
       this.showAssignDialog = true;
-      this.dialog.open(AssignRequestComponent, {
+      const assignDialog = this.dialog.open(AssignRequestComponent, {
         data: event.data,
+        disableClose: true
       });
+
+      assignDialog.afterClosed().subscribe((result) => {
+        console.log(result)
+      })
     }
   }
 
@@ -366,7 +371,7 @@ export class ServiceRequestsComponent {
       <header class="dialog-header">
         <a>Assign Service Request</a>
         <a mat-dialog-close
-          ><span class="material-symbols-outlined">cancel</span></a
+          ><span class="material-symbols-outlined text-danger">cancel</span></a
         >
       </header>
 
