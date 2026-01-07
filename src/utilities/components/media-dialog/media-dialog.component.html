@@ -12,10 +12,7 @@
 
     <video [src]="item | media | async" autoplay controls></video>
     } @else {
-    <img
-      [src]="item | media | async"
-      onerror="this.src='gif/loading-gif.gif'"
-    />
+    <img [src]="item | media | async" />
     } }
   </main>
   } @else {

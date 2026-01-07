@@ -1,5 +1,5 @@
-.sub-header {
-  height: 50px;
+/* .sub-header {
+  height: 40px;
   width: 100%;
   background: linear-gradient(180deg, white, rgba(128, 128, 128, 0.322) 90%);
   border-bottom: 1px solid #e0e0e0;
@@ -8,7 +8,7 @@
   padding-left: 20px;
   font-size: 18px;
   font-weight: 500;
-}
+} */
 
 .dropdown {
   position: relative;
@@ -27,7 +27,7 @@
   width: 450px;
   height: 36px;
 
-  background: linear-gradient(180deg,#FFFFFF80);
+  background: linear-gradient(180deg, #ffffff80);
   border: 1px solid #dcdcdc;
   border-radius: 8px;
 
@@ -126,23 +126,24 @@ input:focus {
   border-color: #888;
 }
 
-.tl-content{
-  padding: 20px;
+.tl-content {
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+  margin: 20px 40px;
 }
 
-.heading{
+.heading {
   font-weight: 600;
   font-size: 13px;
 }
 
-.tl-container{
+.tl-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px,1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
-  overflow-y: auto;
 }
 
-.tl-card{
+.tl-card {
   border: 1px solid #00000026;
   border-radius: 5px;
   display: flex;
@@ -153,31 +154,33 @@ input:focus {
   height: 100px;
   width: 100px;
   cursor: pointer;
+  background: transparent linear-gradient(180deg, #ffffff 0%, #eeeeee 100%) 0%
+    0% no-repeat padding-box;
 }
 
-.tl-card img{
+.tl-card img {
   width: 40%;
 }
 
-.cam-id{
+.cam-id {
   font-weight: 600;
   font-size: 11px;
 }
 
-.date{
+.date {
   font-size: 10px;
   opacity: 0.5;
 }
 
-.red-text{
+.red-text {
   color: white;
 }
 
-.red-bg{
-  background-color: #ed3237;
+.red-bg {
+  background: #ed3237;
 }
 
-.tlinfo-container{
+.tlinfo-container {
   position: fixed;
   right: 0;
   top: 0;
@@ -187,7 +190,7 @@ input:focus {
   flex-direction: column;
 }
 
-.header{
+.header {
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
@@ -195,7 +198,7 @@ input:focus {
   color: white;
 }
 
-.close{
+.close {
   color: black;
   background-color: white;
   width: 25px;
@@ -205,72 +208,72 @@ input:focus {
   cursor: pointer;
 }
 
-.tlinfo-content{
+.tlinfo-content {
   padding: 20px;
   background-color: white;
   flex: 1;
 }
 
-.info-cam-id{
+.info-cam-id {
   color: #ed3237;
   font-weight: 600;
 }
 
-.site-name{
+.site-name {
   font-size: 12px;
 }
 
-.topinfo{
+.topinfo {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 100px;
 }
 
-button{
+button {
   background-color: black;
   color: white;
   padding: 5px;
   border-radius: 5px;
 }
 
-.control-buttons{
+.control-buttons {
   display: flex;
   justify-content: center;
   gap: 10px;
 }
 
-.control-buttons img{
+.control-buttons img {
   border: 1px solid grey;
   border-radius: 50%;
   cursor: pointer;
 }
 
-.no-data{
+.no-data {
   color: #ed3237;
   font-weight: 700;
   font-size: 24px;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   animation: blink 2s ease infinite;
 }
 
-.tlfilter form{
+.tlfilter form {
   display: flex;
   justify-content: start;
   align-items: center;
 }
 
 @keyframes blink {
-  0%{
+  0% {
     opacity: 1;
   }
-  50%{
+  50% {
     opacity: 0.7;
   }
-  100%{
+  100% {
     opacity: 1;
   }
 }

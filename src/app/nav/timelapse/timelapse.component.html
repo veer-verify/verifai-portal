@@ -2,11 +2,12 @@
   <div class="tlfilter">
     <form [formGroup]="tlFilterForm">
       <div class="dropdown">
-
-        <select class="dropdown-select" formControlName="cam" (change)="filterTimeLapseList()">
-          <option value="ALL">
-            ALL ({{ camList.length }})
-          </option>
+        <select
+          class="dropdown-select"
+          formControlName="cam"
+          (change)="filterTimeLapseList()"
+        >
+          <option value="">ALL ({{ camList.length }})</option>
 
           @for (cam of camList; track cam) {
           <option [value]="cam.cameraId">
@@ -16,57 +17,81 @@
         </select>
       </div>
 
-
       <div class="calendar">
         <div class="start">
           <div class="label-box">START</div>
-
-          <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" formControlName="startDate"
-            (dateChange)="filterTimeLapseList()" />
-
-          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
-
+          <input
+            matInput
+            [matDatepicker]="picker1"
+            placeholder="MM-DD-YYYY"
+            formControlName="startDate"
+            (dateChange)="filterTimeLapseList()"
+          />
+          <img
+            src="icons/calendar.svg"
+            class="calendar-icon"
+            (click)="picker1.open()"
+          />
           <mat-datepicker #picker1></mat-datepicker>
         </div>
 
         <div class="end">
           <div class="label-box">END</div>
-
-          <input matInput [matDatepicker]="picker2" placeholder="MM-DD-YYYY" formControlName="endDate"
-            (dateChange)="filterTimeLapseList()" />
-
-          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker2.open()" />
+          <input
+            matInput
+            [matDatepicker]="picker2"
+            placeholder="MM-DD-YYYY"
+            formControlName="endDate"
+            (dateChange)="filterTimeLapseList()"
+          />
+          <img
+            src="icons/calendar.svg"
+            class="calendar-icon"
+            (click)="picker2.open()"
+          />
           <mat-datepicker #picker2></mat-datepicker>
         </div>
       </div>
     </form>
   </div>
-  <div class="heading">TOTAL(
-    @if(tldata){
-    {{tldata.length}}
-    }
-    @else {
-    0
-    })</div>
+
+  <div class="heading">
+    TOTAL RECORDS (@if(tldata){
+    {{ tldata.length }}
+    } @else { 0 })
+  </div>
 </div>
+
 @if(tldata){
 <div class="tl-content">
   <div class="tl-container">
     @for(tl of tldata; track tl){
-    <div class="tl-card" [ngClass]="currentTl === tl?'red-bg': ''" (click)="tlview($index)">
-      <img [src]="currentTl === tl ? 'icons/play-white.svg':'icons/play-circle-fill.svg'" alt="">
-      <div class="cam-id" [ngClass]="currentTl === tl?'red-text':''">{{tl.cameraId}}</div>
-      <div class="date" [ngClass]="currentTl === tl?'red-text':''">{{tl.generatedDate.split('T')[0]}}</div>
+    <div
+      class="tl-card"
+      [ngClass]="currentTl === tl ? 'red-bg' : ''"
+      (click)="tlview($index)"
+    >
+      <img
+        [src]="
+          currentTl === tl
+            ? 'icons/play-white.svg'
+            : 'icons/play-circle-fill.svg'
+        "
+        alt=""
+      />
+      <div class="cam-id" [ngClass]="currentTl === tl ? 'red-text' : ''">
+        {{ tl.cameraId }}
+      </div>
+      <div class="date" [ngClass]="currentTl === tl ? 'red-text' : ''">
+        {{ tl.generatedDate.split("T")[0] }}
+      </div>
     </div>
     }
   </div>
 </div>
-}
-@else {
+} @else {
 <div class="no-data">No Time Lapse Data Available for this Site</div>
-}
-
-@if(currentTl){
+} @if(currentTl){
 <div class="tlinfo-container">
   <div class="header">
     TIME LAPSE VIDEO
@@ -75,24 +100,39 @@
   <div class="tlinfo-content">
     <div class="topinfo">
       <div class="info">
-        <div class="info-cam-id">{{currentTl.cameraId}}</div>
-        <div class="site-name">{{siteName}}</div>
-        <div class="date">{{currentTl.generatedDate}}</div>
+        <div class="info-cam-id">{{ currentTl.cameraId }}</div>
+        <div class="site-name">{{ siteName }}</div>
+        <div class="date">{{ currentTl.generatedDate }}</div>
       </div>
       <button>
-        <img src="icons/download.svg" alt="">
+        <img src="icons/download.svg" alt="" />
         DOWNLOAD
       </button>
     </div>
     <video
-      [src]="environment + currentTl?.filename + '&requestName=lapsevideos' + '&levels=' + currentTl?.cameraId | media | async"
-      autoplay class="video" style="width: 100%; margin: 10px auto;"></video>
+      [src]="
+        environment +
+          currentTl?.filename +
+          '&requestName=lapsevideos' +
+          '&levels=' +
+          currentTl?.cameraId
+          | media
+          | async
+      "
+      autoplay
+      class="video"
+      style="width: 100%; margin: 10px auto"
+    ></video>
     <div class="control-buttons">
-      <img src="icons/first-page.svg" alt="" (click)="gototl(1)">
-      <img src="icons/page-prev.svg" alt="" (click)="gototl(index-1)">
-      <div class="list">{{index}}/{{tldata.length-1}}</div>
-      <img src="icons/next-page.svg" alt="" (click)="gototl(index+1)">
-      <img src="icons/last-page.svg" alt="" (click)="gototl(tldata.length-1)">
+      <img src="icons/first-page.svg" alt="" (click)="gototl(1)" />
+      <img src="icons/page-prev.svg" alt="" (click)="gototl(index - 1)" />
+      <div class="list">{{ index }}/{{ tldata.length - 1 }}</div>
+      <img src="icons/next-page.svg" alt="" (click)="gototl(index + 1)" />
+      <img
+        src="icons/last-page.svg"
+        alt=""
+        (click)="gototl(tldata.length - 1)"
+      />
     </div>
   </div>
 </div>

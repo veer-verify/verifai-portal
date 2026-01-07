@@ -130,7 +130,7 @@
 }
 
 ::ng-deep .mat-mdc-dialog-surface {
-  border-radius: 0 !important;
+  border-radius: 8px !important;
 }
 
 /* ag grid */

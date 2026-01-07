@@ -36,7 +36,7 @@ export class TimelapseComponent {
     private auth_service: AuthService,
     private storage_service: StorageService,
     private fb: FormBuilder
-  ) {}
+  ) { }
   drop = false;
   tldata: any = [];
   currentTl: any = null;
@@ -58,16 +58,11 @@ export class TimelapseComponent {
     this.initForm()
     this.storage_service.currentSite$.pipe(filter((res) => !!res)).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.siteData = res;
         this.siteName = res.siteName;
         this.config_service.listTimeLapseVideos(res).subscribe((tlres: any) => {
           if (tlres.statusCode === 200) {
             this.tldata = tlres.timeLapseList;
-            console.log(this.tldata);
-            console.log(res);
-          } else {
-            this.tldata = null;
           }
           this.config_service
             .getCamerasForSiteId(res)
@@ -81,9 +76,9 @@ export class TimelapseComponent {
 
   initForm() {
     this.tlFilterForm = this.fb.group({
-      cam: [null],
-      startDate: [null],
-      endDate: [null],
+      cam: [''],
+      startDate: [''],
+      endDate: [''],
     });
   }
 
@@ -114,13 +109,13 @@ export class TimelapseComponent {
   filterTimeLapseList() {
     // console.log(this.tlFilterForm.value);
     let {
-  cam: cameraId,
-  startDate: fromDate,
-  endDate: toDate
-} = this.tlFilterForm.value;
+      cam: cameraId,
+      startDate: fromDate,
+      endDate: toDate
+    } = this.tlFilterForm.value;
 
-    console.log({cameraId, fromDate, toDate})
-    if(cameraId==='ALL'){
+    console.log({ cameraId, fromDate, toDate })
+    if (cameraId === 'ALL') {
       cameraId = null;
       // console.log(this.tlFilterForm.value);
       this.config_service.listTimeLapseVideos({
@@ -128,17 +123,17 @@ export class TimelapseComponent {
         cameraId,
         fromDate,
         toDate
-      }).subscribe((res: any)=>{
+      }).subscribe((res: any) => {
         this.tldata = res.timeLapseList;
       })
     }
-    else{
+    else {
       this.config_service.listTimeLapseVideos({
         siteId: this.siteData.siteId,
         cameraId,
         fromDate,
         toDate
-      }).subscribe((res:any)=>{
+      }).subscribe((res: any) => {
         this.tldata = res.timeLapseList;
       })
     }

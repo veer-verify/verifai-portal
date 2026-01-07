@@ -47,7 +47,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   currentSite: any;
   incidentdata: any = [];
@@ -96,7 +96,7 @@ export class AlertsComponent {
   };
   gridOptions: GridOptions = {
     theme: this.myTheme,
-    // rowModelType: '',
+    rowModelType: 'clientSide',
     defaultColDef: this.defaultColDef,
     pagination: false,
     paginationPageSize: 10,
@@ -161,7 +161,7 @@ export class AlertsComponent {
       event.event?.target instanceof HTMLElement &&
       event.event?.target.classList.contains('btn-open')
     ) {
-      this.dialog.open(MediaDialogComponent, { data: event.data });
+      this.dialog.open(MediaDialogComponent, { data: event.data, disableClose: true });
     }
   }
 
@@ -204,12 +204,12 @@ export class AlertsComponent {
   }
 
 
-  changePageSize(pSize: any){
+  changePageSize(pSize: any) {
     this.pageSize = pSize.target.value;
     this.getAlerts();
   }
 
-  changePage(pNum: any){
+  changePage(pNum: any) {
     this.pageNumber = pNum;
     this.getAlerts();
   }
