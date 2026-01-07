@@ -14,7 +14,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { RequestService } from '../../../utilities/services/request.service';
-import { gridOptions, handleResponse } from '../../../grid.config';
+import { gridOptions } from '../../../grid.config';
 import { AddRequestComponent } from './add-request/add-request.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
@@ -63,16 +63,10 @@ export class ServiceRequestsComponent {
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   gridApi!: GridApi;
-  // datasource!: IServerSideDatasource;
-  myTheme = themeQuartz.withParams({
-    headerTextColor: '#FFFFFF',
-    headerBackgroundColor: 'rgba(0,0,0,0.5)',
-    headerColumnResizeHandleColor: '#ffffff',
-    rowBorder: true,
-  });
+
   columnDefs: ColDef[] = [
     { field: 'serviceReqId', headerName: 'Id' },
     { field: 'siteName', headerName: 'Site' },
@@ -116,35 +110,9 @@ export class ServiceRequestsComponent {
       sortable: false,
     },
   ];
-  defaultColDef: ColDef = {
-    flex: 1,
-    minWidth: 100,
-    filter: false,
-  };
-  // gridOptions: GridOptions = {
-  //   theme: this.myTheme,
-  //   rowModelType: 'serverSide',
-  //   defaultColDef: this.defaultColDef,
-  //   pagination: true,
-  //   paginationPageSize: 10,
-  //   paginationPageSizeSelector: [10, 20, 50, 100],
-  //   overlayNoRowsTemplate:
-  //     '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
-  //   noRowsOverlayComponentParams: { message: 'Your custom message' },
-  // };
 
-  gridOptions: GridOptions = {
-    theme: this.myTheme,
-    rowModelType: 'clientSide',
-    defaultColDef: this.defaultColDef,
-    pagination: false,
-    paginationPageSize: 10,
-    paginationPageSizeSelector: [10, 20, 50, 100],
-    overlayNoRowsTemplate:
-      '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
-    noRowsOverlayComponentParams: { message: 'Your custom message' },
-  };
 
+  gridOptions!: GridOptions
   currentSite: any;
   incidentdata: any = [];
   isChecked: boolean = false;
@@ -157,12 +125,14 @@ export class ServiceRequestsComponent {
   viewRequestInfo = false;
   rowRequestData: any;
   closeRequestInfo = false;
-  rowData: any = [];
+  rowData: any = [{}];
   pageNumber = 1;
   pageSize = 10;
   totalPages: any = 0;
 
   ngOnInit() {
+    this.gridOptions = gridOptions;
+
     this.initilizeFilterForm();
     this.getTypes();
     this.loadCategories();
@@ -175,13 +145,12 @@ export class ServiceRequestsComponent {
         this.currentSite = site;
         this.getcamerasForSiteId();
         // this.datasource = this.createDatasource();
-        this.request_service.getHelpDeskRequests().subscribe((res: any)=>{
-        if(res.statusCode === 200){
-          this.rowData = res.serviceRequestList
-          console.log(res.totalPages);
-          this.totalPages = res.totalPages;
-        }
-      })
+        this.request_service.getHelpDeskRequests().subscribe((res: any) => {
+          if (res.statusCode === 200) {
+            this.rowData = res.serviceRequestList
+            this.totalPages = res.totalPages;
+          }
+        })
       });
   }
 
@@ -254,10 +223,6 @@ export class ServiceRequestsComponent {
     return `${(this.durationEnd / this.maxDuration) * 100}%`;
   }
 
-  onStatusFilterChange() {}
-
-  onPriorityFilterChange() {}
-
   filterForm!: FormGroup;
 
   // refreshGrid() {
@@ -292,7 +257,6 @@ export class ServiceRequestsComponent {
     ) {
       this.viewRequestInfo = true;
       this.rowRequestData = event.data;
-      console.log(this.rowRequestData);
     }
     if (
       event.event?.target instanceof HTMLElement &&
@@ -397,11 +361,11 @@ export class ServiceRequestsComponent {
 
   changePSize(pSize: any) {
     this.pageSize = pSize;
-  this.gridApi?.setGridOption('cacheBlockSize', pSize);
-  this.gridApi?.purgeInfiniteCache();
+    this.gridApi?.setGridOption('cacheBlockSize', pSize);
+    this.gridApi?.purgeInfiniteCache();
   }
 
-  
+
 
   // createDatasource() {
   //   return {

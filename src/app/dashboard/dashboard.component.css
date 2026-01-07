@@ -1,4 +1,12 @@
-::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input {
-    color: #716868 !important;
-    caret-color: #514c4c !important
+::ng-deep
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mdc-text-field__input {
+  color: #716868 !important;
+  caret-color: #514c4c !important;
+}
+
+.main {
+  height: calc(100vh - 60px);
+  overflow-y: auto;
+  /* margin: 20px 40px; */
 }

@@ -43,7 +43,7 @@
         routerLinkActive="active"
         >Alerts</a
       >
-      <a
+      <!-- <a
         class="list-group-item"
         routerLink="/dashboard/timelapse"
         routerLinkActive="active"
@@ -54,7 +54,7 @@
         routerLink="/dashboard/nvr"
         routerLinkActive="active"
         >nvr</a
-      >
+      > -->
       <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
         <span class="material-symbols-outlined" style="font-size: 20px"
           >call</span
@@ -86,8 +86,11 @@
         </button>
       </mat-menu>
 
-      <div class="d-inline-flex align-items-center gap-1">
-        <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
+      <div
+        class="d-inline-flex align-items-center pointer gap-1"
+        [matMenuTriggerFor]="profileMenu"
+      >
+        <a class="list-group-item icon">
           <span class="material-symbols-outlined" style="font-size: 20px"
             >person</span
           >

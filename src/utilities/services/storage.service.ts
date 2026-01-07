@@ -16,6 +16,7 @@ export class StorageService {
 
   // private _loader = new BehaviorSubject(false);
   public loader$ = new BehaviorSubject(false);
+  public info$ = new BehaviorSubject('');
 
   // private _siteData = new BehaviorSubject([]);
   public siteData$ = new BehaviorSubject([]);

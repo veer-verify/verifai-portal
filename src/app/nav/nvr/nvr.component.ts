@@ -2,8 +2,9 @@ import { StorageService } from './../../../utilities/services/storage.service';
 import { Component } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ConfigService } from '../../../utilities/services/config.service';
-import { ColDef } from 'ag-grid-community';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { ColDef, GridOptions } from 'ag-grid-community';
+import { filter, Observable, Subject, takeUntil } from 'rxjs';
+import { gridOptions } from '../../../grid.config';
 
 @Component({
   selector: 'app-nvr',
@@ -18,10 +19,11 @@ export class NvrComponent {
   constructor(
     private config_service: ConfigService,
     private storage_service: StorageService
-  ){}
+  ) { }
 
   rowData: any;
   siteData: any;
+  gridOptions!: GridOptions;
 
   columnDefs = [
     { field: 'siteId' },
@@ -32,24 +34,18 @@ export class NvrComponent {
     { field: 'status' },
   ];
 
-  ngOnInit(){
-    this.storage_service.currentSite$.pipe(takeUntil(this.destroy$)).subscribe((res: any)=>{
+  ngOnInit() {
+    this.gridOptions = gridOptions;
+    this.storage_service.currentSite$.pipe(takeUntil(this.destroy$), filter((item) => !!item)).subscribe((res: any) => {
       this.siteData = res;
-      this.config_service.nvrList(this.siteData).subscribe((res:any)=>{
+      this.config_service.nvrList(this.siteData).subscribe((res: any) => {
         this.rowData = res.nvrDetails;
       })
     })
 
   }
 
-  defaultColDef: ColDef = {
-    sortable: true,
-    filter: true,
-    resizable: true,
-    flex: 1
-  };
-
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
