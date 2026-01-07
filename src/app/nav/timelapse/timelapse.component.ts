@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
 import { filter } from 'rxjs';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Validators } from '@angular/forms';
+import { AlertService } from '../../../utilities/services/alert.service';
 
 @Component({
   selector: 'app-timelapse',
@@ -35,7 +36,8 @@ export class TimelapseComponent {
     private config_service: ConfigService,
     private auth_service: AuthService,
     private storage_service: StorageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private alert_service: AlertService
   ) { }
   drop = false;
   tldata: any = [];
@@ -108,6 +110,16 @@ export class TimelapseComponent {
 
   filterTimeLapseList() {
     // console.log(this.tlFilterForm.value);
+    const today = new Date()
+    if(this.tlFilterForm.get('endDate')?.value > today){
+      this.alert_service.error("Please Select a Valid Date");
+      return;
+    }
+
+    if(this.tlFilterForm.get('startDate')?.value > this.tlFilterForm.get('endDate')?.value){
+      this.alert_service.error("Please Select a Valid Date-Range");
+      return;
+    }
     let {
       cam: cameraId,
       startDate: fromDate,

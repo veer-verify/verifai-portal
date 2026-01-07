@@ -175,13 +175,18 @@ export class ServiceRequestsComponent {
         this.currentSite = site;
         this.getcamerasForSiteId();
         // this.datasource = this.createDatasource();
-        this.request_service.getHelpDeskRequests().subscribe((res: any)=>{
-        if(res.statusCode === 200){
-          this.rowData = res.serviceRequestList
-          console.log(res.totalPages);
-          this.totalPages = res.totalPages;
-        }
-      })
+        this.request_service.getHelpDeskRequests({
+          ...this.currentSite,
+          ...this.filterForm.value,
+          page: this.pageNumber,
+          pageSize: this.pageSize
+        }).subscribe((res: any) => {
+          if (res.statusCode === 200) {
+            this.rowData = res.serviceRequestList;
+            // console.log(res.totalPages);
+            this.totalPages = res.totalPages;
+          }
+        });
       });
   }
 
@@ -391,17 +396,33 @@ export class ServiceRequestsComponent {
 
   changePageNumber(pNum: any) {
     this.pageNumber = pNum;
-
-    this.gridApi?.purgeInfiniteCache();
+    this.request_service.getHelpDeskRequests({
+      ...this.currentSite,
+      ...this.filterForm.value,
+      page: pNum,
+      pageSize: this.pageSize
+    }).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.rowData = res.serviceRequestList;
+        this.totalPages = res.totalPages;
+      }
+    });
   }
 
   changePSize(pSize: any) {
     this.pageSize = pSize;
-  this.gridApi?.setGridOption('cacheBlockSize', pSize);
-  this.gridApi?.purgeInfiniteCache();
+    this.request_service.getHelpDeskRequests({
+      ...this.currentSite,
+      ...this.filterForm.value,
+      pageSize: pSize,
+      page: this.pageNumber
+    }).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.rowData = res.serviceRequestList;
+        this.totalPages = res.totalPages;
+      }
+    });
   }
-
-  
 
   // createDatasource() {
   //   return {
