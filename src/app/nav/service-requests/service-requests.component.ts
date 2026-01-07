@@ -355,8 +355,17 @@ export class ServiceRequestsComponent {
 
   changePageNumber(pNum: any) {
     this.pageNumber = pNum;
-
-    this.gridApi?.purgeInfiniteCache();
+    this.request_service.getHelpDeskRequests({
+      ...this.currentSite,
+      ...this.filterForm.value,
+      page: pNum,
+      pageSize: this.pageSize
+    }).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.rowData = res.serviceRequestList;
+        this.totalPages = res.totalPages;
+      }
+    });
   }
 
   changePSize(pSize: any) {

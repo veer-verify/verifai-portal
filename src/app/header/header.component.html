@@ -127,7 +127,7 @@
   </div>
 
   <div class="small-screens">
-    <div class="hamburger">☰</div>
+    <span class="material-symbols-outlined"> menu </span>
     @if (storage_service.currentSite$ | async; as site) {
     <div class="site-accordian">
       <a (click)="toggleSites()">{{ site.siteName }}</a>
@@ -166,7 +166,7 @@
         <a
           class="side-list-group-item"
           routerLink="/dashboard/live-view"
-          routerLinkActive="active"
+          routerLinkActive="side-active"
         >
           Live View
         </a>
@@ -174,9 +174,23 @@
         <a
           class="side-list-group-item"
           routerLink="/dashboard/alerts"
-          routerLinkActive="active"
+          routerLinkActive="side-active"
         >
           Alerts
+        </a>
+        <a
+          class="side-list-group-item"
+          routerLink="/dashboard/timelapse"
+          routerLinkActive="side-active"
+        >
+          Time Lapse
+        </a>
+        <a
+          class="side-list-group-item"
+          routerLink="/dashboard/nvr"
+          routerLinkActive="side-active"
+        >
+          NVR
         </a>
 
         <!-- DROPDOWN -->
@@ -185,13 +199,13 @@
             class="side-list-group-item dropdown-title"
             (click)="toggleDropdown()"
           >
-            Settings
+            Service
             <span class="arrow" [class.open]="isDropdownOpen">▾</span>
           </div>
           <div class="dropdown-menu" [class.open]="isDropdownOpen">
-            <a routerLink="/dashboard/profile">Profile</a>
-            <a routerLink="/dashboard/users">Users</a>
-            <a routerLink="/dashboard/security">Security</a>
+            <a routerLink="/dashboard/service-requests">Requests</a>
+            <a routerLink="/dashboard/terms-conditions">T&C</a>
+            <a routerLink="/dashboard/contact">Contact</a>
           </div>
         </div>
       </div>
