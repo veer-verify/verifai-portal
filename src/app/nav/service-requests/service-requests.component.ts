@@ -175,14 +175,14 @@ export class ServiceRequestsComponent {
         this.currentSite = site;
         this.getcamerasForSiteId();
         // this.datasource = this.createDatasource();
+        this.request_service.getHelpDeskRequests().subscribe((res: any)=>{
+        if(res.statusCode === 200){
+          this.rowData = res.serviceRequestList
+          console.log(res.totalPages);
+          this.totalPages = res.totalPages;
+        }
+      })
       });
-      this.request_service.getHelpDeskRequests().subscribe((res: any)=>{
-      if(res.statusCode === 200){
-        this.rowData = res.serviceRequestList
-        console.log(res.totalPages);
-        this.totalPages = res.totalPages;
-      }
-    })
   }
 
   showInfo(requestData: any) {

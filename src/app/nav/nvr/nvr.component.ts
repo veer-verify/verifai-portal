@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { ColDef } from 'ag-grid-community';
+import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-nvr',
@@ -11,6 +12,8 @@ import { ColDef } from 'ag-grid-community';
   styleUrl: './nvr.component.css'
 })
 export class NvrComponent {
+
+  private destroy$ = new Subject<void>();
 
   constructor(
     private config_service: ConfigService,
@@ -30,8 +33,7 @@ export class NvrComponent {
   ];
 
   ngOnInit(){
-
-    this.storage_service.currentSite$.subscribe((res: any)=>{
+    this.storage_service.currentSite$.pipe(takeUntil(this.destroy$)).subscribe((res: any)=>{
       this.siteData = res;
       this.config_service.nvrList(this.siteData).subscribe((res:any)=>{
         this.rowData = res.nvrDetails;
@@ -46,5 +48,10 @@ export class NvrComponent {
     resizable: true,
     flex: 1
   };
+
+  ngOnDestroy(){
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }
