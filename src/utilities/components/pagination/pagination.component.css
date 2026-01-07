@@ -1,0 +1,31 @@
+.pagination {
+  display: flex;
+  justify-content: end;
+  padding: 10px 20px;
+  gap: 20px;
+  align-items: center;
+}
+
+.pagination select {
+  width: 70px;
+}
+
+.direcs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-det {
+  font-size: 12px;
+}
+
+.direc {
+  cursor: pointer;
+}
+
+.direc.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+}

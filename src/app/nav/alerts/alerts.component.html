@@ -173,7 +173,7 @@
     ></ag-grid-angular>
   </div>
 
-  <div class="pagination">
+  <!-- <div class="pagination">
     <select (change)="changePageSize($event)">
       <option value="10">10</option>
       <option value="25">25</option>
@@ -214,5 +214,6 @@
         </span>
       </div>
     </div>
-  </div>
+  </div> -->
+  <app-pagination [totalPages]="totalPages" (changePSize)="changePageSize($event)" (changePageNumber)="changePage($event)"></app-pagination>
 </main>

@@ -100,11 +100,12 @@
 </div>
 
 <!-- table -->
-<div style="height: calc(100vh - 120px); display: flex; flex-direction: column">
-  <ag-grid-angular style="height: 100%" [columnDefs]="columnDefs" [serverSideDatasource]="datasource"
-    [gridOptions]="gridOptions" (gridReady)="onGridReady($event)"
+<div style="height: calc(100vh - 165px); display: flex; flex-direction: column">
+  <ag-grid-angular style="height: 100%" [columnDefs]="columnDefs"
+    [gridOptions]="gridOptions" [rowData] = "rowData"
     (cellClicked)="onCellClicked($event)"></ag-grid-angular>
 </div>
+<app-pagination [totalPages]="totalPages - 1 == 0 ? 2 : totalPages" (changePageNumber)="changePageNumber($event)" (changePSize)="changePSize($event)"></app-pagination>
 
 @if(showNewRequestModal) {
 <app-new-request [currentRequestData]="currentRequest" (closeModal)="closeNewRequestModal($event)"></app-new-request>

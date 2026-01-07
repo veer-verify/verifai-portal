@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, Input } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   CellClickedEvent,
@@ -6,8 +6,8 @@ import {
   GridApi,
   GridOptions,
   GridReadyEvent,
-  IServerSideDatasource,
-  IServerSideGetRowsParams,
+  // IServerSideDatasource,
+  // IServerSideGetRowsParams,
   themeQuartz,
 } from 'ag-grid-community';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -30,6 +30,7 @@ import {
 } from '@angular/material/dialog';
 import { CommonModule, DatePipe } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
+import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-service-requests',
@@ -45,6 +46,7 @@ import { AlertService } from '../../../utilities/services/alert.service';
     MatNativeDateModule,
     DatePipe,
     CommonModule,
+    PaginationComponent,
   ],
   providers: [DatePipe],
   templateUrl: './service-requests.component.html',
@@ -59,11 +61,12 @@ export class ServiceRequestsComponent {
     private request_service: RequestService,
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   gridApi!: GridApi;
-  datasource!: IServerSideDatasource;
+  // datasource!: IServerSideDatasource;
   myTheme = themeQuartz.withParams({
     headerTextColor: '#FFFFFF',
     headerBackgroundColor: 'rgba(0,0,0,0.5)',
@@ -88,7 +91,7 @@ export class ServiceRequestsComponent {
       field: 'assignedToName',
       headerName: 'Assigned To',
       cellRenderer: (col: any) => {
-        if (col.data.assignedToName) {
+        if (col.data?.assignedToName) {
           return `<button class="btn-open text-primary">${col.data.assignedToName}</button>`;
         } else {
           return `<button class="btn-open text-primary">Assign</button>`;
@@ -118,11 +121,23 @@ export class ServiceRequestsComponent {
     minWidth: 100,
     filter: false,
   };
+  // gridOptions: GridOptions = {
+  //   theme: this.myTheme,
+  //   rowModelType: 'serverSide',
+  //   defaultColDef: this.defaultColDef,
+  //   pagination: true,
+  //   paginationPageSize: 10,
+  //   paginationPageSizeSelector: [10, 20, 50, 100],
+  //   overlayNoRowsTemplate:
+  //     '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
+  //   noRowsOverlayComponentParams: { message: 'Your custom message' },
+  // };
+
   gridOptions: GridOptions = {
     theme: this.myTheme,
-    rowModelType: 'serverSide',
+    rowModelType: 'clientSide',
     defaultColDef: this.defaultColDef,
-    pagination: true,
+    pagination: false,
     paginationPageSize: 10,
     paginationPageSizeSelector: [10, 20, 50, 100],
     overlayNoRowsTemplate:
@@ -142,6 +157,10 @@ export class ServiceRequestsComponent {
   viewRequestInfo = false;
   rowRequestData: any;
   closeRequestInfo = false;
+  rowData: any = [];
+  pageNumber = 1;
+  pageSize = 10;
+  totalPages: any = 0;
 
   ngOnInit() {
     this.initilizeFilterForm();
@@ -155,8 +174,15 @@ export class ServiceRequestsComponent {
       .subscribe((site) => {
         this.currentSite = site;
         this.getcamerasForSiteId();
-        this.datasource = this.createDatasource();
+        // this.datasource = this.createDatasource();
       });
+      this.request_service.getHelpDeskRequests().subscribe((res: any)=>{
+      if(res.statusCode === 200){
+        this.rowData = res.serviceRequestList
+        console.log(res.totalPages);
+        this.totalPages = res.totalPages;
+      }
+    })
   }
 
   showInfo(requestData: any) {
@@ -228,16 +254,16 @@ export class ServiceRequestsComponent {
     return `${(this.durationEnd / this.maxDuration) * 100}%`;
   }
 
-  onStatusFilterChange() { }
+  onStatusFilterChange() {}
 
-  onPriorityFilterChange() { }
+  onPriorityFilterChange() {}
 
   filterForm!: FormGroup;
 
-  refreshGrid() {
-    if (!this.gridApi) return;
-    this.gridApi.refreshServerSide({ purge: true });
-  }
+  // refreshGrid() {
+  //   if (!this.gridApi) return;
+  //   this.gridApi.refreshServerSide({ purge: true });
+  // }
 
   showNewRequestModal: boolean = false;
   openNewRequestModal() {
@@ -247,7 +273,7 @@ export class ServiceRequestsComponent {
 
   closeNewRequestModal(val: boolean) {
     this.showNewRequestModal = val;
-    this.refreshGrid();
+    // this.refreshGrid();
   }
 
   close() {
@@ -283,12 +309,12 @@ export class ServiceRequestsComponent {
       this.showAssignDialog = true;
       const assignDialog = this.dialog.open(AssignRequestComponent, {
         data: event.data,
-        disableClose: true
+        disableClose: true,
       });
 
       assignDialog.afterClosed().subscribe((result) => {
-        console.log(result)
-      })
+        console.log(result);
+      });
     }
   }
 
@@ -305,20 +331,33 @@ export class ServiceRequestsComponent {
     this.actionTags = res[0]?.metadata;
   }
 
-  onGridReady(params: GridReadyEvent) {
-    this.gridApi = params.api;
-    if (this.datasource) {
-      this.gridApi.setGridOption('serverSideDatasource', this.datasource);
-    }
-  }
+  // onGridReady(params: GridReadyEvent) {
+  //   this.gridApi = params.api;
+  //   if (this.datasource) {
+  //     this.gridApi.setGridOption('serverSideDatasource', this.datasource);
+  //   }
+  // }
+
+  // getRequestData(){
+  //   this.request_service.getHelpDeskRequests({
+  //     ...this.currentSite,
+  //     ...this.filterForm.value,
+  //     page: this.pageNumber,
+  //     pageSize: this.pageSize
+  //   }).subscribe({
+  //     next: (res: any)=>{
+  //       if(res.statusCode === 200){
+  //         this.totalPages = res.totalPages
+  //       }
+  //     }
+  //   })
+  // }
 
   createDatasource() {
     return {
-      getRows: (params: IServerSideGetRowsParams) => {
-        const end = params.request.endRow || 0;
-        const start = params.request.startRow || 0;
-        const pageSize = end - start;
-        const pageNumber = start / pageSize + 1;
+      getRows: (params: any) => {
+        const pageSize = this.pageSize;
+        const pageNumber = this.pageNumber;
 
         this.request_service
           .getHelpDeskRequests({
@@ -328,32 +367,90 @@ export class ServiceRequestsComponent {
             pageSize: pageSize,
           })
           .subscribe({
-            next: (res) => {
+            next: (res: any) => {
               if (res.statusCode === 200) {
-                const isLastPage = res.serviceRequestList.length < pageSize;
-                params.success({
-                  rowData: res.serviceRequestList,
-                  rowCount: isLastPage
-                    ? params.request.startRow + res.serviceRequestList.length
-                    : res?.totalPages * pageSize,
-                });
-                params.api.hideOverlay();
-                this.requestData = res;
+                const rows = res.serviceRequestList;
+
+                const lastRow =
+                  rows.length < pageSize
+                    ? (pageNumber - 1) * pageSize + rows.length
+                    : -1;
+
+                params.successCallback(rows, lastRow);
+                this.totalPages = res.totalPages;
+                this.cdr.detectChanges();
               } else {
-                params.fail();
-                params.api.showNoRowsOverlay();
+                params.failCallback();
               }
             },
+            error: () => params.failCallback(),
           });
       },
     };
   }
 
+  changePageNumber(pNum: any) {
+    this.pageNumber = pNum;
+
+    this.gridApi?.purgeInfiniteCache();
+  }
+
+  changePSize(pSize: any) {
+    this.pageSize = pSize;
+  this.gridApi?.setGridOption('cacheBlockSize', pSize);
+  this.gridApi?.purgeInfiniteCache();
+  }
+
+  
+
+  // createDatasource() {
+  //   return {
+  //     getRows: (params: IServerSideGetRowsParams) => {
+  //       const end = params.request.endRow || 0;
+  //       const start = params.request.startRow || 0;
+  //       const pageSize = end - start;
+  //       const pageNumber = start / pageSize + 1;
+
+  //       this.request_service
+  //         .getHelpDeskRequests({
+  //           ...this.currentSite,
+  //           ...this.filterForm.value,
+  //           page: pageNumber,
+  //           pageSize: pageSize,
+  //         })
+  //         .subscribe({
+  //           next: (res) => {
+  //             if (res.statusCode === 200) {
+  //               const isLastPage = res.serviceRequestList.length < pageSize;
+  //               params.success({
+  //                 rowData: res.serviceRequestList,
+  //                 rowCount: isLastPage
+  //                   ? params.request.startRow + res.serviceRequestList.length
+  //                   : res?.totalPages * pageSize,
+  //               });
+  //               params.api.hideOverlay();
+  //               this.requestData = res;
+  //             } else {
+  //               params.fail();
+  //               params.api.showNoRowsOverlay();
+  //             }
+  //           },
+  //         });
+  //     },
+  //   };
+  // }
+
   onFilterChange() {
-    if (!this.gridApi) return;
-    const ds = this.createDatasource();
-    this.gridApi.setGridOption('serverSideDatasource', ds);
-    this.gridApi.refreshServerSide({ purge: true });
+    // if (!this.gridApi) return;
+    // const ds = this.createDatasource();
+    // this.gridApi.setGridOption('serverSideDatasource', ds);
+    // this.gridApi.refreshServerSide({ purge: true });
+  }
+
+  changePage(page: number) {
+    if (page < 1) return;
+    this.pageNumber = page;
+    this.gridApi?.purgeInfiniteCache();
   }
 
   ngOnDestroy() {
@@ -396,7 +493,12 @@ export class ServiceRequestsComponent {
           </div>
 
           <div class="btn-sec">
-            <button type="button" class="btn-primary" (click)="assign()" mat-dialog-close>
+            <button
+              type="button"
+              class="btn-primary"
+              (click)="assign()"
+              mat-dialog-close
+            >
               Assign
             </button>
           </div>
@@ -416,7 +518,8 @@ export class AssignRequestComponent {
     private request_service: RequestService,
     private storage_service: StorageService,
     @Inject(MAT_DIALOG_DATA) public currentRow: any,
-    private alert_service: AlertService
+    private alert_service: AlertService,
+    private cdr: ChangeDetectorRef
   ) {
     this.assignForm = this.fb.group({
       assignee: [''],
@@ -426,7 +529,7 @@ export class AssignRequestComponent {
 
   ngOnInit() {
     this.assignForm.patchValue({ assignee: this.currentRow?.assignedTo });
-    this.listSupportUsers()
+    this.listSupportUsers();
   }
 
   listSupportUsers() {
@@ -466,8 +569,8 @@ export class AssignRequestComponent {
         if (res.statusCode === 200) {
           this.alert_service.success(res.message);
         } else {
-          this.alert_service.error(res.message)
-        };
+          this.alert_service.error(res.message);
+        }
       });
   }
 }

@@ -22,6 +22,7 @@ import { gridOptions, handleResponse } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 
 @Component({
   selector: 'app-alerts',
@@ -34,6 +35,7 @@ import { MatMenuModule } from '@angular/material/menu';
     AgGridAngular,
     MatDialogModule,
     MatMenuModule,
+    PaginationComponent
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
@@ -89,7 +91,7 @@ export class AlertsComponent {
     },
   ];
   gridApi!: GridApi;
-  datasource!: IServerSideDatasource;
+  // datasource!: IServerSideDatasource;
   defaultColDef: ColDef = {
     flex: 1,
     minWidth: 100,
@@ -205,7 +207,8 @@ export class AlertsComponent {
 
 
   changePageSize(pSize: any) {
-    this.pageSize = pSize.target.value;
+    // console.log(pSize);
+    this.pageSize = pSize;
     this.getAlerts();
   }
 
