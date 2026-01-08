@@ -3,7 +3,7 @@ import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { GlobalClickDirective } from '../../utilities/directives/global-click.directive';
 import { StorageService } from '../../utilities/services/storage.service';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
 import { AsyncPipe, TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
@@ -21,7 +21,7 @@ import { menuItems } from './menu-items';
     AsyncPipe,
     UpperCasePipe,
     NgClass
-],
+  ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
   standalone: true,
@@ -36,31 +36,31 @@ export class HeaderComponent implements OnInit {
   ) { }
   isDropdownOpen = false;
   showSideBar = false;
-  closeSideBar = false;
+  // closeSideBar = false;
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  openSideBar(){
-    if(this.showSideBar){
-      this.closeSideBar = true;
-      setTimeout(()=>{
-        this.closeSideBar = false;
-        this.showSideBar = !this.showSideBar
-      },300)
-      return;
-    }
+  openSideBar() {
+    // this.closeSideBar = !this.closeSideBar;
     this.showSideBar = !this.showSideBar;
+    // if (this.showSideBar) {
+    //   // this.closeSideBar = true;
+    //   setTimeout(() => {
+    //   }, 300)
+    //   return;
+    // }
+    // this.showSideBar = !this.showSideBar;
   }
-  
+
   @HostListener('document:click', ['$event']) onClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showSite = false
       this.showSideBar = false;
     }
   }
-  
+
   searchSite!: string;
   sitesList!: Observable<any>;
   user: any;
@@ -71,15 +71,18 @@ export class HeaderComponent implements OnInit {
     this.isAdmin = this.storage_service.isAdmin();
     this.user = this.storage_service.getData('user');
     this.sitesList = this.storage_service.siteData$;
-    this.storage_service.currentSite$.subscribe((res: any)=>{
-      this.config_service.listSiteServices(res).subscribe((res: any)=>{
-        console.log(res);
-        if(res.statusCode === 200){
-          this.serviceData = res.siteServicesList;
-          this.navItems = menuItems
-        }
+    this.storage_service.currentSite$
+      .pipe(
+        filter((site) => !!site),
+      )
+      .subscribe((res: any) => {
+        this.config_service.listSiteServices(res).subscribe((res: any) => {
+          if (res.statusCode === 200) {
+            this.serviceData = res.siteServicesList;
+            this.navItems = menuItems
+          }
+        })
       })
-    })
   }
 
   showSite: boolean = false;
