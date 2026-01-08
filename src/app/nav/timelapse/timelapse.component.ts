@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass, NgIf, UpperCasePipe } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormField, MatLabel } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -10,35 +10,35 @@ import { AuthService } from '../../auth/auth.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
 import { AsyncPipe } from '@angular/common';
 import { environment } from '../../../environments/environment';
-import { filter } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Validators } from '@angular/forms';
-import { AlertService } from '../../../utilities/services/alert.service';
 
 @Component({
   selector: 'app-timelapse',
   imports: [
     NgClass,
     MatDatepickerModule,
-    MatFormField,
-    MatLabel,
     MatInputModule,
     MediaPipe,
     AsyncPipe,
     ReactiveFormsModule,
+    DatePipe,
+    UpperCasePipe
   ],
   providers: [provideNativeDateAdapter(), MediaPipe],
   templateUrl: './timelapse.component.html',
   styleUrl: './timelapse.component.css',
 })
 export class TimelapseComponent {
+
   constructor(
     private config_service: ConfigService,
     private auth_service: AuthService,
-    private storage_service: StorageService,
-    private fb: FormBuilder,
-    private alert_service: AlertService
+    public storage_service: StorageService,
+    private fb: FormBuilder
   ) { }
+
+  destroy$ = new Subject()
   drop = false;
   tldata: any = [];
   currentTl: any = null;
@@ -51,27 +51,33 @@ export class TimelapseComponent {
     '/downloadFile_1_0?requestName=incidents&assetName=';
 
   tlFilterForm!: FormGroup;
-
   toggleDrop() {
     this.drop = !this.drop;
   }
 
   ngOnInit() {
-    this.initForm()
-    this.storage_service.currentSite$.pipe(filter((res) => !!res)).subscribe({
+    this.initForm();
+    this.storage_service.info$.next('');
+    this.storage_service.currentSite$.pipe(filter((res) => !!res), takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.siteData = res;
         this.siteName = res.siteName;
-        this.config_service.listTimeLapseVideos(res).subscribe((tlres: any) => {
-          if (tlres.statusCode === 200) {
-            this.tldata = tlres.timeLapseList;
-          }
-          this.config_service
-            .getCamerasForSiteId(res)
-            .subscribe((camRes: any) => {
-              this.camList = camRes;
-            });
-        });
+        this.config_service
+          .getCamerasForSiteId(res)
+          .subscribe((camRes: any) => {
+            this.camList = camRes;
+          });
+
+        this.config_service
+          .listTimeLapseVideos(res)
+          .subscribe((tlres: any) => {
+            if (tlres.statusCode === 200) {
+              this.tldata = tlres.timeLapseList;
+            } else {
+              this.storage_service.info$.next('no data found!');
+              this.tldata = []
+            }
+          });
       },
     });
   }
@@ -92,7 +98,6 @@ export class TimelapseComponent {
 
   tlview(id: number) {
     this.currentTl = this.tldata[id];
-    console.log(this.currentTl);
     this.index = id + 1;
   }
 
@@ -109,27 +114,14 @@ export class TimelapseComponent {
   }
 
   filterTimeLapseList() {
-    // console.log(this.tlFilterForm.value);
-    const today = new Date()
-    if(this.tlFilterForm.get('endDate')?.value > today){
-      this.alert_service.error("Please Select a Valid Date");
-      return;
-    }
-
-    if(this.tlFilterForm.get('startDate')?.value > this.tlFilterForm.get('endDate')?.value){
-      this.alert_service.error("Please Select a Valid Date-Range");
-      return;
-    }
     let {
       cam: cameraId,
       startDate: fromDate,
       endDate: toDate
     } = this.tlFilterForm.value;
 
-    console.log({ cameraId, fromDate, toDate })
     if (cameraId === 'ALL') {
       cameraId = null;
-      // console.log(this.tlFilterForm.value);
       this.config_service.listTimeLapseVideos({
         siteId: this.siteData.siteId,
         cameraId,
@@ -150,4 +142,10 @@ export class TimelapseComponent {
       })
     }
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(null);
+    this.destroy$.complete();
+  }
+
 }

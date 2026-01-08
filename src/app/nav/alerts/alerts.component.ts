@@ -18,7 +18,7 @@ import {
   themeQuartz,
 } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
-import { gridOptions, handleResponse } from '../../../grid.config';
+import { gridOptions } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
@@ -61,13 +61,6 @@ export class AlertsComponent {
   rowData: any;
   totalPages = 0;
 
-  myTheme = themeQuartz.withParams({
-    headerTextColor: '#FFFFFF',
-    headerBackgroundColor: 'rgba(0,0,0,0.5)',
-    headerColumnResizeHandleColor: '#ffffff',
-    rowBorder: true,
-  });
-
   columnDefs: ColDef[] = [
     { field: 'name', headerName: 'Camera' },
     { field: 'eventDate' },
@@ -92,21 +85,8 @@ export class AlertsComponent {
   ];
   gridApi!: GridApi;
   // datasource!: IServerSideDatasource;
-  defaultColDef: ColDef = {
-    flex: 1,
-    minWidth: 100,
-  };
-  gridOptions: GridOptions = {
-    theme: this.myTheme,
-    rowModelType: 'clientSide',
-    defaultColDef: this.defaultColDef,
-    pagination: false,
-    paginationPageSize: 10,
-    paginationPageSizeSelector: [10, 20, 50, 100],
-    overlayNoRowsTemplate:
-      '<div style="padding: 10px; border: 1px solid red;">No Data Found</div>',
-    noRowsOverlayComponentParams: { message: 'Your custom message' },
-  };
+
+  gridOptions!: GridOptions
 
   resetForm() {
     this.filterForm.reset();
@@ -114,6 +94,7 @@ export class AlertsComponent {
 
   filterForm!: FormGroup;
   ngOnInit() {
+    this.gridOptions = gridOptions;
     this.initilizeFilterForm();
     this.getTypes();
     this.storage_service.currentSite$
@@ -125,8 +106,6 @@ export class AlertsComponent {
         this.currentSite = site;
         this.getcamerasForSiteId();
         this.getAlerts();
-        // this.datasource = this.createDatasource();
-        // this.gridApi.refreshServerSide({ purge: true });
       });
   }
 
@@ -136,8 +115,8 @@ export class AlertsComponent {
       actionTag: [''],
       fromDate: [''],
       toDate: [''],
-      durationStart: [0],
-      durationEnd: [55],
+      durationStart: [1],
+      durationEnd: [60],
     });
   }
 
@@ -207,7 +186,6 @@ export class AlertsComponent {
 
 
   changePageSize(pSize: any) {
-    // console.log(pSize);
     this.pageSize = pSize;
     this.getAlerts();
   }

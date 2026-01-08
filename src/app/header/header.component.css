@@ -226,6 +226,7 @@
     color: white;
     text-decoration: none;
     cursor: pointer;
+    user-select: none;
   }
 
   .side-list-group-item:hover {

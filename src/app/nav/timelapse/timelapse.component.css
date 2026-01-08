@@ -127,8 +127,8 @@ input:focus {
 }
 
 .tl-content {
-  height: calc(100vh - 120px);
-  overflow-y: auto;
+  /* height: calc(100vh - 120px);
+  overflow-y: auto; */
   margin: 20px 40px;
 }
 
@@ -184,7 +184,7 @@ input:focus {
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 9999;
+  z-index: 99;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -210,7 +210,7 @@ input:focus {
 
 .tlinfo-content {
   padding: 20px;
-  background-color: white;
+  background-color: #eeeeee;
   flex: 1;
 }
 
@@ -230,23 +230,32 @@ input:focus {
   gap: 100px;
 }
 
-button {
+.down-button {
   background-color: black;
   color: white;
   padding: 5px;
   border-radius: 5px;
+  font-size: 14px;
 }
 
 .control-buttons {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 14px;
 }
 
-.control-buttons img {
-  border: 1px solid grey;
+.control-buttons span {
+  background-color: #ffffff;
+  /* border: 1px solid grey; */
   border-radius: 50%;
+  padding: 4px;
   cursor: pointer;
+}
+
+.list {
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .no-data {

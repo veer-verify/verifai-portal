@@ -6,7 +6,11 @@
       NEW REQUEST
     </button>
 
-    <button class="filter" [matMenuTriggerFor]="filterMenu" (click)="resetForm()">
+    <button
+      class="filter"
+      [matMenuTriggerFor]="filterMenu"
+      (click)="resetForm()"
+    >
       <span class="material-symbols-outlined text-danger"> filter_list </span>
     </button>
 
@@ -17,7 +21,11 @@
           <span class="material-symbols-outlined text-danger"> cancel </span>
         </div>
 
-        <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
+        <form
+          class="filter-content"
+          [formGroup]="filterForm"
+          (click)="$event.stopPropagation()"
+        >
           <label>Camera</label>
           <select formControlName="camera">
             <option value="" disabled>Select</option>
@@ -46,7 +54,6 @@
 
           <label class="mt-3">Start Date</label>
           <div class="date-time">
-
             <div class="date-time-inputs">
               <input type="date" formControlName="fromDate" />
               <span class="divider"></span>
@@ -56,14 +63,12 @@
 
           <label class="mt-3">End Date</label>
           <div class="date-time">
-
             <div class="date-time-inputs">
               <input type="date" formControlName="toDate" />
               <span class="divider"></span>
               <input type="time" formControlName="toTime" step="1" />
             </div>
           </div>
-
 
           <!-- <label class="date-label">Duration</label>
           <div class="duration-container">
@@ -86,7 +91,10 @@
           </div>
 
           <div class="filter-btns">
-            <button class="btn-secondary" (click)="filterForm.reset(); onFilterChange()">
+            <button
+              class="btn-secondary"
+              (click)="filterForm.reset(); onFilterChange()"
+            >
               RESET
             </button>
             <button class="btn-primary" (click)="onFilterChange()">
@@ -101,55 +109,69 @@
 
 <!-- table -->
 <div style="height: calc(100vh - 165px); display: flex; flex-direction: column">
-  <ag-grid-angular style="height: 100%" [columnDefs]="columnDefs"
-    [gridOptions]="gridOptions" [rowData] = "rowData"
-    (cellClicked)="onCellClicked($event)"></ag-grid-angular>
+  <ag-grid-angular
+    style="height: 100%"
+    [columnDefs]="columnDefs"
+    [rowData]="rowData"
+    [gridOptions]="gridOptions"
+    (cellClicked)="onCellClicked($event)"
+  ></ag-grid-angular>
 </div>
-<app-pagination [totalPages]="totalPages - 1 == 0 ? 2 : totalPages" (changePageNumber)="changePageNumber($event)" (changePSize)="changePSize($event)"></app-pagination>
+
+<app-pagination
+  [totalPages]="totalPages - 1 == 0 ? 2 : totalPages"
+  (changePageNumber)="changePageNumber($event)"
+  (changePSize)="changePSize($event)"
+></app-pagination>
 
 @if(showNewRequestModal) {
-<app-new-request [currentRequestData]="currentRequest" (closeModal)="closeNewRequestModal($event)"></app-new-request>
-}
-
-@if(viewRequestInfo){
-<div class="request-info-container" [ngClass]="closeRequestInfo?'exit-info':''">
+<app-new-request
+  [currentRequestData]="currentRequest"
+  (closeModal)="closeNewRequestModal($event)"
+></app-new-request>
+} @if(viewRequestInfo){
+<div
+  class="request-info-container"
+  [ngClass]="closeRequestInfo ? 'exit-info' : ''"
+>
   <div class="heading">
-    #{{rowRequestData.serviceReqId}}
+    #{{ rowRequestData.serviceReqId }}
     <div class="close" (click)="close()">x</div>
   </div>
-  <div class="data-content" [ngClass]="closeRequestInfo?'fade-exit-info':''">
-    <div class="status">
-      STATUS: {{rowRequestData.status}}
-    </div>
-    <div class=" info-row site-name">
+  <div
+    class="data-content"
+    [ngClass]="closeRequestInfo ? 'fade-exit-info' : ''"
+  >
+    <div class="status">STATUS: {{ rowRequestData.status }}</div>
+    <div class="info-row site-name">
       <p>Site Name</p>
       <p>-</p>
-      <p>{{rowRequestData.siteName}}</p>
+      <p>{{ rowRequestData.siteName }}</p>
     </div>
-    <div class=" info-row category-name">
+    <div class="info-row category-name">
       <p>Category</p>
       <p>-</p>
-      <p>{{rowRequestData.service_cat_name}}</p>
+      <p>{{ rowRequestData.service_cat_name }}</p>
     </div>
-    <div class=" info-row sub-category-name">
+    <div class="info-row sub-category-name">
       <p>Sub-Category</p>
       <p>-</p>
-      <p>{{rowRequestData.service_subcat_name}}</p>
+      <p>{{ rowRequestData.service_subcat_name }}</p>
     </div>
-    <div class=" info-row info-date">
+    <div class="info-row info-date">
       <p>Date</p>
       <p>-</p>
-      <p>{{ rowRequestData.createdTime | date:'dd/MM/yyyy' }}</p>
+      <p>{{ rowRequestData.createdTime | date : "dd/MM/yyyy" }}</p>
     </div>
-    <div class=" info-row info-priority">
+    <div class="info-row info-priority">
       <p>Priority</p>
       <p>-</p>
-      <p>{{rowRequestData.priority}}</p>
+      <p>{{ rowRequestData.priority }}</p>
     </div>
-    <div class=" info-row info-assined-by">
+    <div class="info-row info-assined-by">
       <p>Assigned By</p>
       <p>-</p>
-      <p>{{rowRequestData.createdByName}}</p>
+      <p>{{ rowRequestData.createdByName }}</p>
     </div>
   </div>
 </div>

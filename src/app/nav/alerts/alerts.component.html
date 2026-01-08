@@ -111,35 +111,31 @@
                 <span>{{ formatTime(filterForm.value.durationEnd) }}</span>
               </div>
 
-              <div
-                class="range-container"
-                [style.--start]="filterForm.value.durationStart"
-                [style.--end]="filterForm.value.durationEnd"
-              >
+              <div class="range-container">
                 <input
                   type="range"
-                  min="0"
-                  max="120"
-                  step="1"
+                  [min]="0"
+                  [step]="1"
+                  [value]="10"
                   formControlName="durationStart"
                   (input)="syncDuration()"
                 />
 
                 <input
                   type="range"
-                  min="0"
-                  max="120"
-                  step="1"
+                  [max]="120"
+                  [step]="1"
+                  [value]="60"
                   formControlName="durationEnd"
                   (input)="syncDuration()"
                   class="thumb2"
                 />
               </div>
 
-              <div class="duration-labels">
+              <!-- <div class="duration-labels">
                 <span>00:00</span>
                 <span>120:00</span>
-              </div>
+              </div> -->
             </div>
 
             <div class="filter-btns">
@@ -215,5 +211,9 @@
       </div>
     </div>
   </div> -->
-  <app-pagination [totalPages]="totalPages" (changePSize)="changePageSize($event)" (changePageNumber)="changePage($event)"></app-pagination>
+  <app-pagination
+    [totalPages]="totalPages"
+    (changePSize)="changePageSize($event)"
+    (changePageNumber)="changePage($event)"
+  ></app-pagination>
 </main>

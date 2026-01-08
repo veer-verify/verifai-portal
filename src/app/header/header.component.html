@@ -8,7 +8,7 @@
     <div class="site-accordian">
       <a (click)="toggleSites()" (click)="$event.stopPropagation()">{{
         site.siteName
-        }}</a>
+      }}</a>
 
       @if (showSite) {
       <div class="site-dropdown">
@@ -23,7 +23,9 @@
         }
       </div>
       }
-      <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
+      <span class="material-symbols-outlined" (click)="toggleSites()"
+        >keyboard_arrow_down</span
+      >
     </div>
     }
 
@@ -42,40 +44,67 @@
       }
     }
       <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
-        <span class="material-symbols-outlined" style="font-size: 20px">call</span>
+        <span class="material-symbols-outlined" style="font-size: 20px"
+          >call</span
+        >
       </a>
 
       <!-- request menu -->
       <mat-menu #requestMenu="matMenu">
-        <button routerLink="/dashboard/service-requests" routerLinkActive="active" mat-menu-item>
+        <button
+          routerLink="/dashboard/service-requests"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Requests</span>
         </button>
-        <button routerLink="/dashboard/terms-conditions" routerLinkActive="active" mat-menu-item>
+        <button
+          routerLink="/dashboard/terms-conditions"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">T&C</span>
         </button>
-        <button routerLink="/dashboard/contact" routerLinkActive="active" mat-menu-item>
+        <button
+          routerLink="/dashboard/contact"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Contact</span>
         </button>
       </mat-menu>
 
-      <div class="d-inline-flex align-items-center gap-1">
-        <a class="list-group-item icon" [matMenuTriggerFor]="profileMenu">
-          <span class="material-symbols-outlined" style="font-size: 20px">person</span>
+      <div
+        class="d-inline-flex align-items-center pointer gap-1"
+        [matMenuTriggerFor]="profileMenu"
+      >
+        <a class="list-group-item icon">
+          <span class="material-symbols-outlined" style="font-size: 20px"
+            >person</span
+          >
         </a>
         <span class="d-inline-flex flex-column">
           <span style="font-size: 12px">{{ user?.UserName | uppercase }}</span>
           <span class="text-secondary" style="font-size: 10px">{{
             user?.roleList[0].category
-            }}</span>
+          }}</span>
         </span>
       </div>
 
       <!-- profile-menu -->
       <mat-menu #profileMenu="matMenu">
-        <button routerLink="/dashboard/profile" routerLinkActive="active" mat-menu-item>
+        <button
+          routerLink="/dashboard/profile"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Profile</span>
         </button>
-        <button routerLink="/dashboard/change-password" routerLinkActive="active" mat-menu-item>
+        <button
+          routerLink="/dashboard/change-password"
+          routerLinkActive="active"
+          mat-menu-item
+        >
           <span class="menu-item">Change Password</span>
         </button>
         <button (click)="logout()" mat-menu-item>
@@ -86,9 +115,7 @@
   </div>
 
   <div class="small-screens">
-    <span class="material-symbols-outlined">
-      menu
-    </span>
+    <span class="material-symbols-outlined"> menu </span>
     @if (storage_service.currentSite$ | async; as site) {
     <div class="site-accordian">
       <a (click)="toggleSites()">{{ site.siteName }}</a>
@@ -106,34 +133,60 @@
         }
       </div>
       }
-      <span class="material-symbols-outlined" (click)="toggleSites()">keyboard_arrow_down</span>
+      <span class="material-symbols-outlined" (click)="toggleSites()"
+        >keyboard_arrow_down</span
+      >
     </div>
     }
 
     <!-- side-bar -->
     <aside class="side-bar">
       <div>
-        <img src="themes/verifai/logo-black.png" alt="" width="100px" style="margin: auto; padding: 10px" />
+        <img
+          src="themes/verifai/logo-black.png"
+          alt=""
+          width="100px"
+          style="margin: auto; padding: 10px"
+        />
       </div>
 
       <div class="side-navs">
-        <a class="side-list-group-item" routerLink="/dashboard/live-view" routerLinkActive="side-active">
+        <a
+          class="side-list-group-item"
+          routerLink="/dashboard/live-view"
+          routerLinkActive="side-active"
+        >
           Live View
         </a>
 
-        <a class="side-list-group-item" routerLink="/dashboard/alerts" routerLinkActive="side-active">
+        <a
+          class="side-list-group-item"
+          routerLink="/dashboard/alerts"
+          routerLinkActive="side-active"
+        >
           Alerts
         </a>
-        <a class="side-list-group-item" routerLink="/dashboard/timelapse" routerLinkActive="side-active">
+        <a
+          class="side-list-group-item"
+          routerLink="/dashboard/timelapse"
+          routerLinkActive="side-active"
+        >
           Time Lapse
         </a>
-        <a class="side-list-group-item" routerLink="/dashboard/nvr" routerLinkActive="side-active">
+        <a
+          class="side-list-group-item"
+          routerLink="/dashboard/nvr"
+          routerLinkActive="side-active"
+        >
           NVR
         </a>
 
         <!-- DROPDOWN -->
         <div class="side-dropdown">
-          <div class="side-list-group-item dropdown-title" (click)="toggleDropdown()">
+          <div
+            class="side-list-group-item dropdown-title"
+            (click)="toggleDropdown()"
+          >
             Service
             <span class="arrow" [class.open]="isDropdownOpen">▾</span>
           </div>
