@@ -88,9 +88,9 @@
   opacity: 1;
 }
 
-.side-active{
-  background-color: white !important;
-  color: black !important;
+.side-active {
+  background-color: #ed3237;
+  color: white;
 }
 
 .list-group-item:hover {
@@ -177,13 +177,14 @@
   background-color: #ffffff !important;
 }
 
-@media (max-width: 1102px) {
+@media (max-width: 1202px) {
   /* .logo {
     display: none;
   } */
   .site-accordian {
-    width: 50%;
+    width: 40%;
     left: 4px;
+    position: relative;
   }
 
   .all-screens {
@@ -198,7 +199,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    justify-content: space-between;
+    justify-content: start;
     padding: 0 40px;
   }
 
@@ -212,8 +213,15 @@
     left: 0;
     width: 200px;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.466);
+    background-color: rgb(255, 255, 255);
+    /* color: white; */
     z-index: 999;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    animation: slideIn 0.3s forwards;
+  }
+
+  .close-side{
+    animation: slideOut 0.3s forwards;
   }
 
   .side-navs {
@@ -221,16 +229,25 @@
     flex-direction: column;
   }
 
+  .side-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 30px;
+  }
+
   .side-list-group-item {
     padding: 20px;
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     cursor: pointer;
     user-select: none;
   }
 
   .side-list-group-item:hover {
-    background-color: black;
+    background-color: #ed3237;
+    color: white;
+    font-weight: 700;
   }
 
   /* DROPDOWN */
@@ -270,7 +287,7 @@
 
   .dropdown-menu a {
     padding: 15px 30px;
-    color: white;
+    color: rgb(0, 0, 0);
     text-decoration: none;
   }
 
@@ -285,5 +302,27 @@
 
   .arrow.open {
     transform: rotate(180deg);
+  }
+
+  .no-events {
+    pointer-events: none;
+  }
+}
+
+
+@keyframes slideIn {
+  from{
+    transform: translate(-100%);
+  }
+  to{
+    transform: translate(0%);
+  }
+}
+@keyframes slideOut {
+  from{
+    transform: translate(0%);
+  }
+  to{
+    transform: translate(-100%);
   }
 }

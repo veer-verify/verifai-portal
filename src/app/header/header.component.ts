@@ -6,7 +6,7 @@ import { StorageService } from '../../utilities/services/storage.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
-import { AsyncPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { AsyncPipe, TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
 import { ConfigService } from '../../utilities/services/config.service';
 import { menuItems } from './menu-items';
 
@@ -19,8 +19,9 @@ import { menuItems } from './menu-items';
     SearchPipe,
     TitleCasePipe,
     AsyncPipe,
-    UpperCasePipe
-  ],
+    UpperCasePipe,
+    NgClass
+],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
   standalone: true,
@@ -34,16 +35,29 @@ export class HeaderComponent implements OnInit {
     private config_service: ConfigService
   ) { }
   isDropdownOpen = false;
+  showSideBar = false;
+  closeSideBar = false;
 
   toggleDropdown() {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  
+  openSideBar(){
+    if(this.showSideBar){
+      this.closeSideBar = true;
+      setTimeout(()=>{
+        this.closeSideBar = false;
+        this.showSideBar = !this.showSideBar
+      },300)
+      return;
+    }
+    this.showSideBar = !this.showSideBar;
+  }
   
   @HostListener('document:click', ['$event']) onClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showSite = false
+      this.showSideBar = false;
     }
   }
   
