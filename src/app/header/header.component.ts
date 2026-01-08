@@ -7,6 +7,8 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
 import { AsyncPipe, TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { ConfigService } from '../../utilities/services/config.service';
+import { menuItems } from './menu-items';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +30,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     public storage_service: StorageService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private config_service: ConfigService
   ) { }
   isDropdownOpen = false;
 
@@ -36,19 +39,33 @@ export class HeaderComponent implements OnInit {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-
+  
+  
   @HostListener('document:click', ['$event']) onClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
       this.showSite = false
     }
   }
-
+  
   searchSite!: string;
   sitesList!: Observable<any>;
   user: any;
+  navItems: any;
+  serviceData: any;
+  isAdmin: boolean = false;
   ngOnInit(): void {
+    this.isAdmin = this.storage_service.isAdmin();
     this.user = this.storage_service.getData('user');
     this.sitesList = this.storage_service.siteData$;
+    this.storage_service.currentSite$.subscribe((res: any)=>{
+      this.config_service.listSiteServices(res).subscribe((res: any)=>{
+        console.log(res);
+        if(res.statusCode === 200){
+          this.serviceData = res.siteServicesList;
+          this.navItems = menuItems
+        }
+      })
+    })
   }
 
   showSite: boolean = false;

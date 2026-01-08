@@ -59,6 +59,12 @@ export class StorageService {
     return data.filter((item: any) => item.type == type);
   }
 
+  public isAdmin(): boolean {
+    const user = this.getData('user');
+    let a: Array<any> = Array.from(user.roleList, (item: any) => item.category);
+    return a.includes('Admin') ? true : false;
+  }
+
   public saveData(name: any, data: any) {
     // let x = btoa(encodeURIComponent(JSON.stringify(data)));
     // localStorage.setItem(name, x);

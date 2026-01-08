@@ -29,10 +29,18 @@
 
     <!-- nav-list -->
     <div class="nav-items">
-      <a class="list-group-item" routerLink="/dashboard/live-view" routerLinkActive="active">live view</a>
+      <!-- <a class="list-group-item" routerLink="/dashboard/live-view" routerLinkActive="active">live view</a>
       <a class="list-group-item" routerLink="/dashboard/alerts" routerLinkActive="active">Alerts</a>
       <a class="list-group-item" routerLink="/dashboard/timelapse" routerLinkActive="active">Time Lapse</a>
-      <a class="list-group-item" routerLink="/dashboard/nvr" routerLinkActive="active">nvr</a>
+      <a class="list-group-item" routerLink="/dashboard/nvr" routerLinkActive="active">nvr</a> -->
+      @for(item of navItems; track item){
+        @if(item.call({key: serviceData[item.id], admin: isAdmin})){
+        <a class="list-group-item">
+          <div [routerLinkActive]="['active']" [routerLink]="item.routeLink">{{ item.label |
+            titlecase }}</div>
+        </a>
+      }
+    }
       <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
         <span class="material-symbols-outlined" style="font-size: 20px">call</span>
       </a>

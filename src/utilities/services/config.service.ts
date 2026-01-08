@@ -65,4 +65,10 @@ export class ConfigService {
     return this.http.get(url, {params: params});
   }
 
+  listSiteServices(payload: any): Observable<any> {
+    let url = `${environment.sitesUrl}/listSiteServices_1_0`;
+    let params = new HttpParams().set('siteId', payload?.siteId);
+    return this.http.get(url, {params: params});
+  }
+
 }
