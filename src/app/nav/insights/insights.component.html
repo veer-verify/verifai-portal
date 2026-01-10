@@ -1,0 +1,14 @@
+<div class="insight-container">
+    <div class="first">
+        <ag-grid-angular
+      class="custom-grid"
+      style="height: 100%"
+      [columnDefs]="columnDefs"
+      [gridOptions]="gridOptions"
+      [rowData]="rowData"
+    ></ag-grid-angular>
+    </div>
+    <div class="second">
+        <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
+    </div>
+</div>

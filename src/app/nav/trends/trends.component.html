@@ -1,31 +1,16 @@
 <div class="tool-bar">
   <div class="calendar">
-    <input
-      matInput
-      [matDatepicker]="picker1"
-      placeholder="MM-DD-YYYY"
-      [matDatepickerFilter]="dateFilter"
-      [(ngModel)]="selectedDate"
-      [max]="today"
-      (ngModelChange)="getServices()"
-    />
+    <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" [matDatepickerFilter]="dateFilter"
+      [(ngModel)]="selectedDate" [max]="today" (ngModelChange)="getServices()" />
 
-    <img
-      src="icons/calendar.svg"
-      class="calendar-icon"
-      (click)="picker1.open()"
-    />
+    <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
 
     <mat-datepicker #picker1></mat-datepicker>
   </div>
 
   <div class="service">
     @if (selectedDate && services.length) {
-    <select
-      [ngModel]="selectedId"
-      (ngModelChange)="selectedId = $event"
-      id="selectType"
-    >
+    <select [ngModel]="selectedId" (ngModelChange)="selectedId = $event" id="selectType">
       <option value="" disabled>Customer Count</option>
 
       @for (ser of services; track ser) {
@@ -37,4 +22,9 @@
     }
   </div>
 </div>
-<ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
+<div class="charts">
+  <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
+  <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
+  <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
+  <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
+</div>

@@ -23,3 +23,17 @@
     cursor: pointer;
 }
 
+.charts{
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+    height: calc(100vh - 100px);
+    background:  linear-gradient(181deg, var(--unnamed-color-ffffff) 0%, #F3F3F3 50%, #EEEEEE 100%) 0% 0% no-repeat padding-box;
+}
+
+.charts *{
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius: 15px;
+}
