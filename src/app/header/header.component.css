@@ -84,13 +84,13 @@
 
 .active {
   border-radius: 5px;
-  color: #ed3237;
+  color: #ff4750;
   opacity: 1;
 }
 
 .side-active {
   background-color: #ed3237;
-  color: white;
+  color: #ffffff !important;
 }
 
 .list-group-item:hover {
@@ -125,7 +125,7 @@
   width: 300px;
   display: inline-flex;
   align-items: center;
-  left: 250px;
+  left: 220px;
 }
 
 .site-accordian a {
@@ -173,6 +173,11 @@
   border-radius: 6px;
 }
 
+.hamburger-menu {
+  position: absolute;
+  right: 40px;
+}
+
 ::ng-deep.mat-mdc-menu-panel {
   background-color: #ffffff !important;
 }
@@ -181,8 +186,9 @@
   /* .logo {
     display: none;
   } */
+
   .site-accordian {
-    width: 40%;
+    width: minmax(200px, 100%);
     left: 4px;
     position: relative;
   }
@@ -201,27 +207,19 @@
     gap: 10px;
     justify-content: start;
     padding: 0 40px;
-  }
-
-  .site-accordian {
-    margin: auto;
+    position: relative;
   }
 
   .side-bar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 200px;
+    right: 0;
+    width: 250px;
     height: 100vh;
-    background-color: rgb(255, 255, 255);
-    /* color: white; */
+    background-color: #eeeeee;
     z-index: 999;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     animation: slideIn 0.3s forwards;
-  }
-
-  .close-side{
-    animation: slideOut 0.3s forwards;
   }
 
   .side-navs {
@@ -229,25 +227,29 @@
     flex-direction: column;
   }
 
-  .side-top{
+  .side-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-right: 30px;
+    margin: 20px;
   }
 
   .side-list-group-item {
-    padding: 20px;
+    font-family: "Neometric Medium", sans-serif !important;
+    padding: 10px 20px;
     color: rgb(0, 0, 0);
     text-decoration: none;
     cursor: pointer;
     user-select: none;
+    font-size: 14px;
+    text-transform: uppercase;
   }
 
   .side-list-group-item:hover {
     background-color: #ed3237;
     color: white;
     font-weight: 700;
+    color: #ffffff !important;
   }
 
   /* DROPDOWN */
@@ -309,20 +311,20 @@
   }
 }
 
-
 @keyframes slideIn {
-  from{
-    transform: translate(-100%);
+  from {
+    transform: translate(100%);
   }
-  to{
+  to {
     transform: translate(0%);
   }
 }
+
 @keyframes slideOut {
-  from{
+  from {
     transform: translate(0%);
   }
-  to{
+  to {
     transform: translate(-100%);
   }
 }
