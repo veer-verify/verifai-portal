@@ -21,20 +21,20 @@
 
   <div class="service">
     @if (selectedDate && services.length) {
-      <select
-        [ngModel]="selectedId"
-        (ngModelChange)="selectedId = $event"
-        id="selectType"
-      >
-        <option value="" disabled>Customer Count</option>
+    <select
+      [ngModel]="selectedId"
+      (ngModelChange)="selectedId = $event"
+      id="selectType"
+    >
+      <option value="" disabled>Customer Count</option>
 
-        @for (ser of services; track ser) {
-          <option [value]="ser.serviceId">
-            {{ ser.service }}
-          </option>
-        }
-      </select>
+      @for (ser of services; track ser) {
+      <option [value]="ser.serviceId">
+        {{ ser.service }}
+      </option>
+      }
+    </select>
     }
   </div>
-  <canvas id="salesChart"></canvas>
 </div>
+<ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>

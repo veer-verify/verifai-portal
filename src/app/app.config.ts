@@ -10,6 +10,8 @@ import { TokenInterceptor } from '../utilities/interceptors/token.interceptor';
 
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
 import { DatePipe } from '@angular/common';
+import { provideHighcharts } from 'highcharts-angular';
+
 
 ModuleRegistry.registerModules([
   AllCommunityModule
@@ -24,5 +26,6 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
     provideAnimations(),
     DatePipe,
+    provideHighcharts()
   ]
 };
