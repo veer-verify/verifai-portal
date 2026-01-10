@@ -186,9 +186,13 @@
   /* .logo {
     display: none;
   } */
+  .hamburger-menu {
+    position: absolute;
+    right: 10px;
+  }
 
   .site-accordian {
-    width: minmax(200px, 100%);
+    width: 70%;
     left: 4px;
     position: relative;
   }
@@ -206,7 +210,7 @@
     align-items: center;
     gap: 10px;
     justify-content: start;
-    padding: 0 40px;
+    /* padding: 0 40px; */
     position: relative;
   }
 

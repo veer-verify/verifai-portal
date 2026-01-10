@@ -1,6 +1,6 @@
 import { IncidentService } from './../../../utilities/services/incident.service';
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, formatDate } from '@angular/common';
 import { MatSelectModule } from '@angular/material/select';
 import { TableComponent } from '../../../utilities/components/table/table.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -11,7 +11,6 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import {
   CellClickedEvent,
   ColDef,
-  GridApi,
   GridOptions,
   GridReadyEvent,
   IServerSideDatasource,
@@ -41,7 +40,6 @@ import { PaginationComponent } from '../../../utilities/components/pagination/pa
   styleUrl: './alerts.component.css',
 })
 export class AlertsComponent {
-  private destroy$ = new Subject<void>();
 
   constructor(
     private storage_service: StorageService,
@@ -51,6 +49,8 @@ export class AlertsComponent {
     private fb: FormBuilder
   ) { }
 
+  private destroy$ = new Subject<void>();
+  gridOptions!: GridOptions
   currentSite: any;
   incidentdata: any = [];
   isChecked: boolean = false;
@@ -83,10 +83,7 @@ export class AlertsComponent {
       sortable: false,
     },
   ];
-  gridApi!: GridApi;
-  // datasource!: IServerSideDatasource;
 
-  gridOptions!: GridOptions
 
   resetForm() {
     this.filterForm.reset();
@@ -105,7 +102,7 @@ export class AlertsComponent {
       .subscribe((site) => {
         this.currentSite = site;
         this.getcamerasForSiteId();
-        this.getAlerts();
+        this.incidentList();
       });
   }
 
@@ -115,10 +112,22 @@ export class AlertsComponent {
       actionTag: [''],
       fromDate: [''],
       toDate: [''],
+      fromTime: ["16:52:01"],
+      toTime: ['00:00:00'],
       durationStart: [1],
       durationEnd: [60],
     });
+
+    // const formattedTime = formatDate(new Date(), 'HH:mm', 'en-US');
+    // this.filterForm.patchValue({ fromTime: formattedTime });
+    console.log(this.filterForm.value)
   }
+
+  get() {
+    console.log(this.filterForm.value)
+
+  }
+
 
   formatTime(minutes: number): string {
     const hrs = Math.floor(minutes / 60);
@@ -159,14 +168,7 @@ export class AlertsComponent {
     this.actionTags = res[0]?.metadata;
   }
 
-  // onGridReady(params: GridReadyEvent) {
-  //   this.gridApi = params.api;
-  //   if (this.datasource) {
-  //     this.gridApi.setGridOption('serverSideDatasource', this.datasource);
-  //   }
-  // }
-
-  getAlerts() {
+  incidentList() {
     this.incident_service
       .incidentList({
         ...this.currentSite,
@@ -187,53 +189,16 @@ export class AlertsComponent {
 
   changePageSize(pSize: any) {
     this.pageSize = pSize;
-    this.getAlerts();
+    this.incidentList();
   }
 
   changePage(pNum: any) {
     this.pageNumber = pNum;
-    this.getAlerts();
-  }
-
-  createDatasource() {
-    return {
-      getRows: (params: any) => {
-        const pageSize = params.request.endRow - params.request.startRow;
-        const pageNumber = params.request.startRow / pageSize + 1;
-
-        this.incident_service
-          .incidentList({
-            ...this.currentSite,
-            ...this.filterForm.value,
-            page: pageNumber,
-            pageSize: pageSize,
-          })
-          .subscribe({
-            next: (res) => {
-              if (res.statusCode === 200) {
-                const isLastPage = res.IncidentList.length < pageSize;
-                params.success({
-                  rowData: res.IncidentList,
-                  rowCount: isLastPage
-                    ? params.request.startRow + res.IncidentList.length
-                    : res.totalPages * pageSize,
-                });
-                params.api.hideOverlay();
-              } else {
-                params.fail();
-                params.api.showNoRowsOverlay();
-              }
-            },
-          });
-      },
-    };
+    this.incidentList();
   }
 
   onFilterChange() {
-    if (!this.gridApi) return;
-    const ds = this.createDatasource();
-    this.gridApi.setGridOption('serverSideDatasource', ds);
-    this.gridApi.refreshServerSide({ purge: true });
+    this.incidentList();
   }
 
   ngOnDestroy() {

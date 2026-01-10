@@ -24,8 +24,9 @@
             matInput
             [matDatepicker]="picker1"
             placeholder="MM-DD-YYYY"
-            formControlName="startDate"
+            formControlName="fromDate"
             (dateChange)="filterTimeLapseList()"
+            [max]="today"
           />
           <img
             src="icons/calendar.svg"
@@ -41,8 +42,9 @@
             matInput
             [matDatepicker]="picker2"
             placeholder="MM-DD-YYYY"
-            formControlName="endDate"
+            formControlName="toDate"
             (dateChange)="filterTimeLapseList()"
+            [max]="today"
           />
           <img
             src="icons/calendar.svg"
@@ -52,6 +54,8 @@
           <mat-datepicker #picker2></mat-datepicker>
         </div>
       </div>
+
+      <button type="reset" (click)="filterTimeLapseList()">CLEAR</button>
     </form>
   </div>
 

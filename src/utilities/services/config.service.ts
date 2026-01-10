@@ -38,37 +38,37 @@ export class ConfigService {
     let params = new HttpParams();
     // console.log(payload);
     params = params.set('siteId', payload?.siteId)
-    if(payload?.active) {
+    if (payload?.active) {
       params = params.set('active', payload?.active)
     }
-    if(payload?.cameraId) {
+    if (payload?.cameraId) {
       params = params.set('cameraId', payload?.cameraId)
     }
-    if(payload?.fromDate) {
-      let x: any = this.date.transform(payload?.fromDate,'yyyy-MM-dd');
+    if (payload?.fromDate) {
+      let x: any = this.date.transform(payload?.fromDate, 'yyyy-MM-dd');
       // console.log(x);
       params = params.set('fromDate', x);
     }
-    if(payload?.toDate) {
+    if (payload?.toDate) {
       let x: any = this.date.transform(payload?.toDate, 'yyyy-MM-dd');
       params = params.set('toDate', x);
     }
-    return this.http.get(url, {params: params});
+    return this.http.get(url, { params: params });
   }
 
   nvrList(payload: any) {
     let url = `${environment.incidentsUrl}/NVRList_1_0`;
     let params = new HttpParams();
-    if(payload?.siteId) {
+    if (payload?.siteId) {
       params = params.set('siteId', payload?.siteId)
     }
-    return this.http.get(url, {params: params});
+    return this.http.get(url, { params: params });
   }
 
   listSiteServices(payload: any): Observable<any> {
     let url = `${environment.sitesUrl}/listSiteServices_1_0`;
     let params = new HttpParams().set('siteId', payload?.siteId);
-    return this.http.get(url, {params: params});
+    return this.http.get(url, { params: params });
   }
 
 }

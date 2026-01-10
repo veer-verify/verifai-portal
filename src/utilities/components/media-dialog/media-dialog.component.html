@@ -1,9 +1,9 @@
 <section>
   <header class="dialog-header">
-    <a>Dialog</a>
+    <a>{{ data?.name }}</a>
     <a mat-dialog-close
-      ><img src="icons/cancel_24dp_999999.svg" width="16px"
-    /></a>
+      ><span class="material-symbols-outlined text-danger">cancel</span></a
+    >
   </header>
 
   @if (data?.files.length) {

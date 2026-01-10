@@ -195,7 +195,7 @@
   cursor: pointer;
 }
 
-.request-info-container{
+.request-info-container {
   position: absolute;
   top: 0;
   right: 0;
@@ -209,7 +209,7 @@
   overflow: hidden;
 }
 
-.heading{
+.heading {
   display: flex;
   background-color: #ed3237;
   justify-content: space-between;
@@ -219,7 +219,7 @@
   /* flex: 1; */
 }
 
-.close{
+.close {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,15 +232,15 @@
   color: black;
 }
 
-.data-content{
+.data-content {
   flex: 9;
   padding: 10px;
   background-color: white;
 }
 
-.status{
+.status {
   padding: 5px;
-  background-color: #3A86C7;
+  background-color: #3a86c7;
   color: white;
   font-size: 12px;
   border-radius: 8px;
@@ -268,19 +268,19 @@
   text-align: center;
 }
 
-.info-row > p:first-child{
+.info-row > p:first-child {
   opacity: 0.6;
 }
 
-.exit-info{
+.exit-info {
   animation: slideOut 0.5s forwards;
 }
 
-.info-row *{
+.info-row * {
   animation: fadeIn 3s forwards;
 }
 
-.fade-exit-info *{
+.fade-exit-info * {
   animation: fadeOut 0.3s forwards;
 }
 
@@ -310,7 +310,7 @@
 .date-time-inputs input {
   border: none;
   background: transparent;
-  font-size: 12px;
+  font-size: 12px !important;
   padding: 4px 6px;
   outline: none;
 }
@@ -325,9 +325,11 @@
 
 .date-time-inputs .divider {
   width: 1px;
-  height: 18px;
-  background: #ddd;
-  margin: 0 6px;
+  height: 14px;
+  background: #8d8d8d;
+  margin: 0px 4px;
+  position: absolute;
+  left: 56%;
 }
 
 app-new-request {
@@ -338,40 +340,39 @@ app-new-request {
   z-index: 1000;
 }
 
-
-@keyframes slideIn{
-  from{
+@keyframes slideIn {
+  from {
     width: 0;
   }
 
-  to{
+  to {
     width: 400px;
   }
 }
 
-@keyframes slideOut{
-  from{
+@keyframes slideOut {
+  from {
     width: 400px;
   }
-  to{
+  to {
     width: 0;
   }
 }
 
-@keyframes fadeIn{
-  from{
+@keyframes fadeIn {
+  from {
     opacity: 0;
   }
-  to{
+  to {
     opacity: 1;
   }
 }
 
-@keyframes fadeOut{
-  from{
+@keyframes fadeOut {
+  from {
     opacity: 1;
   }
-  to{
+  to {
     opacity: 0;
   }
 }

@@ -91,20 +91,40 @@
               }
             </select>
 
-            <label class="mt-3">Start Date</label>
+            <!-- <label class="mt-3">Start Date</label>
             <div class="date-time">
               <label class="m-0">START</label>
               <input type="date" formControlName="fromDate" />
+            </div> -->
+            <label class="mt-3">Start Date</label>
+            <div class="date-time">
+              <div class="date-time-inputs">
+                <input type="date" formControlName="fromDate" />
+                <span class="divider"></span>
+                <input
+                  type="time"
+                  formControlName="fromTime"
+                  step="1"
+                  (change)="get()"
+                />
+              </div>
             </div>
 
-            <label class="mt-3">End Date</label>
+            <!-- <label class="mt-3">End Date</label>
             <div class="date-time">
               <label class="m-0">END</label>
               <input type="date" formControlName="toDate" />
+            </div> -->
+            <label class="mt-3">End Date</label>
+            <div class="date-time">
+              <div class="date-time-inputs">
+                <input type="date" formControlName="toDate" />
+                <span class="divider"></span>
+                <input type="time" formControlName="toTime" step="1" />
+              </div>
             </div>
 
             <label class="mt-3">Duration</label>
-
             <div class="duration-wrapper">
               <div class="duration-values">
                 <span>{{ formatTime(filterForm.value.durationStart) }}</span>
@@ -156,9 +176,7 @@
   </div>
 
   <!-- table -->
-  <div
-    style="height: calc(100vh - 165px); display: flex; flex-direction: column"
-  >
+  <div style="height: calc(100vh - 154px)">
     <ag-grid-angular
       class="custom-grid"
       style="height: 100%"
@@ -169,48 +187,6 @@
     ></ag-grid-angular>
   </div>
 
-  <!-- <div class="pagination">
-    <select (change)="changePageSize($event)">
-      <option value="10">10</option>
-      <option value="25">25</option>
-      <option value="50">50</option>
-    </select>
-    <div class="direcs">
-      <div
-        class="first direc"
-        (click)="changePage(1)"
-        [class.disabled]="pageNumber === 1"
-      >
-        <span class="material-symbols-outlined">
-          keyboard_double_arrow_left
-        </span>
-      </div>
-      <div
-        class="prev direc"
-        (click)="changePage(pageNumber - 1)"
-        [class.disabled]="pageNumber === 1"
-      >
-        <span class="material-symbols-outlined"> chevron_backward </span>
-      </div>
-      <div class="page-det">Page {{ pageNumber }}/{{ totalPages - 1 }}</div>
-      <div
-        class="next direc"
-        (click)="changePage(pageNumber + 1)"
-        [class.disabled]="pageNumber === totalPages - 1"
-      >
-        <span class="material-symbols-outlined"> chevron_forward </span>
-      </div>
-      <div
-        class="last direc"
-        (click)="changePage(totalPages - 1)"
-        [class.disabled]="pageNumber === totalPages - 1"
-      >
-        <span class="material-symbols-outlined">
-          keyboard_double_arrow_right
-        </span>
-      </div>
-    </div>
-  </div> -->
   <app-pagination
     [totalPages]="totalPages"
     (changePSize)="changePageSize($event)"

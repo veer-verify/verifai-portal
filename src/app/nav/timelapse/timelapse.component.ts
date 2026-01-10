@@ -38,7 +38,9 @@ export class TimelapseComponent {
     private fb: FormBuilder
   ) { }
 
-  destroy$ = new Subject()
+  destroy$ = new Subject();
+
+  today = new Date();
   drop = false;
   tldata: any = [];
   currentTl: any = null;
@@ -56,39 +58,44 @@ export class TimelapseComponent {
   }
 
   ngOnInit() {
-    this.initForm();
+    this.initFilterForm();
     this.storage_service.info$.next('');
     this.storage_service.currentSite$.pipe(filter((res) => !!res), takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.siteData = res;
         this.siteName = res.siteName;
+        this.listTimeLapseVideos();
         this.config_service
           .getCamerasForSiteId(res)
           .subscribe((camRes: any) => {
             this.camList = camRes;
           });
 
-        this.config_service
-          .listTimeLapseVideos(res)
-          .subscribe((tlres: any) => {
-            if (tlres.statusCode === 200) {
-              this.tldata = tlres.timeLapseList;
-            } else {
-              this.storage_service.info$.next('no data found!');
-              this.tldata = []
-            }
-          });
+
       },
     });
   }
 
-  initForm() {
+  initFilterForm() {
     this.tlFilterForm = this.fb.group({
       cam: [''],
-      startDate: [''],
-      endDate: [''],
+      fromDate: [''],
+      toDate: [''],
     });
   }
+  listTimeLapseVideos() {
+    this.config_service
+      .listTimeLapseVideos({ ...this.siteData, ...this.tlFilterForm.value })
+      .subscribe((tlres: any) => {
+        if (tlres.statusCode === 200) {
+          this.tldata = tlres.timeLapseList;
+        } else {
+          this.storage_service.info$.next('no data found!');
+          this.tldata = []
+        }
+      });
+  }
+
 
   openPicker(input: HTMLInputElement) {
     setTimeout(() => {
@@ -114,33 +121,38 @@ export class TimelapseComponent {
   }
 
   filterTimeLapseList() {
-    let {
-      cam: cameraId,
-      startDate: fromDate,
-      endDate: toDate
-    } = this.tlFilterForm.value;
+    this.listTimeLapseVideos();
+    // let {
+    //   cam: cameraId,
+    //   startDate: fromDate,
+    //   endDate: toDate
+    // } = this.tlFilterForm.value;
 
-    if (cameraId === 'ALL') {
-      cameraId = null;
-      this.config_service.listTimeLapseVideos({
-        siteId: this.siteData.siteId,
-        cameraId,
-        fromDate,
-        toDate
-      }).subscribe((res: any) => {
-        this.tldata = res.timeLapseList;
-      })
-    }
-    else {
-      this.config_service.listTimeLapseVideos({
-        siteId: this.siteData.siteId,
-        cameraId,
-        fromDate,
-        toDate
-      }).subscribe((res: any) => {
-        this.tldata = res.timeLapseList;
-      })
-    }
+    // if (cameraId === 'ALL') {
+    //   cameraId = null;
+    //   this.config_service.listTimeLapseVideos({
+    //     siteId: this.siteData.siteId,
+    //     cameraId,
+    //     fromDate,
+    //     toDate
+    //   }).subscribe((res: any) => {
+    //     if (res.statusCode === 200) {
+    //       this.tldata = res.timeLapseList;
+    //     }
+    //   })
+    // }
+    // else {
+    //   this.config_service.listTimeLapseVideos({
+    //     siteId: this.siteData.siteId,
+    //     cameraId,
+    //     fromDate,
+    //     toDate
+    //   }).subscribe((res: any) => {
+    //     if (res.statusCode === 200) {
+    //       this.tldata = res.timeLapseList;
+    //     }
+    //   })
+    // }
   }
 
   ngOnDestroy(): void {

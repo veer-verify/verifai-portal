@@ -151,4 +151,22 @@
 
 ::ng-deep .ag-cell {
   font-size: 12px !important;
+  padding: 0 0 0 40px !important;
+}
+
+::ng-deep .ag-header-cell-label,
+.ag-header-group-cell-label {
+  padding: 5px 25px !important;
+}
+
+@media (max-width: 768px) {
+  ::ng-deep .ag-cell {
+    font-size: 12px !important;
+    padding: 0 20px !important;
+  }
+
+  ::ng-deep .ag-header-cell-label,
+  .ag-header-group-cell-label {
+    padding: 5px 5px !important;
+  }
 }

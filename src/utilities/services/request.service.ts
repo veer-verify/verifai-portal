@@ -98,7 +98,7 @@ export class RequestService {
     if (payload?.page) {
       params = params.set('page', payload?.page);
     }
-    if(payload?.pageSize){
+    if (payload?.pageSize) {
       params = params.set('pageSize', parseInt(payload?.pageSize))
     }
     if (payload?.fromDate) {
@@ -107,8 +107,6 @@ export class RequestService {
     if (payload?.toDate) {
       params = params.set('toDate', payload?.toDate);
     }
-
-    console.log(payload);
 
     return this.http.get(url, { params: params });
   }

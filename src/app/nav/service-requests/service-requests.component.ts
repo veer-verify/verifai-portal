@@ -65,8 +65,6 @@ export class ServiceRequestsComponent {
     private cdr: ChangeDetectorRef
   ) { }
 
-  gridApi!: GridApi;
-
   columnDefs: ColDef[] = [
     { field: 'serviceReqId', headerName: 'Id' },
     { field: 'siteName', headerName: 'Site' },
@@ -144,14 +142,21 @@ export class ServiceRequestsComponent {
       .subscribe((site) => {
         this.currentSite = site;
         this.getcamerasForSiteId();
-        // this.datasource = this.createDatasource();
-        this.request_service.getHelpDeskRequests().subscribe((res: any) => {
-          if (res.statusCode === 200) {
-            this.rowData = res.serviceRequestList
-            this.totalPages = res.totalPages;
-          }
-        })
+        this.getHelpDeskRequests();
+
       });
+  }
+
+  getHelpDeskRequests() {
+    this.request_service.getHelpDeskRequests({
+      ...this.filterForm.value, page: this.pageNumber,
+      pageSize: this.pageSize,
+    }).subscribe((res: any) => {
+      if (res.statusCode === 200) {
+        this.rowData = res.serviceRequestList
+        this.totalPages = res.totalPages;
+      }
+    })
   }
 
   showInfo(requestData: any) {
@@ -224,12 +229,6 @@ export class ServiceRequestsComponent {
   }
 
   filterForm!: FormGroup;
-
-  // refreshGrid() {
-  //   if (!this.gridApi) return;
-  //   this.gridApi.refreshServerSide({ purge: true });
-  // }
-
   showNewRequestModal: boolean = false;
   openNewRequestModal() {
     this.currentRequest = null;
@@ -238,7 +237,6 @@ export class ServiceRequestsComponent {
 
   closeNewRequestModal(val: boolean) {
     this.showNewRequestModal = val;
-    // this.refreshGrid();
   }
 
   close() {
@@ -295,64 +293,6 @@ export class ServiceRequestsComponent {
     this.actionTags = res[0]?.metadata;
   }
 
-  // onGridReady(params: GridReadyEvent) {
-  //   this.gridApi = params.api;
-  //   if (this.datasource) {
-  //     this.gridApi.setGridOption('serverSideDatasource', this.datasource);
-  //   }
-  // }
-
-  // getRequestData(){
-  //   this.request_service.getHelpDeskRequests({
-  //     ...this.currentSite,
-  //     ...this.filterForm.value,
-  //     page: this.pageNumber,
-  //     pageSize: this.pageSize
-  //   }).subscribe({
-  //     next: (res: any)=>{
-  //       if(res.statusCode === 200){
-  //         this.totalPages = res.totalPages
-  //       }
-  //     }
-  //   })
-  // }
-
-  createDatasource() {
-    return {
-      getRows: (params: any) => {
-        const pageSize = this.pageSize;
-        const pageNumber = this.pageNumber;
-
-        this.request_service
-          .getHelpDeskRequests({
-            ...this.currentSite,
-            ...this.filterForm.value,
-            page: pageNumber,
-            pageSize: pageSize,
-          })
-          .subscribe({
-            next: (res: any) => {
-              if (res.statusCode === 200) {
-                const rows = res.serviceRequestList;
-
-                const lastRow =
-                  rows.length < pageSize
-                    ? (pageNumber - 1) * pageSize + rows.length
-                    : -1;
-
-                params.successCallback(rows, lastRow);
-                this.totalPages = res.totalPages;
-                this.cdr.detectChanges();
-              } else {
-                params.failCallback();
-              }
-            },
-            error: () => params.failCallback(),
-          });
-      },
-    };
-  }
-
   changePageNumber(pNum: any) {
     this.pageNumber = pNum;
     this.request_service.getHelpDeskRequests({
@@ -370,60 +310,18 @@ export class ServiceRequestsComponent {
 
   changePSize(pSize: any) {
     this.pageSize = pSize;
-    this.gridApi?.setGridOption('cacheBlockSize', pSize);
-    this.gridApi?.purgeInfiniteCache();
   }
 
 
 
-  // createDatasource() {
-  //   return {
-  //     getRows: (params: IServerSideGetRowsParams) => {
-  //       const end = params.request.endRow || 0;
-  //       const start = params.request.startRow || 0;
-  //       const pageSize = end - start;
-  //       const pageNumber = start / pageSize + 1;
-
-  //       this.request_service
-  //         .getHelpDeskRequests({
-  //           ...this.currentSite,
-  //           ...this.filterForm.value,
-  //           page: pageNumber,
-  //           pageSize: pageSize,
-  //         })
-  //         .subscribe({
-  //           next: (res) => {
-  //             if (res.statusCode === 200) {
-  //               const isLastPage = res.serviceRequestList.length < pageSize;
-  //               params.success({
-  //                 rowData: res.serviceRequestList,
-  //                 rowCount: isLastPage
-  //                   ? params.request.startRow + res.serviceRequestList.length
-  //                   : res?.totalPages * pageSize,
-  //               });
-  //               params.api.hideOverlay();
-  //               this.requestData = res;
-  //             } else {
-  //               params.fail();
-  //               params.api.showNoRowsOverlay();
-  //             }
-  //           },
-  //         });
-  //     },
-  //   };
-  // }
 
   onFilterChange() {
-    // if (!this.gridApi) return;
-    // const ds = this.createDatasource();
-    // this.gridApi.setGridOption('serverSideDatasource', ds);
-    // this.gridApi.refreshServerSide({ purge: true });
+    this.getHelpDeskRequests()
   }
 
   changePage(page: number) {
     if (page < 1) return;
     this.pageNumber = page;
-    this.gridApi?.purgeInfiniteCache();
   }
 
   ngOnDestroy() {

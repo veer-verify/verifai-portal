@@ -31,6 +31,37 @@
   width: 100%;
 }
 
+.date-time-inputs {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.date-time-inputs input {
+  border: none;
+  background: transparent;
+  font-size: 12px !important;
+  padding: 4px 6px;
+  outline: none;
+}
+
+.date-time-inputs input[type="date"] {
+  width: 60%;
+}
+
+.date-time-inputs input[type="time"] {
+  width: 40%;
+}
+
+.date-time-inputs .divider {
+  width: 1px;
+  height: 14px;
+  background: #8d8d8d;
+  margin: 0px 4px;
+  position: absolute;
+  left: 56%;
+}
+
 /* center section (start/end) */
 .center {
   display: flex;

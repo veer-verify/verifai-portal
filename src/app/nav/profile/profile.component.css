@@ -15,7 +15,7 @@
 }
 
 .profile-image {
-  position: relative;
+  /* position: relative; */
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -29,8 +29,8 @@
   height: 25px;
   border-radius: 50%;
   background-color: #ffff;
-  top: 5%;
-  left: 70%;
+  top: 4px;
+  right: 4px;
   box-shadow: -6px 6px 10px #e72e2e40;
   display: flex;
   justify-content: center;
@@ -283,18 +283,27 @@ app-add-user {
   z-index: 1000;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .upper-container {
     flex-direction: column;
+    padding: 20px 20px;
   }
-}
-
-@media (max-width: 550px) {
+  .rows {
+    align-items: center;
+    margin: 10px;
+  }
   .user-details {
     flex-direction: column;
   }
 
   .user-btns {
     flex-direction: row;
+  }
+
+  .row1,
+  .row2,
+  .row3 {
+    flex-direction: column;
+    gap: 10px;
   }
 }
