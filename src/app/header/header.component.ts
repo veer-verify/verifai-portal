@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
     this.sitesList = this.storage_service.siteData$;
     this.storage_service.currentSite$.subscribe((res: any)=>{
       this.config_service.listSiteServices(res).subscribe((res: any)=>{
-        console.log(res);
+        // console.log(res);
         if(res.statusCode === 200){
           this.serviceData = res.siteServicesList;
           this.navItems = menuItems

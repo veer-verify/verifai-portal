@@ -1,0 +1,25 @@
+.tool-bar{
+    justify-content: start;
+    gap: 20px;
+    align-items: center;
+}
+
+.calendar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #c4c4c4;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+  width: 210px;
+  padding: 0 10px;
+}
+
+.calendar input{
+    border: none;
+}
+
+.calendar-icon{
+    cursor: pointer;
+}
+

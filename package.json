@@ -24,6 +24,7 @@
     "ag-grid-angular": "^34.3.1",
     "ag-grid-community": "^34.3.1",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.5.1",
     "crypto-js": "^4.2.0",
     "ng-otp-input": "^2.0.9",
     "ng2-pdf-viewer": "^10.4.0",
