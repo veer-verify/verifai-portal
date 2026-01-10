@@ -17,12 +17,12 @@ export const menuItems = [
     //     routeLink: 'insight',
     //     call: (data: any) => data?.key !== 'F' ? true : false
     // },
-    // {
-    //     id: 'insights',
-    //     label: 'trends',
-    //     routeLink: 'trends',
-    //     call: (data: any) => data?.key !== 'F' ? true : false
-    // },
+    {
+        id: 'trends',
+        label: 'trends',
+        routeLink: 'trends',
+        call: (data: any) => data?.key !== 'F' ? true : false
+    },
     {
         id: 'timeLapse',
         label: 'timelapse',

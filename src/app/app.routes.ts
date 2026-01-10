@@ -12,65 +12,74 @@ import { ChangePasswordComponent } from './nav/profile/change-password/change-pa
 import { TermsConditionsComponent } from './nav/service-requests/terms-conditions/terms-conditions.component';
 import { ContactComponent } from './nav/service-requests/contact/contact.component';
 import { NvrComponent } from './nav/nvr/nvr.component';
+import { HealthComponent } from './nav/health/health.component';
+import { TrendsComponent } from './nav/trends/trends.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginComponent
-    },
-    {
-        path: 'dashboard',
-        component: DashboardComponent,
-        canActivate: [authGuard],
-        children: [
-            {
-                path: 'live-view',
-                component: LiveViewComponent
-            },
-            {
-                path: 'alerts',
-                component: AlertsComponent
-            },
-            {
-                path: 'service-requests',
-                component: ServiceRequestsComponent
-            },
-            {
-                path: 'terms-conditions',
-                component: TermsConditionsComponent
-            },
-            {
-                path: 'contact',
-                component: ContactComponent
-            },
-            {
-                path: 'timelapse',
-                component: TimelapseComponent
-            },
-            {
-                path: 'nvr',
-                component: NvrComponent
-            },
-            {
-                path: 'profile',
-                component: ProfileComponent
-            },
-            {
-                path: 'change-password',
-                component: ChangePasswordComponent
-            },
-            {
-                path: '',
-                redirectTo: '/dashboard/live-view',
-                pathMatch: 'full'
-            }
-        ]
-    },
-    {
+  {
+    path: 'login',
+    component: LoginComponent,
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'live-view',
+        component: LiveViewComponent,
+      },
+      {
+        path: 'alerts',
+        component: AlertsComponent,
+      },
+      {
+        path: 'service-requests',
+        component: ServiceRequestsComponent,
+      },
+      {
+        path: 'terms-conditions',
+        component: TermsConditionsComponent,
+      },
+      {
+        path: 'contact',
+        component: ContactComponent,
+      },
+      {
+        path: 'timelapse',
+        component: TimelapseComponent,
+      },
+      {
+        path: 'nvr',
+        component: NvrComponent,
+      },
+      {
+        path: 'profile',
+        component: ProfileComponent,
+      },
+      {
+        path: 'change-password',
+        component: ChangePasswordComponent,
+      },
+      {
+        path: 'health',
+        component: HealthComponent,
+      },
+      {
+        path: 'trends',
+        component: TrendsComponent,
+      },
+      {
         path: '',
-        redirectTo: '/login',
-        pathMatch: 'full'
-    }
-
+        redirectTo: '/dashboard/live-view',
+        pathMatch: 'full',
+      },
+    ],
+  },
+  {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full',
+  },
 ];

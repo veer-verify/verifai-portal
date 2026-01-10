@@ -23,6 +23,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([loaderInterceptor, TokenInterceptor])),
     provideNativeDateAdapter(),
     provideAnimations(),
-    DatePipe
+    DatePipe,
   ]
 };
