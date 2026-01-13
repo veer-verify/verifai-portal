@@ -22,6 +22,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-alerts',
@@ -34,23 +35,23 @@ import { PaginationComponent } from '../../../utilities/components/pagination/pa
     AgGridAngular,
     MatDialogModule,
     MatMenuModule,
-    PaginationComponent
+    PaginationComponent,
+    MatDatepickerModule,
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
 })
 export class AlertsComponent {
-
   constructor(
     private storage_service: StorageService,
     private config_service: ConfigService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   private destroy$ = new Subject<void>();
-  gridOptions!: GridOptions
+  gridOptions!: GridOptions;
   currentSite: any;
   incidentdata: any = [];
   isChecked: boolean = false;
@@ -60,17 +61,27 @@ export class AlertsComponent {
   pageNumber: any = 1;
   rowData: any;
   totalPages = 0;
+  filterObj: any;
+  camId: any;
+  fromDate: any;
+  toDate: any;
+  today = new Date();
+  actionTag: any = '';
+  anyData: boolean = false;
+
+  sfilterForm!: FormGroup;
 
   columnDefs: ColDef[] = [
-    { field: 'name', headerName: 'Camera' },
-    { field: 'eventDate' },
-    { field: 'eventFromTime', headerName: 'Start Time' },
-    { field: 'eventToTime', headerName: 'End Time' },
-    { field: 'duration' },
-    { field: 'objectName', headerName: 'Object Identified' },
-    { field: 'actionTag' },
+    { field: 'name', headerName: 'Camera', filter: false },
+    { field: 'eventDate', filter: false },
+    { field: 'eventFromTime', headerName: 'Start Time', filter: false },
+    { field: 'eventToTime', headerName: 'End Time', filter: false },
+    { field: 'duration', filter: false },
+    { field: 'objectName', headerName: 'Object Identified', filter: false },
+    { field: 'actionTag', filter: false },
     {
       field: 'clip',
+      filter: false,
       cellRenderer: (params: any) => {
         const isDisabled = params.data.files.length === 0;
         const disabledAttr = isDisabled ? 'disabled' : '';
@@ -84,7 +95,6 @@ export class AlertsComponent {
     },
   ];
 
-
   resetForm() {
     this.filterForm.reset();
   }
@@ -93,6 +103,24 @@ export class AlertsComponent {
   ngOnInit() {
     this.gridOptions = gridOptions;
     this.initilizeFilterForm();
+    this.sfilterForm.patchValue({ fromTime: '00:00' });
+    this.sfilterForm.patchValue({ toTime: '00:00' });
+
+    // console.log(this.sfilterForm.value);
+    const formValues = this.sfilterForm.value;
+
+    for (const key of Object.keys(formValues)) {
+      const value = formValues[key];
+
+      if (!value) continue; // skip empty, null, undefined
+
+      if ((key === 'fromTime' || key === 'toTime') && value === '00:00') {
+        continue; // ignore default time
+      }
+
+      this.anyData = true;
+      break; // no need to check further
+    }
     this.getTypes();
     this.storage_service.currentSite$
       .pipe(
@@ -106,28 +134,45 @@ export class AlertsComponent {
       });
   }
 
+  clearData() {
+    this.sfilterForm.reset();
+    this.anyData = false;
+  }
+
   initilizeFilterForm(): void {
     this.filterForm = this.fb.group({
       cameraId: [''],
       actionTag: [''],
       fromDate: [''],
       toDate: [''],
-      fromTime: ["16:52:01"],
+      fromTime: ['16:52:01'],
       toTime: ['00:00:00'],
       durationStart: [1],
       durationEnd: [60],
     });
 
+    this.sfilterForm = this.fb.group({
+      cameraId: [''],
+      actionTag: [''],
+      fromDate: [''],
+      fromTime: [''],
+      toTime: [''],
+      toDate: [''],
+    });
+
     // const formattedTime = formatDate(new Date(), 'HH:mm', 'en-US');
     // this.filterForm.patchValue({ fromTime: formattedTime });
-    console.log(this.filterForm.value)
+    // console.log(this.filterForm.value)
+  }
+
+  openTimePicker(input: HTMLInputElement) {
+    input.showPicker?.(); // Chrome, Edge
+    input.focus(); // Fallback
   }
 
   get() {
-    console.log(this.filterForm.value)
-
+    // console.log(this.filterForm.value)
   }
-
 
   formatTime(minutes: number): string {
     const hrs = Math.floor(minutes / 60);
@@ -151,7 +196,10 @@ export class AlertsComponent {
       event.event?.target instanceof HTMLElement &&
       event.event?.target.classList.contains('btn-open')
     ) {
-      this.dialog.open(MediaDialogComponent, { data: event.data, disableClose: true });
+      this.dialog.open(MediaDialogComponent, {
+        data: event.data,
+        disableClose: true,
+      });
     }
   }
 
@@ -172,7 +220,7 @@ export class AlertsComponent {
     this.incident_service
       .incidentList({
         ...this.currentSite,
-        ...this.filterForm.value,
+        ...this.sfilterForm.value,
         page: this.pageNumber,
         pageSize: this.pageSize,
       })
@@ -186,7 +234,6 @@ export class AlertsComponent {
       });
   }
 
-
   changePageSize(pSize: any) {
     this.pageSize = pSize;
     this.incidentList();
@@ -197,7 +244,12 @@ export class AlertsComponent {
     this.incidentList();
   }
 
+  // onFilterChange() {
+  //   this.incidentList();
+  // }
+
   onFilterChange() {
+    this.anyData = true;
     this.incidentList();
   }
 

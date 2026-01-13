@@ -28,6 +28,8 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { environment } from '../../../environments/environment';
 import { AlertService } from '../../../utilities/services/alert.service';
+import { MatOption } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-live-view',
   imports: [
@@ -40,6 +42,8 @@ import { AlertService } from '../../../utilities/services/alert.service';
     CommonModule,
     GlobalClickDirective,
     StreamComponent,
+    MatOption,
+    MatSelectModule
   ],
   templateUrl: './live-view.component.html',
   styleUrl: './live-view.component.css',

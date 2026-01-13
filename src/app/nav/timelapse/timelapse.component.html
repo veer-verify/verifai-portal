@@ -1,12 +1,9 @@
 <div class="tool-bar">
   <div class="tlfilter">
     <form [formGroup]="tlFilterForm">
-      <div class="dropdown">
-        <select
-          class="dropdown-select"
-          formControlName="cam"
-          (change)="filterTimeLapseList()"
-        >
+      <div class="select-with-icon">
+        <img src="icons/drop_cam.svg" alt="" class="icon">
+        <select class="dropdown-select" formControlName="cam" (change)="filterTimeLapseList()">
           <option value="">ALL CAMERAS ({{ camList.length }})</option>
 
           @for (cam of camList; track cam) {
@@ -20,42 +17,23 @@
       <div class="calendar">
         <div class="start">
           <div class="label-box">START</div>
-          <input
-            matInput
-            [matDatepicker]="picker1"
-            placeholder="MM-DD-YYYY"
-            formControlName="fromDate"
-            (dateChange)="filterTimeLapseList()"
-            [max]="today"
-          />
-          <img
-            src="icons/calendar.svg"
-            class="calendar-icon"
-            (click)="picker1.open()"
-          />
+          <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" formControlName="fromDate"
+            (dateChange)="filterTimeLapseList()" [max]="today" />
+          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
           <mat-datepicker #picker1></mat-datepicker>
         </div>
 
         <div class="end">
           <div class="label-box">END</div>
-          <input
-            matInput
-            [matDatepicker]="picker2"
-            placeholder="MM-DD-YYYY"
-            formControlName="toDate"
-            (dateChange)="filterTimeLapseList()"
-            [max]="today"
-          />
-          <img
-            src="icons/calendar.svg"
-            class="calendar-icon"
-            (click)="picker2.open()"
-          />
+          <input matInput [matDatepicker]="picker2" placeholder="MM-DD-YYYY" formControlName="toDate"
+            (dateChange)="filterTimeLapseList()" [max]="today" />
+          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker2.open()" />
           <mat-datepicker #picker2></mat-datepicker>
         </div>
       </div>
-
-      <button type="reset" (click)="filterTimeLapseList()">CLEAR</button>
+      @if(anyData){
+      <button type="reset" class="clear" (click)="clearList()">CLEAR</button>
+      }
     </form>
   </div>
 
@@ -69,20 +47,13 @@
 @if(tldata.length){
 <div class="tl-content">
   <div class="tl-container">
-    @for(tl of tldata; track tl){
-    <div
-      class="tl-card"
-      [ngClass]="currentTl === tl ? 'red-bg' : ''"
-      (click)="tlview($index)"
-    >
-      <img
-        [src]="
+    @for(tl of tldata; track tl.cameraName + '_' + tl.generatedDate){
+    <div class="tl-card" [ngClass]="currentTl === tl ? 'red-bg' : ''" (click)="tlview($index)">
+      <img [src]="
           currentTl === tl
             ? 'icons/play-white.svg'
             : 'icons/play-circle-fill.svg'
-        "
-        alt=""
-      />
+        " alt="" />
       <div class="cam-id" [ngClass]="currentTl === tl ? 'red-text' : ''">
         {{ tl.cameraName }}
       </div>
@@ -118,8 +89,7 @@
         DOWNLOAD
       </button>
     </div>
-    <video
-      [src]="
+    <video [src]="
         environment +
           currentTl?.filename +
           '&requestName=lapsevideos' +
@@ -127,44 +97,25 @@
           currentTl?.cameraId
           | media
           | async
-      "
-      onerror="this.src='gif/error.mp4'"
-      autoplay
-      class="video"
-      style="width: 100%; margin: 10px auto"
-    ></video>
+      " onerror="this.src='gif/error.mp4'" autoplay class="video" style="width: 100%; margin: 10px auto"></video>
     <div class="control-buttons">
-      <span
-        class="material-symbols-outlined"
-        (click)="gototl(1)"
-        [style.opacity]="index === 1 ? '0.5' : '1'"
-      >
+      <span class="material-symbols-outlined" (click)="gototl(1)" [style.opacity]="index === 1 ? '0.5' : '1'">
         keyboard_double_arrow_left
       </span>
 
       <!-- <button disabled> -->
-      <span
-        class="material-symbols-outlined"
-        (click)="gototl(index - 1)"
-        [style.opacity]="index === 1 ? '0.5' : '1'"
-      >
+      <span class="material-symbols-outlined" (click)="gototl(index - 1)" [style.opacity]="index === 1 ? '0.5' : '1'">
         chevron_backward
       </span>
       <!-- </button> -->
 
       <div class="list">{{ index }}/{{ tldata.length - 1 }}</div>
-      <span
-        class="material-symbols-outlined"
-        (click)="gototl(index + 1)"
-        [style.opacity]="index === tldata.length - 1 ? '0.5' : '1'"
-      >
+      <span class="material-symbols-outlined" (click)="gototl(index + 1)"
+        [style.opacity]="index === tldata.length - 1 ? '0.5' : '1'">
         chevron_forward
       </span>
-      <span
-        class="material-symbols-outlined"
-        (click)="gototl(tldata.length - 1)"
-        [style.opacity]="index === tldata.length - 1 ? '0.5' : '1'"
-      >
+      <span class="material-symbols-outlined" (click)="gototl(tldata.length - 1)"
+        [style.opacity]="index === tldata.length - 1 ? '0.5' : '1'">
         keyboard_double_arrow_right
       </span>
     </div>

@@ -30,6 +30,7 @@ import {
 } from 'ag-charts-community';
 import { filter } from 'rxjs';
 import { gridOptions } from '../../../grid.config';
+import { TitleCasePipe } from '@angular/common';
 
 ModuleRegistry.registerModules([
   BarSeriesModule,
@@ -57,20 +58,32 @@ ModuleRegistry.registerModules([
 })
 export class TrendsComponent {
   public chartOptions!: AgChartOptions;
+  public chartOptions2!: AgChartOptions;
+
+  analyticsList: any = [];
+  customView = false;
 
   constructor(
     private storage_service: StorageService,
     private insight_service: InsightService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.chartOptions = {
+      title: {
+        text: 'Daily Users',
+        fontSize: 18,
+        textAlign: 'left',
+        fontWeight: 800,
+        fontFamily: 'Neometric Regular',
+        color: '#33333396',
+      },
       data: [
-        { day: 'Mon', users: 30 },
-        { day: 'Tue', users: 50 },
-        { day: 'Wed', users: 40 },
-        { day: 'thu', users: 32 },
-        { day: 'fri', users: 29 },
-        { day: 'sat', users: 37 },
+        { day: 'MON', users: 30 },
+        { day: 'TUE', users: 50 },
+        { day: 'WED', users: 40 },
+        { day: 'THU', users: 32 },
+        { day: 'FRI', users: 29 },
+        { day: 'SAT', users: 37 },
       ],
       series: [
         {
@@ -84,6 +97,80 @@ export class TrendsComponent {
             fill: '#ed3237', // dot border
             size: 8,
           },
+          interpolation: {
+            type: 'smooth',
+          },
+        },
+      ],
+    };
+    this.chartOptions2 = {
+      title: {
+        text: 'Daily Users',
+        fontSize: 18,
+        textAlign: 'left',
+        fontWeight: 800,
+        fontFamily: 'Neometric Regular',
+        color: '#33333396',
+      },
+      data : [
+        { day: 'MON 08', users: 28 },
+        { day: 'MON 10', users: 30 },
+        { day: 'MON 12', users: 33 },
+        { day: 'MON 14', users: 36 },
+        { day: 'MON 16', users: 34 },
+        { day: 'MON 18', users: 32 },
+
+        { day: 'TUE 08', users: 45 },
+        { day: 'TUE 10', users: 48 },
+        { day: 'TUE 12', users: 50 },
+        { day: 'TUE 14', users: 53 },
+        { day: 'TUE 16', users: 51 },
+        { day: 'TUE 18', users: 49 },
+
+        { day: 'WED 08', users: 38 },
+        { day: 'WED 10', users: 40 },
+        { day: 'WED 12', users: 42 },
+        { day: 'WED 14', users: 44 },
+        { day: 'WED 16', users: 43 },
+        { day: 'WED 18', users: 41 },
+
+        { day: 'THU 08', users: 30 },
+        { day: 'THU 10', users: 32 },
+        { day: 'THU 12', users: 34 },
+        { day: 'THU 14', users: 33 },
+        { day: 'THU 16', users: 31 },
+        { day: 'THU 18', users: 30 },
+
+        { day: 'FRI 08', users: 27 },
+        { day: 'FRI 10', users: 29 },
+        { day: 'FRI 12', users: 31 },
+        { day: 'FRI 14', users: 33 },
+        { day: 'FRI 16', users: 32 },
+        { day: 'FRI 18', users: 30 },
+
+        { day: 'SAT 08', users: 35 },
+        { day: 'SAT 10', users: 37 },
+        { day: 'SAT 12', users: 39 },
+        { day: 'SAT 14', users: 41 },
+        { day: 'SAT 16', users: 40 },
+        { day: 'SAT 18', users: 38 },
+      ],
+
+      series: [
+        {
+          type: 'line',
+          xKey: 'day',
+          yKey: 'users',
+          stroke: '#ed3237',
+          strokeWidth: 3,
+          marker: {
+            enabled: true,
+            fill: '#ed3237', // dot border
+            size: 8,
+          },
+          interpolation: {
+            type: 'smooth',
+          },
         },
       ],
     };
@@ -95,7 +182,7 @@ export class TrendsComponent {
   today = new Date();
   disabledDates: string[] = [];
   selectedDate: any = null;
-  selectedId: any;
+  selectedId: any = '';
 
   ngOnInit() {
     this.storage_service.currentSite$
@@ -135,7 +222,16 @@ export class TrendsComponent {
         .subscribe((ser: any) => {
           this.services = ser.AnalyticsList;
           this.selectedId = this.services?.[0]?.serviceId;
+          this.analyticsList = ser.AnalyticsList.filter((serv: any) => {
+            return serv.serviceId === this.selectedId;
+          })[0].analytics;
+          console.log(this.analyticsList);
+          console.log(this.selectedId);
         });
     });
+  }
+
+  changeView() {
+    this.customView = !this.customView;
   }
 }

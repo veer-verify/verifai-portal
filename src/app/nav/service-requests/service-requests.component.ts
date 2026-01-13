@@ -66,21 +66,23 @@ export class ServiceRequestsComponent {
   ) { }
 
   columnDefs: ColDef[] = [
-    { field: 'serviceReqId', headerName: 'Id' },
-    { field: 'siteName', headerName: 'Site' },
+    { field: 'serviceReqId', headerName: 'Id', filter: false },
+    { field: 'siteName', headerName: 'Site', filter: false },
     {
       field: 'createdTime',
+      filter: false,
       headerName: 'Date',
       cellRenderer: (col: any) =>
         this.datePipe.transform(col.data?.createdTime, 'short'),
     },
-    { field: 'service_cat_name', headerName: 'Category' },
-    { field: 'service_subcat_name', headerName: 'Sub Category' },
-    { field: 'priority' },
-    { field: 'createdByName', headerName: 'Assigned By' },
+    { field: 'service_cat_name', headerName: 'Category', filter: false },
+    { field: 'service_subcat_name', headerName: 'Sub Category', filter: false },
+    { field: 'priority', filter: false },
+    { field: 'createdByName', headerName: 'Assigned By', filter: false },
     // { field: 'assignedToName', headerName: 'Assigned To' },
     {
       field: 'assignedToName',
+      filter: false,
       headerName: 'Assigned To',
       cellRenderer: (col: any) => {
         if (col.data?.assignedToName) {
@@ -101,6 +103,7 @@ export class ServiceRequestsComponent {
     // },
     {
       field: 'Action',
+      filter: false,
       cellRenderer: (rowData: any) =>
         `<span class="material-symbols-outlined btn-view me-1" style="vertical-align: middle; opacity: 0.7;">info</span>
       <span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>`,
@@ -132,6 +135,10 @@ export class ServiceRequestsComponent {
     this.gridOptions = gridOptions;
 
     this.initilizeFilterForm();
+    this.filterForm.patchValue({
+      fromTime: "00:00:00",
+      toTime: "00:00:00"
+    })
     this.getTypes();
     this.loadCategories();
     this.storage_service.currentSite$
@@ -169,9 +176,9 @@ export class ServiceRequestsComponent {
       serviceCategory: [''],
       serviceSubCategory: [''],
       fromDate: [''],
-      fromTime: ['00:00:00'],
+      fromTime: [''],
       toDate: [''],
-      toTime: ['00:00:00'],
+      toTime: [''],
     });
   }
 
@@ -316,6 +323,7 @@ export class ServiceRequestsComponent {
 
 
   onFilterChange() {
+    // console.log(this.filterForm.value)
     this.getHelpDeskRequests()
   }
 

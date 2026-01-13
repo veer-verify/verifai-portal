@@ -1,49 +1,67 @@
 <main>
   <!-- filters -->
   <div class="tool-bar">
-    <!-- <div class="left">
-      <select
-        class="tag-select"
-        [(ngModel)]="filterObj.cameraId"
-        (change)="onFilterChange()"
-      >
-        <option value="">ALL ({{ this.camerasList?.length || 0 }})</option>
-        @for (item of camerasList; track $index) {
-        <option [value]="item?.cameraId">{{ item.name }}</option>
-        } @empty {
-        <option disabled>No cameras available</option>
-        }
-      </select>
+    <div>
+      <form class="left" [formGroup]="sfilterForm">
+        <div class="select-with-icon">
+          <img src="icons/drop_cam.svg" alt="" class="icon">
+          <select class="tag-select" (change)="onFilterChange()" formControlName="cameraId">
+            <option value=""><img src="icons/drop_cam.svg" alt="">ALL CAMERAS ({{ this.camerasList?.length || 0 }})
+            </option>
+            @for (item of camerasList; track $index) {
+            <option [value]="item?.cameraId">{{ item.name }}</option>
+            } @empty {
+            <option disabled>No cameras available</option>
+            }
+          </select>
+        </div>
 
-      <select
-        class="tag-select"
-        [(ngModel)]="filterObj.actionTag"
-        (change)="onFilterChange()"
-      >
-        <option value="">ALL</option>
-        @for (item of actionTags; track $index) {
-        <option>{{ item.value }}</option>
-        }
-      </select>
+        <select class="tag-select" (change)="onFilterChange()" formControlName="actionTag">
+          <option value="" selected disabled>ALL ACTION TAGS</option>
+          @for (item of actionTags; track $index) {
+          <option>{{ item.value }}</option>
+          }
+        </select>
 
-      <div class="date-time">
-        <span class="label">START</span>
+        <!-- <span class="label">START</span>
         <input
           type="date"
-          [(ngModel)]="filterObj.fromDate"
+          [(ngModel)]="fromDate"
           (change)="onFilterChange()"
-        />
-      </div>
+        /> -->
 
-      <div class="date-time">
-        <span class="label">END</span>
-        <input
-          type="date"
-          [(ngModel)]="filterObj.toDate"
-          (change)="onFilterChange()"
-        />
-      </div>
-    </div> -->
+        <div class="calendar">
+          <span>Start</span>
+          <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" [max]="today" (change)="onFilterChange()"
+            formControlName="fromDate" />
+
+          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
+
+          <input matInput type="time" class="time-input" #timeInput1 formControlName="fromTime">
+
+          <img src="icons/time.svg" class="time-icon" (click)="openTimePicker(timeInput1)" alt="">
+
+          <mat-datepicker #picker1></mat-datepicker>
+        </div>
+
+        <div class="calendar">
+          <span>End</span>
+          <input matInput [matDatepicker]="picker2" placeholder="MM-DD-YYYY" [max]="today" (change)="onFilterChange()"
+            formControlName="toDate" />
+
+          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker2.open()" />
+
+          <input matInput type="time" class="time-input" #timeInput2 formControlName="toTime">
+
+          <img src="icons/time.svg" class="time-icon" (click)="openTimePicker(timeInput2)" alt="">
+
+          <mat-datepicker #picker2></mat-datepicker>
+        </div>
+        @if(anyData){
+        <button type="reset" class="clear" (click)="clearData()">CLEAR</button>
+        }
+      </form>
+    </div>
 
     <!-- <div class="right">
       <span class="label" [class.analyticsred]="isChecked">ANALYTICS</span>
@@ -53,15 +71,15 @@
       </label>
     </div> -->
 
-    <span>ALL ALERTS</span>
+    <!-- <span>ALL ALERTS</span> -->
     <div>
-      <button
+      <!-- <button
         class="filter"
         [matMenuTriggerFor]="filterMenu"
         (click)="resetForm()"
-      >
-        <span class="material-symbols-outlined text-danger"> filter_list </span>
-      </button>
+      > -->
+      <!-- <span class="material-symbols-outlined text-danger"> filter_list </span>
+      </button> -->
 
       <mat-menu #filterMenu="matMenu" panelClass="filter-menu">
         <ng-template matMenuContent>
@@ -70,11 +88,7 @@
             <span class="material-symbols-outlined text-danger"> cancel </span>
           </div>
 
-          <form
-            class="filter-content"
-            [formGroup]="filterForm"
-            (click)="$event.stopPropagation()"
-          >
+          <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
             <label>Camera</label>
             <select formControlName="cameraId">
               <option value="" disabled>Select</option>
@@ -101,12 +115,7 @@
               <div class="date-time-inputs">
                 <input type="date" formControlName="fromDate" />
                 <span class="divider"></span>
-                <input
-                  type="time"
-                  formControlName="fromTime"
-                  step="1"
-                  (change)="get()"
-                />
+                <input type="time" formControlName="fromTime" step="1" (change)="get()" />
               </div>
             </div>
 
@@ -132,24 +141,11 @@
               </div>
 
               <div class="range-container">
-                <input
-                  type="range"
-                  [min]="0"
-                  [step]="1"
-                  [value]="10"
-                  formControlName="durationStart"
-                  (input)="syncDuration()"
-                />
+                <input type="range" [min]="0" [step]="1" [value]="10" formControlName="durationStart"
+                  (input)="syncDuration()" />
 
-                <input
-                  type="range"
-                  [max]="120"
-                  [step]="1"
-                  [value]="60"
-                  formControlName="durationEnd"
-                  (input)="syncDuration()"
-                  class="thumb2"
-                />
+                <input type="range" [max]="120" [step]="1" [value]="60" formControlName="durationEnd"
+                  (input)="syncDuration()" class="thumb2" />
               </div>
 
               <!-- <div class="duration-labels">
@@ -159,10 +155,7 @@
             </div>
 
             <div class="filter-btns">
-              <button
-                class="btn-secondary"
-                (click)="filterForm.reset(); onFilterChange()"
-              >
+              <button class="btn-secondary" (click)="filterForm.reset(); onFilterChange()">
                 RESET
               </button>
               <button class="btn-primary" (click)="onFilterChange()">
@@ -177,19 +170,10 @@
 
   <!-- table -->
   <div style="height: calc(100vh - 154px)">
-    <ag-grid-angular
-      class="custom-grid"
-      style="height: 100%"
-      [columnDefs]="columnDefs"
-      [gridOptions]="gridOptions"
-      [rowData]="rowData"
-      (cellClicked)="onCellClicked($event)"
-    ></ag-grid-angular>
+    <ag-grid-angular class="custom-grid" style="height: 100%" [columnDefs]="columnDefs" [gridOptions]="gridOptions"
+      [rowData]="rowData" (cellClicked)="onCellClicked($event)"></ag-grid-angular>
   </div>
 
-  <app-pagination
-    [totalPages]="totalPages"
-    (changePSize)="changePageSize($event)"
-    (changePageNumber)="changePage($event)"
-  ></app-pagination>
+  <app-pagination [totalPages]="totalPages" (changePSize)="changePageSize($event)"
+    (changePageNumber)="changePage($event)"></app-pagination>
 </main>

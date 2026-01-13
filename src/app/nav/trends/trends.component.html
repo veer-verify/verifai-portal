@@ -1,25 +1,87 @@
 <div class="tool-bar">
-  <div class="calendar">
-    <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" [matDatepickerFilter]="dateFilter"
-      [(ngModel)]="selectedDate" [max]="today" (ngModelChange)="getServices()" />
+  @if(!customView){
+  <div class="first">
+    <div class="calendar">
+      <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" [matDatepickerFilter]="dateFilter"
+        [(ngModel)]="selectedDate" [max]="today" (ngModelChange)="getServices()" />
 
-    <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
+      <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
 
-    <mat-datepicker #picker1></mat-datepicker>
-  </div>
+      <mat-datepicker #picker1></mat-datepicker>
+    </div>
 
-  <div class="service">
-    @if (selectedDate && services.length) {
-    <select [ngModel]="selectedId" (ngModelChange)="selectedId = $event" id="selectType">
-      <option value="" disabled>Customer Count</option>
+    <div class="service">
+      @if (selectedDate && services.length) {
+      <select [(ngModel)]="selectedId" (ngModelChange)="selectedId = $event" id="selectType">
+        <option value="" disabled>Customer Count</option>
 
-      @for (ser of services; track ser) {
-      <option [value]="ser.serviceId">
-        {{ ser.service }}
-      </option>
+        @for (ser of services; track ser) {
+        <option [value]="ser.serviceId">
+          {{ ser.service }}
+        </option>
+        }
+      </select>
       }
-    </select>
-    }
+    </div>
+  </div>
+  }
+  @else {
+  <div class="first">
+    <div class="calendar">
+      <div class="label-box">START</div>
+      <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" [matDatepickerFilter]="dateFilter"
+        [(ngModel)]="selectedDate" [max]="today" />
+
+      <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
+
+      <mat-datepicker #picker1></mat-datepicker>
+    </div>
+
+    <div class="calendar">
+      <div class="label-box">END</div>
+      <input matInput [matDatepicker]="picker2" placeholder="MM-DD-YYYY" [matDatepickerFilter]="dateFilter"
+        [(ngModel)]="selectedDate" [max]="today" />
+
+      <img src="icons/calendar.svg" class="calendar-icon" (click)="picker2.open()" />
+
+      <mat-datepicker #picker2></mat-datepicker>
+    </div>
+    <div class="service">
+      @if (selectedDate && services.length) {
+      <select [(ngModel)]="selectedId" (ngModelChange)="selectedId = $event" id="selectType">
+        <option value="" disabled>Customer Count</option>
+
+        @for (ser of services; track ser) {
+        <option [value]="ser.serviceId">
+          {{ ser.service }}
+        </option>
+        }
+      </select>
+      }
+    </div>
+  </div>
+  }
+  <div class="c_view">
+    <strong>Custom View</strong>
+    <label class="switch">
+      <input type="checkbox" (change)="changeView()" />
+      <span class="slider"> </span>
+    </label>
+  </div>
+</div>
+@if(!customView){
+<div class="percs">
+  <div class="day">
+    DAY <div>{{analyticsList[0]?.percentage}}%</div>
+  </div>
+  <div class="week">
+    WEEK <div>{{analyticsList[1]?.percentage}}%</div>
+  </div>
+  <div class="month">
+    MONTH <div>{{analyticsList[2]?.percentage}}%</div>
+  </div>
+  <div class="year">
+    QUARTER <div>{{analyticsList[3]?.percentage}}%</div>
   </div>
 </div>
 <div class="charts">
@@ -28,3 +90,9 @@
   <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
   <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
 </div>
+}
+@else {
+<div class="one-chart">
+  <ag-charts style="display: flex; height: 100%; width: 100%;" [options]="chartOptions2"></ag-charts>
+</div>
+}

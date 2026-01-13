@@ -7,6 +7,29 @@
   border-radius: 6px;
   border: 1px solid #e0e0e0;
   background-color: #fafafa;
+  height: 30px;
+  overflow: hidden;
+}
+
+.calendar {
+  display: flex;
+  align-items: center;
+  border: 1px solid #c4c4c4;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+}
+
+.calendar input{
+    border: none;
+    font-size: 10px !important;
+}
+
+.calendar-icon{
+    cursor: pointer;
 }
 
 /* left section */
@@ -16,20 +39,25 @@
   gap: 8px;
 }
 
+.left>select{
+  height: 30px;
+}
+
 .all-label {
   font-weight: 600;
   text-transform: uppercase;
   font-size: 11px;
 }
 
-.tag-select {
+/* .tag-select {
   border: 1px solid #e0e0e0;
   border-radius: 5px;
-  padding: 10px;
-  font-size: 11px;
+  padding: 5px;
+  font-size: 11px !important;
+  font-weight: 600;
   background-color: #fafafa;
   width: 100%;
-}
+} */
 
 .date-time-inputs {
   display: flex;
@@ -46,11 +74,12 @@
 }
 
 .date-time-inputs input[type="date"] {
-  width: 60%;
+  width: 80%;
+  height: 30px;
 }
 
 .date-time-inputs input[type="time"] {
-  width: 40%;
+  width: 20%;
 }
 
 .date-time-inputs .divider {
@@ -60,6 +89,53 @@
   margin: 0px 4px;
   position: absolute;
   left: 56%;
+}
+
+/* Chrome, Edge, Safari */
+.time-input::-webkit-calendar-picker-indicator {
+  display: none;
+  -webkit-appearance: none;
+}
+
+/* Firefox */
+.time-input {
+  appearance: textfield;
+  -moz-appearance: textfield;
+  position: relative;
+}
+
+/* Layout */
+.split-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0 8px;
+  height: 40px;
+  background: #fff;
+}
+
+.split-input input {
+  border: none;
+  outline: none;
+  height: 100%;
+  padding: 0 8px;
+}
+
+.calendar-icon,
+.time-icon {
+  width: 16px;
+  cursor: pointer;
+  margin-left: 6px;
+}
+
+.time-input::after{
+  content: '';
+  border-left: 0.5px solid grey !important;
+  position: absolute;
+  top: 6px;
+  left: 3px;
+  height: 60%;
 }
 
 /* center section (start/end) */

@@ -48,6 +48,7 @@ export class TimelapseComponent {
   index: number = 0;
   camList: any = [];
   siteData: any;
+  anyData: boolean = false;
   environment =
     environment.commonDownUrl +
     '/downloadFile_1_0?requestName=incidents&assetName=';
@@ -59,6 +60,16 @@ export class TimelapseComponent {
 
   ngOnInit() {
     this.initFilterForm();
+    const formValues = this.tlFilterForm.value;
+
+    for (const key of Object.keys(formValues)) {
+      const value = formValues[key];
+
+      if (!value) continue; // skip empty, null, undefined
+
+      this.anyData = true;
+      break; // no need to check further
+    }
     this.storage_service.info$.next('');
     this.storage_service.currentSite$.pipe(filter((res) => !!res), takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
@@ -89,6 +100,7 @@ export class TimelapseComponent {
       .subscribe((tlres: any) => {
         if (tlres.statusCode === 200) {
           this.tldata = tlres.timeLapseList;
+          // console.log(this.tldata)
         } else {
           this.storage_service.info$.next('no data found!');
           this.tldata = []
@@ -120,7 +132,15 @@ export class TimelapseComponent {
     this.index = 0;
   }
 
+  clearList(){
+    this.anyData = false;
+    this.tlFilterForm.reset();
+    this.listTimeLapseVideos();
+  }
+
   filterTimeLapseList() {
+    this.anyData = true;
+    console.log(this.tlFilterForm.value)
     this.listTimeLapseVideos();
     // let {
     //   cam: cameraId,
