@@ -14,7 +14,6 @@ import { ContactComponent } from './nav/service-requests/contact/contact.compone
 import { NvrComponent } from './nav/nvr/nvr.component';
 import { HealthComponent } from './nav/health/health.component';
 import { TrendsComponent } from './nav/trends/trends.component';
-import { InsightService } from '../utilities/services/insight.service';
 import { InsightsComponent } from './nav/insights/insights.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
