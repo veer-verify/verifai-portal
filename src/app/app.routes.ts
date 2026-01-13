@@ -14,6 +14,7 @@ import { ContactComponent } from './nav/service-requests/contact/contact.compone
 import { NvrComponent } from './nav/nvr/nvr.component';
 import { HealthComponent } from './nav/health/health.component';
 import { TrendsComponent } from './nav/trends/trends.component';
+import { InsightsComponent } from './nav/insights/insights.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
@@ -69,6 +70,10 @@ export const routes: Routes = [
       {
         path: 'trends',
         component: TrendsComponent,
+      },
+      {
+        path: 'insights',
+        component: InsightsComponent,
       },
       {
         path: '',
