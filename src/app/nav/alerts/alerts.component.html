@@ -4,9 +4,16 @@
     <div>
       <form class="left" [formGroup]="sfilterForm">
         <div class="select-with-icon">
-          <img src="icons/drop_cam.svg" alt="" class="icon">
-          <select class="tag-select" (change)="onFilterChange()" formControlName="cameraId">
-            <option value=""><img src="icons/drop_cam.svg" alt="">ALL CAMERAS ({{ this.camerasList?.length || 0 }})
+          <img src="icons/drop_cam.svg" alt="" class="icon" />
+          <select
+            class="tag-select"
+            (change)="onFilterChange()"
+            formControlName="cameraId"
+          >
+            <option value="">
+              <img src="icons/drop_cam.svg" alt="" />ALL CAMERAS ({{
+                this.camerasList?.length || 0
+              }})
             </option>
             @for (item of camerasList; track $index) {
             <option [value]="item?.cameraId">{{ item.name }}</option>
@@ -16,7 +23,11 @@
           </select>
         </div>
 
-        <select class="tag-select" (change)="onFilterChange()" formControlName="actionTag">
+        <select
+          class="tag-select"
+          (change)="onFilterChange()"
+          formControlName="actionTag"
+        >
           <option value="" selected disabled>ALL ACTION TAGS</option>
           @for (item of actionTags; track $index) {
           <option>{{ item.value }}</option>
@@ -32,28 +43,70 @@
 
         <div class="calendar">
           <span>Start</span>
-          <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" [max]="today" (change)="onFilterChange()"
-            formControlName="fromDate" />
+          <input
+            matInput
+            [matDatepicker]="picker1"
+            placeholder="MM-DD-YYYY"
+            [max]="today"
+            (change)="onFilterChange()"
+            formControlName="fromDate"
+          />
 
-          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker1.open()" />
+          <img
+            src="icons/calendar.svg"
+            class="calendar-icon"
+            (click)="picker1.open()"
+          />
 
-          <input matInput type="time" class="time-input" #timeInput1 formControlName="fromTime">
+          <input
+            matInput
+            type="time"
+            class="time-input"
+            #timeInput1
+            formControlName="fromTime"
+          />
 
-          <img src="icons/time.svg" class="time-icon" (click)="openTimePicker(timeInput1)" alt="">
+          <img
+            src="icons/time.svg"
+            class="time-icon"
+            (click)="openTimePicker(timeInput1)"
+            alt=""
+          />
 
           <mat-datepicker #picker1></mat-datepicker>
         </div>
 
         <div class="calendar">
           <span>End</span>
-          <input matInput [matDatepicker]="picker2" placeholder="MM-DD-YYYY" [max]="today" (change)="onFilterChange()"
-            formControlName="toDate" />
+          <input
+            matInput
+            [matDatepicker]="picker2"
+            placeholder="MM-DD-YYYY"
+            [max]="today"
+            (change)="onFilterChange()"
+            formControlName="toDate"
+          />
 
-          <img src="icons/calendar.svg" class="calendar-icon" (click)="picker2.open()" />
+          <img
+            src="icons/calendar.svg"
+            class="calendar-icon"
+            (click)="picker2.open()"
+          />
 
-          <input matInput type="time" class="time-input" #timeInput2 formControlName="toTime">
+          <input
+            matInput
+            type="time"
+            class="time-input"
+            #timeInput2
+            formControlName="toTime"
+          />
 
-          <img src="icons/time.svg" class="time-icon" (click)="openTimePicker(timeInput2)" alt="">
+          <img
+            src="icons/time.svg"
+            class="time-icon"
+            (click)="openTimePicker(timeInput2)"
+            alt=""
+          />
 
           <mat-datepicker #picker2></mat-datepicker>
         </div>
@@ -88,7 +141,11 @@
             <span class="material-symbols-outlined text-danger"> cancel </span>
           </div>
 
-          <form class="filter-content" [formGroup]="filterForm" (click)="$event.stopPropagation()">
+          <form
+            class="filter-content"
+            [formGroup]="filterForm"
+            (click)="$event.stopPropagation()"
+          >
             <label>Camera</label>
             <select formControlName="cameraId">
               <option value="" disabled>Select</option>
@@ -115,7 +172,12 @@
               <div class="date-time-inputs">
                 <input type="date" formControlName="fromDate" />
                 <span class="divider"></span>
-                <input type="time" formControlName="fromTime" step="1" (change)="get()" />
+                <input
+                  type="time"
+                  formControlName="fromTime"
+                  step="1"
+                  (change)="get()"
+                />
               </div>
             </div>
 
@@ -141,11 +203,24 @@
               </div>
 
               <div class="range-container">
-                <input type="range" [min]="0" [step]="1" [value]="10" formControlName="durationStart"
-                  (input)="syncDuration()" />
+                <input
+                  type="range"
+                  [min]="0"
+                  [step]="1"
+                  [value]="10"
+                  formControlName="durationStart"
+                  (input)="syncDuration()"
+                />
 
-                <input type="range" [max]="120" [step]="1" [value]="60" formControlName="durationEnd"
-                  (input)="syncDuration()" class="thumb2" />
+                <input
+                  type="range"
+                  [max]="120"
+                  [step]="1"
+                  [value]="60"
+                  formControlName="durationEnd"
+                  (input)="syncDuration()"
+                  class="thumb2"
+                />
               </div>
 
               <!-- <div class="duration-labels">
@@ -155,7 +230,10 @@
             </div>
 
             <div class="filter-btns">
-              <button class="btn-secondary" (click)="filterForm.reset(); onFilterChange()">
+              <button
+                class="btn-secondary"
+                (click)="filterForm.reset(); onFilterChange()"
+              >
                 RESET
               </button>
               <button class="btn-primary" (click)="onFilterChange()">
@@ -170,10 +248,19 @@
 
   <!-- table -->
   <div style="height: calc(100vh - 154px)">
-    <ag-grid-angular class="custom-grid" style="height: 100%" [columnDefs]="columnDefs" [gridOptions]="gridOptions"
-      [rowData]="rowData" (cellClicked)="onCellClicked($event)"></ag-grid-angular>
+    <ag-grid-angular
+      class="custom-grid"
+      style="height: 100%"
+      [columnDefs]="columnDefs"
+      [gridOptions]="gridOptions"
+      [rowData]="rowData"
+      (cellClicked)="onCellClicked($event)"
+    ></ag-grid-angular>
   </div>
 
-  <app-pagination [totalPages]="totalPages" (changePSize)="changePageSize($event)"
-    (changePageNumber)="changePage($event)"></app-pagination>
+  <app-pagination
+    [totalPages]="totalPages"
+    (changePSize)="changePageSize($event)"
+    (changePageNumber)="changePage($event)"
+  ></app-pagination>
 </main>

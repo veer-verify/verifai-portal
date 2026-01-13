@@ -1,15 +1,7 @@
-.insight-container{
-    display: flex;
-}
-.first, .second{
-    flex: 1;
-    padding: 20px;
-    /* border: none; */
-}
-
-.second{
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    overflow-y: auto;
-    height: calc(100vh - 60px);
-    z-index: 999;
+.insight-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
 }

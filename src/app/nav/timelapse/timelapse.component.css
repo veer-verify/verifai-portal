@@ -76,13 +76,13 @@
   display: block;
 }
 
-.calendar {
+/* .calendar {
   display: flex;
   gap: 1rem;
   margin-left: 1rem;
-}
+} */
 
-.start,
+/* .start,
 .end {
   display: flex;
   align-items: center;
@@ -92,17 +92,16 @@
   background: white;
   width: 210px;
   height: 30px;
-}
+} */
 
-.label-box {
-  /* background: #eaeaea; */
+/* .label-box {
   background: linear-gradient(180deg, #ffffff, #eeeeee);
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 600;
-}
+} */
 
-.calendar input {
+/* .calendar input {
   flex: 1;
   border: none;
   outline: none;
@@ -110,13 +109,13 @@
   font-size: 14px;
   background: white;
   width: 100%;
-}
+} */
 
-.calendar-icon {
+/* .calendar-icon {
   width: 18px;
   margin-right: 10px;
   cursor: pointer;
-}
+} */
 
 input::-webkit-calendar-picker-indicator {
   opacity: 0; /* hide Material icon */

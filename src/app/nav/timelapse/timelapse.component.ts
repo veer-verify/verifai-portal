@@ -23,20 +23,19 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
     AsyncPipe,
     ReactiveFormsModule,
     DatePipe,
-    UpperCasePipe
+    UpperCasePipe,
   ],
   providers: [provideNativeDateAdapter(), MediaPipe],
   templateUrl: './timelapse.component.html',
   styleUrl: './timelapse.component.css',
 })
 export class TimelapseComponent {
-
   constructor(
     private config_service: ConfigService,
     private auth_service: AuthService,
     public storage_service: StorageService,
     private fb: FormBuilder
-  ) { }
+  ) {}
 
   destroy$ = new Subject();
 
@@ -71,20 +70,23 @@ export class TimelapseComponent {
       break; // no need to check further
     }
     this.storage_service.info$.next('');
-    this.storage_service.currentSite$.pipe(filter((res) => !!res), takeUntil(this.destroy$)).subscribe({
-      next: (res: any) => {
-        this.siteData = res;
-        this.siteName = res.siteName;
-        this.listTimeLapseVideos();
-        this.config_service
-          .getCamerasForSiteId(res)
-          .subscribe((camRes: any) => {
-            this.camList = camRes;
-          });
-
-
-      },
-    });
+    this.storage_service.currentSite$
+      .pipe(
+        filter((res) => !!res),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.siteData = res;
+          this.siteName = res.siteName;
+          this.listTimeLapseVideos();
+          // this.config_service
+          //   .getCamerasForSiteId(res)
+          //   .subscribe((camRes: any) => {
+          //     this.camList = camRes;
+          //   });
+        },
+      });
   }
 
   initFilterForm() {
@@ -94,6 +96,15 @@ export class TimelapseComponent {
       toDate: [''],
     });
   }
+
+  getcamerasForSiteId() {
+    this.config_service
+      .getCamerasForSiteId(this.siteData)
+      .subscribe((res: any) => {
+        this.camList = res;
+      });
+  }
+
   listTimeLapseVideos() {
     this.config_service
       .listTimeLapseVideos({ ...this.siteData, ...this.tlFilterForm.value })
@@ -101,13 +112,13 @@ export class TimelapseComponent {
         if (tlres.statusCode === 200) {
           this.tldata = tlres.timeLapseList;
           // console.log(this.tldata)
+          this.getcamerasForSiteId();
         } else {
           this.storage_service.info$.next('no data found!');
-          this.tldata = []
+          this.tldata = [];
         }
       });
   }
-
 
   openPicker(input: HTMLInputElement) {
     setTimeout(() => {
@@ -132,7 +143,7 @@ export class TimelapseComponent {
     this.index = 0;
   }
 
-  clearList(){
+  clearList() {
     this.anyData = false;
     this.tlFilterForm.reset();
     this.listTimeLapseVideos();
@@ -140,7 +151,7 @@ export class TimelapseComponent {
 
   filterTimeLapseList() {
     this.anyData = true;
-    console.log(this.tlFilterForm.value)
+    console.log(this.tlFilterForm.value);
     this.listTimeLapseVideos();
     // let {
     //   cam: cameraId,
@@ -179,5 +190,4 @@ export class TimelapseComponent {
     this.destroy$.next(null);
     this.destroy$.complete();
   }
-
 }

@@ -229,6 +229,8 @@ export class AlertsComponent {
           if (res.statusCode === 200) {
             this.rowData = res.IncidentList;
             this.totalPages = res.totalPages;
+          } else {
+            this.rowData = [];
           }
         },
       });

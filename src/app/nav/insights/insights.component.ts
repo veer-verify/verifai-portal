@@ -28,6 +28,13 @@ import {
 } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { gridOptions } from '../../../grid.config';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
+import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 
 ModuleRegistry.registerModules([
   BarSeriesModule,
@@ -40,7 +47,18 @@ ModuleRegistry.registerModules([
 
 @Component({
   selector: 'app-insights',
-  imports: [AgCharts, AgGridAngular],
+  imports: [
+    AgCharts,
+    AgGridAngular,
+    CommonModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    FormsModule,
+    AgGridAngular,
+    MatDialogModule,
+    MatMenuModule,
+    MatDatepickerModule,
+  ],
   templateUrl: './insights.component.html',
   styleUrl: './insights.component.css',
 })
@@ -48,79 +66,30 @@ export class InsightsComponent {
   public chartOptions!: AgChartOptions;
 
   columnDefs: ColDef[] = [
-    { field: 'name', headerName: 'Col 1', filter: false },
-    { field: 'Col 2', filter: false },
-    { field: 'eventFromTime', headerName: 'Col 3', filter: false },
-    { field: 'eventToTime', headerName: 'Col 4', filter: false },
-    { field: 'Col 5', filter: false },
-    { field: 'objectName', headerName: 'Col 6', filter: false },
-    { field: 'Col 7', filter: false },
-    {
-      field: 'Col 8',
-      filter: false,
-      cellRenderer: (params: any) => {
-        const isDisabled = params.data.files.length === 0;
-        const disabledAttr = isDisabled ? 'disabled' : '';
-        const style = isDisabled
-          ? 'style="opacity: 0.5; pointer-events: none; filter: grayscale(1);"'
-          : '';
-        return `<img src="icons/play-circle-fill.svg" class="btn-open" ${disabledAttr} ${style} />`;
-      },
-      editable: false,
-      sortable: false,
-    },
+    { field: 'name', headerName: 'Customer Analytics', filter: false },
+    { field: 'count', headerName: 'Count', filter: false },
   ];
 
   rowData = [
     {
-      name: 'Camera 01',
-      eventDate: '2026-01-09',
-      eventFromTime: '10:15 AM',
-      eventToTime: '10:18 AM',
-      duration: '00:03:00',
-      objectName: 'Person',
-      actionTag: 'Intrusion',
-      files: ['clip_01.mp4'],
+      name: 'Impression Rate_Aisle 1',
+      count: '70',
     },
     {
-      name: 'Camera 02',
-      eventDate: '2026-01-09',
-      eventFromTime: '11:02 AM',
-      eventToTime: '11:04 AM',
-      duration: '00:02:00',
-      objectName: 'Vehicle',
-      actionTag: 'Loitering',
-      files: [], // ❌ play icon disabled
+      name: 'Impression Rate_Aisle 2',
+      count: '85',
     },
     {
-      name: 'Camera 03',
-      eventDate: '2026-01-09',
-      eventFromTime: '12:45 PM',
-      eventToTime: '12:50 PM',
-      duration: '00:05:00',
-      objectName: 'Person',
-      actionTag: 'Trespassing',
-      files: ['clip_03.mp4'],
+      name: 'Impression Rate_Aisle 3',
+      count: '80',
     },
     {
-      name: 'Camera 04',
-      eventDate: '2026-01-09',
-      eventFromTime: '02:10 PM',
-      eventToTime: '02:12 PM',
-      duration: '00:02:00',
-      objectName: 'Animal',
-      actionTag: 'Motion Detected',
-      files: [], // ❌ play icon disabled
+      name: 'Impression Rate_Aisle 4',
+      count: '90',
     },
     {
-      name: 'Camera 05',
-      eventDate: '2026-01-09',
-      eventFromTime: '03:30 PM',
-      eventToTime: '03:35 PM',
-      duration: '00:05:00',
-      objectName: 'Person',
-      actionTag: 'Running',
-      files: ['clip_05.mp4'],
+      name: 'Impression Rate_Aisle 5',
+      count: '75',
     },
   ];
 
@@ -133,24 +102,26 @@ export class InsightsComponent {
   constructor() {
     this.chartOptions = {
       data: [
-        { day: 'Mon', users: 30 },
-        { day: 'Tue', users: 50 },
-        { day: 'Wed', users: 40 },
-        { day: 'thu', users: 32 },
-        { day: 'fri', users: 29 },
-        { day: 'sat', users: 37 },
+        { name: 'Impression Rate_Aisle 1', count: 70 },
+        { name: 'Impression Rate_Aisle 2', count: 85 },
+        { name: 'Impression Rate_Aisle 3', count: 80 },
+        { name: 'Impression Rate_Aisle 4', count: 90 },
+        { name: 'Impression Rate_Aisle 5', count: 75 },
       ],
       series: [
         {
           type: 'donut',
-          calloutLabelKey: 'day',
-          angleKey: 'users',
+          calloutLabelKey: 'name',
+          angleKey: 'count',
           // innerRadiusRatio: 0.75, // thin ring
           // cornerRadius: 20, // rounded ends
           // sectorSpacing: 3
           // padAngle: 3,
         },
       ],
+      title: {
+        text: 'Customer Analytics',
+      },
     };
   }
 }

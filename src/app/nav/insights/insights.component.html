@@ -1,14 +1,58 @@
-<div class="insight-container">
-    <div class="first">
-        <ag-grid-angular
-      class="custom-grid"
-      style="height: 100%"
-      [columnDefs]="columnDefs"
-      [gridOptions]="gridOptions"
-      [rowData]="rowData"
-    ></ag-grid-angular>
+<section>
+  <div class="tool-bar">
+    <form>
+      <div class="select-with-icon">
+        <img src="icons/drop_cam.svg" alt="" class="icon" />
+        <select class="tag-select">
+          <option selected><img src="icons/drop_cam.svg" alt="" />ALL</option>
+          <option disabled>No cameras available</option>
+        </select>
+      </div>
+      <div class="calendar">
+        <span>START</span>
+        <input matInput [matDatepicker]="picker1" placeholder="MM-DD-YYYY" />
+
+        <img
+          src="icons/calendar.svg"
+          class="calendar-icon"
+          (click)="picker1.open()"
+        />
+
+        <mat-datepicker #picker1></mat-datepicker>
+      </div>
+
+      <div class="calendar">
+        <span>END</span>
+        <input matInput [matDatepicker]="picker2" placeholder="MM-DD-YYYY" />
+
+        <img
+          src="icons/calendar.svg"
+          class="calendar-icon"
+          (click)="picker2.open()"
+        />
+
+        <mat-datepicker #picker2></mat-datepicker>
+      </div>
+    </form>
+  </div>
+
+  <div class="content">
+    <div class="insight-container">
+      <!-- <div class="w-75"> -->
+      <ag-grid-angular
+        style="height: 100%; width: 100%"
+        [columnDefs]="columnDefs"
+        [gridOptions]="gridOptions"
+        [rowData]="rowData"
+      ></ag-grid-angular>
+      <!-- </div> -->
+
+      <!-- <div class="w-50"> -->
+      <ag-charts
+        style="height: 100%; width: 100%"
+        [options]="chartOptions"
+      ></ag-charts>
+      <!-- </div> -->
     </div>
-    <div class="second">
-        <ag-charts style="height: 100%" [options]="chartOptions"></ag-charts>
-    </div>
-</div>
+  </div>
+</section>

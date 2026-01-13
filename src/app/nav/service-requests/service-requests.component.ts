@@ -63,7 +63,7 @@ export class ServiceRequestsComponent {
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
   columnDefs: ColDef[] = [
     { field: 'serviceReqId', headerName: 'Id', filter: false },
@@ -104,7 +104,7 @@ export class ServiceRequestsComponent {
     {
       field: 'Action',
       filter: false,
-      cellRenderer: (rowData: any) =>
+      cellRenderer: () =>
         `<span class="material-symbols-outlined btn-view me-1" style="vertical-align: middle; opacity: 0.7;">info</span>
       <span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>`,
       editable: false,
@@ -112,8 +112,7 @@ export class ServiceRequestsComponent {
     },
   ];
 
-
-  gridOptions!: GridOptions
+  gridOptions!: GridOptions;
   currentSite: any;
   incidentdata: any = [];
   isChecked: boolean = false;
@@ -126,7 +125,7 @@ export class ServiceRequestsComponent {
   viewRequestInfo = false;
   rowRequestData: any;
   closeRequestInfo = false;
-  rowData: any = [{}];
+  rowData: any = [];
   pageNumber = 1;
   pageSize = 10;
   totalPages: any = 0;
@@ -136,9 +135,9 @@ export class ServiceRequestsComponent {
 
     this.initilizeFilterForm();
     this.filterForm.patchValue({
-      fromTime: "00:00:00",
-      toTime: "00:00:00"
-    })
+      fromTime: '00:00:00',
+      toTime: '00:00:00',
+    });
     this.getTypes();
     this.loadCategories();
     this.storage_service.currentSite$
@@ -150,20 +149,31 @@ export class ServiceRequestsComponent {
         this.currentSite = site;
         this.getcamerasForSiteId();
         this.getHelpDeskRequests();
-
       });
   }
 
+  gridApi!: GridApi;
+  onGridReady(params: any) {
+    this.gridApi = params.api;
+    this.gridApi.showLoadingOverlay();
+  }
+
   getHelpDeskRequests() {
-    this.request_service.getHelpDeskRequests({
-      ...this.filterForm.value, page: this.pageNumber,
-      pageSize: this.pageSize,
-    }).subscribe((res: any) => {
-      if (res.statusCode === 200) {
-        this.rowData = res.serviceRequestList
-        this.totalPages = res.totalPages;
-      }
-    })
+    this.request_service
+      .getHelpDeskRequests({
+        ...this.currentSite,
+        ...this.filterForm.value,
+        page: this.pageNumber,
+        pageSize: this.pageSize,
+      })
+      .subscribe((res: any) => {
+        if (res.statusCode === 200) {
+          this.rowData = res.serviceRequestList;
+          this.totalPages = res.totalPages;
+        } else {
+          this.rowData = [];
+        }
+      });
   }
 
   showInfo(requestData: any) {
@@ -302,29 +312,28 @@ export class ServiceRequestsComponent {
 
   changePageNumber(pNum: any) {
     this.pageNumber = pNum;
-    this.request_service.getHelpDeskRequests({
-      ...this.currentSite,
-      ...this.filterForm.value,
-      page: pNum,
-      pageSize: this.pageSize
-    }).subscribe((res: any) => {
-      if (res.statusCode === 200) {
-        this.rowData = res.serviceRequestList;
-        this.totalPages = res.totalPages;
-      }
-    });
+    this.request_service
+      .getHelpDeskRequests({
+        ...this.currentSite,
+        ...this.filterForm.value,
+        page: pNum,
+        pageSize: this.pageSize,
+      })
+      .subscribe((res: any) => {
+        if (res.statusCode === 200) {
+          this.rowData = res.serviceRequestList;
+          this.totalPages = res.totalPages;
+        }
+      });
   }
 
   changePSize(pSize: any) {
     this.pageSize = pSize;
   }
 
-
-
-
   onFilterChange() {
     // console.log(this.filterForm.value)
-    this.getHelpDeskRequests()
+    this.getHelpDeskRequests();
   }
 
   changePage(page: number) {
