@@ -42,7 +42,28 @@ select {
   border: 1px solid #d1d1d1;
   border-radius: 4px;
   padding: 8px;
-  font-size: 14px !important;
+  font-size: 11px !important;
+  font-weight: 600;
+}
+
+.select-with-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.select-with-icon .icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  pointer-events: none;
+}
+
+.select-with-icon select {
+  height: 30px;
+  padding-left: 30px; /* space for icon */
+  width: 300px;
 }
 
 textarea {
@@ -54,6 +75,16 @@ textarea {
 a {
   cursor: pointer;
   text-emphasis: none;
+}
+
+.clear{
+  padding: 5px 10px;
+  background-color: #ed3237;
+  color: white;
+  border-radius: 8px;
+  font-size: 11px;
+  margin-left: 10px;
+  font-weight: 200;
 }
 
 button {
@@ -317,6 +348,11 @@ button {
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
 } */
+
+.close{
+  width: 30px;
+  height: 30px;
+}
 
 .close:hover {
   background-color: white;

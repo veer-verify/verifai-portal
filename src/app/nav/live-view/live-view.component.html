@@ -5,7 +5,7 @@
     <div class="select-with-icon">
       <img src="/icons/drop_cam.svg" class="icon">
       <select [(ngModel)]="selectedCam" (change)="call()">
-        <option value=""><img src="icons/drop_cam.svg" alt="">All Cameras ({{ camList.length }})</option>
+        <option value=""><img src="icons/drop_cam.svg" alt="">All ({{ camList.length }})</option>
         @for (item of camList; track $index) {
         <option [value]="item?.cameraId" #val>
           {{ item?.name }}

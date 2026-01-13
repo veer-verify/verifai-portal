@@ -11,12 +11,12 @@ export const menuItems = [
         routeLink: 'alerts',
         call: (data: any) => data?.key !== 'F' ? true : false
     },
-    // {
-    //     id: 'insights',
-    //     label: 'insight',
-    //     routeLink: 'insight',
-    //     call: (data: any) => data?.key !== 'F' ? true : false
-    // },
+    {
+        id: 'insights',
+        label: 'insight',
+        routeLink: 'insights',
+        call: (data: any) => data?.key !== 'F' ? true : false
+    },
     {
         id: 'trends',
         label: 'trends',
