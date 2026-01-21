@@ -117,10 +117,24 @@ export class InsightsComponent {
           // cornerRadius: 20, // rounded ends
           // sectorSpacing: 3
           // padAngle: 3,
+          calloutLabel: {
+            fontFamily: 'Neometric Regular',
+            fontSize: 12,
+            fontWeight: 600,
+            color: '#333',
+          },
         },
       ],
       title: {
         text: 'Customer Analytics',
+        fontFamily: 'Neometric Regular',
+      },
+      legend: {
+        item: {
+          label: {
+            fontFamily: 'Neometric Regular',
+          },
+        },
       },
     };
   }

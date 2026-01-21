@@ -31,6 +31,7 @@ import {
 import { filter } from 'rxjs';
 import { gridOptions } from '../../../grid.config';
 import { TitleCasePipe } from '@angular/common';
+import { barChartOptions } from '../../../grid.config';
 
 ModuleRegistry.registerModules([
   BarSeriesModule,
@@ -67,15 +68,20 @@ export class TrendsComponent {
     private storage_service: StorageService,
     private insight_service: InsightService,
     private fb: FormBuilder
-  ) {
+  ) {}
+
+  services: any[] = [];
+  today = new Date();
+  disabledDates: string[] = [];
+  selectedDate: any = null;
+  selectedId: any = '';
+
+  ngOnInit() {
     this.chartOptions = {
+      ...barChartOptions,
       title: {
-        text: 'Daily',
-        fontSize: 18,
-        textAlign: 'left',
-        fontWeight: 800,
-        fontFamily: 'Neometric Regular',
-        color: '#33333396',
+        ...barChartOptions.title,
+        text: 'Daily Users',
       },
       data: [
         { day: 'MON', users: 30 },
@@ -85,35 +91,7 @@ export class TrendsComponent {
         { day: 'FRI', users: 29 },
         { day: 'SAT', users: 37 },
       ],
-      series: [
-        {
-          type: 'line',
-          xKey: 'day',
-          yKey: 'users',
-          stroke: '#ed3237',
-          strokeWidth: 3,
-          marker: {
-            enabled: true,
-            fill: '#ed3237', // dot border
-            size: 8,
-          },
-          interpolation: {
-            type: 'smooth',
-          },
-        },
-      ],
     };
-  }
-
-  /* 🔥 REQUIRED FOR HIGHCHARTS */
-
-  services: any[] = [];
-  today = new Date();
-  disabledDates: string[] = [];
-  selectedDate: any = null;
-  selectedId: any = '';
-
-  ngOnInit() {
     this.storage_service.currentSite$
       .pipe(filter((site) => !!site))
       .subscribe((res: any) => {
@@ -130,7 +108,6 @@ export class TrendsComponent {
       });
   }
 
-  /* ✅ FIXED DATE FILTER */
   dateFilter = (date: Date | null): boolean => {
     if (!date) return true;
 
@@ -138,7 +115,7 @@ export class TrendsComponent {
       const [y, m, day] = d.split('-').map(Number);
       return (
         y === date.getFullYear() &&
-        m === date.getMonth() + 1 && // 🔥 FIX
+        m === date.getMonth() + 1 &&
         day === date.getDate()
       );
     });
