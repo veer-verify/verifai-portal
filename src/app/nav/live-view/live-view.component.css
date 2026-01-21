@@ -30,6 +30,7 @@
 .side-sites .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   background-color: #ed3237;
   color: white;
   padding: 10px;
@@ -253,6 +254,10 @@
 
 .site-info {
   width: 300px;
+}
+
+.close {
+  width: 30px;
 }
 
 .exit {
