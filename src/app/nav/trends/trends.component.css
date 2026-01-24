@@ -72,15 +72,14 @@ select {
 }
 
 .percs > * {
-  width: 20%;
+  width: 16%;
   display: flex;
   justify-content: space-between;
-  /* background-color: #f3f3f3; */
-  padding: 10px 20px;
+  padding: 8px 16px;
   align-items: center;
   border-radius: 8px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  font-size: 14px;
+  box-shadow: #ababab 0px 2px 2px;
+  font-size: 12px;
   font-weight: 600;
 }
 .percs > div > div {
