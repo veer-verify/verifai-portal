@@ -29,6 +29,12 @@ export const menuItems = [
     routeLink: 'timelapse',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
+  {
+    id: 'siteInfo',
+    label: 'siteinfo',
+    routeLink: 'siteinfo',
+    call: (data: any) => true,
+  },
   // {
   //     id: 'deviceHealth',
   //     label: 'health',
