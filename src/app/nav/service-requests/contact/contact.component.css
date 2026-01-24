@@ -7,10 +7,10 @@
   justify-content: center;
   gap: 30px;
   align-items: stretch;
-  background-color: #ed3237;
+  /* background-color: #ed3237; */
   padding: 40px;
   border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(237, 50, 55, 0.3);
+  box-shadow: 0 2px 6px rgba(237, 50, 55, 0.3);
   max-width: 900px;
   width: 100%;
 }

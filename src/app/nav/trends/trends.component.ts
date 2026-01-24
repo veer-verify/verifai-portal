@@ -131,8 +131,6 @@ export class TrendsComponent {
           this.analyticsList = ser.AnalyticsList.filter((serv: any) => {
             return serv.serviceId === this.selectedId;
           })[0].analytics;
-          console.log(this.analyticsList);
-          console.log(this.selectedId);
         });
     });
   }

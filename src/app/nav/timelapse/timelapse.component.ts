@@ -1,7 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { DatePipe, NgClass, NgIf, UpperCasePipe } from '@angular/common';
+import { Component } from '@angular/core';
+import { DatePipe, NgClass, UpperCasePipe } from '@angular/common';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormField, MatLabel } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { ConfigService } from '../../../utilities/services/config.service';
@@ -35,7 +34,7 @@ export class TimelapseComponent {
     private auth_service: AuthService,
     public storage_service: StorageService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   destroy$ = new Subject();
 
@@ -95,6 +94,10 @@ export class TimelapseComponent {
       fromDate: [''],
       toDate: [''],
     });
+    this.tlFilterForm.patchValue({
+      fromDate: this.today,
+      toDate: this.today
+    })
   }
 
   getcamerasForSiteId() {
