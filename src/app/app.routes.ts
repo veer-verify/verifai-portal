@@ -15,6 +15,7 @@ import { NvrComponent } from './nav/nvr/nvr.component';
 import { HealthComponent } from './nav/health/health.component';
 import { TrendsComponent } from './nav/trends/trends.component';
 import { InsightsComponent } from './nav/insights/insights.component';
+import { SiteinfoComponent } from './nav/siteinfo/siteinfo.component';
 // import { CalendarComponent } from './nav/calendar/calendar.component';
 
 export const routes: Routes = [
@@ -50,6 +51,10 @@ export const routes: Routes = [
       {
         path: 'timelapse',
         component: TimelapseComponent,
+      },
+      {
+        path: 'siteinfo',
+        component: SiteinfoComponent
       },
       {
         path: 'nvr',
