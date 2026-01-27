@@ -1,10 +1,22 @@
 <div class="page">
-  <div class="container">
+  <div class="info-container">
     <!-- Tabs + Monitoring Info -->
     <div class="topbar">
       <div class="tabs">
-        <div class="tab active">General Info</div>
-        <div class="tab">NVRs</div>
+        <div
+          class="tab"
+          [ngClass]="info === 1 ? 'active' : ''"
+          (click)="changeClass(1)"
+        >
+          General Info
+        </div>
+        <div
+          class="tab"
+          [ngClass]="info === 2 ? 'active' : ''"
+          (click)="changeClass(2)"
+        >
+          NVRs
+        </div>
       </div>
 
       <button class="monitor-btn" type="button">
@@ -13,264 +25,448 @@
       </button>
     </div>
 
-    <!-- Top info rows -->
-    <div class="top-info">
-      <div class="field">
-        <div class="label">Timezone</div>
-        <div class="value">CST</div>
+    @if (info === 1) {
+      <!-- Top info rows -->
+      <div class="top-info">
+        <div class="field">
+          <div class="label">Timezone</div>
+          <div class="value">CST</div>
+        </div>
+
+        <div class="field">
+          <div class="label">Analytics</div>
+          <div class="value">ALL</div>
+        </div>
+
+        <div class="field">
+          <div class="label">Services Activated</div>
+          <div class="value">Monitoring, Business Intelligence</div>
+        </div>
+
+        <div></div>
       </div>
 
-      <div class="field">
-        <div class="label">Analytics</div>
-        <div class="value">ALL</div>
-      </div>
+      <!-- SITE INFO -->
+      <div class="section">
+        <div class="section-title">SITE INFO</div>
+        <div class="edit-icon" title="Edit">
+          <img src="icons/editicon2.svg" alt="" class="pencil" />
+        </div>
 
-      <div class="field">
-        <div class="label">Services Activated</div>
-        <div class="value">Monitoring, Business Intelligence</div>
-      </div>
+        <div class="two-col">
+          <div class="group">
+            <div class="field">
+              <div class="label">Site Name</div>
+              <div class="value">Reliance Store - Tadepally (1234567)</div>
+            </div>
 
-      <div></div>
-    </div>
+            <div class="field">
+              <div class="label">Short Name</div>
+              <div class="value">RS-Tadepally</div>
+            </div>
 
-    <!-- SITE INFO -->
-    <div class="section">
-      <div class="section-title">SITE INFO</div>
-      <div class="edit-icon" title="Edit">
-        <div class="pencil"></div>
-      </div>
-
-      <div class="two-col">
-        <div class="group">
-          <div class="field">
-            <div class="label">Site Name</div>
-            <div class="value">Reliance Store - Tadepally (1234567)</div>
-          </div>
-
-          <div class="field">
-            <div class="label">Short Name</div>
-            <div class="value">RS-Tadepally</div>
-          </div>
-
-          <div class="field">
-            <div class="label">Address</div>
-            <div class="value">
-              <div class="address-line">
-                <div class="pin" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 22s7-5.2 7-12a7 7 0 10-14 0c0 6.8 7 12 7 12z"
-                      fill="#ef4444"
-                    />
-                    <circle cx="12" cy="10" r="2.5" fill="#fff" />
-                  </svg>
+            <div class="field">
+              <div class="label">Address</div>
+              <div class="value">
+                <div class="address-line">
+                  <div class="pin" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M12 22s7-5.2 7-12a7 7 0 10-14 0c0 6.8 7 12 7 12z"
+                        fill="#ef4444"
+                      />
+                      <circle cx="12" cy="10" r="2.5" fill="#fff" />
+                    </svg>
+                  </div>
+                  <div class="address-text">
+                    TADEPALLY, Guntur District,<br />
+                    Andhra Pradesh, INDIA - 500503
+                  </div>
                 </div>
-                <div class="address-text">
-                  TADEPALLY, Guntur District,<br />
+              </div>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="field">
+              <div class="label">Vertical</div>
+              <div class="value">Shopping Centre</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Contact</div>
+              <div class="value"><button class="view-btn">View</button></div>
+            </div>
+
+            <div class="field">
+              <div class="label">Remarks</div>
+              <div class="value"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BILLING INFO -->
+      <div class="section">
+        <div class="section-title">BILLING INFO</div>
+        <div class="edit-icon" title="Edit">
+          <img src="icons/editicon2.svg" alt="" class="pencil" />
+        </div>
+
+        <div class="two-col">
+          <div class="group">
+            <div class="field">
+              <div class="label">Billing Name</div>
+              <div class="value">Reliance Group</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Address</div>
+              <div class="value">
+                <div class="address-text" style="font-weight: 700">
+                  Benz Circle, Vijayawada<br />
                   Andhra Pradesh, INDIA - 500503
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="group">
-          <div class="field">
-            <div class="label">Vertical</div>
-            <div class="value">Shopping Centre</div>
-          </div>
-
-          <div class="field">
-            <div class="label">Contact</div>
-            <div class="value"><button class="view-btn">View</button></div>
-          </div>
-
-          <div class="field">
-            <div class="label">Remarks</div>
-            <div class="value"></div>
+          <div class="group">
+            <div class="field">
+              <div class="label">Contact</div>
+              <div class="value"><button class="view-btn">View</button></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- BILLING INFO -->
-    <div class="section">
-      <div class="section-title">BILLING INFO</div>
-      <div class="edit-icon" title="Edit">
-        <div class="pencil"></div>
-      </div>
+      <!-- DOCUMENT INFO -->
+      <div class="section">
+        <div class="section-title">DOCUMENT INFO</div>
+        <div class="edit-icon" title="Edit">
+          <img src="icons/editicon2.svg" alt="" class="pencil" />
+        </div>
 
-      <div class="two-col">
-        <div class="group">
-          <div class="field">
-            <div class="label">Billing Name</div>
-            <div class="value">Reliance Group</div>
+        <div class="two-col">
+          <div class="group">
+            <div class="field">
+              <div class="label">Equipment Form</div>
+              <div class="value doc-row">
+                <span class="doc-badge">YES</span>
+                <span class="material-symbols-outlined pdf-icon">article</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">Sales Agreement</div>
+              <div class="value doc-row">
+                <span class="doc-badge">YES</span>
+                <span class="material-symbols-outlined pdf-icon">article</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">Monitoring Protocol Form</div>
+              <div class="value doc-row">
+                <span class="doc-badge">No</span>
+              </div>
+            </div>
           </div>
 
-          <div class="field">
-            <div class="label">Address</div>
-            <div class="value">
-              <div class="address-text" style="font-weight: 700">
-                Benz Circle, Vijayawada<br />
-                Andhra Pradesh, INDIA - 500503
+          <div class="group">
+            <div class="field">
+              <div class="label">Floor Map</div>
+              <div class="value doc-row">
+                <span class="doc-badge">YES</span>
+                <span class="material-symbols-outlined pdf-icon">article</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="label">Incidents</div>
+              <div class="value doc-row">
+                <span class="doc-badge">No</span>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="group">
-          <div class="field">
-            <div class="label">Contact</div>
-            <div class="value"><button class="view-btn">View</button></div>
+      <!-- CLIENT INFO -->
+      <div class="section">
+        <div class="section-title">CLIENT INFO</div>
+
+        <div class="two-col">
+          <div class="group">
+            <div class="field">
+              <div class="label">Client Name</div>
+              <div class="value">Reliance (ID)</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Type</div>
+              <div class="value">Client</div>
+            </div>
+          </div>
+
+          <div class="group">
+            <div class="field">
+              <div class="label">Contact</div>
+              <div class="value"><button class="view-btn">View</button></div>
+            </div>
+
+            <div class="field">
+              <div class="label">Remarks</div>
+              <div class="value"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom split: OTHER PICS + DESCRIPTION -->
+        <div class="bottom-grid">
+          <div class="pics-wrap">
+            <div class="pics-header">
+              <div class="pics-title">OTHER PICS (17)</div>
+              <div style="display: flex; align-items: center; gap: 10px">
+                <div class="nav-circle" title="Previous">&#8249;</div>
+                <div class="nav-circle next" title="Next">&#8250;</div>
+              </div>
+            </div>
+
+            <div class="pic-strip">
+              <div class="thumb">
+                <img
+                  alt="thumb1"
+                  src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=200&q=60"
+                />
+              </div>
+              <div class="thumb">
+                <img
+                  alt="thumb2"
+                  src="https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?auto=format&fit=crop&w=200&q=60"
+                />
+              </div>
+              <div class="thumb">
+                <img
+                  alt="thumb3"
+                  src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=200&q=60"
+                />
+              </div>
+              <div class="thumb">
+                <img
+                  alt="thumb4"
+                  src="https://images.unsplash.com/photo-1523475496153-3d6cc3000e44?auto=format&fit=crop&w=200&q=60"
+                />
+              </div>
+              <div class="thumb">
+                <img
+                  alt="thumb5"
+                  src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=200&q=60"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="desc-box">
+            <div class="section-title" style="margin-bottom: 0">
+              DESCRIPTION
+            </div>
+            <div class="edit-icon" title="Edit" style="top: 10px">
+              <img src="icons/editicon2.svg" alt="" class="pencil" />
+            </div>
+            <div class="desc-text">
+              Service center with cars parked around lot
+            </div>
+
+            <div class="edit-bottom">
+              <button class="edit-btn" type="button">
+                <img src="icons/editicon2.svg" alt="" class="pencil" />
+                EDIT
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    } @else {
+      <div class="wrap">
+        <div class="title-row">
+          <div class="title">TOTAL (3)</div>
+        </div>
+        <div class="divider"></div>
 
-    <!-- DOCUMENT INFO -->
-    <div class="section">
-      <div class="section-title">DOCUMENT INFO</div>
-      <div class="edit-icon" title="Edit">
-        <div class="pencil"></div>
+        <!-- NVR 1 Expanded -->
+        <div class="nvr-item">
+          <div class="nvr-body" [ngClass]="det[0] ? 'open' : 'close'">
+            <div class="nvr-header">
+              <div class="nvr-left">
+                <div class="nvr-name">NVR 1</div>
+              </div>
+
+              <div class="nvr-right">
+                <div class="status">ACTIVE</div>
+                <div class="toggle-btn" (click)="showMore(0)">
+                  {{ det[0] ? "-" : "+" }}
+                </div>
+              </div>
+            </div>
+
+            <div class="grid">
+              <!-- Left column -->
+              <div class="row">
+                <div class="label">Device Name</div>
+                <div class="dash">-</div>
+                <div class="value">RELIANCE STORE - UNIT 02 (GISIN8021)</div>
+              </div>
+
+              <!-- Right column -->
+              <div class="row">
+                <div class="label">Make</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Serial Number</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Model</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">User Name</div>
+                <div class="dash">-</div>
+                <div class="value">admin</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Native App Link</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Password</div>
+                <div class="dash">-</div>
+                <div class="value">{{ "Holmes1908/ivisus@123" }}</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Remarks</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Mac Address</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NVR 2 Collapsed -->
+        <div class="nvr-item">
+          <div class="nvr-body" [ngClass]="det[1] ? 'open' : 'close'">
+            <div class="nvr-header">
+              <div class="nvr-left">
+                <div class="nvr-name">NVR 2</div>
+              </div>
+
+              <div class="nvr-right">
+                <div class="status">ACTIVE</div>
+                <div class="toggle-btn" (click)="showMore(1)">
+                  {{ det[1] ? "-" : "+" }}
+                </div>
+              </div>
+            </div>
+            <div class="grid">
+              <!-- Left column -->
+              <div class="row">
+                <div class="label">Device Name</div>
+                <div class="dash">-</div>
+                <div class="value">RELIANCE STORE - UNIT 02 (GISIN8021)</div>
+              </div>
+
+              <!-- Right column -->
+              <div class="row">
+                <div class="label">Make</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Serial Number</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Model</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">User Name</div>
+                <div class="dash">-</div>
+                <div class="value">admin</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Native App Link</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Password</div>
+                <div class="dash">-</div>
+                <div class="value">{{ "Holmes1908/ivisus@123" }}</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Remarks</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div class="row">
+                <div class="label">Mac Address</div>
+                <div class="dash">-</div>
+                <div class="value">-</div>
+              </div>
+
+              <div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- NVR 3 Collapsed -->
+        <div class="nvr-item">
+          <div class="nvr-body" [ngClass]="det[2] ? 'open' : 'close'">
+            <div class="nvr-header">
+              <div class="nvr-left">
+                <div class="nvr-name">NVR 3</div>
+              </div>
+
+              <div class="nvr-right">
+                <div class="status">ACTIVE</div>
+                <div class="toggle-btn" (click)="showMore(2)">
+                  {{ det[2] ? "-" : "+" }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="two-col">
-        <div class="group">
-          <div class="field">
-            <div class="label">Equipment Form</div>
-            <div class="value doc-row">
-              <span class="doc-badge">YES</span>
-              <span class="pdf-icon">PDF</span>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="label">Sales Agreement</div>
-            <div class="value doc-row">
-              <span class="doc-badge">YES</span>
-              <span class="pdf-icon">PDF</span>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="label">Monitoring Protocol Form</div>
-            <div class="value doc-row">
-              <span class="doc-badge">No</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="field">
-            <div class="label">Floor Map</div>
-            <div class="value doc-row">
-              <span class="doc-badge">YES</span>
-              <span class="pdf-icon">PDF</span>
-            </div>
-          </div>
-
-          <div class="field">
-            <div class="label">Incidents</div>
-            <div class="value doc-row">
-              <span class="doc-badge">No</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CLIENT INFO -->
-    <div class="section">
-      <div class="section-title">CLIENT INFO</div>
-
-      <div class="two-col">
-        <div class="group">
-          <div class="field">
-            <div class="label">Client Name</div>
-            <div class="value">Reliance (ID)</div>
-          </div>
-
-          <div class="field">
-            <div class="label">Type</div>
-            <div class="value">Client</div>
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="field">
-            <div class="label">Contact</div>
-            <div class="value"><button class="view-btn">View</button></div>
-          </div>
-
-          <div class="field">
-            <div class="label">Remarks</div>
-            <div class="value"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom split: OTHER PICS + DESCRIPTION -->
-      <div class="bottom-grid">
-        <div class="pics-wrap">
-          <div class="pics-header">
-            <div class="pics-title">OTHER PICS (17)</div>
-            <div style="display: flex; align-items: center; gap: 10px">
-              <div class="nav-circle" title="Previous">&#8249;</div>
-              <div class="nav-circle next" title="Next">&#8250;</div>
-            </div>
-          </div>
-
-          <div class="pic-strip">
-            <div class="thumb">
-              <img
-                alt="thumb1"
-                src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=200&q=60"
-              />
-            </div>
-            <div class="thumb">
-              <img
-                alt="thumb2"
-                src="https://images.unsplash.com/photo-1527443154391-507e9dc6c5cc?auto=format&fit=crop&w=200&q=60"
-              />
-            </div>
-            <div class="thumb">
-              <img
-                alt="thumb3"
-                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=200&q=60"
-              />
-            </div>
-            <div class="thumb">
-              <img
-                alt="thumb4"
-                src="https://images.unsplash.com/photo-1523475496153-3d6cc3000e44?auto=format&fit=crop&w=200&q=60"
-              />
-            </div>
-            <div class="thumb">
-              <img
-                alt="thumb5"
-                src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=200&q=60"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="desc-box">
-          <div class="section-title" style="margin-bottom: 0">DESCRIPTION</div>
-          <div class="edit-icon" title="Edit" style="top: 10px">
-            <div class="pencil"></div>
-          </div>
-          <div class="desc-text">
-            Service center with cars parked around lot
-          </div>
-
-          <div class="edit-bottom">
-            <button class="edit-btn" type="button">
-              <span class="mini-pencil"></span>
-              EDIT
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+    }
   </div>
 </div>
