@@ -98,6 +98,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  margin: 0 !important;
 }
 
 .row3 h5 {
@@ -172,6 +173,12 @@
   font-size: 14px;
 }
 
+.last {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .user-toggles {
   display: flex;
   justify-content: center;
@@ -185,6 +192,13 @@
   gap: 5px;
 }
 
+.icon-red {
+  color: #ed3237;
+  padding: 1px 2px;
+  border: 1px solid #0000001a;
+  border-radius: 6px;
+}
+
 .add-btn {
   display: inline-flex;
   align-items: center;
@@ -195,10 +209,15 @@
   font-size: 14px;
 }
 
-.user-cards {
+.gridUsers {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 4px;
+}
+
+.listUsers {
+  display: flex;
+  flex-direction: column;
 }
 
 .card-container {
@@ -214,6 +233,14 @@
   transition: transform 1s ease;
   cursor: pointer;
   border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.listUsers .card-container {
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 50px;
 }
 
 .dec-user {
@@ -228,12 +255,24 @@
 .card-container:hover .extra-btns {
   display: block;
   position: absolute;
-  bottom: 4px;
 }
 
 .usr-profile-img {
   padding: 10px;
 }
+
+.pr-image {
+  border-radius: 50%;
+  border: 1px solid grey;
+  padding: 4px;
+  margin-bottom: 10px;
+  /* width: 30px;
+  height: 30px; */
+}
+
+/* .listUsers .card-container .usr-profile-img{
+  width: 20%;
+} */
 
 .assign-btn {
   font-size: 12px;
@@ -244,7 +283,7 @@
     rgba(153, 153, 153, 0.192) 90%
   );
   border-radius: 5px;
-  margin: 5px 0;
+  margin: auto 0;
 }
 
 .dialog-header {

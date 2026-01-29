@@ -4,7 +4,7 @@
       <img
         [src]="profileImg | media | async"
         alt=""
-        onerror="this.src='icons/def_profile_image.png'"
+        onerror="this.src = 'icons/def_profile_image.png'"
         class="profile-image"
       />
       <img src="icons/editicon2.svg" class="editicon" alt="" />
@@ -27,51 +27,51 @@
 
     <!-- user info -->
     <div class="user-details">
-      @if(userData) {
-      <div class="rows">
-        <div class="row1">
-          <div class="user-desig">
-            <h5 class="m-0">{{ userData?.userName | uppercase }}</h5>
-            <p>{{ userData?.roleList[0]?.roleName }}</p>
+      @if (userData) {
+        <div class="rows">
+          <div class="row1">
+            <div class="user-desig">
+              <h5 class="m-0">{{ userData?.userName | uppercase }}</h5>
+              <p>{{ userData?.roleList[0]?.roleName }}</p>
+            </div>
           </div>
-        </div>
 
-        <div class="row2 mb-2">
-          <div class="location">
-            <img src="icons/location.svg" alt="" width="16px" />
-            <span>{{ address.join(", ") }}</span>
+          <div class="row2 mb-2">
+            <div class="location">
+              <img src="icons/location.svg" alt="" width="16px" />
+              <span>{{ address.join(", ") }}</span>
+            </div>
+            <div class="call">
+              <img src="icons/phone.svg" alt="" width="16px" />
+              <div class="phnum">{{ userData?.contactNo1 }}</div>
+            </div>
+            <div class="mail">
+              <img src="icons/mail.svg" alt="" width="16px" />
+              <div class="mailid">{{ userData?.email }}</div>
+            </div>
           </div>
-          <div class="call">
-            <img src="icons/phone.svg" alt="" width="16px" />
-            <div class="phnum">{{ userData?.contactNo1 }}</div>
-          </div>
-          <div class="mail">
-            <img src="icons/mail.svg" alt="" width="16px" />
-            <div class="mailid">{{ userData?.email }}</div>
-          </div>
-        </div>
 
-        <div class="row3">
-          <div class="org">
-            <label>Organization Name</label>
-            <h5>{{ userData?.organizationName || "-" }}</h5>
-          </div>
-          <div class="sitesn">
-            <label>Sites Assigned</label>
-            <h5>{{ sitesList.length }}</h5>
-          </div>
-          <div class="manuser">
-            <label>Managed Users</label>
-            <h5>{{ subUsers.length }}</h5>
-          </div>
-          <div class="user-status">
-            <label>Status</label>
-            <h5 [style.color]="userData?.active == 'T' ? 'green' : ''">
-              {{ userData?.active === "T" ? "Active" : "Inactive" }}
-            </h5>
+          <div class="row3">
+            <div class="org">
+              <label>Organization Name</label>
+              <h5>{{ userData?.organizationName || "-" }}</h5>
+            </div>
+            <div class="sitesn">
+              <label>Sites Assigned</label>
+              <h5>{{ sitesList.length }}</h5>
+            </div>
+            <div class="manuser">
+              <label>Managed Users</label>
+              <h5>{{ subUsers.length }}</h5>
+            </div>
+            <div class="user-status">
+              <label>Status</label>
+              <h5 [style.color]="userData?.active == 'T' ? 'green' : ''">
+                {{ userData?.active === "T" ? "Active" : "Inactive" }}
+              </h5>
+            </div>
           </div>
         </div>
-      </div>
       }
 
       <div class="user-btns">
@@ -108,63 +108,66 @@
           </label>
         </div>
       </div>
-      <button class="add-btn" (click)="userAdd()">
-        <span class="material-symbols-outlined text-danger"> add </span>
-        <span>ADD</span>
-      </button>
+      <div class="last">
+        <span class="material-symbols-outlined icon-red" (click)="toggleList(1)" *ngIf="!changeList"> list </span>
+        <span class="material-symbols-outlined icon-red" (click)="toggleList(2)" *ngIf="changeList"> grid_on </span>
+        <button class="add-btn" (click)="userAdd()">
+          <span class="material-symbols-outlined text-danger"> add </span>
+          <span>ADD</span>
+        </button>
+      </div>
     </div>
 
     <hr />
 
-    <div class="user-cards">
-      @for(usr of subUsers; track usr){
-      <div
-        [ngClass]="
-          usr?.STATUS === 'IVISUSA'
-            ? 'card-container'
-            : 'card-container dec-user'
-        "
-      >
-        <img
-          [src]="usr?.profileImageUrl | media | async"
-          alt=""
-          width="70px"
-          height="70px"
-          onerror="this.src='icons/def_profile_image.png'"
-          style="
-            border-radius: 50%;
-            border: 1px solid grey;
-            padding: 4px;
-            margin-bottom: 10px;
+    <div [ngClass]="changeList ? 'listUsers' : 'gridUsers'">
+      @for (usr of subUsers; track usr) {
+        <div
+          [ngClass]="
+            usr?.STATUS === 'IVISUSA'
+              ? 'card-container'
+              : 'card-container dec-user'
           "
-        />
-        <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
-        <p class="role-name">{{ usr.roleName }}</p>
-        <button class="assign-btn" (click)="siteActions(usr.userId)">
-          Assign Sites
-        </button>
+        >
+          <img
+            [src]="usr?.profileImageUrl | media | async"
+            alt=""
+            width="70px"
+            height="70px"
+            onerror="this.src = 'icons/def_profile_image.png'"
+            class="pr-image"
+            [ngStyle]="changeList ? {'height': '30px', 'width' : '30px', 'margin-bottom' : '0'}:{'height': '60px', 'width' : '60px'}"
+          />
+          <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
+          <p class="role-name">{{ usr.roleName }}</p>
+          <button class="assign-btn" [ngStyle]="changeList ? {'width': '200px'} : {'width' : '100px'}" (click)="siteActions(usr.userId)">
+            Assign Sites
+          </button>
 
-        <div class="extra-btns">
-          <span
-            class="material-symbols-outlined text-danger"
-            (click)="deleteUser(usr)"
-          >
-            delete
-          </span>
+          <div *ngIf="changeList" style="width: 100px"></div>
+
+          <div class="extra-btns" [ngStyle]="changeList ? {'right':'20px'}: {'bottom':'4px'}">
+            <span
+              class="material-symbols-outlined text-danger"
+              (click)="deleteUser(usr)"
+            >
+              delete
+            </span>
+          </div>
         </div>
-      </div>
       }
     </div>
   </div>
 </div>
 
-@if(isEdit){
-<app-updateuser (closeModal)="closeUpdateUserModal($event)"></app-updateuser>
-} @if(addBtn){
-<app-add-user
-  (siteActions)="newSiteActions($event)"
-  (closeModal)="closeAddUserModal($event)"
-></app-add-user>
+@if (isEdit) {
+  <app-updateuser (closeModal)="closeUpdateUserModal($event)"></app-updateuser>
+}
+@if (addBtn) {
+  <app-add-user
+    (siteActions)="newSiteActions($event)"
+    (closeModal)="closeAddUserModal($event)"
+  ></app-add-user>
 }
 
 <ng-template #sitesAssign>
@@ -180,69 +183,71 @@
     <input type="text" placeholder="Search" [(ngModel)]="siteSearch" />
 
     <ng-container>
-      @for(item of filters; track item){
-      <div class="btn-group my-2 me-1" role="group">
-        <input
-          type="radio"
-          class="btn-check"
-          [value]="item.id"
-          [id]="item.id"
-          (change)="filterSites(item)"
-          [(ngModel)]="filter"
-        />
-        <label class="btn btn-outline-dark" [for]="item.id">{{
-          item.label
-        }}</label>
-      </div>
+      @for (item of filters; track item) {
+        <div class="btn-group my-2 me-1" role="group">
+          <input
+            type="radio"
+            class="btn-check"
+            [value]="item.id"
+            [id]="item.id"
+            (change)="filterSites(item)"
+            [(ngModel)]="filter"
+          />
+          <label class="btn btn-outline-dark" [for]="item.id">{{
+            item.label
+          }}</label>
+        </div>
       }
     </ng-container>
 
-    @let pipeSites = (userSites | search: siteSearch); @if (pipeSites?.length) {
-    <div style="height: 30vh; overflow: auto">
-      @if (filter !== 1 && pipeSites.length !== 0) {
-      <div class="form-check select-site">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="all"
-          [(ngModel)]="selectAllSites"
-          (ngModelChange)="toggleSites()"
-        />
-        <label class="form-check-label" for="all"> Select All </label>
-      </div>
-      } @for (item of pipeSites; track item.siteId) {
-      <div class="form-check select-site">
-        @if (filter !== 1) {
-        <input
-          class="form-check-input"
-          type="checkbox"
-          [id]="item.siteName"
-          [(ngModel)]="item.assigned"
-          (ngModelChange)="toggleAllIndividual()"
-        />
+    @let pipeSites = userSites | search: siteSearch;
+    @if (pipeSites?.length) {
+      <div style="height: 30vh; overflow: auto">
+        @if (filter !== 1 && pipeSites.length !== 0) {
+          <div class="form-check select-site">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="all"
+              [(ngModel)]="selectAllSites"
+              (ngModelChange)="toggleSites()"
+            />
+            <label class="form-check-label" for="all"> Select All </label>
+          </div>
         }
-        <label class="form-check-label" [for]="item.siteName">
-          {{ item.siteName }}
-        </label>
+        @for (item of pipeSites; track item.siteId) {
+          <div class="form-check select-site">
+            @if (filter !== 1) {
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [id]="item.siteName"
+                [(ngModel)]="item.assigned"
+                (ngModelChange)="toggleAllIndividual()"
+              />
+            }
+            <label class="form-check-label" [for]="item.siteName">
+              {{ item.siteName }}
+            </label>
+          </div>
+        }
       </div>
-      }
-    </div>
     } @else {
-    <p class="text-center" style="height: 30vh">No Sites!</p>
+      <p class="text-center" style="height: 30vh">No Sites!</p>
     }
 
     <div class="d-flex justify-content-center my-2">
-      @if(filter !==1){
-      <button
-        class="req-btn"
-        (click)="applyMapping()"
-        [disabled]="
-          currentUser?.roleName === 'Client-Member' ||
-          currentUser?.roleName === 'Site-Admin'
-        "
-      >
-        {{ filter == 2 ? "Unassign" : "Assign" }}
-      </button>
+      @if (filter !== 1) {
+        <button
+          class="req-btn"
+          (click)="applyMapping()"
+          [disabled]="
+            currentUser?.roleName === 'Client-Member' ||
+            currentUser?.roleName === 'Site-Admin'
+          "
+        >
+          {{ filter == 2 ? "Unassign" : "Assign" }}
+        </button>
       }
     </div>
   </div>
