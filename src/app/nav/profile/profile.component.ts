@@ -2,20 +2,39 @@ import { Component, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
-import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe, NgStyle, NgIf } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { FormsModule } from '@angular/forms';
 import { UpdateuserComponent } from './update-user/updateuser.component';
 import { AddUserComponent } from './add-user/add-user.component';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogModule, MatDialogContent, MatDialogClose } from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogModule,
+  MatDialogContent,
+  MatDialogClose,
+} from '@angular/material/dialog';
 import { SearchPipe } from '../../../utilities/pipes/search.pipe';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
-  imports: [MediaPipe, AsyncPipe, UpperCasePipe, TitleCasePipe, NgClass, FormsModule, SearchPipe, UpdateuserComponent, AddUserComponent, MatDialogContent, MatDialogClose],
+  imports: [
+    MediaPipe,
+    AsyncPipe,
+    UpperCasePipe,
+    TitleCasePipe,
+    NgClass,
+    FormsModule,
+    SearchPipe,
+    UpdateuserComponent,
+    AddUserComponent,
+    MatDialogContent,
+    MatDialogClose,
+    NgStyle,
+    NgIf
+],
   providers: [SearchPipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -27,8 +46,8 @@ export class ProfileComponent {
     private alert_service: AlertService,
     private router: Router,
     private dialog: MatDialog,
-    private searchPipe: SearchPipe
-  ) { }
+    private searchPipe: SearchPipe,
+  ) {}
 
   profileImg: any;
   userData: any;
@@ -44,6 +63,7 @@ export class ProfileComponent {
   assignSites = false;
   allSites: any;
   filSubId: any;
+  changeList = false;
 
   filters = [
     {
@@ -76,15 +96,20 @@ export class ProfileComponent {
     this.auth_service.listRoles().subscribe((res: any) => {
       this.userRoles = res.roleList;
     });
-
-
   }
 
   getUserInfoForId() {
     this.auth_service.getUserInfoForId().subscribe((res: any) => {
       this.userData = res;
-      this.raw_address = [this.userData?.address_line1, this.userData?.address_line2, this.userData?.city, this.userData?.district, this.userData?.state, this.userData?.country]
-      this.address = this.raw_address.filter(Boolean)
+      this.raw_address = [
+        this.userData?.address_line1,
+        this.userData?.address_line2,
+        this.userData?.city,
+        this.userData?.district,
+        this.userData?.state,
+        this.userData?.country,
+      ];
+      this.address = this.raw_address.filter(Boolean);
       this.profileImg = this.userData?.profileImage;
     });
   }
@@ -92,8 +117,11 @@ export class ProfileComponent {
   getUserNamesByUserName() {
     this.auth_service.getUserNamesByUserName().subscribe((res: any) => {
       this.subUsers = res.data;
+      this.subUsers.sort((a: any, b: any) =>
+        a.User_Name.localeCompare(b.User_Name),
+      );
       // this.editBtns = new Array(this.subUsers.length).fill(false);
-    })
+    });
   }
 
   @ViewChild('profileInput') profileinput!: ElementRef;
@@ -142,7 +170,7 @@ export class ProfileComponent {
       (res: any) => {
         if (res?.status_code === 200) {
           this.alert_service.success(
-            `Profile image updated successfully for ${userUpdate.FirstName} ${userUpdate.LastName}`
+            `Profile image updated successfully for ${userUpdate.FirstName} ${userUpdate.LastName}`,
           );
           this.getUser();
         } else {
@@ -151,7 +179,7 @@ export class ProfileComponent {
       },
       (err) => {
         this.alert_service.error('Request Entity Too Large');
-      }
+      },
     );
   }
 
@@ -166,7 +194,7 @@ export class ProfileComponent {
           this.getSitesListForUserName();
         }
       },
-      error: (err) => { },
+      error: (err) => {},
     });
   }
 
@@ -185,6 +213,14 @@ export class ProfileComponent {
 
   userAdd() {
     this.addBtn = true;
+  }
+
+  toggleList(n: number) {
+    if (n === 1) {
+      this.changeList = true;
+    } else {
+      this.changeList = false;
+    }
   }
 
   filterSites(data: any) {
@@ -223,13 +259,12 @@ export class ProfileComponent {
         assigned: null,
       })
       .subscribe({
-        next: (res: any) => { },
+        next: (res: any) => {},
       });
   }
 
   newSiteActions(data: any) {
-
-    this.getUserNamesByUserName()
+    this.getUserNamesByUserName();
     this.filter = 1;
     this.dialog.open(this.sitesAssign);
     this.filSubId = data.userId;
@@ -240,7 +275,7 @@ export class ProfileComponent {
     };
     this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
       next: (res: any) => {
-        this.filterSites({ userId: res.userId, value: 0 })
+        this.filterSites({ userId: res.userId, value: 0 });
       },
     });
   }
@@ -265,7 +300,7 @@ export class ProfileComponent {
 
   toggleAllIndividual() {
     this.selectAllSites = this.userSites.every(
-      (item: any) => item.assigned == true
+      (item: any) => item.assigned == true,
     );
   }
 
@@ -284,7 +319,7 @@ export class ProfileComponent {
           loginId: this.userData?.UserId,
           siteId: Array.from(
             this.userSites.filter((el: any) => el['assigned']),
-            (item: any) => item.siteId
+            (item: any) => item.siteId,
           ),
         })
         .subscribe({
@@ -319,7 +354,7 @@ export class ProfileComponent {
           loginId: this.userData?.UserId,
           siteList: Array.from(
             this.userSites.filter((el: any) => el['assigned']),
-            (item: any) => item.siteId
+            (item: any) => item.siteId,
           ),
         })
         .subscribe({
@@ -374,7 +409,7 @@ export class ProfileComponent {
     };
     this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
       next: (res: any) => {
-        this.filterSites({ userId: res.userId, value: 0 })
+        this.filterSites({ userId: res.userId, value: 0 });
         // console.log(res.userId);
       },
     });
@@ -382,19 +417,22 @@ export class ProfileComponent {
 
   deleteUser(data: any) {
     console.log(data);
-    this.alert_service.confirm('Do you Want to Deactivate This User?').then((result: any) => {
-      if (result.isConfirmed) {
-        this.auth_service.deactivateUser(data).subscribe({
-          next: (res: any) => {
-            if (res.statusCode === 200) this.alert_service.success(res.message);
-            else this.alert_service.error(res.message);
-          },
-          error: (err: any) => {
-            this.alert_service.error(err);
-          },
-        });
-      }
-    });
+    this.alert_service
+      .confirm('Do you Want to Deactivate This User?')
+      .then((result: any) => {
+        if (result.isConfirmed) {
+          this.auth_service.deactivateUser(data).subscribe({
+            next: (res: any) => {
+              if (res.statusCode === 200)
+                this.alert_service.success(res.message);
+              else this.alert_service.error(res.message);
+            },
+            error: (err: any) => {
+              this.alert_service.error(err);
+            },
+          });
+        }
+      });
   }
 
   logout() {
