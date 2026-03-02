@@ -1,10 +1,10 @@
-.uuser-container {
+.user-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s forwards;
   width: 400px;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .top-header {
@@ -29,13 +29,14 @@
   height: 22px;
   padding: 2px;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .close:hover {
   background-color: #ed3237;
   color: white;
-  /* border: 1px solid rgb(121, 121, 121); */
 }
 
 .content {
@@ -44,10 +45,6 @@
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   padding: 20px;
 }
-
-/* option {
-  font-size: 16px;
-} */
 
 .priority-btns {
   display: flex;

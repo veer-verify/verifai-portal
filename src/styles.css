@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Neometric Regular";
-  src: url("../public/fonts/neometric-2/Neometric-Regular.otf");
+  src: url("../public/fonts/neometric/Neometric-Regular.otf");
 }
 
 @font-face {
   font-family: "Neometric Medium";
-  src: url("../public/fonts/neometric-2/Neometric\ Medium\ \(Regular\).otf");
+  src: url("../public/fonts/neometric/Neometric-Medium.otf");
 }
 
 html,
