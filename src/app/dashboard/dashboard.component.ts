@@ -13,13 +13,21 @@ import { ConfigService } from '../../utilities/services/config.service';
 })
 export class DashboardComponent implements OnInit {
 
-    storage_service = inject(StorageService);
-    config_service = inject(ConfigService);
+    private storage_service = inject(StorageService);
+    private config_service = inject(ConfigService);
 
     ngOnInit(): void {
         this.getSitesListForUserName();
     }
 
+    check(): boolean {
+        const session = this.storage_service.getData('session');
+        return session ? true : false;
+    }
+
+    /**
+     * single time sites loading throuh this method
+     */
     getSitesListForUserName() {
         this.config_service.getSitesListForUserName()
             .subscribe({
@@ -29,9 +37,11 @@ export class DashboardComponent implements OnInit {
                         this.storage_service.siteData$.next(res.sites);
                         this.storage_service.currentSite$.next(first);
                     }
+                },
+                error: (err) => {
+                    console.log(err);
                 }
             })
     }
-
 
 }

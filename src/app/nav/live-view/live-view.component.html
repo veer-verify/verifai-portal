@@ -1,17 +1,20 @@
 <section class="sub-header">
   @if (camList.length) {
-  <div class="site-info">
-    <div class="hamburger" (click)="showSideSites()">☰</div>
-    <div class="select-with-icon">
-      <img src="/icons/drop_cam.svg" class="icon">
-      <select [(ngModel)]="selectedCam" (change)="call()">
-        <option value=""><img src="icons/drop_cam.svg" alt="">All ({{ camList.length }})</option>
-        @for (item of camList; track $index) {
-        <option [value]="item?.cameraId" #val>
-          {{ item?.name }}
-        </option>
-        }
-      </select>
+    <div class="site-info">
+      <div class="hamburger" (click)="toggle()">☰</div>
+
+      <div class="select-with-icon">
+        <img src="/icons/drop_cam.svg" class="icon" />
+        <select (change)="adjustGrid($event)">
+          <option value="">
+            <img src="icons/drop_cam.svg" alt="" />All ({{ camList.length }})
+          </option>
+          @for (item of camList; track $index) {
+            <option [value]="item?.cameraId" #val>
+              {{ item?.name }}
+            </option>
+          }
+        </select>
       </div>
     </div>
 
@@ -19,12 +22,23 @@
     <div class="d-flex gap-3">
       <div class="d-flex align-items-center gap-3">
         @for (item of gridTypes; track $index) {
-        <a [ngClass]="
-          itemsPerPage == item.noOfItems ? 'grid-highlight' : 'grid-highlight'
-        " (click)="adjustGrid(item.noOfItems)">
-          <img [src]="itemsPerPage == item.noOfItems ? item.activePath : item.path" width="16px" alt="" />
-          <!-- {{ item?.label }} -->
-        </a>
+          <a
+            [ngClass]="
+              itemsPerPage == item.noOfItems
+                ? 'grid-highlight'
+                : 'grid-highlight'
+            "
+            (click)="adjustGrid(item.noOfItems)"
+          >
+            <img
+              [src]="
+                itemsPerPage == item.noOfItems ? item.activePath : item.path
+              "
+              width="16px"
+              alt=""
+            />
+            <!-- {{ item?.label }} -->
+          </a>
         }
       </div>
 
@@ -32,52 +46,67 @@
         <button (click)="navigate('prev')" [disabled]="currentPage === 1">
           <span class="material-symbols-outlined">keyboard_arrow_left </span>
         </button>
-        <a>{{`${currentPage} - ${totalPages}`}}</a>
-        <button (click)="navigate('next')" [disabled]="currentPage === totalPages">
+        <a>{{ `${currentPage} - ${totalPages}` }}</a>
+        <button
+          (click)="navigate('next')"
+          [disabled]="currentPage === totalPages"
+        >
           <span class="material-symbols-outlined">keyboard_arrow_right </span>
         </button>
       </div>
     </div>
 
     <div class="d-inline-flex align-items-center gap-2">
-      <span class="hover-bar" [class.analyticsred]="isChecked">camera info</span>
+      <span class="hover-bar" [class.analyticsred]="isChecked"
+        >camera info</span
+      >
       <label class="switch">
         <input type="checkbox" [(ngModel)]="isChecked" />
         <span class="slider"></span>
       </label>
     </div>
-    }
+  }
 </section>
 
 <!-- camera container -->
 <section class="grid-container" #gridContainer appGlobalClick>
-  @for(item of getPaginatedList(); track $index) {
-  <div class="grid-item" [ngClass]="itemsPerPage === 1 ? 'single-view' : ''" #gridItem>
-    @if (change) {
-    <app-stream [videoData]="item" [isChecked]="isChecked"></app-stream>
-    <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
-    }
-    <!-- @if (isChecked) {
+  @for (item of paginatedList; track item.cameraId) {
+    <div
+      class="grid-item"
+      [ngClass]="itemsPerPage === 1 ? 'single-view' : ''"
+      #gridItem
+    >
+      <app-stream [videoData]="item" [isChecked]="isChecked"></app-stream>
+      <!-- <iframe class="iframe" [src]="item?.httpUrl | sanitize" frameborder="0"></iframe> -->
+      <!-- @if (isChecked) {
     <div class="info">{{ item?.name }}</div>
     } -->
-    <!-- <div class="cam-info">{{item?.name}}</div> -->
-  </div>
+      <!-- <div class="cam-info">{{item?.name}}</div> -->
+    </div>
   }
 </section>
 
-<div class="side-sites" [hidden]="!showSites">
-  <div class="header">
-    TOTAL SITES - {{ siteList.length }}
-    <a class="close" (click)="close()"><span class="material-symbols-outlined"> arrow_left_alt </span></a>
-  </div>
-  <div class="sites-content">
-    @for(item of siteList; track item){
-    <div class="site-list-item">
-      @if(storage_service.currentSite$ | async; as site) {
-      <a (click)="updateSite(item)" [style.color]="item?.siteId === site.siteId ? '#ef7146' : ''">
-        @if(item.siteName.length <=35){ {{ item.siteName }} } @else { {{ item.siteName.slice(0, 35) }}... } </a>
-          }
+@if (showSites) {
+  <div class="side-sites">
+    <div class="header">
+      TOTAL SITES - {{ sitesList?.length }}
+      <a class="close" (click)="toggle()"
+        ><span class="material-symbols-outlined"> arrow_left_alt </span></a
+      >
     </div>
-    }
+    <div class="sites-content">
+      @for (item of sitesList; track item.siteId) {
+        <div class="site-list-item">
+          @if (storage_service.currentSite$ | async; as site) {
+            <a
+              (click)="updateSite(item)"
+              [style.color]="item?.siteId === site.siteId ? '#ef7146' : ''"
+            >
+              {{ item.siteName }}
+            </a>
+          }
+        </div>
+      }
+    </div>
   </div>
-</div>
+}

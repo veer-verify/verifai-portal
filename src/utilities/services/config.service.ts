@@ -53,7 +53,7 @@ export class ConfigService {
       let x: any = this.date.transform(payload?.toDate, 'yyyy-MM-dd');
       params = params.set('toDate', x);
     }
-    return this.http.get(url, { params: params });
+    return this.http.get(url, { params });
   }
 
   nvrList(payload: any) {
@@ -62,13 +62,19 @@ export class ConfigService {
     if (payload?.siteId) {
       params = params.set('siteId', payload?.siteId)
     }
-    return this.http.get(url, { params: params });
+    return this.http.get(url, { params });
   }
 
   listSiteServices(payload: any): Observable<any> {
     let url = `${environment.sitesUrl}/listSiteServices_1_0`;
     let params = new HttpParams().set('siteId', payload?.siteId);
-    return this.http.get(url, { params: params });
+    return this.http.get(url, { params });
+  }
+
+  getSiteFloorMapDetails(payload: any): Observable<any> {
+    let url = `${environment.sitesUrl}/getSiteFloorMapDetails_1_0`;
+    let params = new HttpParams().set('siteId', payload?.siteId);
+    return this.http.get(url, { params });
   }
 
 }

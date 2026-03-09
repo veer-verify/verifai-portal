@@ -46,6 +46,30 @@ select {
   font-weight: 600;
 }
 
+textarea {
+  width: 100%;
+  outline: none;
+  border: 1px solid #d1d1d1;
+}
+
+a {
+  cursor: pointer;
+  text-emphasis: none;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  background: transparent;
+}
+
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: wrap;
+  width: 100%;
+}
+
 .select-with-icon {
   position: relative;
   display: inline-block;
@@ -66,17 +90,6 @@ select {
   width: 300px;
 }
 
-textarea {
-  width: 100%;
-  outline: none;
-  border: 1px solid #d1d1d1;
-}
-
-a {
-  cursor: pointer;
-  text-emphasis: none;
-}
-
 .clear {
   padding: 5px 10px;
   background-color: #ed3237;
@@ -85,11 +98,6 @@ a {
   font-size: 11px;
   margin-left: 10px;
   font-weight: 200;
-}
-
-button {
-  border: none;
-  background: transparent;
 }
 
 .filter-menu {

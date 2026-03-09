@@ -29,6 +29,18 @@ export const menuItems = [
     routeLink: 'timelapse',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
+  {
+    id: 'nvr',
+    label: 'nvr',
+    routeLink: 'nvr',
+    call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
+  },
+  {
+    id: 'map',
+    label: 'map',
+    routeLink: 'site-map',
+    call: () => true
+  },
   // {
   //   id: 'siteInfo',
   //   label: 'siteinfo',
@@ -41,22 +53,4 @@ export const menuItems = [
   //     routeLink: '/device-health',
   //     call: (data: any) => data?.key !== 'F' && data?.admin ? true : false
   // },
-  // {
-  //     id: 'simDetails',
-  //     label: 'sim cards',
-  //     routeLink: 'sim-cards',
-  //     call: (data: any) => data?.key !== 'F' && data?.admin ? true : false
-  // },
-  // {
-  //     id: 'sensors',
-  //     label: 'sensors',
-  //     routeLink: 'sensors',
-  //     call: (data: any) => data?.key !== 'F' && data?.admin ? true : false
-  // },
-  {
-    id: 'nvr',
-    label: 'nvr',
-    routeLink: 'nvr',
-    call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
-  },
 ];

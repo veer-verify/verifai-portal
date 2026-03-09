@@ -17,7 +17,7 @@ export class StreamComponent {
     private alert_service: AlertService
   ) { }
 
-  @Input() videoData: any;
+  @Input({ required: true }) videoData: any;
   @Input() isChecked: any;
   @ViewChild('video') video!: ElementRef;
 
@@ -29,6 +29,11 @@ export class StreamComponent {
 
   hitStream: boolean = false;
   encoded: any;
+
+  ngOnChanges(): void {
+    // console.log(this.videoData)
+  };
+
   ngOnInit(): void {
     const username = "admin";
     const password = "verifai123789";

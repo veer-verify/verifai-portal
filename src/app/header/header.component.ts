@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { GlobalClickDirective } from '../../utilities/directives/global-click.directive';
 import { StorageService } from '../../utilities/services/storage.service';
-import { filter, Observable, Subject, takeUntil } from 'rxjs';
+import { delay, filter, Observable, of, Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
 import { AsyncPipe, TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
@@ -20,39 +20,12 @@ import { menuItems } from './menu-items';
     TitleCasePipe,
     AsyncPipe,
     UpperCasePipe,
-    NgClass
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
   standalone: true,
 })
-export class HeaderComponent implements OnInit {
-
-  constructor(
-    private router: Router,
-    public storage_service: StorageService,
-    private elementRef: ElementRef,
-    private config_service: ConfigService
-  ) { }
-  isDropdownOpen = false;
-  showSideBar = false;
-  // closeSideBar = false;
-
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
-  openSideBar() {
-    // this.closeSideBar = !this.closeSideBar;
-    this.showSideBar = !this.showSideBar;
-    // if (this.showSideBar) {
-    //   // this.closeSideBar = true;
-    //   setTimeout(() => {
-    //   }, 300)
-    //   return;
-    // }
-    // this.showSideBar = !this.showSideBar;
-  }
+export class HeaderComponent implements OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event']) onClick(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target)) {
@@ -61,12 +34,33 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  constructor(
+    private router: Router,
+    public storage_service: StorageService,
+    private elementRef: ElementRef,
+    private config_service: ConfigService
+  ) { }
+
+  destroy$ = new Subject<void>();
+  isDropdownOpen = false;
+  showSideBar = false;
   searchSite!: string;
   sitesList!: Observable<any>;
   user: any;
   navItems: any;
   serviceData: any;
   isAdmin: boolean = false;
+  showSite: boolean = false;
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  openSideBar() {
+    this.showSideBar = !this.showSideBar;
+  }
+
+
   ngOnInit(): void {
     this.isAdmin = this.storage_service.isAdmin();
     this.user = this.storage_service.getData('user');
@@ -74,6 +68,7 @@ export class HeaderComponent implements OnInit {
     this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
+        takeUntil(this.destroy$)
       )
       .subscribe((res: any) => {
         this.config_service.listSiteServices(res).subscribe((res: any) => {
@@ -85,21 +80,25 @@ export class HeaderComponent implements OnInit {
       })
   }
 
-  showSite: boolean = false;
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   updateSite(site: any) {
     this.showSite = !this.showSite;
     this.storage_service.currentSite$.next(site);
   }
 
-  @ViewChild('siteInput', { static: false }) siteInput!: ElementRef;
+  @ViewChild('siteInput') set siteInput(element: ElementRef) {
+    if (element && this.showSite) {
+      element.nativeElement.focus();
+    }
+  }
+
   toggleSites(): void {
     this.searchSite = '';
     this.showSite = !this.showSite;
-    setTimeout(() => {
-      if (this.showSite) {
-        this.siteInput.nativeElement?.focus()
-      }
-    }, 500);
   }
 
   logout() {

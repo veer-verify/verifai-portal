@@ -1,22 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './auth/login/login.component';
-// import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LiveViewComponent } from './nav/live-view/live-view.component';
-import { ServiceRequestsComponent } from './nav/service-requests/service-requests.component';
-import { AlertsComponent } from './nav/alerts/alerts.component';
-import { authGuard } from './auth/auth.guard';
-import { TimelapseComponent } from './nav/timelapse/timelapse.component';
-import { ProfileComponent } from './nav/profile/profile.component';
-import { ChangePasswordComponent } from './nav/profile/change-password/change-password.component';
-import { TermsConditionsComponent } from './nav/service-requests/terms-conditions/terms-conditions.component';
-import { ContactComponent } from './nav/service-requests/contact/contact.component';
-import { NvrComponent } from './nav/nvr/nvr.component';
-import { HealthComponent } from './nav/health/health.component';
-import { TrendsComponent } from './nav/trends/trends.component';
-import { InsightsComponent } from './nav/insights/insights.component';
-import { SiteinfoComponent } from './nav/siteinfo/siteinfo.component';
-// import { CalendarComponent } from './nav/calendar/calendar.component';
+import { authGuard, canDeactivateDashboard } from './auth/auth.guard';
 
 export const routes: Routes = [
   {
@@ -30,61 +15,66 @@ export const routes: Routes = [
     children: [
       {
         path: 'live-view',
-        component: LiveViewComponent,
+        loadComponent: () => import('./nav/live-view/live-view.component').then((c) => c.LiveViewComponent)
       },
       {
         path: 'alerts',
-        component: AlertsComponent,
-      },
-      {
-        path: 'service-requests',
-        component: ServiceRequestsComponent,
-      },
-      {
-        path: 'terms-conditions',
-        component: TermsConditionsComponent,
-      },
-      {
-        path: 'contact',
-        component: ContactComponent,
+        loadComponent: () => import('./nav/alerts/alerts.component').then((c) => c.AlertsComponent)
       },
       {
         path: 'timelapse',
-        component: TimelapseComponent,
-      },
-      {
-        path: 'siteinfo',
-        component: SiteinfoComponent
+        loadComponent: () => import('./nav/timelapse/timelapse.component').then((c) => c.TimelapseComponent)
       },
       {
         path: 'nvr',
-        component: NvrComponent,
-      },
-      {
-        path: 'profile',
-        component: ProfileComponent,
-      },
-      {
-        path: 'change-password',
-        component: ChangePasswordComponent,
+        loadComponent: () => import('./nav/nvr/nvr.component').then((c) => c.NvrComponent)
       },
       {
         path: 'health',
-        component: HealthComponent,
+        loadComponent: () => import('./nav/health/health.component').then((c) => c.HealthComponent)
       },
       {
         path: 'trends',
-        component: TrendsComponent,
+        loadComponent: () => import('./nav/trends/trends.component').then((c) => c.TrendsComponent)
       },
       {
         path: 'insights',
-        component: InsightsComponent,
+        loadComponent: () => import('./nav/insights/insights.component').then((c) => c.InsightsComponent)
       },
+      {
+        path: 'service-requests',
+        loadComponent: () => import('./nav/service-requests/service-requests.component').then((c) => c.ServiceRequestsComponent)
+      },
+      {
+        path: 'site-map',
+        loadComponent: () => import('./nav/site-map/site-map.component').then((c) => c.SiteMapComponent)
+      },
+      {
+        path: 'siteinfo',
+        loadComponent: () => import('./nav/siteinfo/siteinfo.component').then((c) => c.SiteinfoComponent)
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('./nav/profile/profile.component').then((c) => c.ProfileComponent)
+      },
+      {
+        path: 'terms-conditions',
+        loadComponent: () => import('./nav/service-requests/terms-conditions/terms-conditions.component').then((c) => c.TermsConditionsComponent)
+      },
+      {
+        path: 'contact',
+        loadComponent: () => import('./nav/service-requests/contact/contact.component').then((c) => c.ContactComponent)
+      },
+      {
+        path: 'change-password',
+        loadComponent: () => import('./nav/profile/change-password/change-password.component').then((c) => c.ChangePasswordComponent)
+      },
+
       {
         path: '',
         redirectTo: '/dashboard/live-view',
         pathMatch: 'full',
-      },
+      }
     ],
   },
   {

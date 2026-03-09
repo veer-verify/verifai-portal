@@ -133,6 +133,10 @@
   border-radius: 8px !important;
 }
 
+::ng-deep .mat-mdc-menu-panel {
+  max-width: 100% !important;
+}
+
 /* ag grid */
 ::ng-deep .ag-root-wrapper {
   border-radius: 0 !important;

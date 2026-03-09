@@ -6,40 +6,46 @@
     </div>
 
     @if (storage_service.currentSite$ | async; as site) {
-    <div class="site-accordian">
-      <a (click)="toggleSites()" (click)="$event.stopPropagation()">{{
-        site.siteName
-      }}</a>
+      <div class="site-accordian">
+        <a (click)="toggleSites()" (click)="$event.stopPropagation()">{{
+          site.siteName
+        }}</a>
 
-      @if (showSite) {
-      <div class="site-dropdown">
-        <input type="search" [(ngModel)]="searchSite" #siteInput />
-        @for (item of sitesList | async | search: searchSite; track $index) {
-        <a (click)="updateSite(item)">
-          <img src="icons/dot-1.svg" width="8px" class="me-1" />
-          {{ item.siteName }}
-        </a>
-        } @empty {
-        <p class="text-center bg-secondary">{{ "no sites!" | titlecase }}</p>
+        @if (showSite) {
+          <div class="site-dropdown">
+            <input type="search" [(ngModel)]="searchSite" #siteInput />
+            @for (
+              item of sitesList | async | search: searchSite;
+              track $index
+            ) {
+              <a (click)="updateSite(item)">
+                <img src="icons/dot-1.svg" width="8px" class="me-1" />
+                {{ item.siteName }}
+              </a>
+            } @empty {
+              <p class="text-center bg-secondary">
+                {{ "no sites!" | titlecase }}
+              </p>
+            }
+          </div>
         }
+        <span class="material-symbols-outlined" (click)="toggleSites()"
+          >keyboard_arrow_down</span
+        >
       </div>
-      }
-      <span class="material-symbols-outlined" (click)="toggleSites()"
-        >keyboard_arrow_down</span
-      >
-    </div>
     }
 
     <!-- nav-list -->
     <div class="nav-items">
-      @for(item of navItems; track item){ @if(item.call({key:
-      serviceData[item.id], admin: isAdmin})){
-      <a class="list-group-item">
-        <div [routerLinkActive]="['active']" [routerLink]="item.routeLink">
-          {{ item.label | titlecase }}
-        </div>
-      </a>
-      } }
+      @for (item of navItems; track item) {
+        @if (item.call({ key: serviceData[item.id], admin: isAdmin })) {
+          <a class="list-group-item">
+            <div [routerLinkActive]="['active']" [routerLink]="item.routeLink">
+              {{ item.label | titlecase }}
+            </div>
+          </a>
+        }
+      }
       <a class="list-group-item icon" [matMenuTriggerFor]="requestMenu">
         <span class="material-symbols-outlined" style="font-size: 20px"
           >call</span
@@ -120,83 +126,89 @@
       menu
     </span>
     @if (storage_service.currentSite$ | async; as site) {
-    <div class="site-accordian">
-      <a (click)="toggleSites()">{{ site.siteName }}</a>
+      <div class="site-accordian">
+        <a (click)="toggleSites()">{{ site.siteName }}</a>
 
-      @if (showSite) {
-      <div class="site-dropdown">
-        <input type="search" [(ngModel)]="searchSite" #siteInput />
-        @for (item of sitesList | async | search: searchSite; track $index) {
-        <a (click)="updateSite(item)">
-          <img src="icons/dot-1.svg" width="8px" class="me-1" />
-          {{ item.siteName }}
-        </a>
-        } @empty {
-        <p class="text-center bg-secondary">{{ "no sites!" | titlecase }}</p>
+        @if (showSite) {
+          <div class="site-dropdown">
+            <input type="search" [(ngModel)]="searchSite" #siteInput />
+            @for (
+              item of sitesList | async | search: searchSite;
+              track $index
+            ) {
+              <a (click)="updateSite(item)">
+                <img src="icons/dot-1.svg" width="8px" class="me-1" />
+                {{ item.siteName }}
+              </a>
+            } @empty {
+              <p class="text-center bg-secondary">
+                {{ "no sites!" | titlecase }}
+              </p>
+            }
+          </div>
         }
+        <span class="material-symbols-outlined" (click)="toggleSites()"
+          >keyboard_arrow_down</span
+        >
       </div>
-      }
-      <span class="material-symbols-outlined" (click)="toggleSites()"
-        >keyboard_arrow_down</span
-      >
-    </div>
     }
 
     <!-- side-bar -->
-    @if(showSideBar){
-    <aside class="side-bar">
-      <div class="side-top">
-        <span class="material-symbols-outlined" (click)="openSideBar()">
-          arrow_forward
-        </span>
-        <img src="themes/verifai/logo-black.png" alt="" width="80px" />
-      </div>
+    @if (showSideBar) {
+      <aside class="side-bar">
+        <div class="side-top">
+          <span class="material-symbols-outlined" (click)="openSideBar()">
+            arrow_forward
+          </span>
+          <img src="themes/verifai/logo-black.png" alt="" width="80px" />
+        </div>
 
-      <!-- nav-list -->
-      <div class="side-navs">
-        @for(item of navItems; track item){ @if(item.call({key:
-        serviceData[item.id], admin: isAdmin})){
-        <a
-          class="side-list-group-item"
-          routerLinkActive="side-active"
-          [routerLink]="item.routeLink"
-        >
-          {{ item.label | titlecase }}
-        </a>
-        } }
+        <!-- nav-list -->
+        <div class="side-navs">
+          @for (item of navItems; track item) {
+            @if (item.call({ key: serviceData[item.id], admin: isAdmin })) {
+              <a
+                class="side-list-group-item"
+                routerLinkActive="side-active"
+                [routerLink]="item.routeLink"
+              >
+                {{ item.label | titlecase }}
+              </a>
+            }
+          }
 
-        <a
-          routerLink="/dashboard/service-requests"
-          class="side-list-group-item"
-          routerLinkActive="side-active"
-          >Requests</a
-        >
-        <a
-          routerLink="/dashboard/terms-conditions"
-          class="side-list-group-item"
-          routerLinkActive="side-active"
-          >T&C</a
-        >
-        <a
-          routerLink="/dashboard/contact"
-          class="side-list-group-item"
-          routerLinkActive="side-active"
-          >Contact</a
-        >
-        <a
-          routerLink="/dashboard/change-password"
-          class="side-list-group-item"
-          routerLinkActive="side-active"
-          >Change Password</a
-        >
-        <a
-          routerLink="/dashboard/profile"
-          class="side-list-group-item"
-          routerLinkActive="side-active"
-          >Profile</a
-        >
-      </div>
-    </aside>
+          <a
+            routerLink="/dashboard/service-requests"
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            >Requests</a
+          >
+          <a
+            routerLink="/dashboard/terms-conditions"
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            >T&C</a
+          >
+          <a
+            routerLink="/dashboard/contact"
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            >Contact</a
+          >
+          <a
+            routerLink="/dashboard/change-password"
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            >Change Password</a
+          >
+          <a
+            routerLink="/dashboard/profile"
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            >Profile</a
+          >
+        </div>
+      </aside>
     }
   </div>
 </section>
