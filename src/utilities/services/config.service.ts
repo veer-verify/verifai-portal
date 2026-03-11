@@ -16,8 +16,8 @@ export class ConfigService {
     private date: DatePipe
   ) { }
 
-  public dataFromSubheader: BehaviorSubject<any> = new BehaviorSubject([]);
-  public site_add_sub: BehaviorSubject<any> = new BehaviorSubject({});
+  public dataFromSubheader = new BehaviorSubject<any>([]);
+  public site_add_sub = new BehaviorSubject<any>({});
 
   public getSitesListForUserName(): Observable<any> {
     const url = `${environment.sitesUrl}/getSitesListForUserName_2_0/`;
@@ -33,10 +33,8 @@ export class ConfigService {
   }
 
   listTimeLapseVideos(payload: any) {
-    // console.log(payload)
     let url = `${environment.timelapseUrl}/listTimeLapseVideos_1_0`;
     let params = new HttpParams();
-    // console.log(payload);
     params = params.set('siteId', payload?.siteId)
     if (payload?.active) {
       params = params.set('active', payload?.active)
@@ -46,7 +44,6 @@ export class ConfigService {
     }
     if (payload?.fromDate) {
       let x: any = this.date.transform(payload?.fromDate, 'yyyy-MM-dd');
-      // console.log(x);
       params = params.set('fromDate', x);
     }
     if (payload?.toDate) {

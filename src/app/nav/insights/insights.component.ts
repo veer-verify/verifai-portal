@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AgCharts } from 'ag-charts-angular';
 import {
   AgBarSeriesOptions,
@@ -35,6 +35,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
+import { InsightService } from '../../../utilities/services/insight.service';
+import { StorageService } from '../../../utilities/services/storage.service';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 ModuleRegistry.registerModules([
   BarSeriesModule,
@@ -62,80 +65,103 @@ ModuleRegistry.registerModules([
   templateUrl: './insights.component.html',
   styleUrl: './insights.component.css',
 })
-export class InsightsComponent {
+export class InsightsComponent implements OnInit, OnDestroy {
   public chartOptions!: AgChartOptions;
 
-  columnDefs: ColDef[] = [
-    { field: 'name', headerName: 'Customer Analytics', filter: false },
-    { field: 'count', headerName: 'Count', filter: false },
+  constructor(
+    private insight_service: InsightService,
+    public storage_service: StorageService
+  ) { }
+
+  columnDefs = [
+    {
+      field: 'type',
+      flex: 2,
+      cellRenderer: (params: any) => {
+        return `<span class="type-cell">${params.value}</span>`
+      }
+    },
+    {
+      field: 'total',
+      flex: 1,
+      cellClass: 'count-cell'
+    }
   ];
 
-  rowData = [
-    {
-      name: 'Impression Rate_Aisle 1',
-      count: '70',
-    },
-    {
-      name: 'Impression Rate_Aisle 2',
-      count: '85',
-    },
-    {
-      name: 'Impression Rate_Aisle 3',
-      count: '80',
-    },
-    {
-      name: 'Impression Rate_Aisle 4',
-      count: '90',
-    },
-    {
-      name: 'Impression Rate_Aisle 5',
-      count: '75',
-    },
-  ];
-
+  private destroy$ = new Subject<void>();
+  currentSite: any;
+  fromDate: Date = new Date();
+  toDate: Date = new Date();
   gridOptions!: GridOptions;
+  analyticsData: any = [];
+  charts: any[] = [];
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.gridOptions = gridOptions;
+
+    this.storage_service.currentSite$
+      .pipe(
+        filter((site) => !!site),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((site) => {
+        this.currentSite = site;
+        this.getNonWorkingDays();
+      });
   }
 
-  constructor() {
-    this.chartOptions = {
-      data: [
-        { name: 'Impression Rate_Aisle 1', count: 70 },
-        { name: 'Impression Rate_Aisle 2', count: 85 },
-        { name: 'Impression Rate_Aisle 3', count: 80 },
-        { name: 'Impression Rate_Aisle 4', count: 90 },
-        { name: 'Impression Rate_Aisle 5', count: 75 },
-      ],
-      series: [
-        {
-          type: 'donut',
-          calloutLabelKey: 'name',
-          angleKey: 'count',
-          // innerRadiusRatio: 0.75, // thin ring
-          // cornerRadius: 20, // rounded ends
-          // sectorSpacing: 3
-          // padAngle: 3,
-          calloutLabel: {
-            fontFamily: 'Neometric Regular',
-            fontSize: 12,
-            fontWeight: 600,
-            color: '#333',
-          },
-        },
-      ],
-      title: {
-        text: 'Customer Analytics',
-        fontFamily: 'Neometric Regular',
-      },
-      legend: {
-        item: {
-          label: {
-            fontFamily: 'Neometric Regular',
-          },
-        },
-      },
-    };
+  ngOnDestroy(): void {
+
   }
+
+  getNonWorkingDays() {
+    this.insight_service.getNonWorkingDays({ siteId: this.currentSite?.siteId }).subscribe({
+      next: (res) => {
+        if (res.status === "Success") {
+          this.fromDate = new Date(res.LastWorkingDay)
+          this.biAnalyticsReport()
+        }
+      }
+    })
+  }
+
+  biAnalyticsReport() {
+    this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
+      next: (res) => {
+        if (res.Status === "Success") {
+          this.analyticsData = res.AnalyticsReportList;
+          this.generateCharts()
+        }
+      }
+    })
+  }
+
+  generateCharts() {
+    this.charts = this.analyticsData.map((section: any) => {
+
+      const chartData = section.data.map((d: any) => ({
+        label: d.type,
+        value: Number(d.total)
+      }));
+
+      return {
+        title: section.name,
+        options: {
+          data: chartData,
+          series: [
+            {
+              type: 'donut',
+              angleKey: 'value',
+              calloutLabelKey: 'label',
+              innerRadiusRatio: 0.6
+            }
+          ],
+          legend: {
+            position: 'right'
+          }
+        }
+      };
+    });
+  }
+
 }

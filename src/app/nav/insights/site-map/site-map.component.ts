@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ConfigService } from '../../../utilities/services/config.service';
-import { Site, StorageService } from '../../../utilities/services/storage.service';
+import { ConfigService } from '../../../../utilities/services/config.service';
+import { StorageService } from '../../../../utilities/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { MediaPipe } from '../../../utilities/pipes/media.pipe';
+import { MediaPipe } from '../../../../utilities/pipes/media.pipe';
 import { MatMenuModule } from '@angular/material/menu';
-import { StreamComponent } from "../../../utilities/components/stream/stream.component";
+import { StreamComponent } from "../../../../utilities/components/stream/stream.component";
 
 @Component({
   selector: 'app-site-map',
@@ -55,7 +55,7 @@ export class SiteMapComponent implements OnInit, OnDestroy {
 
   currentCam: any;
   onCameraClick(cam: string) {
-    this.currentCam = null
+    this.currentCam = null;
     setTimeout(() => {
       this.currentCam = cam;
     }, 100)

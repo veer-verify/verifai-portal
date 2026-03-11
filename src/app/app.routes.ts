@@ -47,7 +47,7 @@ export const routes: Routes = [
       },
       {
         path: 'site-map',
-        loadComponent: () => import('./nav/site-map/site-map.component').then((c) => c.SiteMapComponent)
+        loadComponent: () => import('./nav/insights/site-map/site-map.component').then((c) => c.SiteMapComponent)
       },
       {
         path: 'siteinfo',
