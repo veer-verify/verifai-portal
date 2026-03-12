@@ -1,0 +1,47 @@
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 10px;
+  margin: 0 40px;
+  /* background-color: #eeeeee; */
+}
+
+.table-panel {
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding-right: 10px;
+  /* background-color: #ffffff; */
+}
+
+.chart-panel {
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  padding-left: 10px;
+  box-shadow: -5px 5px 5px #0000000d;
+  /* background-color: #ffffff; */
+}
+
+.section-header {
+  background: #7c7c7c;
+  color: white;
+  padding: 10px 15px;
+  font-weight: 600;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 6px 6px 0 0;
+  margin-top: 6px;
+}
+
+.grid {
+  border: 1px solid #e5e5e5;
+}
+
+.chart-title {
+  font-weight: 600;
+  margin: 15px 0;
+}
+
+.donut-chart {
+  height: 220px;
+}

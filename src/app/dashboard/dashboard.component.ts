@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
 import { ConfigService } from '../../utilities/services/config.service';
+import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.component";
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent],
+    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,

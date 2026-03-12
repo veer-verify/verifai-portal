@@ -1,85 +1,90 @@
 <section>
+  <app-err-info></app-err-info>
+
   <div class="tool-bar">
-    <!-- <form> -->
-    <div class="select-with-icon">
-      <img src="icons/drop_cam.svg" alt="" class="icon" />
-      <select class="tag-select">
-        <option selected><img src="icons/drop_cam.svg" alt="" />ALL</option>
-        <option disabled>No cameras available</option>
-      </select>
-    </div>
-    <div class="calendar">
-      <span>START</span>
-      <input
-        matInput
-        [matDatepicker]="picker1"
-        placeholder="MM-DD-YYYY"
-        [(ngModel)]="fromDate"
-      />
+    <div class="d-inline-flex gap-2">
+      <!-- <div class="select-with-icon">
+        <img src="icons/drop_cam.svg" alt="" class="icon" />
+        <select class="tag-select">
+          <option selected><img src="icons/drop_cam.svg" alt="" />ALL</option>
+          <option disabled>No cameras available</option>
+        </select>
+      </div> -->
 
-      <img
-        src="icons/calendar.svg"
-        class="calendar-icon"
-        (click)="picker1.open()"
-      />
+      <div class="calendar">
+        <span>START</span>
+        <input
+          matInput
+          [matDatepicker]="picker1"
+          placeholder="MM-DD-YYYY"
+          [(ngModel)]="fromDate"
+          [max]="today"
+        />
 
-      <mat-datepicker #picker1></mat-datepicker>
-    </div>
+        <img
+          src="icons/calendar.svg"
+          class="calendar-icon"
+          (click)="picker1.open()"
+        />
 
-    <div class="calendar">
-      <span>END</span>
-      <input
-        matInput
-        [matDatepicker]="picker2"
-        placeholder="MM-DD-YYYY"
-        [(ngModel)]="toDate"
-      />
+        <mat-datepicker #picker1></mat-datepicker>
+      </div>
 
-      <img
-        src="icons/calendar.svg"
-        class="calendar-icon"
-        (click)="picker2.open()"
-      />
+      <div class="calendar">
+        <span>END</span>
+        <input
+          matInput
+          [matDatepicker]="picker2"
+          placeholder="MM-DD-YYYY"
+          [(ngModel)]="toDate"
+          [max]="today"
+        />
 
-      <mat-datepicker #picker2></mat-datepicker>
+        <img
+          src="icons/calendar.svg"
+          class="calendar-icon"
+          (click)="picker2.open()"
+        />
+
+        <mat-datepicker #picker2></mat-datepicker>
+      </div>
     </div>
 
     <div class="d-inline-flex gap-2">
-      <button>list</button>
-      <button>map</button>
-    </div>
-    <!-- </form> -->
-  </div>
-
-  <div class="dashboard">
-    <!-- LEFT TABLE -->
-    <div class="table-panel">
-      <div *ngFor="let section of analyticsData">
-        <div class="section-header">
-          {{ section.name }}
-          <!-- <span>COUNT</span> -->
-        </div>
-
-        <div class="ag-theme-alpine grid">
-          <ag-grid-angular
-            [rowData]="section.data"
-            [columnDefs]="columnDefs"
-            [domLayout]="'autoHeight'"
-          >
-          </ag-grid-angular>
-        </div>
-      </div>
-    </div>
-
-    <!-- RIGHT CHARTS -->
-    <div class="chart-panel">
-      <div *ngFor="let chart of charts">
-        <div class="chart-title">
-          {{ chart.title }}
-        </div>
-
-        <ag-charts class="donut-chart" [options]="chart.options"> </ag-charts>
-      </div>
+      <button
+        (click)="setPage('list')"
+        [ngStyle]="{ background: page === 'list' ? 'red' : '' }"
+      >
+        <span
+          class="material-symbols-outlined"
+          [ngClass]="page === 'list' ? 'text-light' : 'text-secondary'"
+        >
+          list
+        </span>
+      </button>
+      <button
+        (click)="setPage('map')"
+        [ngStyle]="{ background: page === 'map' ? 'red' : '' }"
+      >
+        <span
+          class="material-symbols-outlined"
+          [ngClass]="page === 'map' ? 'text-light' : 'text-secondary'"
+        >
+          explore_nearby
+        </span>
+      </button>
     </div>
   </div>
+
+  <ng-container *ngIf="page === 'list'">
+    <app-site-report
+      [fromDate]="fromDate"
+      [toDate]="toDate"
+      (dates)="getDates($event)"
+    ></app-site-report>
+  </ng-container>
+
+  <ng-container *ngIf="page === 'map'">
+    <app-site-map></app-site-map>
+  </ng-container>
 </section>

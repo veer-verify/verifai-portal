@@ -1,30 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AgCharts } from 'ag-charts-angular';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
-  AgBarSeriesOptions,
-  AgCategoryAxisOptions,
-  AgChartCaptionOptions,
-  AgChartLegendOptions,
   AgChartOptions,
-  AgChartSubtitleOptions,
-  AgLineSeriesOptions,
-  AgNumberAxisOptions,
-  BarSeriesModule,
-  CategoryAxisModule,
-  LegendModule,
-  LineSeriesModule,
-  ModuleRegistry,
-  NumberAxisModule,
-  DonutSeriesModule,
 } from 'ag-charts-community';
 
 import {
-  CellClickedEvent,
-  ColDef,
   GridOptions,
-  GridReadyEvent,
-  IServerSideDatasource,
-  themeQuartz,
 } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { gridOptions } from '../../../grid.config';
@@ -34,62 +14,41 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 import { InsightService } from '../../../utilities/services/insight.service';
 import { StorageService } from '../../../utilities/services/storage.service';
+import { SiteMapComponent } from "./site-map/site-map.component";
+import { CameraInsightsComponent } from "./camera-insights/camera-insights.component";
+import { ErrInfoComponent } from "../../../utilities/components/err-info/err-info.component";
+import { SiteReportComponent } from "./site-report/site-report.component";
 import { filter, Subject, takeUntil } from 'rxjs';
-
-ModuleRegistry.registerModules([
-  BarSeriesModule,
-  CategoryAxisModule,
-  LegendModule,
-  LineSeriesModule,
-  NumberAxisModule,
-  DonutSeriesModule,
-]);
-
 @Component({
   selector: 'app-insights',
   imports: [
-    AgCharts,
-    AgGridAngular,
     CommonModule,
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
-    AgGridAngular,
     MatDialogModule,
     MatMenuModule,
     MatDatepickerModule,
+    SiteMapComponent,
+    ErrInfoComponent,
+    SiteReportComponent
   ],
   templateUrl: './insights.component.html',
   styleUrl: './insights.component.css',
 })
 export class InsightsComponent implements OnInit, OnDestroy {
-  public chartOptions!: AgChartOptions;
 
   constructor(
     private insight_service: InsightService,
     public storage_service: StorageService
   ) { }
 
-  columnDefs = [
-    {
-      field: 'type',
-      flex: 2,
-      cellRenderer: (params: any) => {
-        return `<span class="type-cell">${params.value}</span>`
-      }
-    },
-    {
-      field: 'total',
-      flex: 1,
-      cellClass: 'count-cell'
-    }
-  ];
-
-  private destroy$ = new Subject<void>();
+  @ViewChild(SiteReportComponent) child!: SiteReportComponent;
+  destroy$ = new Subject<void>();
   currentSite: any;
+  today = new Date();
   fromDate: Date = new Date();
   toDate: Date = new Date();
   gridOptions!: GridOptions;
@@ -97,71 +56,91 @@ export class InsightsComponent implements OnInit, OnDestroy {
   charts: any[] = [];
 
   ngOnInit(): void {
-    this.gridOptions = gridOptions;
+    // this.gridOptions = gridOptions;
 
-    this.storage_service.currentSite$
-      .pipe(
-        filter((site) => !!site),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((site) => {
-        this.currentSite = site;
-        this.getNonWorkingDays();
-      });
+    // this.storage_service.currentSite$
+    //   .pipe(
+    //     filter((site) => !!site),
+    //     takeUntil(this.destroy$)
+    //   )
+    //   .subscribe((site) => {
+    //     this.currentSite = site;
+    //     this.getNonWorkingDays();
+    //   });
   }
 
   ngOnDestroy(): void {
-
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
-  getNonWorkingDays() {
-    this.insight_service.getNonWorkingDays({ siteId: this.currentSite?.siteId }).subscribe({
-      next: (res) => {
-        if (res.status === "Success") {
-          this.fromDate = new Date(res.LastWorkingDay)
-          this.biAnalyticsReport()
-        }
-      }
-    })
+  page: string = 'list';
+  setPage(page: string) {
+    this.page = page;
   }
 
-  biAnalyticsReport() {
-    this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
-      next: (res) => {
-        if (res.Status === "Success") {
-          this.analyticsData = res.AnalyticsReportList;
-          this.generateCharts()
-        }
-      }
-    })
+  getDates(data: any) {
+    this.fromDate = data.fromDate;
   }
 
-  generateCharts() {
-    this.charts = this.analyticsData.map((section: any) => {
+  // getNonWorkingDays() {
+  //   this.storage_service.info$.next('');
+  //   this.analyticsData = [];
+  //   this.charts = [];
+  //   this.insight_service.getNonWorkingDays({ siteId: this.currentSite?.siteId }).subscribe({
+  //     next: (res) => {
+  //       if (res.status === "Success") {
+  //         this.fromDate = new Date(res.LastWorkingDay);
+  //         this.biAnalyticsReport()
+  //       } else {
+  //         this.storage_service.info$.next(res.message);
+  //       }
+  //     }
+  //   })
+  // }
 
-      const chartData = section.data.map((d: any) => ({
-        label: d.type,
-        value: Number(d.total)
-      }));
+  // biAnalyticsReport() {
+  //   this.storage_service.info$.next('');
+  //   this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
+  //     next: (res) => {
+  //       if (res.Status === "Success") {
+  //         this.analyticsData = res.AnalyticsReportList;
+  //         this.generateCharts()
+  //         if (this.analyticsData.length === 0) {
+  //           this.storage_service.info$.next('no data!');
+  //         }
+  //       } else {
+  //         this.storage_service.info$.next('no data!');
+  //       }
+  //     }
+  //   })
+  // }
 
-      return {
-        title: section.name,
-        options: {
-          data: chartData,
-          series: [
-            {
-              type: 'donut',
-              angleKey: 'value',
-              calloutLabelKey: 'label',
-              innerRadiusRatio: 0.6
-            }
-          ],
-          legend: {
-            position: 'right'
-          }
-        }
-      };
-    });
-  }
+  // generateCharts() {
+  //   this.charts = this.analyticsData.map((section: any) => {
+  //     const chartData = section.data.map((d: any) => ({
+  //       label: d.type,
+  //       value: Number(d.total)
+  //     }));
+
+  //     return {
+  //       title: section.name,
+  //       options: {
+  //         data: chartData,
+  //         series: [
+  //           {
+  //             type: 'donut',
+  //             angleKey: 'value',
+  //             calloutLabelKey: 'label',
+  //             innerRadiusRatio: 0.6
+  //           }
+  //         ],
+  //         legend: {
+  //           position: 'right'
+  //         }
+  //       }
+  //     };
+  //   });
+  // }
 
 }

@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { MediaPipe } from '../../../../utilities/pipes/media.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { StreamComponent } from "../../../../utilities/components/stream/stream.component";
+import { CameraInsightsComponent } from "../camera-insights/camera-insights.component";
 
 @Component({
   selector: 'app-site-map',
-  imports: [CommonModule, MediaPipe, MatMenuModule, StreamComponent],
+  imports: [CommonModule, MediaPipe, MatMenuModule, StreamComponent, CameraInsightsComponent],
   templateUrl: './site-map.component.html',
   styleUrl: './site-map.component.css'
 })
@@ -22,6 +23,8 @@ export class SiteMapComponent implements OnInit, OnDestroy {
 
   destroy$ = new Subject<void>();
   siteDetails: any;
+  originalWidth = 9000;
+  originalHeight = 7000;
 
   ngOnInit(): void {
     this.storage_service.currentSite$
@@ -43,6 +46,10 @@ export class SiteMapComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.statusCode === 200) {
           this.siteDetails = res.siteDetails;
+          this.originalWidth = this.siteDetails.imageWidth;
+          this.originalHeight = this.siteDetails.imageHeight;
+
+          // console.log(this.originalWidth, this.originalHeight);
           if (!this.siteDetails.siteImage) {
             this.storage_service.info$.next('no floor map for selected site!');
           }
@@ -56,13 +63,11 @@ export class SiteMapComponent implements OnInit, OnDestroy {
   currentCam: any;
   onCameraClick(cam: string) {
     this.currentCam = null;
+    // this.addBtn = true;
     setTimeout(() => {
       this.currentCam = cam;
     }, 100)
   }
-
-  originalWidth = 9000;
-  originalHeight = 7000;
 
   findx(x: number) {
     return (x / this.originalWidth) * 100;
@@ -70,6 +75,11 @@ export class SiteMapComponent implements OnInit, OnDestroy {
 
   findy(y: number) {
     return (y / this.originalHeight) * 100;
+  }
+
+  addBtn = false
+  closeAddUserModal(val: boolean) {
+    this.addBtn = val;
   }
 
 }

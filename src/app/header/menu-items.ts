@@ -17,12 +17,12 @@ export const menuItems = [
     routeLink: 'insights',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
-  {
-    id: 'trends',
-    label: 'trends',
-    routeLink: 'trends',
-    call: (data: any) => (data?.key !== 'F' ? true : false),
-  },
+  // {
+  //   id: 'trends',
+  //   label: 'trends',
+  //   routeLink: 'trends',
+  //   call: (data: any) => (data?.key !== 'F' ? true : false),
+  // },
   {
     id: 'timeLapse',
     label: 'timelapse',
@@ -35,12 +35,12 @@ export const menuItems = [
     routeLink: 'nvr',
     call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
   },
-  {
-    id: 'map',
-    label: 'map',
-    routeLink: 'site-map',
-    call: () => true
-  },
+  // {
+  //   id: 'map',
+  //   label: 'map',
+  //   routeLink: 'site-map',
+  //   call: () => true
+  // },
   // {
   //   id: 'siteInfo',
   //   label: 'siteinfo',

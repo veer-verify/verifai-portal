@@ -1,0 +1,9 @@
+<!-- <div class="text-container">
+    <p class="text-detail">{{ text }}</p>
+</div> -->
+
+@if (storage_service.info$ | async; as data) {
+  <div class="text-container">
+    <p class="text-detail">{{ data }}</p>
+  </div>
+}

@@ -1,7 +1,7 @@
 .map-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 100px);
   /* border: 5px solid; */
 }
 
@@ -30,4 +30,11 @@
   text-transform: uppercase;
   font-size: 18px;
   font-weight: 700;
+}
+
+app-camera-insights {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
 }

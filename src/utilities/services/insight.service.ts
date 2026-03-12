@@ -17,7 +17,7 @@ export class InsightService {
   getNonWorkingDays(payload: any): Observable<any> {
     let url = `${environment.insightsUrl}/notWorkingDays_1_0`;
     let params = new HttpParams();
-    params = params.set('siteId', 36347);
+    params = params.set('siteId', payload?.siteId);
     if (payload?.year) {
       params = params.set('year', payload?.year)
     }

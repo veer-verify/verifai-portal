@@ -18,11 +18,11 @@
     <p class="err-info">no floor map for selected site!</p>
   </ng-container> -->
 
-  @if (storage_service.info$ | async; as data) {
+  <!-- @if (storage_service.info$ | async; as data) {
     <div class="err-info">
       {{ data }}
     </div>
-  }
+  } -->
 
   <mat-menu #menu="matMenu">
     <div
@@ -34,3 +34,9 @@
     </div>
   </mat-menu>
 </div>
+
+@if (addBtn) {
+  <app-camera-insights
+    (closeModal)="closeAddUserModal($event)"
+  ></app-camera-insights>
+}
