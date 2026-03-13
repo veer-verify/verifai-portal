@@ -10,7 +10,8 @@
       (click)="onCameraClick(cam)"
       [matMenuTriggerFor]="menu"
     >
-      <img src="icons/cctv.png" width="24px" />
+      <!-- <span>{{ cam?.cameraName }}</span> -->
+      <img src="icons/cctv.png" width="24px" [title]="cam?.cameraName" />
     </div>
   </ng-container>
 
@@ -26,7 +27,7 @@
 
   <mat-menu #menu="matMenu">
     <div
-      style="width: 800px; height: 500px; overflow: hidden; background: #000000"
+      style="width: 500px; height: 300px; overflow: hidden; background: #000000"
     >
       @if (currentCam) {
         <app-stream [videoData]="currentCam"></app-stream>
@@ -38,5 +39,7 @@
 @if (addBtn) {
   <app-camera-insights
     (closeModal)="closeAddUserModal($event)"
+    [analyticsData]="analyticsData"
+    [camera]="currentCam"
   ></app-camera-insights>
 }

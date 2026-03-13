@@ -14,7 +14,7 @@ body {
   margin: 0;
   box-sizing: border-box;
   user-select: none;
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Regular" !important;
   overflow-y: hidden;
 }
 
@@ -26,7 +26,7 @@ label {
 }
 
 input {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Regular" !important;
   width: 100%;
   outline: none;
   border: 1px solid #d1d1d1;
@@ -39,7 +39,7 @@ input [type="radio"] {
 }
 
 select {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Regular" !important;
   width: 100%;
   border: 1px solid #d1d1d1;
   border-radius: 4px;
@@ -347,7 +347,6 @@ button {
 }
 
 .filter-header {
-  /* font-family: "Neometric Regular", sans-serif; */
   font-size: 12px;
   font-weight: 600;
   padding: 12px 16px;

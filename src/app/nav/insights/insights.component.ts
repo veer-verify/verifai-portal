@@ -21,6 +21,8 @@ import { CameraInsightsComponent } from "./camera-insights/camera-insights.compo
 import { ErrInfoComponent } from "../../../utilities/components/err-info/err-info.component";
 import { SiteReportComponent } from "./site-report/site-report.component";
 import { filter, Subject, takeUntil } from 'rxjs';
+import { AgCharts } from "ag-charts-angular";
+import { ConfigService } from '../../../utilities/services/config.service';
 @Component({
   selector: 'app-insights',
   imports: [
@@ -33,7 +35,9 @@ import { filter, Subject, takeUntil } from 'rxjs';
     MatDatepickerModule,
     SiteMapComponent,
     ErrInfoComponent,
-    SiteReportComponent
+    SiteReportComponent,
+    AgGridAngular,
+    AgCharts
   ],
   templateUrl: './insights.component.html',
   styleUrl: './insights.component.css',
@@ -42,12 +46,30 @@ export class InsightsComponent implements OnInit, OnDestroy {
 
   constructor(
     private insight_service: InsightService,
-    public storage_service: StorageService
+    public storage_service: StorageService,
+    public configSrvc: ConfigService,
+
   ) { }
+
+  columnDefs = [
+    {
+      field: 'type',
+      flex: 2,
+      cellRenderer: (params: any) => {
+        return `<span class="type-cell">${params.value}</span>`
+      }
+    },
+    {
+      field: 'total',
+      flex: 1,
+      cellClass: 'count-cell'
+    }
+  ];
 
   @ViewChild(SiteReportComponent) child!: SiteReportComponent;
   destroy$ = new Subject<void>();
   currentSite: any;
+  cameraId: any
   today = new Date();
   fromDate: Date = new Date();
   toDate: Date = new Date();
@@ -56,17 +78,18 @@ export class InsightsComponent implements OnInit, OnDestroy {
   charts: any[] = [];
 
   ngOnInit(): void {
-    // this.gridOptions = gridOptions;
+    this.gridOptions = gridOptions;
 
-    // this.storage_service.currentSite$
-    //   .pipe(
-    //     filter((site) => !!site),
-    //     takeUntil(this.destroy$)
-    //   )
-    //   .subscribe((site) => {
-    //     this.currentSite = site;
-    //     this.getNonWorkingDays();
-    //   });
+    this.storage_service.currentSite$
+      .pipe(
+        filter((site) => !!site),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((site) => {
+        this.currentSite = site;
+        this.getCamerasForSiteId(site)
+        this.getNonWorkingDays();
+      });
   }
 
   ngOnDestroy(): void {
@@ -77,70 +100,92 @@ export class InsightsComponent implements OnInit, OnDestroy {
   page: string = 'list';
   setPage(page: string) {
     this.page = page;
+
+    if (page === 'map') return;
+    this.getNonWorkingDays();
   }
 
   getDates(data: any) {
     this.fromDate = data.fromDate;
   }
 
-  // getNonWorkingDays() {
-  //   this.storage_service.info$.next('');
-  //   this.analyticsData = [];
-  //   this.charts = [];
-  //   this.insight_service.getNonWorkingDays({ siteId: this.currentSite?.siteId }).subscribe({
-  //     next: (res) => {
-  //       if (res.status === "Success") {
-  //         this.fromDate = new Date(res.LastWorkingDay);
-  //         this.biAnalyticsReport()
-  //       } else {
-  //         this.storage_service.info$.next(res.message);
-  //       }
-  //     }
-  //   })
-  // }
+  camList: any = [];
+  getCamerasForSiteId(data: any) {
+    this.camList = [];
+    this.configSrvc.getCamerasForSiteId(data).subscribe({
+      next: (res: any) => {
+        this.camList = res;
+      }
+    });
+  }
 
-  // biAnalyticsReport() {
-  //   this.storage_service.info$.next('');
-  //   this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
-  //     next: (res) => {
-  //       if (res.Status === "Success") {
-  //         this.analyticsData = res.AnalyticsReportList;
-  //         this.generateCharts()
-  //         if (this.analyticsData.length === 0) {
-  //           this.storage_service.info$.next('no data!');
-  //         }
-  //       } else {
-  //         this.storage_service.info$.next('no data!');
-  //       }
-  //     }
-  //   })
-  // }
+  getNonWorkingDays() {
+    this.storage_service.info$.next('');
+    this.analyticsData = [];
+    this.charts = [];
+    this.insight_service.getNonWorkingDays({ siteId: this.currentSite?.siteId }).subscribe({
+      next: (res) => {
+        if (res.status === "Success") {
+          this.fromDate = new Date(res.LastWorkingDay);
+          this.biAnalyticsReport()
+        } else {
+          this.storage_service.info$.next(res.message);
+        }
+      }
+    })
+  }
 
-  // generateCharts() {
-  //   this.charts = this.analyticsData.map((section: any) => {
-  //     const chartData = section.data.map((d: any) => ({
-  //       label: d.type,
-  //       value: Number(d.total)
-  //     }));
+  biAnalyticsReport() {
+    this.storage_service.info$.next('');
+    this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, cameraId: this.cameraId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
+      next: (res) => {
+        if (res.Status === "Success") {
+          this.analyticsData = res.AnalyticsReportList;
+          this.generateCharts()
+          if (this.analyticsData.length === 0) {
+            this.storage_service.info$.next('no data!');
+          }
+        } else {
+          this.storage_service.info$.next('no data!');
+        }
+      }
+    })
+  }
 
-  //     return {
-  //       title: section.name,
-  //       options: {
-  //         data: chartData,
-  //         series: [
-  //           {
-  //             type: 'donut',
-  //             angleKey: 'value',
-  //             calloutLabelKey: 'label',
-  //             innerRadiusRatio: 0.6
-  //           }
-  //         ],
-  //         legend: {
-  //           position: 'right'
-  //         }
-  //       }
-  //     };
-  //   });
-  // }
+  generateCharts() {
+    this.charts = this.analyticsData.map((section: any) => {
+      const chartData = section.data.map((d: any) => ({
+        label: d.type,
+        value: Number(d.total)
+      }));
+
+      return {
+        title: section.name,
+        options: {
+          data: chartData,
+          series: [
+            {
+              type: 'donut',
+              angleKey: 'value',
+              calloutLabelKey: 'label',
+              innerRadiusRatio: 0.6,
+              calloutLabel: {
+                enabled: false
+              }
+            }
+          ],
+          legend: {
+            position: 'right',
+            item: {
+              label: {
+                fontFamily: 'Neometric Medium',
+                fontSize: 14
+              }
+            }
+          }
+        }
+      };
+    });
+  }
 
 }

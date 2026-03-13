@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ConfigService } from '../../../../utilities/services/config.service';
 import { StorageService } from '../../../../utilities/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -7,6 +7,7 @@ import { MediaPipe } from '../../../../utilities/pipes/media.pipe';
 import { MatMenuModule } from '@angular/material/menu';
 import { StreamComponent } from "../../../../utilities/components/stream/stream.component";
 import { CameraInsightsComponent } from "../camera-insights/camera-insights.component";
+import { InsightService } from '../../../../utilities/services/insight.service';
 
 @Component({
   selector: 'app-site-map',
@@ -18,10 +19,13 @@ export class SiteMapComponent implements OnInit, OnDestroy {
 
   constructor(
     private config_service: ConfigService,
-    public storage_service: StorageService
+    public storage_service: StorageService,
+    private insight_service: InsightService,
   ) { }
 
   destroy$ = new Subject<void>();
+  @Input() fromDate: any;
+  @Input() toDate: any;
   siteDetails: any;
   originalWidth = 9000;
   originalHeight = 7000;
@@ -60,12 +64,31 @@ export class SiteMapComponent implements OnInit, OnDestroy {
     })
   }
 
+  analyticsData: any = [];
+  biAnalyticsReport() {
+    this.storage_service.info$.next('');
+    this.insight_service.biAnalyticsReport({ fromDate: this.fromDate, toDate: this.toDate, cameraId: this.currentCam?.cameraId }).subscribe({
+      next: (res) => {
+        if (res.Status === "Success") {
+          this.analyticsData = res.AnalyticsReportList;
+          this.addBtn = true;
+          if (this.analyticsData.length === 0) {
+            this.storage_service.info$.next('no data!');
+          }
+        } else {
+          this.storage_service.info$.next('no data!');
+        }
+      }
+    })
+  }
+
   currentCam: any;
   onCameraClick(cam: string) {
     this.currentCam = null;
-    // this.addBtn = true;
     setTimeout(() => {
       this.currentCam = cam;
+      this.biAnalyticsReport();
+
     }, 100)
   }
 

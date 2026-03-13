@@ -34,6 +34,9 @@ export class InsightService {
     if (payload?.toDate) {
       params = params.set('toDate', this.fordate.transform(payload?.toDate, 'yyyy-MM-dd')!)
     }
+    if (payload?.cameraId) {
+      params = params.set('cameraId', payload?.cameraId)
+    }
     return this.http.get(url, { params: params });
   }
 

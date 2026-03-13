@@ -6,6 +6,7 @@ export const theme = themeQuartz.withParams({
   headerBackgroundColor: 'rgba(0,0,0,0.5)',
   headerColumnResizeHandleColor: '#ffffff',
   rowBorder: true,
+  fontFamily: 'Neometric Medium',
 });
 
 export const defaultColDef: ColDef = {
@@ -34,39 +35,39 @@ export const gridOptions: GridOptions = {
   //   noRowsOverlayComponentParams: { message: 'Your custom message' },
 };
 
-export const donutChartOptions: AgChartOptions = {
-  series: [
-    {
-      type: 'donut',
-      calloutLabelKey: 'name',
-      angleKey: 'count',
-      calloutLabel: {
-        fontFamily: 'Neometric Regular',
-        fontSize: 12,
-        fontWeight: 600,
-        color: '#333',
-      },
-    },
-  ],
-  title: {
-    text: 'Customer Analytics',
-    fontFamily: 'Neometric Regular',
-  },
-  legend: {
-    item: {
-      label: {
-        fontFamily: 'Neometric Regular',
-      },
-    },
-  },
-};
+// export const donutChartOptions: AgChartOptions = {
+//   series: [
+//     {
+//       type: 'donut',
+//       calloutLabelKey: 'name',
+//       angleKey: 'count',
+//       calloutLabel: {
+//         fontFamily: 'Neometric Medium',
+//         fontSize: 12,
+//         fontWeight: 600,
+//         color: '#333',
+//       },
+//     },
+//   ],
+//   title: {
+//     text: 'Customer Analytics',
+//     fontFamily: 'Neometric Medium',
+//   },
+//   legend: {
+//     item: {
+//       label: {
+//         fontFamily: 'Neometric Medium',
+//       },
+//     },
+//   },
+// };
 
 export const barChartOptions: AgChartOptions = {
   title: {
     fontSize: 18,
     textAlign: 'left',
     fontWeight: 800,
-    fontFamily: 'Neometric Regular',
+    fontFamily: 'Neometric Medium',
     color: '#33333396',
   },
   series: [

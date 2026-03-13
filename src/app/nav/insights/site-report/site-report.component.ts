@@ -49,7 +49,6 @@ ModuleRegistry.registerModules([
     MatSelectModule,
     ReactiveFormsModule,
     FormsModule,
-    AgGridAngular,
     MatDialogModule,
     MatMenuModule,
     MatDatepickerModule,
@@ -193,8 +192,5 @@ export class SiteReportComponent {
       };
     });
   }
-
-
-
 
 }
