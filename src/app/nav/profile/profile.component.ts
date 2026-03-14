@@ -34,7 +34,7 @@ import { CommonModule } from '@angular/common';
     MatDialogClose,
     NgStyle,
     NgIf
-],
+  ],
   providers: [SearchPipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
@@ -47,7 +47,7 @@ export class ProfileComponent {
     private router: Router,
     private dialog: MatDialog,
     private searchPipe: SearchPipe,
-  ) {}
+  ) { }
 
   profileImg: any;
   userData: any;
@@ -194,7 +194,7 @@ export class ProfileComponent {
           this.getSitesListForUserName();
         }
       },
-      error: (err) => {},
+      error: (err) => { },
     });
   }
 
@@ -259,7 +259,7 @@ export class ProfileComponent {
         assigned: null,
       })
       .subscribe({
-        next: (res: any) => {},
+        next: (res: any) => { },
       });
   }
 
@@ -416,16 +416,19 @@ export class ProfileComponent {
   }
 
   deleteUser(data: any) {
-    console.log(data);
     this.alert_service
       .confirm('Do you Want to Deactivate This User?')
       .then((result: any) => {
         if (result.isConfirmed) {
           this.auth_service.deactivateUser(data).subscribe({
             next: (res: any) => {
-              if (res.statusCode === 200)
+              if (res.statusCode === 200) {
                 this.alert_service.success(res.message);
-              else this.alert_service.error(res.message);
+                this.getUserNamesByUserName();
+              }
+              else {
+                this.alert_service.error(res.message);
+              }
             },
             error: (err: any) => {
               this.alert_service.error(err);

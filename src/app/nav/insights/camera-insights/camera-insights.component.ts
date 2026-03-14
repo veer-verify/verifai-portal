@@ -42,7 +42,7 @@ export class CameraInsightsComponent implements OnChanges {
   generateCharts() {
     this.charts = this.analyticsData.map((section: any) => {
       const chartData = section.data.map((d: any) => ({
-        label: d.type,
+        label: `${d.type} (${d.total})`,
         value: Number(d.total)
       }));
 
@@ -56,6 +56,7 @@ export class CameraInsightsComponent implements OnChanges {
               angleKey: 'value',
               calloutLabelKey: 'label',
               innerRadiusRatio: 0.6,
+              outerRadiusRatio: 0.8,
               calloutLabel: {
                 enabled: false
               }
@@ -63,6 +64,7 @@ export class CameraInsightsComponent implements OnChanges {
           ],
           legend: {
             position: 'right',
+            maxWidth: 350,
             item: {
               label: {
                 fontFamily: 'Neometric Medium',

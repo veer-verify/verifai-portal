@@ -109,8 +109,20 @@
         </div>
       </div>
       <div class="last">
-        <span class="material-symbols-outlined icon-red" (click)="toggleList(1)" *ngIf="!changeList"> list </span>
-        <span class="material-symbols-outlined icon-red" (click)="toggleList(2)" *ngIf="changeList"> grid_on </span>
+        <span
+          class="material-symbols-outlined icon-red"
+          (click)="toggleList(1)"
+          *ngIf="!changeList"
+        >
+          list
+        </span>
+        <span
+          class="material-symbols-outlined icon-red"
+          (click)="toggleList(2)"
+          *ngIf="changeList"
+        >
+          grid_on
+        </span>
         <button class="add-btn" (click)="userAdd()">
           <span class="material-symbols-outlined text-danger"> add </span>
           <span>ADD</span>
@@ -136,17 +148,28 @@
             height="70px"
             onerror="this.src = 'icons/def_profile_image.png'"
             class="pr-image"
-            [ngStyle]="changeList ? {'height': '30px', 'width' : '30px', 'margin-bottom' : '0'}:{'height': '60px', 'width' : '60px'}"
+            [ngStyle]="
+              changeList
+                ? { height: '30px', width: '30px', 'margin-bottom': '0' }
+                : { height: '60px', width: '60px' }
+            "
           />
           <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
           <p class="role-name">{{ usr.roleName }}</p>
-          <button class="assign-btn" [ngStyle]="changeList ? {'width': '200px'} : {'width' : '100px'}" (click)="siteActions(usr.userId)">
+          <button
+            class="assign-btn"
+            [ngStyle]="changeList ? { width: '200px' } : { width: '100px' }"
+            (click)="siteActions(usr.userId)"
+          >
             Assign Sites
           </button>
 
           <div *ngIf="changeList" style="width: 100px"></div>
 
-          <div class="extra-btns" [ngStyle]="changeList ? {'right':'20px'}: {'bottom':'4px'}">
+          <div
+            class="extra-btns"
+            [ngStyle]="changeList ? { right: '20px' } : { bottom: '4px' }"
+          >
             <span
               class="material-symbols-outlined text-danger"
               (click)="deleteUser(usr)"
@@ -245,6 +268,7 @@
             currentUser?.roleName === 'Client-Member' ||
             currentUser?.roleName === 'Site-Admin'
           "
+          mat-dialog-close
         >
           {{ filter == 2 ? "Unassign" : "Assign" }}
         </button>

@@ -2,7 +2,8 @@
   <app-err-info></app-err-info>
 
   <div class="tool-bar">
-    <div class="d-inline-flex gap-2">
+    <div *ngIf="page === 'map'"></div>
+    <div class="d-inline-flex gap-2" *ngIf="page === 'list'">
       <div class="select-with-icon">
         <img src="icons/drop_cam.svg" alt="" class="icon" />
         <select

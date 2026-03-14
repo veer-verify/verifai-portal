@@ -5,6 +5,10 @@
     <div
       *ngFor="let cam of siteDetails?.cameras"
       class="camera"
+      [ngStyle]="{
+        borderColor:
+          currentCam?.cameraName === cam.cameraName ? 'red' : 'transparent',
+      }"
       [style.top.%]="findx(cam?.camImagePoints?.x)"
       [style.left.%]="findy(cam?.camImagePoints?.y)"
       (click)="onCameraClick(cam)"

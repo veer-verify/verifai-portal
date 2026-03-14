@@ -155,7 +155,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
   generateCharts() {
     this.charts = this.analyticsData.map((section: any) => {
       const chartData = section.data.map((d: any) => ({
-        label: d.type,
+        label: `${d.type} (${d.total})`,
         value: Number(d.total)
       }));
 
@@ -169,6 +169,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
               angleKey: 'value',
               calloutLabelKey: 'label',
               innerRadiusRatio: 0.6,
+              outerRadiusRatio: 0.8, // 👈 dynamic donut width
               calloutLabel: {
                 enabled: false
               }
@@ -176,6 +177,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
           ],
           legend: {
             position: 'right',
+            maxWidth: 350,
             item: {
               label: {
                 fontFamily: 'Neometric Medium',

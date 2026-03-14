@@ -107,6 +107,7 @@ export class SiteMapComponent implements OnInit, OnChanges, OnDestroy {
   addBtn = false
   closeAddUserModal(val: boolean) {
     this.addBtn = val;
+    this.currentCam = null;
   }
 
 }
