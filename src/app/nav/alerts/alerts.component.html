@@ -16,9 +16,9 @@
               }})
             </option>
             @for (item of camerasList; track $index) {
-            <option [value]="item?.cameraId">{{ item.name }}</option>
+              <option [value]="item?.cameraId">{{ item.name }}</option>
             } @empty {
-            <option disabled>No cameras available</option>
+              <option disabled>No cameras available</option>
             }
           </select>
         </div>
@@ -30,7 +30,7 @@
         >
           <option value="" selected disabled>ALL ACTION TAGS</option>
           @for (item of actionTags; track $index) {
-          <option>{{ item.value }}</option>
+            <option>{{ item.value }}</option>
           }
         </select>
 
@@ -48,7 +48,7 @@
             [matDatepicker]="picker1"
             placeholder="MM-DD-YYYY"
             [max]="today"
-            (change)="onFilterChange()"
+            (dateChange)="onFilterChange()"
             formControlName="fromDate"
           />
 
@@ -83,7 +83,7 @@
             [matDatepicker]="picker2"
             placeholder="MM-DD-YYYY"
             [max]="today"
-            (change)="onFilterChange()"
+            (dateChange)="onFilterChange()"
             formControlName="toDate"
           />
 
@@ -110,8 +110,10 @@
 
           <mat-datepicker #picker2></mat-datepicker>
         </div>
-        @if(anyData){
-        <button type="reset" class="clear" (click)="clearData()">CLEAR</button>
+        @if (anyData) {
+          <button type="reset" class="clear" (click)="clearData()">
+            CLEAR
+          </button>
         }
       </form>
     </div>
@@ -149,16 +151,16 @@
             <label>Camera</label>
             <select formControlName="cameraId">
               <option value="" disabled>Select</option>
-              @for(cam of camerasList; track cam){
-              <option [value]="cam.cameraId">{{ cam.name }}</option>
+              @for (cam of camerasList; track cam) {
+                <option [value]="cam.cameraId">{{ cam.name }}</option>
               }
             </select>
 
             <label class="mt-3">Action Tag</label>
             <select formControlName="actionTag">
               <option value="" disabled>Select</option>
-              @for(cat of actionTags; track cat){
-              <option [value]="cat.keyId">{{ cat.value }}</option>
+              @for (cat of actionTags; track cat) {
+                <option [value]="cat.keyId">{{ cat.value }}</option>
               }
             </select>
 

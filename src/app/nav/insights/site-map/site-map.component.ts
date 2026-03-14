@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { ConfigService } from '../../../../utilities/services/config.service';
 import { StorageService } from '../../../../utilities/services/storage.service';
 import { filter, Subject, takeUntil } from 'rxjs';
@@ -15,7 +15,7 @@ import { InsightService } from '../../../../utilities/services/insight.service';
   templateUrl: './site-map.component.html',
   styleUrl: './site-map.component.css'
 })
-export class SiteMapComponent implements OnInit, OnDestroy {
+export class SiteMapComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private config_service: ConfigService,
@@ -29,6 +29,10 @@ export class SiteMapComponent implements OnInit, OnDestroy {
   siteDetails: any;
   originalWidth = 9000;
   originalHeight = 7000;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.currentCam = this.siteDetails?.cameras.find((item: any) => item.cameraId === this.camera);
+  }
 
   ngOnInit(): void {
     this.storage_service.currentSite$
@@ -82,14 +86,14 @@ export class SiteMapComponent implements OnInit, OnDestroy {
     })
   }
 
+  @Input() camera: any;
   currentCam: any;
   onCameraClick(cam: string) {
     this.currentCam = null;
     setTimeout(() => {
       this.currentCam = cam;
       this.biAnalyticsReport();
-
-    }, 100)
+    }, 100);
   }
 
   findx(x: number) {

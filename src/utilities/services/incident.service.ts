@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { StorageService } from './storage.service';
 import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,8 @@ import { Observable } from 'rxjs';
 export class IncidentService {
   constructor(
     private http: HttpClient,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private datePipe: DatePipe
   ) { }
 
   incidentList(payload?: any): Observable<any> {
@@ -34,10 +36,10 @@ export class IncidentService {
       params = params.set('actionTag', payload?.actionTag);
     }
     if (payload?.fromDate) {
-      params = params.set('fromDate', payload?.fromDate);
+      params = params.set('fromDate', this.datePipe.transform(payload?.fromDate, 'yyyy-MM-dd')!)
     }
     if (payload?.toDate) {
-      params = params.set('toDate', payload?.toDate);
+      params = params.set('toDate', this.datePipe.transform(payload?.toDate, 'yyyy-MM-dd')!)
     }
 
     if (payload?.pageSize) {

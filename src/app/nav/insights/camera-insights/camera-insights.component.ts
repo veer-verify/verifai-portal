@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AlertService } from '../../../../utilities/services/alert.service';
 import { AuthService } from '../../../auth/auth.service';
@@ -11,7 +11,7 @@ import { AgCharts } from "ag-charts-angular";
   templateUrl: './camera-insights.component.html',
   styleUrl: './camera-insights.component.css'
 })
-export class CameraInsightsComponent {
+export class CameraInsightsComponent implements OnChanges {
 
   constructor(
     private fb: FormBuilder,
@@ -25,6 +25,10 @@ export class CameraInsightsComponent {
   @Output() siteActions = new EventEmitter<any>();
   roleList: any;
   addUserForm!: FormGroup;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.generateCharts()
+  }
 
   ngOnInit() {
     this.generateCharts()

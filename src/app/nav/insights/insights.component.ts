@@ -69,7 +69,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
   @ViewChild(SiteReportComponent) child!: SiteReportComponent;
   destroy$ = new Subject<void>();
   currentSite: any;
-  cameraId: any
+  cameraId: any = '';
   today = new Date();
   fromDate: Date = new Date();
   toDate: Date = new Date();

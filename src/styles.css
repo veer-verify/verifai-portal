@@ -405,6 +405,7 @@ button {
 .calendar input {
   border: none;
   font-size: 10px !important;
+  margin-top: 2px;
 }
 
 .calendar-icon {

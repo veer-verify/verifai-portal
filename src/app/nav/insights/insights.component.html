@@ -13,7 +13,9 @@
           <option value="" selected>
             <img src="icons/drop_cam.svg" alt="" />ALL
           </option>
-          <option *ngFor="let item of camList">{{ item?.name }}</option>
+          <option *ngFor="let item of camList" [value]="item.cameraId">
+            {{ item?.name }}
+          </option>
         </select>
       </div>
 
@@ -123,6 +125,10 @@
   </ng-container>
 
   <ng-container *ngIf="page === 'map'">
-    <app-site-map [fromDate]="fromDate" [toDate]="toDate"></app-site-map>
+    <app-site-map
+      [fromDate]="fromDate"
+      [toDate]="toDate"
+      [camera]="cameraId"
+    ></app-site-map>
   </ng-container>
 </section>
