@@ -3,23 +3,32 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
 import { ConfigService } from '../../utilities/services/config.service';
+import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.component";
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent],
+    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,
 })
 export class DashboardComponent implements OnInit {
 
-    storage_service = inject(StorageService);
-    config_service = inject(ConfigService);
+    private storage_service = inject(StorageService);
+    private config_service = inject(ConfigService);
 
     ngOnInit(): void {
         this.getSitesListForUserName();
     }
 
+    check(): boolean {
+        const session = this.storage_service.getData('session');
+        return session ? true : false;
+    }
+
+    /**
+     * single time sites loading throuh this method
+     */
     getSitesListForUserName() {
         this.config_service.getSitesListForUserName()
             .subscribe({
@@ -29,9 +38,11 @@ export class DashboardComponent implements OnInit {
                         this.storage_service.siteData$.next(res.sites);
                         this.storage_service.currentSite$.next(first);
                     }
+                },
+                error: (err) => {
+                    console.log(err);
                 }
             })
     }
-
 
 }

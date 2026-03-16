@@ -1,19 +1,21 @@
 @font-face {
   font-family: "Neometric Regular";
-  src: url("../public/fonts/neometric-2/Neometric-Regular.otf");
+  src: url("../public/fonts/neometric/Neometric-Regular.otf");
 }
 
 @font-face {
   font-family: "Neometric Medium";
-  src: url("../public/fonts/neometric-2/Neometric\ Medium\ \(Regular\).otf");
+  src: url("../public/fonts/neometric/Neometric-Medium.otf");
 }
 
 html,
 body {
   height: 100%;
   margin: 0;
+  box-sizing: border-box;
   user-select: none;
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Regular" !important;
+  overflow-y: hidden;
 }
 
 label {
@@ -24,7 +26,7 @@ label {
 }
 
 input {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Regular" !important;
   width: 100%;
   outline: none;
   border: 1px solid #d1d1d1;
@@ -37,13 +39,38 @@ input [type="radio"] {
 }
 
 select {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Regular" !important;
   width: 100%;
   border: 1px solid #d1d1d1;
   border-radius: 4px;
   padding: 8px;
   font-size: 11px !important;
   font-weight: 600;
+}
+
+textarea {
+  width: 100%;
+  outline: none;
+  border: 1px solid #d1d1d1;
+}
+
+a {
+  cursor: pointer;
+  text-emphasis: none;
+  text-decoration: none;
+}
+
+button {
+  border: none;
+  border-radius: 4px;
+  /* background: transparent; */
+}
+
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-wrap: wrap;
+  width: 100%;
 }
 
 .select-with-icon {
@@ -66,17 +93,6 @@ select {
   width: 300px;
 }
 
-textarea {
-  width: 100%;
-  outline: none;
-  border: 1px solid #d1d1d1;
-}
-
-a {
-  cursor: pointer;
-  text-emphasis: none;
-}
-
 .clear {
   padding: 5px 10px;
   background-color: #ed3237;
@@ -85,11 +101,6 @@ a {
   font-size: 11px;
   margin-left: 10px;
   font-weight: 200;
-}
-
-button {
-  border: none;
-  background: transparent;
 }
 
 .filter-menu {
@@ -336,7 +347,6 @@ button {
 }
 
 .filter-header {
-  /* font-family: "Neometric Regular", sans-serif; */
   font-size: 12px;
   font-weight: 600;
   padding: 12px 16px;
@@ -395,6 +405,7 @@ button {
 .calendar input {
   border: none;
   font-size: 10px !important;
+  margin-top: 2px;
 }
 
 .calendar-icon {

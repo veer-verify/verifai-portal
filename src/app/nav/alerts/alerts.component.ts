@@ -48,7 +48,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -103,8 +103,8 @@ export class AlertsComponent {
   ngOnInit() {
     this.gridOptions = gridOptions;
     this.initilizeFilterForm();
-    this.sfilterForm.patchValue({ fromTime: '00:00' });
-    this.sfilterForm.patchValue({ toTime: '00:00' });
+    // this.sfilterForm.patchValue({ fromTime: '00:00' });
+    // this.sfilterForm.patchValue({ toTime: '00:00' });
 
     // console.log(this.sfilterForm.value);
     const formValues = this.sfilterForm.value;
@@ -137,6 +137,7 @@ export class AlertsComponent {
   clearData() {
     this.sfilterForm.reset();
     this.anyData = false;
+    this.incidentList();
   }
 
   initilizeFilterForm(): void {
@@ -145,8 +146,8 @@ export class AlertsComponent {
       actionTag: [''],
       fromDate: [''],
       toDate: [''],
-      fromTime: ['16:52:01'],
-      toTime: ['00:00:00'],
+      fromTime: [''],
+      toTime: [''],
       durationStart: [1],
       durationEnd: [60],
     });
@@ -245,10 +246,6 @@ export class AlertsComponent {
     this.pageNumber = pNum;
     this.incidentList();
   }
-
-  // onFilterChange() {
-  //   this.incidentList();
-  // }
 
   onFilterChange() {
     this.anyData = true;

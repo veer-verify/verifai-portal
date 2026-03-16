@@ -1,0 +1,49 @@
+<div class="map-container">
+  <ng-container *ngIf="siteDetails?.siteImage">
+    <img [src]="siteDetails?.siteImage | media | async" class="map-image" />
+
+    <div
+      *ngFor="let cam of siteDetails?.cameras"
+      class="camera"
+      [ngStyle]="{
+        borderColor:
+          currentCam?.cameraName === cam.cameraName ? 'red' : 'transparent',
+      }"
+      [style.top.%]="findx(cam?.camImagePoints?.x)"
+      [style.left.%]="findy(cam?.camImagePoints?.y)"
+      (click)="onCameraClick(cam)"
+      [matMenuTriggerFor]="menu"
+    >
+      <!-- <span>{{ cam?.cameraName }}</span> -->
+      <img src="icons/cctv.png" width="24px" [title]="cam?.cameraName" />
+    </div>
+  </ng-container>
+
+  <!-- <ng-container *ngIf="!siteDetails?.siteImage">
+    <p class="err-info">no floor map for selected site!</p>
+  </ng-container> -->
+
+  <!-- @if (storage_service.info$ | async; as data) {
+    <div class="err-info">
+      {{ data }}
+    </div>
+  } -->
+
+  <mat-menu #menu="matMenu">
+    <div
+      style="width: 500px; height: 300px; overflow: hidden; background: #000000"
+    >
+      @if (currentCam) {
+        <app-stream [videoData]="currentCam"></app-stream>
+      }
+    </div>
+  </mat-menu>
+</div>
+
+@if (addBtn) {
+  <app-camera-insights
+    (closeModal)="closeAddUserModal($event)"
+    [analyticsData]="analyticsData"
+    [camera]="currentCam"
+  ></app-camera-insights>
+}

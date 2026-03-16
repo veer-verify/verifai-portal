@@ -13,39 +13,10 @@ export interface Site {
 export class StorageService {
 
   private readonly key = "verifai";
-
-  // private _loader = new BehaviorSubject(false);
   public loader$ = new BehaviorSubject(false);
   public info$ = new BehaviorSubject('');
-
-  // private _siteData = new BehaviorSubject([]);
   public siteData$ = new BehaviorSubject([]);
-
-  // private _currentSite = new BehaviorSubject(null);
   public currentSite$ = new BehaviorSubject<Site | null>(null);
-
-
-
-
-  // public show(): void {
-  //   this._loader.next(true);
-  // }
-
-  // public hide(): void {
-  //   this._loader.next(false);
-  // }
-
-  // public saveSites(data: any): void {
-  //   this._siteData.next(data);
-  // }
-
-  // public saveSite(data: any): void {
-  //   this._currentSite.next(data);
-  // }
-
-  // public getSite(): any {
-  //   return this._currentSite.getValue()
-  // }
 
   public encrypt(txt: string): string {
     return AES.encrypt(txt, this.key).toString();
@@ -68,24 +39,22 @@ export class StorageService {
 
   public saveData(name: any, data: any) {
     // let x = btoa(encodeURIComponent(JSON.stringify(data)));
-    // localStorage.setItem(name, x);
-    localStorage.setItem(name, JSON.stringify(data));
+    // sessionStorage.setItem(name, x);
+    sessionStorage.setItem(name, JSON.stringify(data));
   }
 
-
-
   public getData(data: any) {
-    // let x: any = localStorage.getItem(data);
+    // let x: any = sessionStorage.getItem(data);
     // return JSON.parse(decodeURIComponent(atob(x)));
-    return JSON.parse(localStorage.getItem(data)!);
+    return JSON.parse(sessionStorage.getItem(data)!);
   }
 
   public removeData(key: string) {
-    localStorage.removeItem(key);
+    sessionStorage.removeItem(key);
   }
 
   public clearData() {
-    localStorage.clear();
+    sessionStorage.clear();
   }
 
 }

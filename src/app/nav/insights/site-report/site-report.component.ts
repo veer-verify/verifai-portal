@@ -1,31 +1,50 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { AgCharts } from 'ag-charts-angular';
 import {
+  AgBarSeriesOptions,
+  AgCategoryAxisOptions,
+  AgChartCaptionOptions,
+  AgChartLegendOptions,
   AgChartOptions,
+  AgChartSubtitleOptions,
+  AgLineSeriesOptions,
+  AgNumberAxisOptions,
+  BarSeriesModule,
+  CategoryAxisModule,
+  LegendModule,
+  LineSeriesModule,
+  ModuleRegistry,
+  NumberAxisModule,
+  DonutSeriesModule,
 } from 'ag-charts-community';
-
-import {
-  GridOptions,
-} from 'ag-grid-community';
-import { AgGridAngular } from 'ag-grid-angular';
-import { gridOptions } from '../../../grid.config';
+import { Subject, filter, takeUntil } from 'rxjs';
+import { gridOptions } from '../../../../grid.config';
+import { InsightService } from '../../../../utilities/services/insight.service';
+import { StorageService } from '../../../../utilities/services/storage.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { InsightService } from '../../../utilities/services/insight.service';
-import { StorageService } from '../../../utilities/services/storage.service';
-import { SiteMapComponent } from "./site-map/site-map.component";
-import { CameraInsightsComponent } from "./camera-insights/camera-insights.component";
-import { ErrInfoComponent } from "../../../utilities/components/err-info/err-info.component";
-import { SiteReportComponent } from "./site-report/site-report.component";
-import { filter, Subject, takeUntil } from 'rxjs';
-import { AgCharts } from "ag-charts-angular";
-import { ConfigService } from '../../../utilities/services/config.service';
+import { AgGridAngular } from 'ag-grid-angular';
+import { GridOptions } from 'ag-grid-community';
+
+ModuleRegistry.registerModules([
+  BarSeriesModule,
+  CategoryAxisModule,
+  LegendModule,
+  LineSeriesModule,
+  NumberAxisModule,
+  DonutSeriesModule,
+]);
+
+
 @Component({
-  selector: 'app-insights',
+  selector: 'app-site-report',
   imports: [
+    AgCharts,
+    AgGridAngular,
     CommonModule,
     MatSelectModule,
     ReactiveFormsModule,
@@ -33,22 +52,17 @@ import { ConfigService } from '../../../utilities/services/config.service';
     MatDialogModule,
     MatMenuModule,
     MatDatepickerModule,
-    SiteMapComponent,
-    ErrInfoComponent,
-    SiteReportComponent,
-    AgGridAngular,
-    AgCharts
   ],
-  templateUrl: './insights.component.html',
-  styleUrl: './insights.component.css',
+  templateUrl: './site-report.component.html',
+  styleUrl: './site-report.component.css'
 })
-export class InsightsComponent implements OnInit, OnDestroy {
+export class SiteReportComponent {
+
+  public chartOptions!: AgChartOptions;
 
   constructor(
     private insight_service: InsightService,
-    public storage_service: StorageService,
-    public configSrvc: ConfigService,
-
+    public storage_service: StorageService
   ) { }
 
   columnDefs = [
@@ -66,16 +80,33 @@ export class InsightsComponent implements OnInit, OnDestroy {
     }
   ];
 
-  @ViewChild(SiteReportComponent) child!: SiteReportComponent;
   destroy$ = new Subject<void>();
   currentSite: any;
-  cameraId: any = '';
-  today = new Date();
-  fromDate: Date = new Date();
-  toDate: Date = new Date();
+  // today: Date = new Date();
+
+  @Input() fromDate: any;
+  @Input() toDate: any;
+  @Output() dates = new EventEmitter();
   gridOptions!: GridOptions;
   analyticsData: any = [];
   charts: any[] = [];
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['fromDate']['firstChange']) return;
+
+    this.storage_service.info$.next('');
+    this.analyticsData = [];
+    this.charts = [];
+    this.insight_service.getNonWorkingDays({ siteId: this.currentSite?.siteId }).subscribe({
+      next: (res) => {
+        if (res.status === "Success") {
+          this.biAnalyticsReport()
+        } else {
+          this.storage_service.info$.next(res.message);
+        }
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.gridOptions = gridOptions;
@@ -87,7 +118,6 @@ export class InsightsComponent implements OnInit, OnDestroy {
       )
       .subscribe((site) => {
         this.currentSite = site;
-        this.getCamerasForSiteId(site)
         this.getNonWorkingDays();
       });
   }
@@ -100,23 +130,6 @@ export class InsightsComponent implements OnInit, OnDestroy {
   page: string = 'list';
   setPage(page: string) {
     this.page = page;
-
-    if (page === 'map') return;
-    this.getNonWorkingDays();
-  }
-
-  getDates(data: any) {
-    this.fromDate = data.fromDate;
-  }
-
-  camList: any = [];
-  getCamerasForSiteId(data: any) {
-    this.camList = [];
-    this.configSrvc.getCamerasForSiteId(data).subscribe({
-      next: (res: any) => {
-        this.camList = res;
-      }
-    });
   }
 
   getNonWorkingDays() {
@@ -127,7 +140,8 @@ export class InsightsComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.status === "Success") {
           this.fromDate = new Date(res.LastWorkingDay);
-          this.biAnalyticsReport()
+          this.dates.emit({ fromDate: this.fromDate })
+          this.biAnalyticsReport();
         } else {
           this.storage_service.info$.next(res.message);
         }
@@ -137,7 +151,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
 
   biAnalyticsReport() {
     this.storage_service.info$.next('');
-    this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, cameraId: this.cameraId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
+    this.insight_service.biAnalyticsReport({ siteId: this.currentSite?.siteId, fromDate: this.fromDate, toDate: this.toDate }).subscribe({
       next: (res) => {
         if (res.Status === "Success") {
           this.analyticsData = res.AnalyticsReportList;
@@ -155,7 +169,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
   generateCharts() {
     this.charts = this.analyticsData.map((section: any) => {
       const chartData = section.data.map((d: any) => ({
-        label: `${d.type} (${d.total})`,
+        label: d.type,
         value: Number(d.total)
       }));
 
@@ -168,22 +182,11 @@ export class InsightsComponent implements OnInit, OnDestroy {
               type: 'donut',
               angleKey: 'value',
               calloutLabelKey: 'label',
-              innerRadiusRatio: 0.6,
-              outerRadiusRatio: 0.8, // 👈 dynamic donut width
-              calloutLabel: {
-                enabled: false
-              }
+              innerRadiusRatio: 0.6
             }
           ],
           legend: {
-            position: 'right',
-            maxWidth: 350,
-            item: {
-              label: {
-                fontFamily: 'Neometric Medium',
-                fontSize: 14
-              }
-            }
+            position: 'right'
           }
         }
       };

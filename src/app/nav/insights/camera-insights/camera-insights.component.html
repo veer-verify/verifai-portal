@@ -1,0 +1,23 @@
+<div class="user-container">
+  <div class="top-header">
+    <span>
+      <img src="icons/camera-white.svg" width="16px" />
+      {{ camera?.cameraName }}
+    </span>
+    <a (click)="close()">
+      <span class="material-symbols-outlined text-light"> cancel </span>
+    </a>
+  </div>
+
+  <div class="content">
+    <div class="chart-panel">
+      <div *ngFor="let chart of charts">
+        <div class="chart-title">
+          {{ chart.title }}
+        </div>
+
+        <ag-charts class="donut-chart" [options]="chart.options"> </ag-charts>
+      </div>
+    </div>
+  </div>
+</div>

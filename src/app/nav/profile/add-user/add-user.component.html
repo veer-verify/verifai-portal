@@ -1,4 +1,4 @@
-<div class="uuser-container">
+<div class="user-container">
   <div class="top-header">
     ADD USER
     <a (click)="close()">
@@ -22,10 +22,10 @@
 
       <label for="role">Role</label>
       <select name="role" id="role" formControlName="roleList">
-        @for(option of roleList; track option){
-        <option [value]="option?.deptId" style="color: black">
-          {{ option?.name }}
-        </option>
+        @for (option of roleList; track option) {
+          <option [value]="option?.deptId" style="color: black">
+            {{ option?.name }}
+          </option>
         }
       </select>
 

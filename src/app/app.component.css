@@ -108,18 +108,18 @@
 }
 
 ::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-content {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Medium" !important;
 }
 
 /* mat-menu */
 ::ng-deep .mat-mdc-menu-content {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Medium" !important;
   padding: 0 !important;
   /* overflow: hidden !important; */
 }
 
 ::ng-deep .mat-mdc-menu-content .mat-mdc-menu-item .mat-mdc-menu-item-text {
-  font-family: "Neometric Medium", sans-serif !important;
+  font-family: "Neometric Medium" !important;
 }
 
 ::ng-deep .mat-mdc-menu-item {
@@ -133,15 +133,23 @@
   border-radius: 8px !important;
 }
 
+::ng-deep .mat-mdc-menu-panel {
+  max-width: 100% !important;
+}
+
 /* ag grid */
 ::ng-deep .ag-root-wrapper {
   border-radius: 0 !important;
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Medium" !important;
 }
 
 ::ng-deep .ag-row,
 .ag-spanned-row {
-  font-family: "Neometric Regular", sans-serif !important;
+  font-family: "Neometric Medium" !important;
+}
+
+::ng-deep .ag-charts-proxy-legend-toolbar {
+  font-family: "Neometric Medium" !important;
 }
 
 ::ng-deep .ag-header-cell-text {

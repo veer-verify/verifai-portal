@@ -13,16 +13,17 @@ import { LoaderComponent } from '../utilities/components/loader/loader.component
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'verifai-portal';
+  private storage_service = inject(StorageService);
+  public showLoader!: Observable<boolean>;
 
-  storage_service = inject(StorageService);
-  showLoader!: Observable<boolean>;
-
+  /**
+   * implemented global loader usnig interceptor
+   */
   constructor() {
     this.showLoader = this.storage_service.loader$.pipe(delay(0));
   };
 
   ngOnInit(): void {
-
   };
 
   ngAfterViewInit(): void {

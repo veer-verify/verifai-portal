@@ -1,0 +1,32 @@
+<div class="dashboard">
+  <!-- LEFT TABLE -->
+  <div class="table-panel">
+    <div *ngFor="let section of analyticsData">
+      <div class="section-header">
+        {{ section.name }}
+        <span>COUNT</span>
+      </div>
+
+      <div class="ag-theme-alpine grid">
+        <ag-grid-angular
+          class="custom-grid"
+          [rowData]="section.data"
+          [columnDefs]="columnDefs"
+          [domLayout]="'autoHeight'"
+        >
+        </ag-grid-angular>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT CHARTS -->
+  <div class="chart-panel">
+    <div *ngFor="let chart of charts">
+      <div class="chart-title">
+        {{ chart.title }}
+      </div>
+
+      <ag-charts class="donut-chart" [options]="chart.options"> </ag-charts>
+    </div>
+  </div>
+</div>

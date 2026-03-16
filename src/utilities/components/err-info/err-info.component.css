@@ -1,0 +1,16 @@
+.text-container {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+}
+
+.text-detail {
+  font-family: TP, sans-serif;
+  text-transform: uppercase;
+  color: #ababab;
+  font-size: 18px;
+  background-color: transparent;
+  font-weight: 700;
+  color: #ed3237;
+}
