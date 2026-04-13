@@ -48,7 +48,6 @@ export class InsightsComponent implements OnInit, OnDestroy {
     private insight_service: InsightService,
     public storage_service: StorageService,
     public configSrvc: ConfigService,
-
   ) { }
 
   columnDefs = [

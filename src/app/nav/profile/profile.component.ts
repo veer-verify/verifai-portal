@@ -4,7 +4,6 @@ import { StorageService } from '../../../utilities/services/storage.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
 import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe, NgStyle, NgIf } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
-import { ConfigService } from '../../../utilities/services/config.service';
 import { FormsModule } from '@angular/forms';
 import { UpdateuserComponent } from './update-user/updateuser.component';
 import { AddUserComponent } from './add-user/add-user.component';
@@ -16,7 +15,6 @@ import {
   MatDialogClose,
 } from '@angular/material/dialog';
 import { SearchPipe } from '../../../utilities/pipes/search.pipe';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -140,6 +138,7 @@ export class ProfileComponent {
 
   closeAddUserModal(val: boolean) {
     this.addBtn = val;
+    this.getUserNamesByUserName();
   }
 
   onFileChange(event: any) {
@@ -239,7 +238,6 @@ export class ProfileComponent {
   currentUser: any;
   filter = 1;
   userIndex: any;
-
   showSiteMapping: boolean = false;
   openSiteMapping(data: any) {
     this.showSiteMapping = true;
@@ -263,8 +261,24 @@ export class ProfileComponent {
       });
   }
 
+  siteActions(subUserId: any) {
+    this.filter = 1;
+    this.dialog.open(this.sitesAssign);
+    this.filSubId = subUserId;
+    let obj = {
+      userId: subUserId,
+      loginId: this.userData?.UserId,
+      assigned: 0,
+    };
+    this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
+      next: (res: any) => {
+        this.filterSites({ userId: res.userId, value: 0 });
+      },
+    });
+  }
+
   newSiteActions(data: any) {
-    this.getUserNamesByUserName();
+    // this.getUserNamesByUserName();
     this.filter = 1;
     this.dialog.open(this.sitesAssign);
     this.filSubId = data.userId;
@@ -381,7 +395,6 @@ export class ProfileComponent {
 
   getSitesForGlobal(data: any) {
     this.showLoader = true;
-    // console.log(data)
     this.auth_service.getSitesListForGlobalAccountId(data).subscribe({
       next: (res: any) => {
         this.showLoader = false;
@@ -397,24 +410,6 @@ export class ProfileComponent {
   }
 
   siteSearch: any;
-
-  siteActions(subUserId: any) {
-    this.filter = 1;
-    this.dialog.open(this.sitesAssign);
-    this.filSubId = subUserId;
-    let obj = {
-      userId: subUserId,
-      loginId: this.userData?.UserId,
-      assigned: 0,
-    };
-    this.auth_service.getSitesListForGlobalAccountId(obj).subscribe({
-      next: (res: any) => {
-        this.filterSites({ userId: res.userId, value: 0 });
-        // console.log(res.userId);
-      },
-    });
-  }
-
   deleteUser(data: any) {
     this.alert_service
       .confirm('Do you Want to Deactivate This User?')

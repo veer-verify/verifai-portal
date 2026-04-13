@@ -17,7 +17,7 @@ export class AddUserComponent {
     private alert_service: AlertService
   ) { }
 
-  @Output() closeModal: any = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<any>();
   @Output() siteActions = new EventEmitter<any>();
 
   // triggerSiteAction(data: any) {
@@ -56,11 +56,12 @@ export class AddUserComponent {
       next: (res: any) => {
         if (res.statusCode === 200) {
           this.alert_service.confirm('Do you want to map sites to the user ?').then((result: any) => {
-            console.log(result);
             if (result.isConfirmed) {
               this.siteActions.emit(res);
               this.close();
-            };
+            } else {
+              this.close();
+            }
           })
         }
         else {
@@ -72,6 +73,6 @@ export class AddUserComponent {
   }
 
   close() {
-    this.closeModal.emit()
+    this.closeModal.emit();
   }
 }

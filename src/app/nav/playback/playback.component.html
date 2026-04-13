@@ -1,0 +1,85 @@
+<div class="playback">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div
+      class="camera"
+      *ngFor="let cam of cameras"
+      (click)="selectCamera(cam)"
+      [class.active]="cam === selectedCamera"
+    >
+      <img [src]="cam.image" />
+      <div class="label">🔴 {{ cam.name }}</div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="time-range">
+        <input type="date" />
+
+        <div class="fake-range" (click)="open = !open">
+          <!-- {{ startTime }} - {{ endTime }} -->
+
+          <div class="d-flex align-items-center gap-2">
+            <input type="time" [(ngModel)]="startTime" />
+            -
+            <input type="time" [(ngModel)]="endTime" />
+          </div>
+        </div>
+      </div>
+
+      <button class="go-btn">➜</button>
+    </div>
+
+    <!-- Video Section -->
+    <div class="video-container">
+      <!-- <div class="video"> -->
+      <img [src]="selectedCamera.image" width="100%" height="100%" />
+      <!-- </div> -->
+
+      <!-- Controls -->
+      <div class="controls">
+        <!-- Left Controls -->
+        <div class="left-controls">
+          🔊
+          <span>-</span>
+          <input type="range" min="0" max="100" />
+          <span>+</span>
+
+          <button>▶</button>
+          <button>■</button>
+
+          <input type="range" min="0" max="100" />
+          <span>1x</span>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-wrapper">
+          <!-- Timeline Bar -->
+          <div class="tick-bar">
+            <!-- Ticks -->
+            <div
+              class="tick"
+              *ngFor="let tick of ticks; let i = index"
+              [class.major]="i % ticksPerHour === 0"
+              [class.medium]="i % (ticksPerHour / 2) === 0"
+            ></div>
+
+            <!-- Labels (aligned with major ticks) -->
+            <div class="labels">
+              <div
+                class="label"
+                *ngFor="let h of hours; let i = index"
+                [style.left.%]="(i / 24) * 100"
+              >
+                {{ h }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

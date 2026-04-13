@@ -18,6 +18,10 @@ export const routes: Routes = [
         loadComponent: () => import('./nav/live-view/live-view.component').then((c) => c.LiveViewComponent)
       },
       {
+        path: 'playback',
+        loadComponent: () => import('./nav/playback/playback.component').then((c) => c.PlaybackComponent)
+      },
+      {
         path: 'alerts',
         loadComponent: () => import('./nav/alerts/alerts.component').then((c) => c.AlertsComponent)
       },
