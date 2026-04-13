@@ -61,6 +61,29 @@
       </div>
     </div>
 
+    <div class="d-inline-flex align-items-center gap-2">
+      <div class="d-inline-flex align-items-center gap-2">
+        <input
+          type="radio"
+          name="type"
+          value="monitoring"
+          [(ngModel)]="selectedOption"
+          (ngModelChange)="getNonWorkingDays()"
+        />
+        <span>Monitoring</span>
+      </div>
+      <div class="d-inline-flex align-items-center gap-2">
+        <input
+          type="radio"
+          name="type"
+          value="business"
+          [(ngModel)]="selectedOption"
+          (ngModelChange)="getNonWorkingDays()"
+        />
+        <span style="white-space: nowrap">Business Intelligence</span>
+      </div>
+    </div>
+
     <div class="d-inline-flex gap-2">
       <button
         (click)="setPage('list')"

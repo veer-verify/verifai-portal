@@ -75,6 +75,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
   gridOptions!: GridOptions;
   analyticsData: any = [];
   charts: any[] = [];
+  selectedOption: string = 'monitoring';
 
   ngOnInit(): void {
     this.gridOptions = gridOptions;
