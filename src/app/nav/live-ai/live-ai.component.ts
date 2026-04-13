@@ -1,0 +1,342 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Subject, takeUntil, filter, finalize } from 'rxjs';
+
+import { LiveAiService } from '../../../utilities/services/live-ai.service';
+import { StorageService } from '../../../utilities/services/storage.service';
+
+@Component({
+  selector: 'app-live-ai',
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  providers: [LiveAiService],
+  templateUrl: './live-ai.component.html',
+  styleUrl: './live-ai.component.css',
+})
+export class LiveAiComponent implements OnInit, OnDestroy {
+  // 📊 Events Data
+  alerts: any[] = [];
+  totalCount = 0;
+
+  // 🎥 Cameras
+  camerasList: any[] = [];
+  selectedCamera: any = '';
+
+  // 🖼️ Image
+  selectedCameraImage: string = '';
+
+  // 🏢 Site
+  selectedSiteId!: number;
+
+  // 🔁 Refresh
+  refreshInterval: number = 30000;
+  intervalId: any;
+
+  private destroy$ = new Subject<void>();
+
+  constructor(
+    private router: Router,
+    private liveAiService: LiveAiService,
+    private storageService: StorageService,
+  ) {}
+
+  //! =========================================
+  //! INIT
+  //! =========================================
+  // ngOnInit(): void {
+  //   this.storageService.currentSite$
+  //     .pipe(filter(site => !!site), takeUntil(this.destroy$))
+  //     .subscribe((site: any) => {
+  //       this.selectedSiteId = site.siteId;
+
+  //       this.loadCameras();
+  //       this.loadEvents();
+  //     });
+
+  //   this.startAutoRefresh();
+  // }
+  ngOnInit(): void {
+    this.storageService.currentSite$
+      .pipe(
+        filter((site) => !!site),
+        takeUntil(this.destroy$),
+      )
+      .subscribe((site: any) => {
+        this.imageLoader = true;
+        this.tableLoader = true;
+
+        console.log('🏢 Site Changed:', site);
+
+        this.selectedSiteId = site.siteId;
+
+        // ✅ RESET EVERYTHING (VERY IMPORTANT)
+        this.selectedCamera = '';
+        this.selectedCameraImage = '';
+        this.alerts = [];
+
+        // ✅ Load fresh data
+        this.loadCameras();
+      });
+
+    this.startAutoRefresh();
+  }
+  //! =========================================
+  //! LOAD CAMERAS
+  //! =========================================
+  // loadCameras(): void {
+  //   if (!this.selectedSiteId) return;
+
+  //   this.liveAiService.getCamerasForAI(this.selectedSiteId).subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode === 200) {
+  //         this.camerasList = res.data.map((cam: any) => ({
+  //           ...cam,
+  //           cameraName: cam.cameraName?.trim()
+  //         }));
+  //       }
+  //     },
+  //     error: (err) => console.error('❌ Camera API Error:', err),
+  //   });
+  // }
+  // loadCameras(): void {
+  //   if (!this.selectedSiteId) return;
+
+  //   this.liveAiService.getCamerasForAI(this.selectedSiteId).subscribe({
+  //     next: (res: any) => {
+  //       if (res.statusCode === 200) {
+
+  //         this.camerasList = res.data.map((cam: any) => ({
+  //           ...cam,
+  //           cameraName: cam.cameraName?.trim()
+  //         }));
+
+  //         //* ---------  AUTO SELECT FIRST CAMERA  ---------
+  //         if (this.camerasList.length > 0 && !this.selectedCamera) {
+  //           this.selectedCamera = this.camerasList[0].cameraId;
+
+  //           console.log('🎥 Default Camera Selected:', this.selectedCamera);
+
+  //           //  Load image + events immediately
+  //           this.loadCameraImage();
+  //           this.loadEvents();
+  //         }
+  //       }
+  //     },
+  //     error: (err) => console.error('❌ Camera API Error:', err),
+  //   });
+  // }
+  loadCameras(): void {
+    if (!this.selectedSiteId) return;
+
+    this.liveAiService.getCamerasForAI(this.selectedSiteId).subscribe({
+      next: (res: any) => {
+        if (res.statusCode === 200) {
+          this.camerasList = res.data.map((cam: any) => ({
+            ...cam,
+            cameraName: cam.cameraName?.trim(),
+          }));
+
+          //* ✅ ALWAYS SELECT FIRST CAMERA
+          if (this.camerasList.length > 0) {
+            this.selectedCamera = this.camerasList[0].cameraId;
+
+            console.log('🎥 New Site → Default Camera:', this.selectedCamera);
+
+            this.loadAlertCounts();
+            this.loadCameraImage();
+            this.loadEvents();
+          }
+        }
+      },
+      error: (err) => console.error('❌ Camera API Error:', err),
+    });
+  }
+  //! =========================================
+  //! CAMERA CHANGE
+  //! =========================================
+  onCameraChange(): void {
+    if (!this.selectedCamera) {
+      this.selectedCameraImage = '';
+    } else {
+      this.loadCameraImage();
+    }
+
+    this.loadEvents();
+    this.loadAlertCounts();
+  }
+  //! =========================================
+  //! ALert count
+  //! =========================================
+  alertCounts: any = {};
+
+  loadAlertCounts(): void {
+    if (!this.selectedSiteId) return;
+
+    const today = new Date().toISOString().split('T')[0];
+
+    this.liveAiService
+      .getAlertCounts(
+        this.selectedSiteId,
+        today,
+        this.selectedCamera || undefined,
+      )
+      .subscribe({
+        next: (res: any) => {
+          if (res.statusCode === 200) {
+            console.log('📊 Alert Counts:', res.aiTagCounts);
+            this.alertCounts = res.aiTagCounts;
+          } else {
+            this.alertCounts = {};
+          }
+        },
+        error: (err) => {
+          console.error('❌ Alert Count API Error:', err);
+          this.alertCounts = {};
+        },
+      });
+  }
+
+  //! =========================================
+  //! LOAD IMAGE
+  //! =========================================
+  imageLoader = false;
+  loadCameraImage(): void {
+    if (!this.selectedCamera) return;
+
+    this.imageLoader = true;
+    this.liveAiService.getLatestCameraImage(this.selectedCamera).subscribe({
+      next: (res: any) => {
+        if (res.statusCode === 200 && res.latestImage) {
+          this.imageLoader = false;
+          this.selectedCameraImage = `${res.latestImage}?t=${new Date().getTime()}`; // cache fix
+        } else {
+          this.imageLoader = false;
+          this.selectedCameraImage = 'icons/eyedisabled.svg';
+        }
+      },
+
+      error: (err) => {
+        this.imageLoader = false;
+        console.error('❌ Image API Error:', err);
+      },
+    });
+  }
+
+  //! =========================================
+  //! LOAD EVENTS (MAIN API 🔥)
+  //! =========================================
+  // loadEvents(): void {
+  //   if (!this.selectedSiteId) return;
+
+  //   const today = new Date().toISOString().split('T')[0];
+  //   const cameraIds = this.selectedCamera ? [this.selectedCamera] : [];
+
+  //   this.liveAiService
+  //     .getEventsByCameras(this.selectedSiteId, today, cameraIds)
+  //     .subscribe({
+  //       next: (res: any) => {
+
+  //         if (res.statusCode === 200 && res.events) {
+
+  //           this.alerts = res.events.slice(0, 5).map((event: any) => ({
+  //             ...event,
+  //             objectName: this.parseObjectName(event.objectName)
+  //           }));
+
+  //           this.totalCount = res.events.length;
+  //         } else {
+  //           this.alerts = [];
+  //           this.totalCount = 0;
+  //         }
+  //       },
+  //       error: (err) => console.error('❌ Events API Error:', err),
+  //     });
+  // }
+  tableLoader = true;
+  loadEvents(): void {
+    if (!this.selectedSiteId) return;
+
+    const today = new Date().toISOString().split('T')[0];
+    const cameraIds = this.selectedCamera ? [this.selectedCamera] : [];
+
+    this.tableLoader = true;
+    this.liveAiService
+      .getEventsByCameras(this.selectedSiteId, today, cameraIds)
+      .pipe(finalize(() => (this.tableLoader = false)))
+      .subscribe({
+        next: (res: any) => {
+          if (res.statusCode === 200 && res.events) {
+            // ✅ REMOVE slice(0,5)
+            this.alerts = res.events.map((event: any) => ({
+              ...event,
+              objectName: this.parseObjectName(event.objectName),
+            }));
+
+            this.totalCount = res.events.length;
+          } else {
+            this.alerts = [];
+            this.totalCount = 0;
+          }
+        },
+        error: (err) => console.error('❌ Events API Error:', err),
+      });
+  }
+
+  //! =========================================
+  //! FIX OBJECT NAME
+  //! =========================================
+  parseObjectName(value: string): string {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.join(', ') : value;
+    } catch {
+      return value;
+    }
+  }
+
+  //! =========================================
+  //! AUTO REFRESH
+  //! =========================================
+  startAutoRefresh(): void {
+    this.clearTimer();
+
+    this.intervalId = setInterval(() => {
+      this.loadEvents();
+      this.loadAlertCounts();
+
+      if (this.selectedCamera) {
+        this.loadCameraImage();
+      }
+    }, this.refreshInterval);
+  }
+
+  updateRefresh(): void {
+    this.startAutoRefresh();
+  }
+
+  clearTimer(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  //! =========================================
+  //! NAVIGATION
+  //! =========================================
+  goToAlerts(alert?: any): void {
+    this.router.navigate(['/dashboard/alerts'], {
+      queryParams: alert ? { tag: alert.actionTag } : {},
+    });
+  }
+
+  //! =========================================
+  //! CLEANUP
+  //! =========================================
+  ngOnDestroy(): void {
+    this.clearTimer();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+}

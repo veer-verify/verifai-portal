@@ -19,4 +19,5 @@ export const environment = {
     inventoryUrl: `${prod_url}/inventory`,
     helpdeskUrl: `${prod_url}/supportRequests`,
     incidentsUrl: `${prod_url}/guard_monitoring`,
+    eventDataUrl: `${prod_url}/events_data`,
 };

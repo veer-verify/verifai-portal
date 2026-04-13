@@ -1,0 +1,95 @@
+<div class="live-ai-page">
+  <!-- TOP BAR -->
+  <div class="top-filter-bar">
+    <div class="select-with-icon">
+      <img src="icons/drop_cam.svg" class="icon" />
+
+      <select
+        class="tag-select"
+        [(ngModel)]="selectedCamera"
+        (change)="onCameraChange()"
+      >
+        <option value="">ALL CAMERAS ({{ camerasList.length || 0 }})</option>
+
+        <option *ngFor="let cam of camerasList" [value]="cam.cameraId">
+          {{ cam.cameraName }}
+        </option>
+      </select>
+    </div>
+    <div class="alert-counts">
+      <div class="chip" *ngFor="let tag of alertCounts || []">
+        <span class="dot"></span>
+        <span>{{ tag.subAlertTag }}: {{ tag.subAlertTagCount }}</span>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <span class="total-btn" (click)="goToAlerts()"> Total </span>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="live-ai-container">
+    <!-- LEFT: IMAGE -->
+    <div class="camera-section">
+      <ng-container *ngIf="!imageLoader">
+        <img
+          [src]="selectedCameraImage"
+          class="camera-feed"
+          onerror="this.src = 'icons/eyedisabled.svg'"
+        />
+      </ng-container>
+
+      <ng-container *ngIf="imageLoader">
+        <img src="gif/loading-gif.gif" />
+      </ng-container>
+    </div>
+
+    <!-- RIGHT: TABLE -->
+    <div class="alerts-section">
+      <div class="header">
+        <!-- <span class="title">Live Alerts</span> -->
+      </div>
+
+      <table class="alerts-table">
+        <!-- ✅ HEADER -->
+        <thead class="table-header">
+          <th style="width: 150px">Start time</th>
+          <th style="width: 150px">End time</th>
+          <th>Duration</th>
+          <th>Object</th>
+          <th>Action</th>
+        </thead>
+
+        <!-- ✅ ROWS -->
+        <tbody>
+          <tr *ngFor="let alert of alerts" class="table-row">
+            <td>{{ alert.eventFromTime || "-" }}</td>
+            <td>{{ alert.eventToTime || "-" }}</td>
+            <td>{{ alert.duration || "-" }}</td>
+            <td>{{ alert.objectName || "-" }}</td>
+            <td>{{ alert.subAlertTag || "-" }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- EMPTY -->
+      <div *ngIf="alerts.length === 0 && !tableLoader" class="no-data">
+        No alerts available
+      </div>
+
+      <div *ngIf="tableLoader" class="no-data">Loading...</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>Refresh:</span>
+
+    <select [(ngModel)]="refreshInterval" (change)="updateRefresh()">
+      <option [value]="30000">30 sec</option>
+      <option [value]="60000">1 min</option>
+      <option [value]="180000">3 min</option>
+      <option [value]="300000">5 min</option>
+    </select>
+  </div>
+</div>
