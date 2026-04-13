@@ -23,6 +23,12 @@ export const menuItems = [
     routeLink: 'insights',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
+   {
+    id: 'liveAI',
+    label: 'live ai',
+    routeLink: 'live-ai',
+    call: (data: any) => (data?.key !== 'F' ? true : false),
+  },
   // {
   //   id: 'trends',
   //   label: 'trends',

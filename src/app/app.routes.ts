@@ -15,7 +15,10 @@ export const routes: Routes = [
     children: [
       {
         path: 'live-view',
-        loadComponent: () => import('./nav/live-view/live-view.component').then((c) => c.LiveViewComponent)
+        loadComponent: () =>
+          import('./nav/live-view/live-view.component').then(
+            (c) => c.LiveViewComponent,
+          ),
       },
       {
         path: 'playback',
@@ -23,62 +26,106 @@ export const routes: Routes = [
       },
       {
         path: 'alerts',
-        loadComponent: () => import('./nav/alerts/alerts.component').then((c) => c.AlertsComponent)
+        loadComponent: () =>
+          import('./nav/alerts/alerts.component').then(
+            (c) => c.AlertsComponent,
+          ),
       },
       {
         path: 'timelapse',
-        loadComponent: () => import('./nav/timelapse/timelapse.component').then((c) => c.TimelapseComponent)
+        loadComponent: () =>
+          import('./nav/timelapse/timelapse.component').then(
+            (c) => c.TimelapseComponent,
+          ),
       },
       {
         path: 'nvr',
-        loadComponent: () => import('./nav/nvr/nvr.component').then((c) => c.NvrComponent)
+        loadComponent: () =>
+          import('./nav/nvr/nvr.component').then((c) => c.NvrComponent),
       },
       {
         path: 'health',
-        loadComponent: () => import('./nav/health/health.component').then((c) => c.HealthComponent)
+        loadComponent: () =>
+          import('./nav/health/health.component').then(
+            (c) => c.HealthComponent,
+          ),
       },
       {
         path: 'trends',
-        loadComponent: () => import('./nav/trends/trends.component').then((c) => c.TrendsComponent)
+        loadComponent: () =>
+          import('./nav/trends/trends.component').then(
+            (c) => c.TrendsComponent,
+          ),
       },
       {
         path: 'insights',
-        loadComponent: () => import('./nav/insights/insights.component').then((c) => c.InsightsComponent)
+        loadComponent: () =>
+          import('./nav/insights/insights.component').then(
+            (c) => c.InsightsComponent,
+          ),
+      },
+      {
+        path: 'live-ai',
+        loadComponent: () =>
+          import('./nav/live-ai/live-ai.component').then(
+            (m) => m.LiveAiComponent,
+          ),
       },
       {
         path: 'service-requests',
-        loadComponent: () => import('./nav/service-requests/service-requests.component').then((c) => c.ServiceRequestsComponent)
+        loadComponent: () =>
+          import('./nav/service-requests/service-requests.component').then(
+            (c) => c.ServiceRequestsComponent,
+          ),
       },
       {
         path: 'site-map',
-        loadComponent: () => import('./nav/insights/site-map/site-map.component').then((c) => c.SiteMapComponent)
+        loadComponent: () =>
+          import('./nav/insights/site-map/site-map.component').then(
+            (c) => c.SiteMapComponent,
+          ),
       },
       {
         path: 'siteinfo',
-        loadComponent: () => import('./nav/siteinfo/siteinfo.component').then((c) => c.SiteinfoComponent)
+        loadComponent: () =>
+          import('./nav/siteinfo/siteinfo.component').then(
+            (c) => c.SiteinfoComponent,
+          ),
       },
       {
         path: 'profile',
-        loadComponent: () => import('./nav/profile/profile.component').then((c) => c.ProfileComponent)
+        loadComponent: () =>
+          import('./nav/profile/profile.component').then(
+            (c) => c.ProfileComponent,
+          ),
       },
       {
         path: 'terms-conditions',
-        loadComponent: () => import('./nav/service-requests/terms-conditions/terms-conditions.component').then((c) => c.TermsConditionsComponent)
+        loadComponent: () =>
+          import('./nav/service-requests/terms-conditions/terms-conditions.component').then(
+            (c) => c.TermsConditionsComponent,
+          ),
       },
       {
         path: 'contact',
-        loadComponent: () => import('./nav/service-requests/contact/contact.component').then((c) => c.ContactComponent)
+        loadComponent: () =>
+          import('./nav/service-requests/contact/contact.component').then(
+            (c) => c.ContactComponent,
+          ),
       },
       {
         path: 'change-password',
-        loadComponent: () => import('./nav/profile/change-password/change-password.component').then((c) => c.ChangePasswordComponent)
+        loadComponent: () =>
+          import('./nav/profile/change-password/change-password.component').then(
+            (c) => c.ChangePasswordComponent,
+          ),
       },
 
       {
         path: '',
         redirectTo: '/dashboard/live-view',
         pathMatch: 'full',
-      }
+      },
     ],
   },
   {

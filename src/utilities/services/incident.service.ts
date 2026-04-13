@@ -12,11 +12,11 @@ export class IncidentService {
   constructor(
     private http: HttpClient,
     private storageService: StorageService,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+  ) {}
 
   incidentList(payload?: any): Observable<any> {
-    let url = `${environment.incidentsUrl}/incidentList_1_0`;
+    let url = `${environment.eventDataUrl}/getEventList_1_0`;
     let params = new HttpParams();
 
     var user = this.storageService.getData('user');
@@ -36,11 +36,20 @@ export class IncidentService {
       params = params.set('actionTag', payload?.actionTag);
     }
     if (payload?.fromDate) {
-      params = params.set('fromDate', this.datePipe.transform(payload?.fromDate, 'yyyy-MM-dd')!)
+      params = params.set(
+        'fromDate',
+        this.datePipe.transform(payload?.fromDate, 'yyyy-MM-dd')!,
+      );
     }
     if (payload?.toDate) {
-      params = params.set('toDate', this.datePipe.transform(payload?.toDate, 'yyyy-MM-dd')!)
+      params = params.set(
+        'toDate',
+        this.datePipe.transform(payload?.toDate, 'yyyy-MM-dd')!,
+      );
     }
+    // if (payload?.status) {
+      params = params.set('callingSystemDetail', 'portal');
+    // }
 
     if (payload?.pageSize) {
       params = params.set('pageSize', payload.pageSize);
