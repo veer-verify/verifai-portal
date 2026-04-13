@@ -68,7 +68,7 @@
           name="type"
           value="monitoring"
           [(ngModel)]="selectedOption"
-          (ngModelChange)="getNonWorkingDays()"
+          (ngModelChange)="onRadioChange()"
         />
         <span>Monitoring</span>
       </div>
@@ -78,7 +78,7 @@
           name="type"
           value="business"
           [(ngModel)]="selectedOption"
-          (ngModelChange)="getNonWorkingDays()"
+          (ngModelChange)="onRadioChange()"
         />
         <span style="white-space: nowrap">Business Intelligence</span>
       </div>
@@ -109,8 +109,18 @@
       </button>
     </div>
   </div>
-
-  <ng-container *ngIf="page === 'list'">
+  <!--  MONITORING VIEW -->
+  <div *ngIf="selectedOption === 'monitoring'" class="monitoring-container">
+    <div class="alert-card" *ngFor="let item of alertCounts | keyvalue">
+      <div class="alert-title">
+        {{ item.key }}
+      </div>
+      <div class="alert-count">
+        {{ item.value }}
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="page === 'list' && selectedOption === 'business'">
     <div class="dashboard">
       <!-- LEFT TABLE -->
       <div class="table-panel">

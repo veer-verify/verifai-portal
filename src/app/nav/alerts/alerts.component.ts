@@ -47,8 +47,8 @@ export class AlertsComponent {
     private config_service: ConfigService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+  ) {}
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -78,7 +78,7 @@ export class AlertsComponent {
     { field: 'eventToTime', headerName: 'End Time', filter: false },
     { field: 'duration', filter: false },
     { field: 'objectName', headerName: 'Object Identified', filter: false },
-    { field: 'actionTag', filter: false },
+    { field: 'subAlertTag', filter: false },
     {
       field: 'clip',
       filter: false,
@@ -125,7 +125,7 @@ export class AlertsComponent {
     this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
       )
       .subscribe((site) => {
         this.currentSite = site;

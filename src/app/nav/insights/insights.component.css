@@ -52,3 +52,29 @@
 /* .donut-chart {
   height: 220px;
 } */
+.monitoring-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  padding: 20px;
+}
+
+.alert-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.alert-title {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.alert-count {
+  font-size: 14px;
+  font-weight: bold;
+}
