@@ -6,11 +6,12 @@ import { Subject, takeUntil, filter, finalize } from 'rxjs';
 
 import { LiveAiService } from '../../../utilities/services/live-ai.service';
 import { StorageService } from '../../../utilities/services/storage.service';
+import { StreamComponent } from "../../../utilities/components/stream/stream.component";
 
 @Component({
   selector: 'app-live-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, StreamComponent],
   providers: [LiveAiService],
   templateUrl: './live-ai.component.html',
   styleUrl: './live-ai.component.css',
@@ -40,7 +41,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private router: Router,
     private liveAiService: LiveAiService,
     private storageService: StorageService,
-  ) {}
+  ) { }
 
   //! =========================================
   //! INIT

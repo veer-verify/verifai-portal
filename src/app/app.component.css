@@ -167,6 +167,10 @@
   padding: 5px 25px !important;
 }
 
+::ng-deep .ag-center-cols-viewport {
+  min-height: auto !important;
+}
+
 @media (max-width: 768px) {
   ::ng-deep .ag-cell {
     font-size: 12px !important;

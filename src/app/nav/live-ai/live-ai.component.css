@@ -5,13 +5,13 @@
 
 /* LEFT */
 .camera-section {
-  width: 50%;
+  /* width: 50%; */
   background: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 14px;
-  height: 60vh;
+  height: 40vh;
 }
 
 .camera-feed {
