@@ -1,3 +1,7 @@
+/* .calendar {
+  width: 300px;
+} */
+
 .date-time {
   display: inline-flex;
   align-items: center;
@@ -28,15 +32,9 @@
   font-size: 11px;
 }
 
-/* .tag-select {
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  padding: 5px;
-  font-size: 11px !important;
-  font-weight: 600;
-  background-color: #fafafa;
-  width: 100%;
-} */
+.tag-select {
+  width: 200px;
+}
 
 .date-time-inputs {
   display: flex;
@@ -103,9 +101,10 @@
 
 .calendar-icon,
 .time-icon {
-  width: 16px;
+  width: 24px;
   cursor: pointer;
-  margin-left: 6px;
+  opacity: 0.8;
+  /* margin-left: 6px; */
 }
 
 .time-input::after {

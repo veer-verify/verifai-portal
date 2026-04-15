@@ -48,7 +48,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -248,6 +248,7 @@ export class AlertsComponent {
   }
 
   onFilterChange() {
+    console.log('call')
     this.anyData = true;
     this.incidentList();
   }

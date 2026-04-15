@@ -42,23 +42,21 @@
         /> -->
 
         <div class="calendar">
-          <span>Start</span>
+          <span>START</span>
           <input
-            matInput
-            [matDatepicker]="picker1"
+            type="date"
             placeholder="MM-DD-YYYY"
             [max]="today"
-            (dateChange)="onFilterChange()"
+            (change)="onFilterChange()"
             formControlName="fromDate"
           />
 
-          <img
+          <!-- <img
             src="icons/calendar.svg"
             class="calendar-icon"
-            (click)="picker1.open()"
-          />
+          /> -->
 
-          <input
+          <!-- <input
             matInput
             type="time"
             class="time-input"
@@ -71,29 +69,27 @@
             class="time-icon"
             (click)="openTimePicker(timeInput1)"
             alt=""
-          />
+          /> -->
 
-          <mat-datepicker #picker1></mat-datepicker>
+          <!-- <mat-datepicker #picker1></mat-datepicker> -->
         </div>
 
         <div class="calendar">
-          <span>End</span>
+          <span>END</span>
           <input
-            matInput
-            [matDatepicker]="picker2"
+            type="date"
             placeholder="MM-DD-YYYY"
             [max]="today"
-            (dateChange)="onFilterChange()"
+            (change)="onFilterChange()"
             formControlName="toDate"
           />
 
-          <img
+          <!-- <img
             src="icons/calendar.svg"
             class="calendar-icon"
-            (click)="picker2.open()"
-          />
+          /> -->
 
-          <input
+          <!-- <input
             matInput
             type="time"
             class="time-input"
@@ -106,9 +102,7 @@
             class="time-icon"
             (click)="openTimePicker(timeInput2)"
             alt=""
-          />
-
-          <mat-datepicker #picker2></mat-datepicker>
+          /> -->
         </div>
         @if (anyData) {
           <button type="reset" class="clear" (click)="clearData()">
