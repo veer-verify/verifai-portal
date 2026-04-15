@@ -236,7 +236,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           if (res.statusCode === 200 && res.latestImage) {
             this.imageLoader = false;
-            this.selectedCameraImage = `${res.latestImage}?t=${new Date().getTime()}`; // cache fix
+            this.selectedCameraImage = `${res.latestImage}?t=${new Date().getTime()}`;
           } else {
             this.imageLoader = false;
             this.selectedCameraImage = 'icons/eyedisabled.svg';
