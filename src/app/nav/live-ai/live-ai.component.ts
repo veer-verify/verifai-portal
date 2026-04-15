@@ -41,7 +41,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private router: Router,
     private liveAiService: LiveAiService,
     private storageService: StorageService,
-  ) {}
+  ) { }
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
