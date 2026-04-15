@@ -38,6 +38,11 @@ input [type="radio"] {
   cursor: pointer !important;
 }
 
+input[type="radio"] {
+  accent-color: #ed3237;
+  cursor: pointer;
+}
+
 select {
   font-family: "Neometric Regular" !important;
   width: 100%;
@@ -390,14 +395,21 @@ button {
   margin-top: 20px;
 }
 
+input[type="date"] {
+  color: #ababab;
+  text-transform: uppercase;
+}
+
 .calendar {
   display: flex;
   align-items: center;
   border: 1px solid #c4c4c4;
   border-radius: 6px;
   overflow: hidden;
-  background: white;
-  width: 100%;
+  background: transparent linear-gradient(180deg, #ffffff 0%, #eeeeee 100%) 0%
+    0% no-repeat padding-box;
+  /* width: 100%; */
+  width: 200px;
   height: 30px;
   padding: 0 10px;
 }
@@ -410,4 +422,12 @@ button {
 
 .calendar-icon {
   cursor: pointer;
+}
+
+.calendar span {
+  padding-right: 10px;
+}
+
+.calendar img {
+  padding-left: 10px;
 }

@@ -45,7 +45,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
     public storage_service: StorageService,
     public configSrvc: ConfigService,
     private liveAiService: LiveAiService,
-  ) {}
+  ) { }
 
   columnDefs = [
     {
@@ -123,25 +123,23 @@ export class InsightsComponent implements OnInit, OnDestroy {
 
     const date = new Date().toISOString().split('T')[0];
 
+    this.storage_service.info$.next('');
     this.liveAiService.getAlertCounts(this.currentSite.siteId, date).subscribe({
       next: (res: any) => {
         if (res.statusCode === 200) {
-          console.log('📊 Insights Alert Counts:', res.aiTagCounts);
-
-          // ✅ TRANSFORM ARRAY → OBJECT
+          this.storage_service.info$.next('');
           const formatted: any = {};
-
           res.aiTagCounts?.forEach((item: any) => {
             formatted[item.subAlertTag] = item.subAlertTagCount;
           });
-
-          this.alertCounts = formatted; // ✅ FIXED
+          this.alertCounts = formatted;
         } else {
+          this.storage_service.info$.next('no data!');
           this.alertCounts = {};
         }
       },
-      error: (err) => {
-        console.error('❌ Alert Count Error:', err);
+      error: () => {
+        this.storage_service.info$.next('no data!');
         this.alertCounts = {};
       },
     });
@@ -198,6 +196,19 @@ export class InsightsComponent implements OnInit, OnDestroy {
       });
   }
 
+  getColor(label: string) {
+    const colors = [
+      '#8B6FE8',
+      '#49B882',
+      '#E74C3C',
+      '#F4B400',
+      '#3498DB',
+      '#E67E22',
+      '#1ABC9C'
+    ];
+    return colors[Math.abs(label.length) % colors.length];
+  }
+
   generateCharts() {
     this.charts = this.analyticsData.map((section: any) => {
       const chartData = section.data.map((d: any) => ({
@@ -209,28 +220,29 @@ export class InsightsComponent implements OnInit, OnDestroy {
         title: section.name,
         options: {
           data: chartData,
+          legend: { enabled: false },
           series: [
             {
               type: 'donut',
               angleKey: 'value',
               calloutLabelKey: 'label',
-              innerRadiusRatio: 0.6,
-              outerRadiusRatio: 0.8, // 👈 dynamic donut width
+              innerRadiusRatio: 0.5,
+              outerRadiusRatio: 0.8,
               calloutLabel: {
                 enabled: false,
               },
             },
           ],
-          legend: {
-            position: 'right',
-            maxWidth: 350,
-            item: {
-              label: {
-                fontFamily: 'Neometric Medium',
-                fontSize: 14,
-              },
-            },
-          },
+          // legend: {
+          //   position: 'right',
+          //   maxWidth: 350,
+          //   item: {
+          //     label: {
+          //       fontFamily: 'Neometric Medium',
+          //       fontSize: 14,
+          //     },
+          //   },
+          // },
         },
       };
     });

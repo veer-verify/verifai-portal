@@ -3,7 +3,7 @@
 
   <div class="tool-bar">
     <div *ngIf="page === 'map'"></div>
-    <div class="d-inline-flex gap-2" *ngIf="page === 'list'">
+    <div class="d-inline-flex gap-3" *ngIf="page === 'list'">
       <div class="select-with-icon">
         <img src="icons/drop_cam.svg" alt="" class="icon" />
         <select
@@ -12,7 +12,7 @@
           (ngModelChange)="biAnalyticsReport()"
         >
           <option value="" selected>
-            <img src="icons/drop_cam.svg" alt="" />ALL
+            <img src="icons/drop_cam.svg" alt="" />ALL ({{ camList.length }})
           </option>
           <option *ngFor="let item of camList" [value]="item.cameraId">
             {{ item?.name }}
@@ -20,48 +20,7 @@
         </select>
       </div>
 
-      <div class="calendar">
-        <span>START</span>
-        <input
-          matInput
-          [matDatepicker]="picker1"
-          placeholder="MM-DD-YYYY"
-          [(ngModel)]="fromDate"
-          [max]="today"
-          (ngModelChange)="biAnalyticsReport()"
-        />
-
-        <img
-          src="icons/calendar.svg"
-          class="calendar-icon"
-          (click)="picker1.open()"
-        />
-
-        <mat-datepicker #picker1></mat-datepicker>
-      </div>
-
-      <div class="calendar">
-        <span>END</span>
-        <input
-          matInput
-          [matDatepicker]="picker2"
-          placeholder="MM-DD-YYYY"
-          [(ngModel)]="toDate"
-          [max]="today"
-          (ngModelChange)="biAnalyticsReport()"
-        />
-
-        <img
-          src="icons/calendar.svg"
-          class="calendar-icon"
-          (click)="picker2.open()"
-        />
-
-        <mat-datepicker #picker2></mat-datepicker>
-      </div>
-    </div>
-
-    <div class="d-inline-flex align-items-center gap-2">
+      <!-- <div class="d-inline-flex align-items-center gap-2" *ngIf="page === 'list'"> -->
       <div class="d-inline-flex align-items-center gap-2">
         <input
           type="radio"
@@ -82,9 +41,49 @@
         />
         <span style="white-space: nowrap">Business Intelligence</span>
       </div>
+      <!-- </div> -->
+
+      <div class="calendar">
+        <span>START</span>
+        <input
+          type="date"
+          [(ngModel)]="fromDate"
+          [max]="today"
+          (ngModelChange)="biAnalyticsReport()"
+        />
+
+        <!-- <img
+          src="icons/calendar.svg"
+          class="calendar-icon"
+          (click)="picker1.open()"
+        /> -->
+
+        <mat-datepicker #picker1></mat-datepicker>
+      </div>
+
+      <div class="calendar">
+        <span>END</span>
+        <input
+          type="date"
+          [(ngModel)]="toDate"
+          [max]="today"
+          (ngModelChange)="biAnalyticsReport()"
+        />
+
+        <!-- <img
+          src="icons/calendar.svg"
+          class="calendar-icon"
+          (click)="picker2.open()"
+        /> -->
+
+        <mat-datepicker #picker2></mat-datepicker>
+      </div>
     </div>
 
-    <div class="d-inline-flex gap-2">
+    <div class="btn-sec d-inline-flex gap-2">
+      <button class="d-inline-flex align-items-center gap-2 me-3">
+        <img src="icons/download-insights.svg" /><span>DOWNLOAD</span>
+      </button>
       <button
         (click)="setPage('list')"
         [ngStyle]="{ background: page === 'list' ? 'red' : '' }"
@@ -110,7 +109,10 @@
     </div>
   </div>
   <!--  MONITORING VIEW -->
-  <div *ngIf="selectedOption === 'monitoring'" class="monitoring-container">
+  <div
+    *ngIf="selectedOption === 'monitoring' && page === 'list'"
+    class="monitoring-container"
+  >
     <div class="alert-card" *ngFor="let item of alertCounts | keyvalue">
       <div class="alert-title">
         {{ item.key }}
@@ -120,6 +122,7 @@
       </div>
     </div>
   </div>
+
   <ng-container *ngIf="page === 'list' && selectedOption === 'business'">
     <div class="dashboard">
       <!-- LEFT TABLE -->
@@ -133,6 +136,7 @@
           <div class="ag-theme-alpine grid">
             <ag-grid-angular
               class="custom-grid"
+              [headerHeight]="40"
               [rowData]="section.data"
               [columnDefs]="columnDefs"
               [domLayout]="'autoHeight'"
@@ -149,9 +153,27 @@
             {{ chart.title }}
           </div>
 
-          <div class="chart-container">
+          <!-- <div class="chart-container">
             <ag-charts class="donut-chart" [options]="chart.options">
             </ag-charts>
+          </div> -->
+
+          <div class="chart-row">
+            <!-- Donut -->
+            <ag-charts class="donut-chart" [options]="chart.options">
+            </ag-charts>
+
+            <!-- Custom Legend -->
+            <div class="legend">
+              <div class="legend-item" *ngFor="let item of chart.options.data">
+                <span class="dot" [style.background]="getColor(item.label)">
+                </span>
+
+                <span class="label">{{ item.label }}</span>
+
+                <span class="value">{{ item.value }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>

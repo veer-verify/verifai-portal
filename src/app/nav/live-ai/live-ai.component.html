@@ -85,6 +85,15 @@
       <ng-container *ngIf="imageLoader">
         <img src="gif/loading-gif.gif" />
       </ng-container>
+
+      <!-- <div class="camera-section">
+        <app-stream
+          [videoData]="{
+            httpUrl:
+              'https://gisusorin1017live-repo.us1.pitunnel.com/GISUSORIN1017C1',
+          }"
+        ></app-stream> -->
+      <!-- </div> -->
     </div>
 
     <!-- RIGHT: TABLE -->
@@ -96,8 +105,8 @@
       <table class="alerts-table">
         <!-- ✅ HEADER -->
         <thead class="table-header">
-          <th style="width: 150px">Start Time</th>
-          <th style="width: 150px">End Time</th>
+          <th>Start Time</th>
+          <th>End Time</th>
           <!-- <th>Duration</th> -->
           <th>Object</th>
           <th>Action</th>
