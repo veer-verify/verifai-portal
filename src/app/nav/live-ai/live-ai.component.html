@@ -1,21 +1,6 @@
 <div class="live-ai-page">
-  <!-- TOP BAR -->
+  <!-- TOP BAR (UNCHANGED) -->
   <div class="top-filter-bar">
-    <!-- <div class="select-with-icon">
-    
-
-      <select
-        class="tag-select"
-        [(ngModel)]="selectedCamera"
-        (change)="onCameraChange()"
-      >
-        <option value="">ALL CAMERAS ({{ camerasList.length || 0 }})</option>
-
-        <option *ngFor="let cam of camerasList" [value]="cam.cameraId">
-          {{ cam.cameraName }}
-        </option>
-      </select>
-    </div> -->
     <div class="camera-scroll-wrapper">
       <button class="scroll-btn left" (click)="scrollLeft()">&#10094;</button>
 
@@ -29,101 +14,89 @@
           }"
           (click)="selectCamera(cam)"
         >
-          <!-- ICON -->
-          <img
-            src="icons/drop_cam.svg"
-            class="icon"
-            [ngClass]="{
-              'icon-active': selectedCamera?.cameraId === cam.cameraId,
-            }"
-          />
-
-          <!-- NAME -->
-          <span class="cam-name">
-            {{ cam.cameraName }}
-          </span>
-
-          <!-- DOT -->
+          <img src="icons/drop_cam.svg" class="icon" />
+          <span class="cam-name">{{ cam.cameraName }}</span>
           <span class="dot"></span>
         </div>
       </div>
 
       <button class="scroll-btn right" (click)="scrollRight()">&#10095;</button>
     </div>
-    <!-- <div class="alert-counts">
-      <div class="chip" *ngFor="let tag of alertCounts || []">
-        <span class="dot"></span>
-        <span>{{ tag.subAlertTag }}: {{ tag.subAlertTagCount }}</span>
-      </div>
-    </div> -->
 
     <div class="header-right">
-      <span class="total-btn" (click)="goToAlerts()"> Total </span>
+      <span class="total-btn" (click)="goToAlerts()">Total</span>
     </div>
   </div>
 
   <!-- MAIN -->
   <div class="live-ai-container">
-    <!-- LEFT: IMAGE -->
-
+    <!-- LEFT SIDE (CAMERAS) -->
     <div class="camera-section">
-      <div class="live-stream" *ngIf="selectedCamera">
-        <app-stream
-          [videoData]="{
-            httpUrl: selectedCamera?.httpUrl,
-          }"
-        ></app-stream>
+      <!-- HEADER -->
+      <div class="camera-header">
+        <span style="font-size: 14px">{{ siteName }}</span>
+        <span>{{ selectedCamera?.cameraId || "-" }}</span>
       </div>
-      <ng-container *ngIf="!imageLoader">
-        <img
-          [src]="selectedCameraImage"
-          class="camera-feed"
-          onerror="this.src = 'icons/eyedisabled.svg'"
-        />
-      </ng-container>
 
-      <!-- <ng-container *ngIf="imageLoader">
-        <img src="gif/loading-gif.gif" />
-      </ng-container> -->
+      <!-- TWO CAMERAS -->
+      <div class="camera-grid">
+        <!-- CAMERA 1 -->
+        <div class="camera-box">
+          <app-stream
+            *ngIf="selectedCamera"
+            [videoData]="{ httpUrl: selectedCamera?.httpUrl }"
+          ></app-stream>
 
-      <!-- <div class="camera-section">
-        <app-stream
-          [videoData]="{
-            httpUrl:
-              'https://gisusorin1017live-repo.us1.pitunnel.com/GISUSORIN1017C1',
-          }"
-        ></app-stream> -->
-      <!-- </div> -->
+          <img
+            *ngIf="!imageLoader"
+            [src]="selectedCameraImage"
+            class="camera-feed"
+            onerror="this.src = 'icons/eyedisabled.svg'"
+          />
+        </div>
+
+        <!-- CAMERA 2 -->
+        <div class="camera-box">
+          <img
+            *ngIf="!imageLoader"
+            [src]="selectedCameraImage"
+            class="camera-feed"
+          />
+        </div>
+      </div>
     </div>
 
-    <!-- RIGHT: TABLE -->
+    <!-- RIGHT SIDE (TABLE) -->
     <div class="alerts-section">
-      <div class="header">
-        <!-- <span class="title">Live Alerts</span> -->
-      </div>
-
       <table class="alerts-table">
-        <!-- ✅ HEADER -->
-        <thead class="table-header">
-          <th>Start Time</th>
-          <th>End Time</th>
-          <!-- <th>Duration</th> -->
-          <th>Object</th>
-          <th>Action</th>
+        <thead>
+          <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Object</th>
+            <th>Action</th>
+            <th>Clip</th>
+          </tr>
         </thead>
 
-        <!-- ✅ ROWS -->
         <tbody>
-          <tr *ngFor="let alert of alerts" class="table-row">
-            <td>{{ alert.eventFromTime || "-" }}</td>
-            <td>{{ alert.eventToTime || "-" }}</td>
-            <!-- <td>{{ alert.duration || "-" }}</td> -->
-            <td>{{ alert.objectName || "-" }}</td>
-            <td>{{ alert.subAlertTag || "-" }}</td>
+          <tr *ngFor="let alert of alerts">
+            <td>{{ alert.eventFromTime }}</td>
+            <td>{{ alert.eventToTime }}</td>
+            <td>{{ alert.objectName }}</td>
+            <td>{{ alert.subAlertTag }}</td>
+            <td>
+              <img
+                src="icons/play-circle-fill.svg"
+                class="clip-btn"
+                [class.disabled]="!alert.files?.length"
+                (click)="openClip(alert)"
+              />
+            </td>
           </tr>
         </tbody>
       </table>
-      <!-- EMPTY -->
+
       <div *ngIf="alerts.length === 0 && !tableLoader" class="no-data">
         No alerts available
       </div>
@@ -135,7 +108,6 @@
   <!-- FOOTER -->
   <div class="footer">
     <span>Refresh:</span>
-
     <select [(ngModel)]="refreshInterval" (change)="updateRefresh()">
       <option [value]="30000">30 sec</option>
       <option [value]="60000">1 min</option>

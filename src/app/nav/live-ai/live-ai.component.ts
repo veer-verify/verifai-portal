@@ -8,6 +8,8 @@ import { LiveAiService } from '../../../utilities/services/live-ai.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { ViewChild, ElementRef } from '@angular/core';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
 @Component({
   selector: 'app-live-ai',
   standalone: true,
@@ -20,7 +22,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //  Events Data
   alerts: any[] = [];
   totalCount = 0;
-
+  siteName: string = '';
   //  Cameras
   camerasList: any[] = [];
   selectedCamera: any = null;
@@ -41,6 +43,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private router: Router,
     private liveAiService: LiveAiService,
     private storageService: StorageService,
+    private dialog: MatDialog,
   ) {}
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
@@ -93,6 +96,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
         console.log('🏢 Site Changed:', site);
 
         this.selectedSiteId = site.siteId;
+        this.siteName = site.siteName;
 
         //  RESET EVERYTHING (VERY IMPORTANT)
         this.selectedCamera = '';
@@ -175,6 +179,23 @@ export class LiveAiComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => console.error('❌ Camera API Error:', err),
+    });
+  }
+  openClip(alert: any) {
+    if (!alert.files || alert.files.length === 0) return;
+
+    const fileName = alert.files[0];
+
+    const fileUrl = `https://usstaging.ivisecurity.com/common/downloadFile_1_0?requestName=staging-events&assetName=${fileName}`;
+
+    console.log('FINAL API URL:', fileUrl);
+
+    this.dialog.open(MediaDialogComponent, {
+      data: {
+        ...alert,
+        fileUrl: fileUrl, //  IMPORTANT
+      },
+      disableClose: true,
     });
   }
   //! =========================================
