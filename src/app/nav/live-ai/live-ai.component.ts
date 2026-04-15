@@ -6,31 +6,32 @@ import { Subject, takeUntil, filter, finalize } from 'rxjs';
 
 import { LiveAiService } from '../../../utilities/services/live-ai.service';
 import { StorageService } from '../../../utilities/services/storage.service';
-
+import { ViewChild, ElementRef } from '@angular/core';
+import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 @Component({
   selector: 'app-live-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, StreamComponent],
   providers: [LiveAiService],
   templateUrl: './live-ai.component.html',
   styleUrl: './live-ai.component.css',
 })
 export class LiveAiComponent implements OnInit, OnDestroy {
-  // 📊 Events Data
+  //  Events Data
   alerts: any[] = [];
   totalCount = 0;
 
-  // 🎥 Cameras
+  //  Cameras
   camerasList: any[] = [];
-  selectedCamera: any = '';
+  selectedCamera: any = null;
 
-  // 🖼️ Image
+  //  Image
   selectedCameraImage: string = '';
 
-  // 🏢 Site
+  //  Site
   selectedSiteId!: number;
 
-  // 🔁 Refresh
+  //  Refresh
   refreshInterval: number = 30000;
   intervalId: any;
 
@@ -42,6 +43,28 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
   ) {}
 
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+
+  selectCamera(cam: any) {
+    this.selectedCamera = cam;
+    this.onCameraChange();
+  }
+
+  //  Scroll Left
+  scrollLeft() {
+    this.scrollContainer.nativeElement.scrollBy({
+      left: -200,
+      behavior: 'smooth',
+    });
+  }
+
+  //  Scroll Right
+  scrollRight() {
+    this.scrollContainer.nativeElement.scrollBy({
+      left: 200,
+      behavior: 'smooth',
+    });
+  }
   //! =========================================
   //! INIT
   //! =========================================
@@ -71,12 +94,12 @@ export class LiveAiComponent implements OnInit, OnDestroy {
 
         this.selectedSiteId = site.siteId;
 
-        // ✅ RESET EVERYTHING (VERY IMPORTANT)
+        //  RESET EVERYTHING (VERY IMPORTANT)
         this.selectedCamera = '';
         this.selectedCameraImage = '';
         this.alerts = [];
 
-        // ✅ Load fresh data
+        //  Load fresh data
         this.loadCameras();
       });
 
@@ -138,9 +161,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             cameraName: cam.cameraName?.trim(),
           }));
 
-          //* ✅ ALWAYS SELECT FIRST CAMERA
+          //*  ALWAYS SELECT FIRST CAMERA
           if (this.camerasList.length > 0) {
-            this.selectedCamera = this.camerasList[0].cameraId;
+            // this.selectedCamera = this.camerasList[0].cameraId;
+            this.selectedCamera = this.camerasList[0];
 
             console.log('🎥 New Site → Default Camera:', this.selectedCamera);
 
@@ -180,7 +204,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .getAlertCounts(
         this.selectedSiteId,
         today,
-        this.selectedCamera || undefined,
+        this.selectedCamera?.cameraId || undefined,
       )
       .subscribe({
         next: (res: any) => {
@@ -203,29 +227,31 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //! =========================================
   imageLoader = false;
   loadCameraImage(): void {
-    if (!this.selectedCamera) return;
+    if (!this.selectedCamera?.cameraId) return;
 
     this.imageLoader = true;
-    this.liveAiService.getLatestCameraImage(this.selectedCamera).subscribe({
-      next: (res: any) => {
-        if (res.statusCode === 200 && res.latestImage) {
-          this.imageLoader = false;
-          this.selectedCameraImage = `${res.latestImage}?t=${new Date().getTime()}`; // cache fix
-        } else {
-          this.imageLoader = false;
-          this.selectedCameraImage = 'icons/eyedisabled.svg';
-        }
-      },
+    this.liveAiService
+      .getLatestCameraImage(this.selectedCamera?.cameraId)
+      .subscribe({
+        next: (res: any) => {
+          if (res.statusCode === 200 && res.latestImage) {
+            this.imageLoader = false;
+            this.selectedCameraImage = `${res.latestImage}?t=${new Date().getTime()}`; // cache fix
+          } else {
+            this.imageLoader = false;
+            this.selectedCameraImage = 'icons/eyedisabled.svg';
+          }
+        },
 
-      error: (err) => {
-        this.imageLoader = false;
-        console.error('❌ Image API Error:', err);
-      },
-    });
+        error: (err) => {
+          this.imageLoader = false;
+          console.error('❌ Image API Error:', err);
+        },
+      });
   }
 
   //! =========================================
-  //! LOAD EVENTS (MAIN API 🔥)
+  //! LOAD EVENTS (MAIN API )
   //! =========================================
   // loadEvents(): void {
   //   if (!this.selectedSiteId) return;
@@ -259,7 +285,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     if (!this.selectedSiteId) return;
 
     const today = new Date().toISOString().split('T')[0];
-    const cameraIds = this.selectedCamera ? [this.selectedCamera] : [];
+    const cameraIds = this.selectedCamera ? [this.selectedCamera.cameraId] : [];
 
     this.tableLoader = true;
     this.liveAiService
@@ -268,7 +294,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           if (res.statusCode === 200 && res.events) {
-            // ✅ REMOVE slice(0,5)
+            //  REMOVE slice(0,5)
             this.alerts = res.events.map((event: any) => ({
               ...event,
               objectName: this.parseObjectName(event.objectName),
@@ -306,7 +332,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       this.loadEvents();
       this.loadAlertCounts();
 
-      if (this.selectedCamera) {
+      if (this.selectedCamera?.cameraId) {
         this.loadCameraImage();
       }
     }, this.refreshInterval);
@@ -326,7 +352,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //! NAVIGATION
   //! =========================================
   goToAlerts(alert?: any): void {
-    this.router.navigate(['/dashboard/alerts'], {
+    this.router.navigate(['/dashboard/insights'], {
       queryParams: alert ? { tag: alert.actionTag } : {},
     });
   }

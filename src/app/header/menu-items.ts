@@ -19,11 +19,11 @@ export const menuItems = [
   },
   {
     id: 'insights',
-    label: 'insight',
+    label: 'insights',
     routeLink: 'insights',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
-   {
+  {
     id: 'liveAI',
     label: 'live ai',
     routeLink: 'live-ai',

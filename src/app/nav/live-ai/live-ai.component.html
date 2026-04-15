@@ -1,8 +1,8 @@
 <div class="live-ai-page">
   <!-- TOP BAR -->
   <div class="top-filter-bar">
-    <div class="select-with-icon">
-      <img src="icons/drop_cam.svg" class="icon" />
+    <!-- <div class="select-with-icon">
+    
 
       <select
         class="tag-select"
@@ -15,13 +15,47 @@
           {{ cam.cameraName }}
         </option>
       </select>
+    </div> -->
+    <div class="camera-scroll-wrapper">
+      <button class="scroll-btn left" (click)="scrollLeft()">&#10094;</button>
+
+      <div class="camera-scroll" #scrollContainer>
+        <div
+          class="camera-chip"
+          *ngFor="let cam of camerasList"
+          [ngClass]="{
+            active: selectedCamera?.cameraId === cam.cameraId,
+            inactive: selectedCamera?.cameraId !== cam.cameraId,
+          }"
+          (click)="selectCamera(cam)"
+        >
+          <!-- ICON -->
+          <img
+            src="icons/drop_cam.svg"
+            class="icon"
+            [ngClass]="{
+              'icon-active': selectedCamera?.cameraId === cam.cameraId,
+            }"
+          />
+
+          <!-- NAME -->
+          <span class="cam-name">
+            {{ cam.cameraName }}
+          </span>
+
+          <!-- DOT -->
+          <span class="dot"></span>
+        </div>
+      </div>
+
+      <button class="scroll-btn right" (click)="scrollRight()">&#10095;</button>
     </div>
-    <div class="alert-counts">
+    <!-- <div class="alert-counts">
       <div class="chip" *ngFor="let tag of alertCounts || []">
         <span class="dot"></span>
         <span>{{ tag.subAlertTag }}: {{ tag.subAlertTagCount }}</span>
       </div>
-    </div>
+    </div> -->
 
     <div class="header-right">
       <span class="total-btn" (click)="goToAlerts()"> Total </span>
@@ -31,7 +65,15 @@
   <!-- MAIN -->
   <div class="live-ai-container">
     <!-- LEFT: IMAGE -->
+
     <div class="camera-section">
+      <div class="live-stream" *ngIf="selectedCamera">
+        <app-stream
+          [videoData]="{
+            httpUrl: selectedCamera?.httpUrl,
+          }"
+        ></app-stream>
+      </div>
       <ng-container *ngIf="!imageLoader">
         <img
           [src]="selectedCameraImage"
@@ -54,9 +96,9 @@
       <table class="alerts-table">
         <!-- ✅ HEADER -->
         <thead class="table-header">
-          <th style="width: 150px">Start time</th>
-          <th style="width: 150px">End time</th>
-          <th>Duration</th>
+          <th style="width: 150px">Start Time</th>
+          <th style="width: 150px">End Time</th>
+          <!-- <th>Duration</th> -->
           <th>Object</th>
           <th>Action</th>
         </thead>
@@ -66,7 +108,7 @@
           <tr *ngFor="let alert of alerts" class="table-row">
             <td>{{ alert.eventFromTime || "-" }}</td>
             <td>{{ alert.eventToTime || "-" }}</td>
-            <td>{{ alert.duration || "-" }}</td>
+            <!-- <td>{{ alert.duration || "-" }}</td> -->
             <td>{{ alert.objectName || "-" }}</td>
             <td>{{ alert.subAlertTag || "-" }}</td>
           </tr>
