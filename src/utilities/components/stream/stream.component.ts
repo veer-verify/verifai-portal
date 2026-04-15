@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AlertService } from '../../services/alert.service';
 
@@ -10,7 +10,7 @@ import { AlertService } from '../../services/alert.service';
   styleUrl: './stream.component.css',
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class StreamComponent {
+export class StreamComponent implements OnChanges, OnDestroy {
 
   constructor(
     private http: HttpClient,
@@ -29,10 +29,21 @@ export class StreamComponent {
 
   hitStream: boolean = false;
   encoded: any;
+  previousUrl: string = '';
 
-  ngOnChanges(): void {
-    // console.log(this.videoData)
-  };
+  ngOnChanges(changes: SimpleChanges): void {
+    // 🔄 When videoData changes, restart the stream
+    if (changes['videoData'] && !changes['videoData'].firstChange) {
+      const newUrl = changes['videoData'].currentValue?.httpUrl;
+      const oldUrl = changes['videoData'].previousValue?.httpUrl;
+      
+      // Only restart if URL actually changed
+      if (newUrl && newUrl !== oldUrl) {
+        console.log('📹 Camera changed:', oldUrl, '→', newUrl);
+        this.restartStream();
+      }
+    }
+  }
 
   ngOnInit(): void {
     const username = "admin";
@@ -122,6 +133,39 @@ export class StreamComponent {
       this.sessionUrl = '';
       this.queuedCandidates = [];
     }
+  };
+
+  //! =========================================
+  //! 🔄 RESTART STREAM (Camera Change)
+  //! =========================================
+  restartStream(): void {
+    console.log('🔄 Restarting stream...');
+    
+    // Close existing peer connection
+    if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
+      this.peerConnection.close();
+    }
+
+    // Delete session if exists
+    if (this.sessionUrl) {
+      fetch(this.sessionUrl, {
+        method: 'DELETE',
+      }).catch(err => console.error('Failed to delete session:', err));
+    }
+
+    // Reset state
+    this.sessionUrl = '';
+    this.queuedCandidates = [];
+    this.peerConnection = null as any;
+    
+    // Clear video
+    if (this.video && this.video.nativeElement) {
+      this.video.nativeElement.srcObject = null;
+    }
+
+    // Restart the stream with new URL
+    this.hitStream = true;
+    this.requestICEServers();
   };
 
   onLocalCandidate(evt: RTCPeerConnectionIceEvent): void {
@@ -349,8 +393,27 @@ export class StreamComponent {
       );
   }
 
-  ngOnDestroy() {
-    this.hitStream = false;
-    this.peerConnection?.close();
+  //! =========================================
+  //! 🧹 CLEANUP ON DESTROY
+  //! =========================================
+  ngOnDestroy(): void {
+    console.log('🧹 Cleaning up stream component...');
+    
+    // Close peer connection
+    if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
+      this.peerConnection.close();
+    }
+
+    // Delete session
+    if (this.sessionUrl) {
+      fetch(this.sessionUrl, {
+        method: 'DELETE',
+      }).catch(err => console.error('Failed to delete session on destroy:', err));
+    }
+
+    // Clear references
+    this.sessionUrl = '';
+    this.queuedCandidates = [];
+    this.restartTimeout = null;
   }
 }
