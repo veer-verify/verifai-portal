@@ -172,7 +172,9 @@
                   [style.background]="chart.hasData ? COLORS[i] : '#E0E0E0'"
                 ></span>
                 <span class="label">{{ item.label }}</span>
-                <span class="value">{{ item.value }}</span>
+                <span class="value" (click)="goToAlerts(item)">{{
+                  item.value
+                }}</span>
               </div>
             </div>
           </div>

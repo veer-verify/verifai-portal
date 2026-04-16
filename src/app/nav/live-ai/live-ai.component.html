@@ -39,20 +39,31 @@
         </div>
       </div>
       <div class="status-indicators">
-        <span class="status-item">
-          <span
-            class="status-dot"
-            [ngClass]="monitoringStatus ? 'red' : 'gray'"
-          ></span>
-          MONITORING
-        </span>
-        <span class="status-item">
-          <span
-            class="status-dot"
-            [ngClass]="aiStatus ? 'green' : 'gray'"
-          ></span>
-          AI ANALYTICS
-        </span>
+        <div class="status">
+          <span class="status-item">
+            <span
+              class="status-dot"
+              [ngClass]="monitoringStatus ? 'red' : 'gray'"
+            ></span>
+            MONITORING
+          </span>
+          <span class="status-item">
+            <span
+              class="status-dot"
+              [ngClass]="aiStatus ? 'green' : 'gray'"
+            ></span>
+            AI ANALYTICS
+          </span>
+        </div>
+        <div class="subtitles-overlay" *ngIf="!imageLoader">
+          <div
+            class="subtitle-chip"
+            *ngFor="let sub of subtitles"
+            [style.--chip-color]="sub.color"
+          >
+            <span class="sub-label">{{ sub.subtitle }}</span>
+          </div>
+        </div>
       </div>
 
       <!-- TWO CAMERAS -->
@@ -94,15 +105,6 @@
             width="200"
             *ngIf="imageLoader"
           />
-        </div>
-        <div class="subtitles-overlay" *ngIf="!imageLoader && !imageError">
-          <div
-            class="subtitle-chip"
-            *ngFor="let sub of subtitles"
-            [style.--chip-color]="sub.color"
-          >
-            <span class="sub-label">{{ sub.subtitle }}</span>
-          </div>
         </div>
       </div>
     </div>
@@ -150,7 +152,7 @@
 
   <!-- FOOTER -->
   <div class="footer">
-    <span>Refresh:</span>
+    <span>Refresh</span>
     <select [(ngModel)]="refreshInterval" (change)="updateRefresh()">
       <option [value]="30000">30 sec</option>
       <option [value]="60000">1 min</option>

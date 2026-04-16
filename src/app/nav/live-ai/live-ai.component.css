@@ -133,7 +133,7 @@
   /* background: #e5e7eb; */
   display: flex;
   flex-direction: column;
-  padding: 0 30px;
+  padding: 0 20px;
   /* border-radius: 8px; */
 }
 
@@ -153,7 +153,7 @@
   justify-content: center;
   background: #000;
   height: 50vh;
-  border: 1px solid #ababab;
+  border: 1px #ababab solid;
   /* overflow: hidden; */
 }
 
@@ -177,7 +177,7 @@
   display: flex;
   flex-direction: column;
   /* border-left: 1px solid #ddd; */
-  padding: 0 30px 0 0;
+  padding: 0 20px 0 0;
   /* background: #fff; */
   /* border-radius: 8px; */
   overflow-y: auto;
@@ -248,7 +248,7 @@
   border-radius: 6px;
   background: red;
   color: #fff;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
 }
 
@@ -316,10 +316,10 @@
 
 /* STRONG HEADER TEXT */
 .alerts-table th {
-  padding: 9px 24px;
+  padding: 11px 24px;
   font-size: 11px;
   font-weight: 600;
-  text-align: center;
+  /* text-align: center; */
   white-space: nowrap;
 }
 
@@ -339,19 +339,23 @@
 
 /* CELL */
 .alerts-table td {
-  padding: 4px 24px;
+  padding: 9px 24px;
   font-size: 11px;
-  text-align: center;
-  white-space: nowrap;
+  /* text-align: center; */
 }
 /* --- Status Indicators (Monitoring / AI) --- */
 .status-indicators {
   display: flex;
   gap: 15px;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 10px;
 }
-
+.status {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
 .status-item {
   display: flex;
   align-items: center;
@@ -366,18 +370,18 @@
   border-radius: 50%;
 }
 .status-dot.red {
-  background: red;
-  box-shadow: 0 0 5px red;
+  background: #ff0000;
+  /* box-shadow: 0 0 5px red; */
 }
 .status-dot.green {
   background: #00ff00;
-  box-shadow: 0 0 5px #00ff00;
+  /* box-shadow: 0 0 5px #00ff00; */
 }
 
 /* Fix header spacing */
-.camera-header {
+/* .camera-header {
   padding: 10px 0;
-}
+} */
 
 .site-name {
   color: #333;
@@ -406,7 +410,7 @@
   color: #bfbfbf;
   padding: 0;
   border-radius: 0;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   border-left: none;
   text-transform: none;
@@ -422,8 +426,8 @@
 }
 
 .sub-label {
-  color: #bfbfbf;
-  font-size: 14px;
+  color: #252424;
+  font-size: 12px;
   font-weight: 500;
 }
 
