@@ -104,6 +104,18 @@
             alt=""
           /> -->
         </div>
+        <div class="ec-download">
+          <button
+            type="button"
+            class="download-btn"
+            (click)="downloadExcelReport()"
+            pTooltip="Generate Excel Report"
+          >
+            <ng-container *ngIf="!spinexcel">
+              <img src="icons/excel.png" alt="excel" class="excel-icon" />
+            </ng-container>
+          </button>
+        </div>
         @if (anyData) {
           <button type="reset" class="clear" (click)="clearData()">
             CLEAR

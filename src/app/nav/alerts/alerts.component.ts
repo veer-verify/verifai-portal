@@ -23,7 +23,7 @@ import { MediaDialogComponent } from '../../../utilities/components/media-dialog
 import { MatMenuModule } from '@angular/material/menu';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
+import { AlertService } from '../../../utilities/services/alert.service';
 @Component({
   selector: 'app-alerts',
   standalone: true,
@@ -45,10 +45,11 @@ export class AlertsComponent {
   constructor(
     private storage_service: StorageService,
     private config_service: ConfigService,
+    private alertService: AlertService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) { }
+  ) {}
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -139,7 +140,64 @@ export class AlertsComponent {
     this.anyData = false;
     this.incidentList();
   }
+  spinexcel: boolean = false;
 
+  downloadExcelReport() {
+    const formValue = this.sfilterForm.value;
+    const siteId = this.currentSite?.siteId;
+
+    if (!formValue.fromDate || !formValue.toDate || !siteId) {
+      this.alertService.error('From Date, To Date and Site Id are mandatory');
+      return;
+    }
+
+    const user = this.storage_service.getData('user');
+    const token = user?.AccessToken;
+
+    console.log('USER DATA =>', user);
+    console.log('Resolved token =>', token);
+
+    if (!token) {
+      this.alertService.error('Access token expired. Please login again.');
+      return;
+    }
+
+    this.spinexcel = true;
+
+    const payload: any = {
+      fromDate: `${formValue.fromDate} 00:00:00`,
+      toDate: `${formValue.toDate} 23:59:59`,
+      siteId: siteId,
+    };
+
+    if (formValue.cameraId) {
+      payload.cameraId = formValue.cameraId;
+    }
+
+    if (formValue.actionTag) {
+      payload.actionTag = formValue.actionTag;
+    }
+
+    this.alertService.downloadExcelReport(payload, token).subscribe({
+      next: (blob: Blob) => {
+        const fileName = `Alert_Report_${Date.now()}.xlsx`;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = fileName;
+        link.click();
+
+        window.URL.revokeObjectURL(url);
+        this.spinexcel = false;
+      },
+      error: (err: any) => {
+        console.log('Download error =>', err);
+        this.alertService.error('Download failed');
+        this.spinexcel = false;
+      },
+    });
+  }
   initilizeFilterForm(): void {
     this.filterForm = this.fb.group({
       cameraId: [''],
@@ -248,7 +306,7 @@ export class AlertsComponent {
   }
 
   onFilterChange() {
-    console.log('call')
+    console.log('call');
     this.anyData = true;
     this.incidentList();
   }
