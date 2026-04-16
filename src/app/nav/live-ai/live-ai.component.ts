@@ -378,6 +378,22 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     });
   }
 
+  onImageLoad(event: Event) {
+    console.log('g');
+    const img = event.target as HTMLImageElement;
+    // img.width = 200;
+    img.classList.add('camera-feed');
+  }
+
+  imageError = false;
+  onImageError(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.width = 200;
+    // img.classList.remove('camera-feed');
+    this.imageError = true;
+    img.src = '/icons/eyedisabled.svg';
+  }
+
   //! =========================================
   //! CLEANUP
   //! =========================================

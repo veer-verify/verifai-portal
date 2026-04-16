@@ -22,20 +22,21 @@
 
       <button class="scroll-btn right" (click)="scrollRight()">&#10095;</button>
     </div>
-
-    <div class="header-right">
-      <span class="total-btn" (click)="goToAlerts()">Total</span>
-    </div>
   </div>
 
   <!-- MAIN -->
+
   <div class="live-ai-container">
-    <!-- LEFT SIDE (CAMERAS) -->
     <div class="camera-section">
-      <!-- HEADER -->
       <div class="camera-header">
-        <span style="font-size: 14px">{{ siteName }}</span>
-        <span>{{ selectedCamera?.cameraId || "-" }}</span>
+        <div>
+          <p>{{ siteName }}</p>
+          <p>{{ selectedCamera?.cameraId || "-" }}</p>
+        </div>
+
+        <div class="header-right">
+          <span class="total-btn" (click)="goToAlerts()">View Total</span>
+        </div>
       </div>
 
       <!-- TWO CAMERAS -->
@@ -47,20 +48,36 @@
             [videoData]="{ httpUrl: selectedCamera?.httpUrl }"
           ></app-stream>
 
-          <img
+          <!-- <img
             *ngIf="!imageLoader"
             [src]="selectedCameraImage"
             class="camera-feed"
             onerror="this.src = 'icons/eyedisabled.svg'"
-          />
+          /> -->
+          <!-- <div *ngIf="imageLoader" class="text-light">Loading...</div> -->
         </div>
 
         <!-- CAMERA 2 -->
         <div class="camera-box">
-          <img
+          <!-- <img
             *ngIf="!imageLoader"
             [src]="selectedCameraImage"
             class="camera-feed"
+            onerror="this.src = 'icons/eyedisabled.svg'"
+          /> -->
+          <img
+            class="camera-feed"
+            [src]="selectedCameraImage"
+            *ngIf="!imageLoader"
+            [class.error-image]="imageError"
+            (error)="onImageError($event)"
+          />
+
+          <img
+            src="gif/loading-gif.gif"
+            alt=""
+            width="200"
+            *ngIf="imageLoader"
           />
         </div>
       </div>
@@ -98,12 +115,14 @@
       </table>
 
       <div *ngIf="alerts.length === 0 && !tableLoader" class="no-data">
-        No alerts available
+        No alerts available!
       </div>
 
       <div *ngIf="tableLoader" class="no-data">Loading...</div>
     </div>
   </div>
+
+  <!-- MAIN -->
 
   <!-- FOOTER -->
   <div class="footer">

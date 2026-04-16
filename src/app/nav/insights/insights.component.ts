@@ -45,7 +45,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
     public storage_service: StorageService,
     public configSrvc: ConfigService,
     private liveAiService: LiveAiService,
-  ) { }
+  ) {}
 
   columnDefs = [
     {
@@ -69,10 +69,12 @@ export class InsightsComponent implements OnInit, OnDestroy {
   today = new Date();
   fromDate: Date = new Date();
   toDate: Date = new Date();
+  fromTime: any;
+  toTime: any;
   gridOptions!: GridOptions;
   analyticsData: any = [];
   charts: any[] = [];
-  selectedOption: string = 'monitoring';
+  selectedOption: string = 'business';
 
   ngOnInit(): void {
     this.gridOptions = gridOptions;
@@ -175,7 +177,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
   biAnalyticsReport() {
     this.storage_service.info$.next('loading');
     this.insight_service
-      .biAnalyticsReport({
+      .bi_verifai({
         siteId: this.currentSite?.siteId,
         cameraId: this.cameraId,
         fromDate: this.fromDate,
@@ -203,27 +205,25 @@ export class InsightsComponent implements OnInit, OnDestroy {
     '#F4B400',
     '#3498DB',
     '#E67E22',
-    '#1ABC9C'
+    '#1ABC9C',
   ];
   getColor(index: number, chart: any) {
-    return chart.hasData
-      ? this.COLORS[index % this.COLORS.length]
-      : '#E0E0E0';
+    return chart.hasData ? this.COLORS[index % this.COLORS.length] : '#E0E0E0';
   }
 
   generateCharts() {
     this.charts = this.analyticsData.map((section: any) => {
       const originalData = section.data.map((d: any) => ({
         label: d.type,
-        value: Number(d.total)
+        value: Number(d.total),
       }));
       const hasData = originalData.some((d: any) => d.value > 0);
       const chartData = hasData
         ? originalData
         : originalData.map((d: any) => ({
-          ...d,
-          value: 1
-        }));
+            ...d,
+            value: 1,
+          }));
 
       return {
         title: section.name,
@@ -237,17 +237,15 @@ export class InsightsComponent implements OnInit, OnDestroy {
               angleKey: 'value',
               innerRadiusRatio: 0.75,
 
-              fills: hasData
-                ? this.COLORS
-                : ['#E0E0E0'],
+              fills: hasData ? this.COLORS : ['#E0E0E0'],
 
               calloutLabel: {
-                enabled: hasData
-              }
-            }
+                enabled: hasData,
+              },
+            },
           ],
-          legend: { enabled: false }
-        }
+          legend: { enabled: false },
+        },
       };
     });
   }

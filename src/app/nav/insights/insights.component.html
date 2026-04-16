@@ -3,7 +3,7 @@
 
   <div class="tool-bar">
     <div *ngIf="page === 'map'"></div>
-    <div class="d-inline-flex gap-3" *ngIf="page === 'list'">
+    <div class="d-inline-flex align-items-center gap-3" *ngIf="page === 'list'">
       <div class="select-with-icon">
         <img src="icons/drop_cam.svg" alt="" class="icon" />
         <select
@@ -45,12 +45,9 @@
 
       <div class="calendar">
         <span>START</span>
-        <input
-          type="date"
-          [(ngModel)]="fromDate"
-          [max]="today"
-          (ngModelChange)="biAnalyticsReport()"
-        />
+        <input type="date" [(ngModel)]="fromDate" [max]="today" />
+
+        <input matInput type="time" class="time-input" [(ngModel)]="fromTime" />
 
         <!-- <img
           src="icons/calendar.svg"
@@ -63,12 +60,7 @@
 
       <div class="calendar">
         <span>END</span>
-        <input
-          type="date"
-          [(ngModel)]="toDate"
-          [max]="today"
-          (ngModelChange)="biAnalyticsReport()"
-        />
+        <input type="date" [(ngModel)]="toDate" [max]="today" />
 
         <!-- <img
           src="icons/calendar.svg"
@@ -76,7 +68,13 @@
           (click)="picker2.open()"
         /> -->
 
+        <input matInput type="time" class="time-input" [(ngModel)]="toTime" />
+
         <!-- <mat-datepicker #picker2></mat-datepicker> -->
+      </div>
+
+      <div>
+        <button class="submit-btn" (click)="biAnalyticsReport()">Submit</button>
       </div>
     </div>
 

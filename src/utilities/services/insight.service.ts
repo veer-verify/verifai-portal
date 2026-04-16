@@ -5,21 +5,20 @@ import { DatePipe } from '@angular/common';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class InsightService {
-
   constructor(
     private http: HttpClient,
-    private fordate: DatePipe
-  ) { }
+    private fordate: DatePipe,
+  ) {}
 
   getNonWorkingDays(payload: any): Observable<any> {
     let url = `${environment.insightsUrl}/notWorkingDays_1_0`;
     let params = new HttpParams();
     params = params.set('siteId', payload?.siteId);
     if (payload?.year) {
-      params = params.set('year', payload?.year)
+      params = params.set('year', payload?.year);
     }
     return this.http.get(url, { params: params });
   }
@@ -27,15 +26,44 @@ export class InsightService {
   biAnalyticsReport(payload: any): Observable<any> {
     const url = environment.insightsUrl + '/biAnalyticsReport_1_0';
     let params = new HttpParams();
-    params = params.set('SiteId', 36347);
+    params = params.set('SiteId', payload?.siteId);
     if (payload?.fromDate) {
-      params = params.set('fromDate', this.fordate.transform(payload?.fromDate, 'yyyy-MM-dd')!)
+      params = params.set(
+        'fromDate',
+        this.fordate.transform(payload?.fromDate, 'yyyy-MM-dd')!,
+      );
     }
     if (payload?.toDate) {
-      params = params.set('toDate', this.fordate.transform(payload?.toDate, 'yyyy-MM-dd')!)
+      params = params.set(
+        'toDate',
+        this.fordate.transform(payload?.toDate, 'yyyy-MM-dd')!,
+      );
     }
     if (payload?.cameraId) {
-      params = params.set('cameraId', payload?.cameraId)
+      params = params.set('cameraId', payload?.cameraId);
+    }
+    return this.http.get(url, { params: params });
+  }
+
+  bi_verifai(payload: any): Observable<any> {
+    const url =
+      'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReport_1_0';
+    let params = new HttpParams();
+    params = params.set('SiteId', payload?.siteId);
+    if (payload?.fromDate) {
+      params = params.set(
+        'fromDate',
+        this.fordate.transform(payload?.fromDate, 'yyyy-MM-dd')!,
+      );
+    }
+    if (payload?.toDate) {
+      params = params.set(
+        'toDate',
+        this.fordate.transform(payload?.toDate, 'yyyy-MM-dd')!,
+      );
+    }
+    if (payload?.cameraId) {
+      params = params.set('cameraId', payload?.cameraId);
     }
     return this.http.get(url, { params: params });
   }
@@ -45,7 +73,10 @@ export class InsightService {
     let params = new HttpParams();
     params = params.set('SiteId', siteId ?? 0);
     if (startDate) {
-      params = params.set('date', this.fordate.transform(startDate, 'yyyy-MM-dd')!)
+      params = params.set(
+        'date',
+        this.fordate.transform(startDate, 'yyyy-MM-dd')!,
+      );
     }
     return this.http.get(url, { params: params });
   }
@@ -60,7 +91,6 @@ export class InsightService {
     if (typeid) {
       params = params.set('analyticTypeId', typeid);
     }
-    return this.http.get(url, { params: params })
+    return this.http.get(url, { params: params });
   }
-
 }

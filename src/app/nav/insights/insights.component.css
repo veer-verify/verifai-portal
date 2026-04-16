@@ -1,3 +1,14 @@
+.calendar {
+  width: 240px;
+}
+
+.submit-btn {
+  background: red;
+  border-radius: 6px;
+  color: white;
+  padding: 6px 12px;
+}
+
 .dashboard {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
