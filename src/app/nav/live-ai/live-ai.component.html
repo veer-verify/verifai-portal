@@ -38,6 +38,22 @@
           <span class="total-btn" (click)="goToAlerts()">View Total</span>
         </div>
       </div>
+      <div class="status-indicators">
+        <span class="status-item">
+          <span
+            class="status-dot"
+            [ngClass]="monitoringStatus ? 'red' : 'gray'"
+          ></span>
+          MONITORING
+        </span>
+        <span class="status-item">
+          <span
+            class="status-dot"
+            [ngClass]="aiStatus ? 'green' : 'gray'"
+          ></span>
+          AI ANALYTICS
+        </span>
+      </div>
 
       <!-- TWO CAMERAS -->
       <div class="camera-grid">
@@ -79,6 +95,15 @@
             width="200"
             *ngIf="imageLoader"
           />
+        </div>
+        <div class="subtitles-overlay" *ngIf="!imageLoader && !imageError">
+          <div
+            class="subtitle-chip"
+            *ngFor="let sub of subtitles"
+            [style.--chip-color]="sub.color"
+          >
+            <span class="sub-label">{{ sub.subtitle }}</span>
+          </div>
         </div>
       </div>
     </div>

@@ -26,7 +26,9 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //  Cameras
   camerasList: any[] = [];
   selectedCamera: any = null;
-
+  subtitles: any[] = [];
+  monitoringStatus: boolean = false;
+  aiStatus: boolean = false;
   //  Image
   selectedCameraImage: string = '';
 
@@ -44,7 +46,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private liveAiService: LiveAiService,
     private storageService: StorageService,
     private dialog: MatDialog,
-  ) { }
+  ) {}
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -257,20 +259,39 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .getLatestCameraImage(this.selectedCamera?.cameraId)
       .subscribe({
         next: (res: any) => {
-          if (res.statusCode === 200 && res.latestImage) {
-            this.imageLoader = false;
-            this.selectedCameraImage = `${res.latestImage}?t=${new Date().getTime()}`;
+          this.imageLoader = false;
+          if (res.statusCode === 200) {
+            // 1. Set the image
+            this.selectedCameraImage = res.latestImage
+              ? `${res.latestImage}?t=${new Date().getTime()}`
+              : 'icons/eyedisabled.svg';
+
+            // 2. Map the Status (Convert 'T'/'F' to boolean)
+            this.monitoringStatus = res.monitoring === 'T';
+            this.aiStatus = res.AI === 'T';
+
+            // 3. Store the Subtitles array for the legend overlay
+            this.subtitles = res.subtitles || [];
+
+            this.imageError = !res.latestImage;
           } else {
-            this.imageLoader = false;
-            this.selectedCameraImage = 'icons/eyedisabled.svg';
+            this.resetCameraData();
           }
         },
-
         error: (err) => {
           this.imageLoader = false;
+          this.imageError = true;
           console.error('❌ Image API Error:', err);
         },
       });
+  }
+
+  // Helper to clear data if API fails
+  private resetCameraData() {
+    this.selectedCameraImage = 'icons/eyedisabled.svg';
+    this.subtitles = [];
+    this.monitoringStatus = false;
+    this.aiStatus = false;
   }
 
   //! =========================================

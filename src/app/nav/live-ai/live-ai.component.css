@@ -322,9 +322,9 @@
 }
 
 /* ROW COLORS */
-.alerts-table tbody tr {
-  /* background: #ffffff; */
-}
+/* .alerts-table tbody tr {
+  /* background: #ffffff; 
+} */
 
 .alerts-table tbody tr:nth-child(even) {
   background: #f9fafb;
@@ -339,4 +339,90 @@
 .alerts-table td {
   padding: 8px 24px;
   font-size: 11px;
+}
+/* --- Status Indicators (Monitoring / AI) --- */
+.status-indicators {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #666;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.status-dot.red {
+  background: red;
+  box-shadow: 0 0 5px red;
+}
+.status-dot.green {
+  background: #00ff00;
+  box-shadow: 0 0 5px #00ff00;
+}
+
+/* Fix header spacing */
+.camera-header {
+  padding: 10px 0;
+}
+
+.site-name {
+  color: #333;
+  margin-bottom: 2px !important;
+}
+
+.cam-id {
+  color: #888;
+}
+/* --- Subtitles / Legend Style --- */
+.subtitles-overlay {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin-top: 12px;
+  max-width: 100%;
+  pointer-events: none;
+}
+
+.subtitle-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #bfbfbf;
+  padding: 0;
+  border-radius: 0;
+  font-size: 14px;
+  font-weight: 500;
+  border-left: none;
+  text-transform: none;
+}
+
+.subtitle-chip::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--chip-color);
+  display: inline-block;
+}
+
+.sub-label {
+  color: #bfbfbf;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sub-count {
+  display: none;
 }
