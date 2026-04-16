@@ -52,7 +52,7 @@ export class LiveAiService {
 
     const params: any = {
       siteId,
-      date,
+      // date,
       cameraIds,
       callingSystemDetail: 'portal'
     };
