@@ -20,6 +20,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { AgCharts } from 'ag-charts-angular';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { LiveAiService } from '../../../utilities/services/live-ai.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-insights',
   imports: [
@@ -45,7 +46,8 @@ export class InsightsComponent implements OnInit, OnDestroy {
     public storage_service: StorageService,
     public configSrvc: ConfigService,
     private liveAiService: LiveAiService,
-  ) { }
+    private router: Router,
+  ) {}
 
   columnDefs = [
     {
@@ -107,7 +109,13 @@ export class InsightsComponent implements OnInit, OnDestroy {
     if (page === 'map') return;
     this.onRadioChange();
   }
-
+  goToAlerts(item: any) {
+    this.router.navigate(['/dashboard/alerts'], {
+      queryParams: {
+        label: item.label,
+      },
+    });
+  }
   getDates(data: any) {
     this.fromDate = data.fromDate;
   }
@@ -165,7 +173,9 @@ export class InsightsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           if (res.status === 'Success') {
-            this.fromDate = new Date(res.LastWorkingDay).toISOString().split('T')[0];;
+            this.fromDate = new Date(res.LastWorkingDay)
+              .toISOString()
+              .split('T')[0];
             this.biAnalyticsReport();
           } else {
             this.storage_service.info$.next(res.message);
@@ -183,7 +193,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
         fromDate: this.fromDate,
         toDate: this.toDate,
         fromTime: this.fromTime,
-        toTime: this.toTime
+        toTime: this.toTime,
       })
       .subscribe({
         next: (res) => {
@@ -223,9 +233,9 @@ export class InsightsComponent implements OnInit, OnDestroy {
       const chartData = hasData
         ? originalData
         : originalData.map((d: any) => ({
-          ...d,
-          value: 1,
-        }));
+            ...d,
+            value: 1,
+          }));
 
       return {
         title: section.name,

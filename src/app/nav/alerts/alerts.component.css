@@ -333,3 +333,36 @@ select::-webkit-scrollbar-thumb:hover {
   pointer-events: none;
   cursor: not-allowed;
 }
+.ec-download {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+}
+
+/* Button reset + alignment */
+.download-btn {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* 🔥 FIXED ICON SIZE */
+.excel-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* Optional hover */
+.download-btn:hover .excel-icon {
+  transform: scale(1.1);
+}
+
+/* Optional click effect */
+.download-btn:active {
+  transform: scale(0.95);
+}
