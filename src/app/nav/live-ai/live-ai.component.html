@@ -30,7 +30,7 @@
     <div class="camera-section">
       <div class="camera-header">
         <div>
-          <p>{{ siteName }}</p>
+          <p>{{ siteName || "-" }}</p>
           <p>{{ selectedCamera?.cameraId || "-" }}</p>
         </div>
 
@@ -64,13 +64,12 @@
             [src]="selectedCameraImage"
             class="camera-feed"
             onerror="this.src = 'icons/eyedisabled.svg'"
+               [class.error-image]="storage_service.imageError"
           /> -->
           <img
             class="camera-feed"
-            [src]="selectedCameraImage"
+            [src]="selectedCameraImage | media | async"
             *ngIf="!imageLoader"
-            [class.error-image]="imageError"
-            (error)="onImageError($event)"
           />
 
           <img

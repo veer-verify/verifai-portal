@@ -10,10 +10,11 @@ import { ViewChild, ElementRef } from '@angular/core';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
+import { MediaPipe } from "../../../utilities/pipes/media.pipe";
 @Component({
   selector: 'app-live-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, StreamComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, StreamComponent, MediaPipe],
   providers: [LiveAiService],
   templateUrl: './live-ai.component.html',
   styleUrl: './live-ai.component.css',
@@ -44,12 +45,12 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private liveAiService: LiveAiService,
     private storageService: StorageService,
     private dialog: MatDialog,
+    public storage_service: StorageService
   ) { }
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   selectCamera(cam: any) {
-    this.imageError = false;
     this.selectedCamera = cam;
     this.onCameraChange();
   }
@@ -93,9 +94,6 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .subscribe((site: any) => {
         this.imageLoader = true;
         this.tableLoader = true;
-        this.imageError = false;
-
-        console.log('🏢 Site Changed:', site);
 
         this.selectedSiteId = site.siteId;
         this.siteName = site.siteName;
@@ -380,21 +378,21 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     });
   }
 
-  onImageLoad(event: Event) {
-    console.log('g');
-    const img = event.target as HTMLImageElement;
-    // img.width = 200;
-    img.classList.add('camera-feed');
-  }
+  // onImageLoad(event: Event) {
+  //   console.log('g');
+  //   const img = event.target as HTMLImageElement;
+  //   // img.width = 200;
+  //   img.classList.add('camera-feed');
+  // }
 
-  imageError = false;
-  onImageError(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.width = 200;
-    // img.classList.remove('camera-feed');
-    this.imageError = true;
-    img.src = '/icons/eyedisabled.svg';
-  }
+
+  // onImageError(event: Event) {
+  //   const img = event.target as HTMLImageElement;
+  //   img.width = 200;
+  //   // img.classList.remove('camera-feed');
+  //   this.storage_service.imageError = false;
+  //   img.src = '/icons/eyedisabled.svg';
+  // }
 
   //! =========================================
   //! CLEANUP
