@@ -13,11 +13,11 @@ video {
   align-items: center;
   position: absolute;
   bottom: 0;
-  z-index: 99;
+  z-index: 9;
   width: 100%;
-  background: #000 0% 0% no-repeat padding-box;
-  color: #ababab;
+  color: #ffffff;
   font-size: 12px;
+  background: rgb(27 24 24 / 60%);
   padding: 4px 10px;
 }
 

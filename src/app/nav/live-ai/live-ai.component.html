@@ -95,14 +95,14 @@
             *ngIf="imageLoader"
           />
         </div>
-        <div class="subtitles-overlay" *ngIf="!imageLoader && !imageError">
-          <div
-            class="subtitle-chip"
-            *ngFor="let sub of subtitles"
-            [style.--chip-color]="sub.color"
-          >
-            <span class="sub-label">{{ sub.subtitle }}</span>
-          </div>
+      </div>
+      <div class="subtitles-overlay" *ngIf="!imageLoader">
+        <div
+          class="subtitle-chip"
+          *ngFor="let sub of subtitles"
+          [style.--chip-color]="sub.color"
+        >
+          <span class="sub-label">{{ sub.subtitle }}</span>
         </div>
       </div>
     </div>

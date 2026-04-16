@@ -237,7 +237,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
             {
               type: 'donut',
               angleKey: 'value',
-              innerRadiusRatio: 0.75,
+              innerRadiusRatio: 0.65,
 
               fills: hasData ? this.COLORS : ['#E0E0E0'],
 

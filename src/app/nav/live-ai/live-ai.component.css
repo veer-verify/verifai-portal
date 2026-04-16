@@ -349,14 +349,14 @@
   display: flex;
   gap: 15px;
   align-items: center;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
 .status-item {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 12px;
+  font-size: 11px;
   color: #666;
 }
 
@@ -375,9 +375,9 @@
 }
 
 /* Fix header spacing */
-.camera-header {
+/* .camera-header {
   padding: 10px 0;
-}
+} */
 
 .site-name {
   color: #333;
@@ -402,14 +402,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: transparent;
-  color: #bfbfbf;
+  /* background: transparent; */
+  color: #665858;
   padding: 0;
   border-radius: 0;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   border-left: none;
-  text-transform: none;
+  text-transform: capitalize;
 }
 
 .subtitle-chip::before {
@@ -419,13 +419,14 @@
   border-radius: 2px;
   background: var(--chip-color);
   display: inline-block;
+  margin-bottom: 3px;
 }
 
-.sub-label {
+/* .sub-label {
   color: #bfbfbf;
   font-size: 14px;
   font-weight: 500;
-}
+} */
 
 .sub-count {
   display: none;
