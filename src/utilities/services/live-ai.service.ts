@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root',
 })
 export class LiveAiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   //!! ======================= Get Cameras  =======================
   getCamerasForAI(siteId: number) {
@@ -53,7 +53,8 @@ export class LiveAiService {
     const params: any = {
       siteId,
       date,
-      cameraIds, // array supported
+      cameraIds,
+      callingSystemDetail: 'portal'
     };
 
     return this.http.get<any>(url, { params });

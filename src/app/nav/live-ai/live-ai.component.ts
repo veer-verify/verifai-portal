@@ -22,7 +22,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //  Events Data
   alerts: any[] = [];
   totalCount = 0;
-  siteName: string = '';
+  siteName!: string;
   //  Cameras
   camerasList: any[] = [];
   selectedCamera: any = null;
@@ -44,11 +44,12 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private liveAiService: LiveAiService,
     private storageService: StorageService,
     private dialog: MatDialog,
-  ) {}
+  ) { }
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
   selectCamera(cam: any) {
+    this.imageError = false;
     this.selectedCamera = cam;
     this.onCameraChange();
   }
@@ -92,6 +93,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .subscribe((site: any) => {
         this.imageLoader = true;
         this.tableLoader = true;
+        this.imageError = false;
 
         console.log('🏢 Site Changed:', site);
 

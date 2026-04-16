@@ -100,7 +100,7 @@
           <tr *ngFor="let alert of alerts">
             <td>{{ alert.eventFromTime }}</td>
             <td>{{ alert.eventToTime }}</td>
-            <td>{{ alert.objectName }}</td>
+            <td>{{ alert.objectName | titlecase }}</td>
             <td>{{ alert.subAlertTag }}</td>
             <td>
               <img

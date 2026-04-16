@@ -45,7 +45,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
     public storage_service: StorageService,
     public configSrvc: ConfigService,
     private liveAiService: LiveAiService,
-  ) {}
+  ) { }
 
   columnDefs = [
     {
@@ -67,8 +67,8 @@ export class InsightsComponent implements OnInit, OnDestroy {
   currentSite: any;
   cameraId: any = '';
   today = new Date();
-  fromDate: Date = new Date();
-  toDate: Date = new Date();
+  fromDate: any;
+  toDate: any;
   fromTime: any;
   toTime: any;
   gridOptions!: GridOptions;
@@ -165,7 +165,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           if (res.status === 'Success') {
-            this.fromDate = new Date(res.LastWorkingDay);
+            this.fromDate = new Date(res.LastWorkingDay).toISOString().split('T')[0];;
             this.biAnalyticsReport();
           } else {
             this.storage_service.info$.next(res.message);
@@ -182,6 +182,8 @@ export class InsightsComponent implements OnInit, OnDestroy {
         cameraId: this.cameraId,
         fromDate: this.fromDate,
         toDate: this.toDate,
+        fromTime: this.fromTime,
+        toTime: this.toTime
       })
       .subscribe({
         next: (res) => {
@@ -221,9 +223,9 @@ export class InsightsComponent implements OnInit, OnDestroy {
       const chartData = hasData
         ? originalData
         : originalData.map((d: any) => ({
-            ...d,
-            value: 1,
-          }));
+          ...d,
+          value: 1,
+        }));
 
       return {
         title: section.name,
