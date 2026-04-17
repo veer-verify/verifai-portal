@@ -22,6 +22,7 @@
   z-index: 99;
   width: 340px;
   height: calc(100vh - 60px);
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s forwards;
@@ -34,7 +35,7 @@
   background-color: #ed3237;
   color: white;
   padding: 10px;
-  flex: 1;
+  /* flex: 1; */
   font-size: 14px;
   user-select: none;
 }
@@ -136,12 +137,17 @@
 }
 
 .info {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   position: absolute;
   bottom: 0;
+  z-index: 99;
   width: 100%;
-  background: #000 0% 0% no-repeat padding-box;
   color: #ffffff;
+  font-size: 12px;
+  background: rgb(27 24 24 / 60%);
+  padding: 4px 10px;
 }
 
 .grid-highlight {
