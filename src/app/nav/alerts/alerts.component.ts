@@ -24,7 +24,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AlertService } from '../../../utilities/services/alert.service';
-import { CdkAutofill } from "@angular/cdk/text-field";
+import { CdkAutofill } from '@angular/cdk/text-field';
+
 @Component({
   selector: 'app-alerts',
   standalone: true,
@@ -38,7 +39,7 @@ import { CdkAutofill } from "@angular/cdk/text-field";
     MatMenuModule,
     PaginationComponent,
     MatDatepickerModule,
-    CdkAutofill
+    CdkAutofill,
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
@@ -51,7 +52,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) { }
+  ) {}
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -69,10 +70,12 @@ export class AlertsComponent {
   fromDate: any;
   toDate: any;
   today = new Date();
+  todayDateTime = '';
   actionTag: any = '';
   anyData: boolean = false;
 
   sfilterForm!: FormGroup;
+  spinexcel: boolean = false;
 
   columnDefs: ColDef[] = [
     { field: 'name', headerName: 'Camera', filter: false },
@@ -114,15 +117,9 @@ export class AlertsComponent {
 
     for (const key of Object.keys(formValues)) {
       const value = formValues[key];
-
-      if (!value) continue; // skip empty, null, undefined
-
-      if ((key === 'fromTime' || key === 'toTime') && value === '00:00') {
-        continue; // ignore default time
-      }
-
+      if (!value) continue;
       this.anyData = true;
-      break; // no need to check further
+      break;
     }
     this.getTypes();
     this.storage_service.currentSite$
@@ -137,12 +134,67 @@ export class AlertsComponent {
       });
   }
 
+  formatDateTimeLocal(date: Date): string {
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2, '0');
+    const day = `${date.getDate()}`.padStart(2, '0');
+    const hours = `${date.getHours()}`.padStart(2, '0');
+    const minutes = `${date.getMinutes()}`.padStart(2, '0');
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
+  formatDateTimeSeconds(dateTimeValue: string): string {
+    if (!dateTimeValue) return '';
+    return dateTimeValue.replace('T', ' ') + ':00';
+  }
+
+  initilizeFilterForm(): void {
+    const now = new Date();
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    this.todayDateTime = this.formatDateTimeLocal(now);
+
+    this.filterForm = this.fb.group({
+      cameraId: [''],
+      actionTag: [''],
+      fromDate: [this.formatDateTimeLocal(startOfToday)],
+      toDate: [this.formatDateTimeLocal(now)],
+      fromTime: [''],
+      toTime: [''],
+      durationStart: [1],
+      durationEnd: [60],
+    });
+
+    this.sfilterForm = this.fb.group({
+      cameraId: [''],
+      actionTag: [''],
+      fromDate: [this.formatDateTimeLocal(startOfToday)],
+      fromTime: [''],
+      toTime: [''],
+      toDate: [this.formatDateTimeLocal(now)],
+    });
+  }
+
   clearData() {
-    this.sfilterForm.reset();
-    this.anyData = false;
+    const now = new Date();
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    this.todayDateTime = this.formatDateTimeLocal(now);
+
+    this.sfilterForm.patchValue({
+      cameraId: '',
+      actionTag: '',
+      fromDate: this.formatDateTimeLocal(startOfToday),
+      toDate: this.formatDateTimeLocal(now),
+      fromTime: '',
+      toTime: '',
+    });
+
+    this.anyData = true;
     this.incidentList();
   }
-  spinexcel: boolean = false;
 
   downloadExcelReport() {
     const formValue = this.sfilterForm.value;
@@ -156,9 +208,6 @@ export class AlertsComponent {
     const user = this.storage_service.getData('user');
     const token = user?.AccessToken;
 
-    console.log('USER DATA =>', user);
-    console.log('Resolved token =>', token);
-
     if (!token) {
       this.alertService.error('Access token expired. Please login again.');
       return;
@@ -167,8 +216,8 @@ export class AlertsComponent {
     this.spinexcel = true;
 
     const payload: any = {
-      fromDate: `${formValue.fromDate} 00:00:00`,
-      toDate: `${formValue.toDate} 23:59:59`,
+      fromDate: this.formatDateTimeSeconds(formValue.fromDate),
+      toDate: this.formatDateTimeSeconds(formValue.toDate),
       siteId: siteId,
     };
 
@@ -188,8 +237,9 @@ export class AlertsComponent {
 
         link.href = url;
         link.download = fileName;
+        document.body.appendChild(link);
         link.click();
-
+        document.body.removeChild(link);
         window.URL.revokeObjectURL(url);
         this.spinexcel = false;
       },
@@ -199,31 +249,6 @@ export class AlertsComponent {
         this.spinexcel = false;
       },
     });
-  }
-  initilizeFilterForm(): void {
-    this.filterForm = this.fb.group({
-      cameraId: [''],
-      actionTag: [''],
-      fromDate: [''],
-      toDate: [''],
-      fromTime: [''],
-      toTime: [''],
-      durationStart: [1],
-      durationEnd: [60],
-    });
-
-    this.sfilterForm = this.fb.group({
-      cameraId: [''],
-      actionTag: [''],
-      fromDate: [''],
-      fromTime: [''],
-      toTime: [''],
-      toDate: [''],
-    });
-
-    // const formattedTime = formatDate(new Date(), 'HH:mm', 'en-US');
-    // this.filterForm.patchValue({ fromTime: formattedTime });
-    // console.log(this.filterForm.value)
   }
 
   openTimePicker(input: HTMLInputElement) {
@@ -273,7 +298,7 @@ export class AlertsComponent {
   }
 
   getTypes() {
-    let res = this.storage_service.getType(36);
+    const res = this.storage_service.getType(36);
     this.actionTags = res[0]?.metadata;
   }
 
@@ -302,18 +327,18 @@ export class AlertsComponent {
     this.incidentList();
   }
 
-  changePage(pNum: any) {
-    this.pageNumber = pNum;
+  changePage(pageNo: any) {
+    this.pageNumber = pageNo;
     this.incidentList();
   }
 
   onFilterChange() {
-    console.log('call');
+    this.pageNumber = 1;
     this.anyData = true;
     this.incidentList();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }

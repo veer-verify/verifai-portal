@@ -47,6 +47,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   intervalId: any;
 
   private destroy$ = new Subject<void>();
+  http: any;
 
   constructor(
     private router: Router,
@@ -260,31 +261,41 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     if (!this.selectedCamera?.cameraId) return;
 
     this.imageLoader = true;
+
     this.liveAiService
-      .getLatestCameraImage(this.selectedCamera?.cameraId)
+      .getLatestCameraImage(this.selectedCamera.cameraId)
       .subscribe({
         next: (res: any) => {
           this.imageLoader = false;
+
           if (res.statusCode === 200) {
-            this.selectedCameraImage = res.latestImage
-              ? `${res.latestImage}?t=${new Date().getTime()}`
-              : 'icons/eyedisabled.svg';
+            if (res.latestImage) {
+              const separator = res.latestImage.includes('?') ? '&' : '?';
+              this.selectedCameraImage = `${res.latestImage}${separator}t=${new Date().getTime()}`;
+            } else {
+              this.selectedCameraImage = 'icons/eyedisabled.svg';
+            }
 
             this.monitoringStatus = res.monitoring === 'T';
             this.aiStatus = res.AI === 'T';
             this.subtitles = res.subtitles || [];
 
-            const index = this.camerasList.findIndex(
-              (cam: any) => cam.cameraId === this.selectedCamera?.cameraId,
+            this.camerasList = this.camerasList.map((cam: any) =>
+              cam.cameraId === this.selectedCamera.cameraId
+                ? {
+                    ...cam,
+                    monitoringStatus: this.monitoringStatus,
+                    aiStatus: this.aiStatus,
+                  }
+                : cam,
             );
 
-            if (index !== -1) {
-              this.camerasList[index].monitoringStatus = this.monitoringStatus;
-              this.camerasList[index].aiStatus = this.aiStatus;
+            const updatedCam = this.camerasList.find(
+              (cam: any) => cam.cameraId === this.selectedCamera.cameraId,
+            );
 
-              this.selectedCamera = {
-                ...this.camerasList[index],
-              };
+            if (updatedCam) {
+              this.selectedCamera = { ...updatedCam };
             }
           } else {
             this.resetCameraData();
@@ -293,6 +304,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
         error: (err) => {
           this.imageLoader = false;
           console.error('❌ Image API Error:', err);
+          this.resetCameraData();
         },
       });
   }
@@ -304,17 +316,24 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     this.monitoringStatus = false;
     this.aiStatus = false;
 
-    const index = this.camerasList.findIndex(
-      (cam: any) => cam.cameraId === this.selectedCamera?.cameraId,
+    if (!this.selectedCamera?.cameraId) return;
+
+    this.camerasList = this.camerasList.map((cam: any) =>
+      cam.cameraId === this.selectedCamera.cameraId
+        ? {
+            ...cam,
+            monitoringStatus: false,
+            aiStatus: false,
+          }
+        : cam,
     );
 
-    if (index !== -1) {
-      this.camerasList[index].monitoringStatus = false;
-      this.camerasList[index].aiStatus = false;
+    const updatedCam = this.camerasList.find(
+      (cam: any) => cam.cameraId === this.selectedCamera.cameraId,
+    );
 
-      this.selectedCamera = {
-        ...this.camerasList[index],
-      };
+    if (updatedCam) {
+      this.selectedCamera = { ...updatedCam };
     }
   }
 

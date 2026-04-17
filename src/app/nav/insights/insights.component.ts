@@ -68,7 +68,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
   destroy$ = new Subject<void>();
   currentSite: any;
   cameraId: any = '';
-  today = new Date();
+  today = new Date().toISOString().split('T')[0];
   fromDate: any;
   toDate: any;
   fromTime: any;
@@ -207,14 +207,30 @@ export class InsightsComponent implements OnInit, OnDestroy {
     this.storage_service.info$.next('loading...');
     this.analyticsData = [];
     this.charts = [];
+
     this.insight_service
       .getNonWorkingDays({ siteId: this.currentSite?.siteId })
       .subscribe({
         next: (res) => {
           if (res.status === 'Success') {
+            const now = new Date();
+
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const hh = String(now.getHours()).padStart(2, '0');
+            const min = String(now.getMinutes()).padStart(2, '0');
+
+            // keep old start-date logic exactly as it is
             this.fromDate = new Date(res.LastWorkingDay)
               .toISOString()
               .split('T')[0];
+
+            // only add end-date/current-time defaults
+            this.toDate = `${yyyy}-${mm}-${dd}`;
+            this.fromTime = '00:00';
+            this.toTime = `${hh}:${min}`;
+
             this.biAnalyticsReport();
           } else {
             this.storage_service.info$.next(res.message);

@@ -105,12 +105,27 @@
         </div>
 
         <!-- CAMERA 2 -->
-        <div class="camera-box">
+        <!-- <div class="camera-box">
           <img
             class="camera-feed"
             [src]="selectedCameraImage | media | async"
             *ngIf="!imageLoader"
             onerror="this.src = 'icons/eye-disabled.png'"
+          />
+
+          <img
+            src="gif/loading-gif.gif"
+            alt=""
+            width="200"
+            *ngIf="imageLoader"
+          />
+        </div> -->
+        <div class="camera-box">
+          <img
+            class="camera-feed"
+            [src]="selectedCameraImage"
+            *ngIf="!imageLoader"
+            onerror="this.src = 'icons/eyedisabled.svg'"
           />
 
           <img
@@ -128,8 +143,9 @@
       <table class="alerts-table">
         <thead>
           <tr>
-            <th>Start Time</th>
-            <th>End Time</th>
+            <th>Date</th>
+            <th>Time</th>
+            <!-- <th>End Time</th> -->
             <th>Object Name</th>
             <th>Alert Tag</th>
             <th>Image/Clip</th>
@@ -138,8 +154,9 @@
 
         <tbody>
           <tr *ngFor="let alert of alerts">
+            <td>{{ alert.eventDate }}</td>
             <td>{{ alert.eventFromTime }}</td>
-            <td>{{ alert.eventToTime }}</td>
+            <!-- <td>{{ alert.eventToTime }}</td> -->
             <td>{{ alert.objectName | titlecase }}</td>
             <td>{{ alert.subAlertTag }}</td>
             <td>

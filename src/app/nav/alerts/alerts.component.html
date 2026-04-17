@@ -52,9 +52,8 @@
         <div class="calendar">
           <span>START</span>
           <input
-            type="date"
-            placeholder="MM-DD-YYYY"
-            [max]="today"
+            type="datetime-local"
+            [max]="todayDateTime"
             (change)="onFilterChange()"
             formControlName="fromDate"
           />
@@ -85,9 +84,8 @@
         <div class="calendar">
           <span>END</span>
           <input
-            type="date"
-            placeholder="MM-DD-YYYY"
-            [max]="today"
+            type="datetime-local"
+            [max]="todayDateTime"
             (change)="onFilterChange()"
             formControlName="toDate"
           />
@@ -186,13 +184,10 @@
             <label class="mt-3">Start Date</label>
             <div class="date-time">
               <div class="date-time-inputs">
-                <input type="date" formControlName="fromDate" />
-                <span class="divider"></span>
                 <input
-                  type="time"
-                  formControlName="fromTime"
-                  step="1"
-                  (change)="get()"
+                  type="datetime-local"
+                  formControlName="fromDate"
+                  [max]="todayDateTime"
                 />
               </div>
             </div>
@@ -205,9 +200,11 @@
             <label class="mt-3">End Date</label>
             <div class="date-time">
               <div class="date-time-inputs">
-                <input type="date" formControlName="toDate" />
-                <span class="divider"></span>
-                <input type="time" formControlName="toTime" step="1" />
+                <input
+                  type="datetime-local"
+                  formControlName="toDate"
+                  [max]="todayDateTime"
+                />
               </div>
             </div>
 
