@@ -11,7 +11,7 @@ export class InsightService {
   constructor(
     private http: HttpClient,
     private fordate: DatePipe,
-  ) { }
+  ) {}
 
   getNonWorkingDays(payload: any): Observable<any> {
     let url = `${environment.insightsUrl}/notWorkingDays_1_0`;
@@ -46,7 +46,8 @@ export class InsightService {
   }
 
   bi_verifai(payload: any): Observable<any> {
-    const url = 'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReport_1_0';
+    const url =
+      'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReport_1_0';
 
     let params = new HttpParams().set('SiteId', payload?.siteId);
 
@@ -60,8 +61,8 @@ export class InsightService {
         'fromDate',
         this.fordate.transform(
           fromDateTime,
-          payload.fromTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'
-        )!
+          payload.fromTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd',
+        )!,
       );
     }
 
@@ -75,8 +76,8 @@ export class InsightService {
         'toDate',
         this.fordate.transform(
           toDateTime,
-          payload.toTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'
-        )!
+          payload.toTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd',
+        )!,
       );
     }
 
@@ -111,5 +112,49 @@ export class InsightService {
       params = params.set('analyticTypeId', typeid);
     }
     return this.http.get(url, { params: params });
+  }
+
+  downloadBiVerifaiPdf(payload: any): Observable<Blob> {
+    const url =
+      'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReportPdf_1_0';
+
+    let params = new HttpParams().set('SiteId', payload?.siteId);
+
+    if (payload?.fromDate) {
+      const fromDateTime = payload.fromTime
+        ? new Date(`${payload.fromDate}T${payload.fromTime}`)
+        : new Date(payload.fromDate);
+
+      params = params.set(
+        'fromDate',
+        this.fordate.transform(
+          fromDateTime,
+          payload.fromTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd',
+        )!,
+      );
+    }
+
+    if (payload?.toDate) {
+      const toDateTime = payload.toTime
+        ? new Date(`${payload.toDate}T${payload.toTime}`)
+        : new Date(payload.toDate);
+
+      params = params.set(
+        'toDate',
+        this.fordate.transform(
+          toDateTime,
+          payload.toTime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd',
+        )!,
+      );
+    }
+
+    if (payload?.cameraId) {
+      params = params.set('cameraId', payload.cameraId);
+    }
+
+    return this.http.get(url, {
+      params,
+      responseType: 'blob',
+    });
   }
 }

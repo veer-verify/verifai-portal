@@ -79,8 +79,12 @@
     </div>
 
     <div class="btn-sec d-inline-flex gap-2">
-      <button class="d-inline-flex align-items-center gap-2 me-3">
-        <img src="icons/download-insights.svg" /><span>DOWNLOAD</span>
+      <button
+        class="d-inline-flex align-items-center gap-2 me-3"
+        (click)="downloadBiReport()"
+      >
+        <img src="icons/download-insights.svg" alt="download" />
+        <span>DOWNLOAD</span>
       </button>
       <button
         (click)="setPage('list')"
