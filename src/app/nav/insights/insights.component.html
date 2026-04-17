@@ -4,6 +4,13 @@
   <div class="tool-bar">
     <div *ngIf="page === 'map'"></div>
     <div class="d-inline-flex align-items-center gap-3" *ngIf="page === 'list'">
+      <div
+        class="hamburger py-1"
+        (click)="storage_service.openSideNav()"
+        *ngIf="!(storage_service.showSideNav$ | async)"
+      >
+        ☰
+      </div>
       <div class="select-with-icon">
         <img src="icons/drop_cam.svg" alt="" class="icon" />
         <select
@@ -21,7 +28,7 @@
       </div>
 
       <!-- <div class="d-inline-flex align-items-center gap-2" *ngIf="page === 'list'"> -->
-      <div class="d-inline-flex align-items-center gap-2">
+      <!-- <div class="d-inline-flex align-items-center gap-2">
         <input
           type="radio"
           name="type"
@@ -40,7 +47,7 @@
           (ngModelChange)="onRadioChange()"
         />
         <span style="white-space: nowrap">Business Intelligence</span>
-      </div>
+      </div> -->
       <!-- </div> -->
 
       <div class="calendar">

@@ -24,6 +24,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { AlertService } from '../../../utilities/services/alert.service';
+import { CdkAutofill } from "@angular/cdk/text-field";
 @Component({
   selector: 'app-alerts',
   standalone: true,
@@ -37,19 +38,20 @@ import { AlertService } from '../../../utilities/services/alert.service';
     MatMenuModule,
     PaginationComponent,
     MatDatepickerModule,
+    CdkAutofill
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
 })
 export class AlertsComponent {
   constructor(
-    private storage_service: StorageService,
+    public storage_service: StorageService,
     private config_service: ConfigService,
     private alertService: AlertService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -58,7 +60,7 @@ export class AlertsComponent {
   isChecked: boolean = false;
   camerasList: any = [];
   actionTags: any = [];
-  pageSize: any = 10;
+  pageSize: any = 25;
   pageNumber: any = 1;
   rowData: any;
   totalPages = 0;

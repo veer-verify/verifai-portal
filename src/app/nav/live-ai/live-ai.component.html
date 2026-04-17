@@ -1,6 +1,13 @@
 <div class="live-ai-page">
   <!-- TOP BAR (UNCHANGED) -->
   <div class="top-filter-bar">
+    <div
+      class="hamburger"
+      (click)="storage_service.openSideNav()"
+      *ngIf="!(storage_service.showSideNav$ | async)"
+    >
+      ☰
+    </div>
     <div class="camera-scroll-wrapper">
       <button class="scroll-btn left" (click)="scrollLeft()">&#10094;</button>
 
@@ -86,17 +93,11 @@
 
         <!-- CAMERA 2 -->
         <div class="camera-box">
-          <!-- <img
-            *ngIf="!imageLoader"
-            [src]="selectedCameraImage"
-            class="camera-feed"
-            onerror="this.src = 'icons/eyedisabled.svg'"
-               [class.error-image]="storage_service.imageError"
-          /> -->
           <img
             class="camera-feed"
             [src]="selectedCameraImage | media | async"
             *ngIf="!imageLoader"
+            onerror="this.src = 'icons/eye-disabled.png'"
           />
 
           <img

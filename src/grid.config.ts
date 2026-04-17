@@ -27,6 +27,7 @@ export const gridOptions: GridOptions = {
   pagination: false,
   paginationPageSize: 10,
   // cacheBlockSize: 10,
+  // paginationAutoPageSize: true,
   paginationPageSizeSelector: [10, 20, 50, 100],
   animateRows: true,
   serverSideEnableClientSideSort: false,

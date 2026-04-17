@@ -4,18 +4,20 @@ import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
 import { ConfigService } from '../../utilities/services/config.service';
 import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.component";
+import { AsyncPipe } from '@angular/common';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent],
+    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,
 })
 export class DashboardComponent implements OnInit {
 
-    private storage_service = inject(StorageService);
+    public storage_service = inject(StorageService);
     private config_service = inject(ConfigService);
+    sites: any = [];
 
     ngOnInit(): void {
         this.getSitesListForUserName();
@@ -34,6 +36,7 @@ export class DashboardComponent implements OnInit {
             .subscribe({
                 next: (res) => {
                     if (res.Status === 'Success') {
+                        this.sites = res.sites;
                         const [first] = res.sites;
                         this.storage_service.siteData$.next(res.sites);
                         this.storage_service.currentSite$.next(first);
@@ -43,6 +46,15 @@ export class DashboardComponent implements OnInit {
                     console.log(err);
                 }
             })
+    }
+
+    updateSite(site: any) {
+        this.storage_service.showSideNav$.next(false);
+        this.storage_service.currentSite$.next(site);
+    }
+
+    close() {
+        this.storage_service.showSideNav$.next(false);
     }
 
 }

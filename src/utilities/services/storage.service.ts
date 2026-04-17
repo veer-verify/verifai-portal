@@ -16,7 +16,12 @@ export class StorageService {
   public loader$ = new BehaviorSubject(false);
   public info$ = new BehaviorSubject('');
   public siteData$ = new BehaviorSubject([]);
+  public showSideNav$ = new BehaviorSubject(true);
   public currentSite$ = new BehaviorSubject<Site | null>(null);
+
+  openSideNav() {
+    this.showSideNav$.next(true);
+  }
 
   public encrypt(txt: string): string {
     return AES.encrypt(txt, this.key).toString();

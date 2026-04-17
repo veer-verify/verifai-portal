@@ -1,4 +1,4 @@
-.dialog video {
+/* .dialog video {
   width: 250px;
   height: 250px;
 }
@@ -6,9 +6,31 @@
 .dialog img {
   width: 250px;
   height: 250px;
+} */
+
+/* .dialog {
+  background-color: #000000;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+} */
+
+.dialog img,
+.dialog video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
 .dialog {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  /* width: 100%;
+  height: 100%; */
+}
+
+/* If only one item → make it bigger */
+.dialog:has(:only-child) {
+  grid-template-columns: 1fr;
 }

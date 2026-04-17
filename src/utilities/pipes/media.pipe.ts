@@ -9,7 +9,7 @@ import { catchError, filter, firstValueFrom, map, of } from 'rxjs';
 export class MediaPipe implements PipeTransform {
 
   http = inject(HttpClient);
-  storage_service = inject(StorageService);
+  // storage_service = inject(StorageService);
 
   async transform(src: string): Promise<any> {
     if (!src) return;

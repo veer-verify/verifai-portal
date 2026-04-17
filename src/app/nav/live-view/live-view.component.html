@@ -1,7 +1,13 @@
 <section class="sub-header">
   @if (camList.length) {
     <div class="site-info">
-      <div class="hamburger" (click)="toggle()">☰</div>
+      <div
+        class="hamburger"
+        (click)="storage_service.openSideNav()"
+        *ngIf="!(storage_service.showSideNav$ | async)"
+      >
+        ☰
+      </div>
 
       <div class="select-with-icon">
         <img src="icons/drop_cam.svg" class="icon" />
@@ -86,11 +92,11 @@
   }
 </section>
 
-@if (showSites) {
+<!-- @if (storage_service.showSideNav$ | async) {
   <div class="side-sites">
     <div class="header">
       TOTAL SITES - {{ sitesList?.length }}
-      <a class="close" (click)="toggle()"
+      <a class="close" (click)="close()"
         ><span class="material-symbols-outlined"> arrow_left_alt </span></a
       >
     </div>
@@ -109,4 +115,4 @@
       }
     </div>
   </div>
-}
+} -->

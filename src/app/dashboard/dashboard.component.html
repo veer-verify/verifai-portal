@@ -2,6 +2,33 @@
 <!-- <app-sub-header></app-sub-header> -->
 <!-- <app-sb-hdr></app-sb-hdr> -->
 
-<main class="main">
+<main
+  class="main"
+  [style.marginLeft]="(storage_service.showSideNav$ | async) ? '300px' : '0'"
+>
+  @if (storage_service.showSideNav$ | async) {
+    <div class="side-sites">
+      <div class="header">
+        TOTAL SITES - {{ sites?.length }}
+        <a class="close" (click)="close()"
+          ><span class="material-symbols-outlined"> arrow_left_alt </span></a
+        >
+      </div>
+      <div class="sites-content">
+        @for (item of sites; track item?.siteId) {
+          <div class="site-list-item">
+            @if (storage_service.currentSite$ | async; as site) {
+              <a
+                (click)="updateSite(item)"
+                [style.color]="item?.siteId === site.siteId ? '#ef7146' : ''"
+              >
+                {{ item?.siteName }}
+              </a>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  }
   <router-outlet></router-outlet>
 </main>

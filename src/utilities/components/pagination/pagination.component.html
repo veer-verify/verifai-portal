@@ -1,8 +1,8 @@
 <div class="pagination">
-  <select (change)="changePageSize($event)">
-    <option value="10">10</option>
-    <option value="25">25</option>
-    <option value="50">50</option>
+  <select [(ngModel)]="pageSize" (change)="changePageSize($event)">
+    <option [value]="10">10</option>
+    <option [value]="25">25</option>
+    <option [value]="50">50</option>
   </select>
 
   <div class="direcs">

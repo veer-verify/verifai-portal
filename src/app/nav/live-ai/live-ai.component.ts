@@ -183,23 +183,21 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       error: (err) => console.error('❌ Camera API Error:', err),
     });
   }
+
   openClip(alert: any) {
     if (!alert.files || alert.files.length === 0) return;
 
     const fileName = alert.files[0];
-
     const fileUrl = `https://usstaging.ivisecurity.com/common/downloadFile_1_0?requestName=staging-events&assetName=${fileName}`;
-
-    console.log('FINAL API URL:', fileUrl);
-
     this.dialog.open(MediaDialogComponent, {
       data: {
         ...alert,
-        fileUrl: fileUrl, //  IMPORTANT
+        fileUrl: fileUrl,
       },
       disableClose: true,
     });
   }
+
   //! =========================================
   //! CAMERA CHANGE
   //! =========================================

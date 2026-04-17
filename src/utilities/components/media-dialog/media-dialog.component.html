@@ -6,16 +6,22 @@
     >
   </header>
 
-  @if (data?.files.length) {
-  <main class="dialog">
-    @for (item of data?.files; track $index) { @if (isVideo(item)) {
-
-    <video [src]="item | media | async" autoplay controls></video>
-    } @else {
-    <img [src]="item | media | async" />
-    } }
-  </main>
+  @if (data?.files?.length) {
+    <main class="dialog">
+      @for (item of data?.files; track $index) {
+        @if (isVideo(item)) {
+          <video [src]="item | media | async" autoplay controls></video>
+        } @else {
+          <!-- <img src="gif/loading-gif.gif" /> -->
+          <img
+            *ngIf="item"
+            [src]="item | media | async"
+            onerror="this.src = 'gif/cam-loader.gif'"
+          />
+        }
+      }
+    </main>
   } @else {
-  <p>no data!</p>
+    <p>no data!</p>
   }
 </section>

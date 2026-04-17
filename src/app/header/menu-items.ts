@@ -5,12 +5,19 @@ export const menuItems = [
     routeLink: 'live-view',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
+
   // {
   //   id: 'playback',
   //   label: 'playback',
   //   routeLink: 'playback',
   //   call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
   // },
+  {
+    id: 'liveAI',
+    label: 'live ai',
+    routeLink: 'live-ai',
+    call: (data: any) => (data?.key !== 'F' ? true : false),
+  },
   {
     id: 'alerts',
     label: 'alerts',
@@ -23,12 +30,7 @@ export const menuItems = [
     routeLink: 'insights',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
-  {
-    id: 'liveAI',
-    label: 'live ai',
-    routeLink: 'live-ai',
-    call: (data: any) => (data?.key !== 'F' ? true : false),
-  },
+
   // {
   //   id: 'trends',
   //   label: 'trends',
@@ -41,12 +43,12 @@ export const menuItems = [
     routeLink: 'timelapse',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
-  {
-    id: 'nvr',
-    label: 'nvr',
-    routeLink: 'nvr',
-    call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
-  },
+  // {
+  //   id: 'nvr',
+  //   label: 'nvr',
+  //   routeLink: 'nvr',
+  //   call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
+  // },
   // {
   //   id: 'map',
   //   label: 'map',

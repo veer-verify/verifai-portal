@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pagination',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.css'
 })
 export class PaginationComponent {
 
-  pageSize: any = 10;
+  pageSize: any = 25;
   pageNumber: any = 1;
 
   @Input() totalPages!: number;
