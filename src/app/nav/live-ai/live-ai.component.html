@@ -16,7 +16,20 @@
         >
           <img src="icons/drop_cam.svg" class="icon" />
           <span class="cam-name">{{ cam.cameraName }}</span>
-          <span class="dot"></span>
+
+          <div class="chip-status-dots">
+            <span
+              class="dot monitoring-dot"
+              [ngClass]="cam.monitoringStatus ? 'red' : 'gray'"
+              title="Monitoring"
+            ></span>
+
+            <span
+              class="dot ai-dot"
+              [ngClass]="cam.aiStatus ? 'green' : 'gray'"
+              title="AI Analytics"
+            ></span>
+          </div>
         </div>
       </div>
 
