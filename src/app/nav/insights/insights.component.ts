@@ -154,6 +154,45 @@ export class InsightsComponent implements OnInit, OnDestroy {
       },
     });
   }
+  //! downloadReportPDF
+  downloadBiReport() {
+    if (!this.currentSite?.siteId) {
+      this.storage_service.info$.next('site not found!');
+      return;
+    }
+
+    this.storage_service.info$.next('downloading...');
+
+    this.insight_service
+      .downloadBiVerifaiPdf({
+        siteId: this.currentSite?.siteId,
+        cameraId: this.cameraId,
+        fromDate: this.fromDate,
+        toDate: this.toDate,
+        fromTime: this.fromTime,
+        toTime: this.toTime,
+      })
+      .subscribe({
+        next: (blob: Blob) => {
+          const fileURL = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = fileURL;
+
+          const from = this.fromDate ? this.fromDate : 'from';
+          const to = this.toDate ? this.toDate : 'to';
+
+          a.download = `bi_analytics_report_${this.currentSite?.siteId}_${from}_${to}.pdf`;
+          a.click();
+
+          window.URL.revokeObjectURL(fileURL);
+          this.storage_service.info$.next('');
+        },
+        error: () => {
+          this.storage_service.info$.next('failed to download report!');
+        },
+      });
+  }
+
   camList: any = [];
   getCamerasForSiteId(data: any) {
     this.camList = [];

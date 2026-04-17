@@ -10,11 +10,17 @@ import { ViewChild, ElementRef } from '@angular/core';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
-import { MediaPipe } from "../../../utilities/pipes/media.pipe";
+import { MediaPipe } from '../../../utilities/pipes/media.pipe';
 @Component({
   selector: 'app-live-ai',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, StreamComponent, MediaPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    StreamComponent,
+    MediaPipe,
+  ],
   providers: [LiveAiService],
   templateUrl: './live-ai.component.html',
   styleUrl: './live-ai.component.css',
@@ -47,8 +53,8 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private liveAiService: LiveAiService,
     private storageService: StorageService,
     private dialog: MatDialog,
-    public storage_service: StorageService
-  ) { }
+    public storage_service: StorageService,
+  ) {}
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -165,6 +171,9 @@ export class LiveAiComponent implements OnInit, OnDestroy {
           this.camerasList = res.data.map((cam: any) => ({
             ...cam,
             cameraName: cam.cameraName?.trim(),
+            monitoringStatus:
+              cam.monitoring === 'T' || cam.monitoringStatus === true,
+            aiStatus: cam.AI === 'T' || cam.aiStatus === true,
           }));
 
           //*  ALWAYS SELECT FIRST CAMERA
@@ -257,18 +266,26 @@ export class LiveAiComponent implements OnInit, OnDestroy {
         next: (res: any) => {
           this.imageLoader = false;
           if (res.statusCode === 200) {
-            // 1. Set the image
             this.selectedCameraImage = res.latestImage
               ? `${res.latestImage}?t=${new Date().getTime()}`
               : 'icons/eyedisabled.svg';
 
-            // 2. Map the Status (Convert 'T'/'F' to boolean)
             this.monitoringStatus = res.monitoring === 'T';
             this.aiStatus = res.AI === 'T';
-
-            // 3. Store the Subtitles array for the legend overlay
             this.subtitles = res.subtitles || [];
 
+            const index = this.camerasList.findIndex(
+              (cam: any) => cam.cameraId === this.selectedCamera?.cameraId,
+            );
+
+            if (index !== -1) {
+              this.camerasList[index].monitoringStatus = this.monitoringStatus;
+              this.camerasList[index].aiStatus = this.aiStatus;
+
+              this.selectedCamera = {
+                ...this.camerasList[index],
+              };
+            }
           } else {
             this.resetCameraData();
           }
@@ -286,6 +303,19 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     this.subtitles = [];
     this.monitoringStatus = false;
     this.aiStatus = false;
+
+    const index = this.camerasList.findIndex(
+      (cam: any) => cam.cameraId === this.selectedCamera?.cameraId,
+    );
+
+    if (index !== -1) {
+      this.camerasList[index].monitoringStatus = false;
+      this.camerasList[index].aiStatus = false;
+
+      this.selectedCamera = {
+        ...this.camerasList[index],
+      };
+    }
   }
 
   //! =========================================
@@ -401,7 +431,6 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //   // img.width = 200;
   //   img.classList.add('camera-feed');
   // }
-
 
   // onImageError(event: Event) {
   //   const img = event.target as HTMLImageElement;
