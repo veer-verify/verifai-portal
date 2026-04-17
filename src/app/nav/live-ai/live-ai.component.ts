@@ -55,7 +55,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private dialog: MatDialog,
     public storage_service: StorageService,
-  ) {}
+  ) { }
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -269,12 +269,13 @@ export class LiveAiComponent implements OnInit, OnDestroy {
           this.imageLoader = false;
 
           if (res.statusCode === 200) {
-            if (res.latestImage) {
-              const separator = res.latestImage.includes('?') ? '&' : '?';
-              this.selectedCameraImage = `${res.latestImage}${separator}t=${new Date().getTime()}`;
-            } else {
-              this.selectedCameraImage = 'icons/eyedisabled.svg';
-            }
+            // if (res.latestImage) {
+            //   const separator = res.latestImage.includes('?') ? '&' : '?';
+            //   this.selectedCameraImage = `${res.latestImage}${separator}t=${new Date().getTime()}`;
+            // } else {
+            //   this.selectedCameraImage = 'icons/eyedisabled.svg';
+            // }
+            this.selectedCameraImage = res.latestImage;
 
             this.monitoringStatus = res.monitoring === 'T';
             this.aiStatus = res.AI === 'T';
@@ -283,10 +284,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             this.camerasList = this.camerasList.map((cam: any) =>
               cam.cameraId === this.selectedCamera.cameraId
                 ? {
-                    ...cam,
-                    monitoringStatus: this.monitoringStatus,
-                    aiStatus: this.aiStatus,
-                  }
+                  ...cam,
+                  monitoringStatus: this.monitoringStatus,
+                  aiStatus: this.aiStatus,
+                }
                 : cam,
             );
 
@@ -311,7 +312,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
 
   // Helper to clear data if API fails
   private resetCameraData() {
-    this.selectedCameraImage = 'icons/eyedisabled.svg';
+    // this.selectedCameraImage = 'icons/eyedisabled.svg';
     this.subtitles = [];
     this.monitoringStatus = false;
     this.aiStatus = false;
@@ -321,10 +322,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     this.camerasList = this.camerasList.map((cam: any) =>
       cam.cameraId === this.selectedCamera.cameraId
         ? {
-            ...cam,
-            monitoringStatus: false,
-            aiStatus: false,
-          }
+          ...cam,
+          monitoringStatus: false,
+          aiStatus: false,
+        }
         : cam,
     );
 
