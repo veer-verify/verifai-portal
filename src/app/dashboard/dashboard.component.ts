@@ -5,10 +5,12 @@ import { StorageService } from '../../utilities/services/storage.service';
 import { ConfigService } from '../../utilities/services/config.service';
 import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.component";
 import { AsyncPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { SearchPipe } from "../../utilities/pipes/search.pipe";
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe],
+    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe, FormsModule, SearchPipe],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,
@@ -18,6 +20,7 @@ export class DashboardComponent implements OnInit {
     public storage_service = inject(StorageService);
     private config_service = inject(ConfigService);
     sites: any = [];
+    searchSite!: string;
 
     ngOnInit(): void {
         this.getSitesListForUserName();
@@ -49,7 +52,7 @@ export class DashboardComponent implements OnInit {
     }
 
     updateSite(site: any) {
-        this.storage_service.showSideNav$.next(false);
+        // this.storage_service.showSideNav$.next(false);
         this.storage_service.currentSite$.next(site);
     }
 

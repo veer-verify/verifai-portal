@@ -14,8 +14,14 @@
           ><span class="material-symbols-outlined"> arrow_left_alt </span></a
         >
       </div>
+      <input
+        type="search"
+        placeholder="Search Sites"
+        [(ngModel)]="searchSite"
+        #siteInput
+      />
       <div class="sites-content">
-        @for (item of sites; track item?.siteId) {
+        @for (item of sites | search: searchSite; track item?.siteId) {
           <div class="site-list-item">
             @if (storage_service.currentSite$ | async; as site) {
               <a

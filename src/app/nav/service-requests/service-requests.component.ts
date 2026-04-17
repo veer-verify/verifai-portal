@@ -56,14 +56,14 @@ export class ServiceRequestsComponent {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private storage_service: StorageService,
+    public storage_service: StorageService,
     private config_service: ConfigService,
     private request_service: RequestService,
     private fb: FormBuilder,
     private dialog: MatDialog,
     private datePipe: DatePipe,
     private cdr: ChangeDetectorRef
-  ) {}
+  ) { }
 
   columnDefs: ColDef[] = [
     { field: 'serviceReqId', headerName: 'Id', filter: false },
