@@ -39,6 +39,10 @@
   /* background-color: #ffffff; */
 }
 
+.analytics-section {
+  margin-bottom: 10px;
+}
+
 .section-header {
   background: #7c7c7c;
   color: white;
@@ -47,8 +51,62 @@
   font-size: 12px;
   display: flex;
   justify-content: space-between;
-  border-radius: 6px 6px 0 0;
-  /* margin-top: 6px; */
+  border-radius: 6px;
+}
+
+.section-body {
+  background: transparent;
+  /* padding-top: 2px; */
+}
+.analytics-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.analytics-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.analytics-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.analytics-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 11px;
+}
+
+.analytics-value {
+  min-width: 60px;
+  text-align: right;
+  padding-right: 4px;
+  font-size: 11px;
+}
+
+.fallback-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #ff3b30;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .select-with-icon select {

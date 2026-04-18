@@ -96,7 +96,15 @@ export class InsightsComponent implements OnInit, OnDestroy {
         }
       });
   }
+  getAnalyticsIcon(icon: string): string {
+    if (!icon) return '';
 
+    if (icon.startsWith('http://') || icon.startsWith('https://')) {
+      return icon;
+    }
+
+    return `icons/${icon}`;
+  }
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

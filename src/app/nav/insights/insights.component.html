@@ -136,25 +136,49 @@
     <div class="dashboard">
       <!-- LEFT TABLE -->
       <div class="table-panel">
-        <div *ngFor="let section of analyticsData">
+        <div class="analytics-section" *ngFor="let section of analyticsData">
           <div class="section-header">
-            {{ section.name }}
-            <!-- <span>COUNT</span> -->
+            <span>{{ section.name }}</span>
+            <!-- <span>
+              {{
+                section.name?.toUpperCase()?.includes("TIME") ||
+                section.name?.toUpperCase()?.includes("PRODUCTIVITY")
+                  ? "TIME"
+                  : "COUNT"
+              }}
+            </span> -->
           </div>
 
-          <div class="ag-theme-alpine grid">
-            <ag-grid-angular
-              class="custom-grid"
-              [headerHeight]="40"
-              [rowData]="section.data"
-              [columnDefs]="columnDefs"
-              [domLayout]="'autoHeight'"
-            >
-            </ag-grid-angular>
+          <div class="section-body">
+            <div class="analytics-row" *ngFor="let row of section.data">
+              <div class="analytics-left">
+                <!-- ICON -->
+                <img
+                  *ngIf="row.icon && !row._iconError"
+                  class="analytics-icon"
+                  [src]="getAnalyticsIcon(row.icon)"
+                  (error)="row._iconError = true"
+                  alt=""
+                />
+
+                <!-- RED DOT FALLBACK -->
+                <span
+                  *ngIf="!row.icon || row._iconError"
+                  class="fallback-dot"
+                ></span>
+
+                <span class="analytics-label">
+                  {{ row.type || "-" }}
+                </span>
+              </div>
+
+              <div class="analytics-value">
+                {{ row.total || "0" }}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-
       <!-- RIGHT CHARTS -->
       <div class="chart-panel">
         <div *ngFor="let chart of charts">
