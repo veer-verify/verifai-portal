@@ -52,7 +52,6 @@
   display: flex;
   justify-content: space-between;
   border-radius: 6px;
-  margin-top: 10px;
 }
 
 .section-body {
@@ -131,7 +130,6 @@
   font-size: 14px;
   margin-left: 20px;
   text-transform: uppercase;
-  margin-top: 10px;
 }
 
 /* .donut-chart {
