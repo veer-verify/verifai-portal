@@ -24,13 +24,13 @@
   display: flex;
   flex-direction: column;
   animation: slideIn 300ms forwards;
-  box-shadow:
-    rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
-    rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px,
-    rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
-    rgba(42, 51, 70, 0.04) 0px 6px 6px -3px,
-    rgba(14, 63, 126, 0.04) 0px 12px 12px -6px,
-    rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
+}
+
+.site-search {
+  height: 32px;
+  border: 1px solid #ed3237;
+  border-radius: 50px;
+  padding: 0 16px;
 }
 
 .side-sites .header {
@@ -41,7 +41,6 @@
   color: white;
   padding: 10px;
   font-size: 13px;
-  font-weight: 700;
   user-select: none;
 }
 
@@ -62,28 +61,62 @@
 }
 
 .site-list-item {
-  padding: 6px 8px;
+  padding: 4px 8px;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   border-bottom: 1px solid #ed3237;
   font-size: 12px;
   user-select: none;
   opacity: 0.9;
+  cursor: pointer;
 
-  &:hover {
+  /* &:hover {
+    color: #ffffff !important;
     background-color: #ed3237;
-    color: #ffffff;
     opacity: 0.9;
-  }
+  } */
 }
 
-.site-list-item a {
+/* .site-list-item:hover a {
+  color: #ffffff !important;
+} */
+
+.site-list-item p {
   font-family: "Neometric Medium", sans-serif !important;
-  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: space-between;
+  margin: 6px 0;
+}
+
+.site-list-item span {
 }
 
 .show-cameras {
   cursor: pointer;
+}
+
+.cam-name {
+  font-size: 10px;
+  padding: 4px 0 8px 8px;
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cam-name img {
+  margin-right: 6px;
+}
+
+.dot {
+  display: block;
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
 }
 
 @keyframes slideIn {

@@ -79,20 +79,26 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe((res) => {
-        this.getCamerasForSiteId(res);
+        // this.getCamerasForSiteId(res);
+        this.tempCamList = [];
+        this.storage_service.camData$.subscribe((res) => {
+          this.camList = res;
+          this.tempCamList = this.camList;
+          this.adjustGrid(this.itemsPerPage);
+        })
       });
   }
 
-  getCamerasForSiteId(data: any) {
-    this.tempCamList = [];
-    this.configSrvc.getCamerasForSiteId(data).subscribe({
-      next: (res: any) => {
-        this.camList = res;
-        this.tempCamList = this.camList;
-        this.adjustGrid(this.itemsPerPage);
-      }
-    });
-  }
+  // getCamerasForSiteId(data: any) {
+  //   this.tempCamList = [];
+  //   this.configSrvc.getCamerasForSiteId(data).subscribe({
+  //     next: (res: any) => {
+  //       this.camList = res;
+  //       this.tempCamList = this.camList;
+  //       this.adjustGrid(this.itemsPerPage);
+  //     }
+  //   });
+  // }
 
   /**
    * pagination to split the cameras into multiple pages
@@ -139,12 +145,6 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.storage_service.showSideNav$.next(false);
     this.storage_service.currentSite$.next(site);
   }
-
-  // toggle() {
-  //   this.sitesList = this.storage_service.siteData$.getValue();
-  //   this.storage_service.showSideNav$.next(true);
-  //   // console.log(this.sitesList);
-  // }
 
   ngOnDestroy(): void {
     this.destroy$.next();
