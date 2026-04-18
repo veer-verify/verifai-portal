@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Subject, takeUntil, filter, finalize } from 'rxjs';
+import { Subject, takeUntil, filter, finalize, Observable, delay } from 'rxjs';
 
 import { LiveAiService } from '../../../utilities/services/live-ai.service';
 import { StorageService } from '../../../utilities/services/storage.service';
@@ -47,6 +47,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   intervalId: any;
 
   private destroy$ = new Subject<void>();
+  _sideNav!: Observable<any>;
   http: any;
 
   constructor(
@@ -95,6 +96,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //   this.startAutoRefresh();
   // }
   ngOnInit(): void {
+    this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
     this.storageService.currentSite$
       .pipe(
         filter((site) => !!site),

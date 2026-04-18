@@ -4,7 +4,7 @@
       <div
         class="hamburger"
         (click)="storage_service.openSideNav()"
-        *ngIf="!(storage_service.showSideNav$ | async)"
+        *ngIf="!(_sideNav | async)"
       >
         ☰
       </div>
@@ -87,7 +87,7 @@
   }
 </section>
 
-<!-- @if (storage_service.showSideNav$ | async) {
+<!-- @if (_sideNav | async) {
   <div class="side-sites">
     <div class="header">
       TOTAL SITES - {{ sitesList?.length }}

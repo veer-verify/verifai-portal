@@ -7,7 +7,7 @@ import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.c
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from "../../utilities/pipes/search.pipe";
-import { finalize } from 'rxjs';
+import { delay, finalize, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
@@ -21,6 +21,8 @@ export class DashboardComponent implements OnInit {
     public storage_service = inject(StorageService);
     private config_service = inject(ConfigService);
     private router = inject(Router);
+    _sideNav!: Observable<any>;
+
 
     sites: any = [];
     camList: any = [];
@@ -29,7 +31,7 @@ export class DashboardComponent implements OnInit {
     camLoader = false;
 
     ngOnInit(): void {
-        console.log(this.router.url);
+        this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
         this.getSitesListForUserName();
     }
 
@@ -80,7 +82,6 @@ export class DashboardComponent implements OnInit {
     currentSite: any;
     prevSite: any;
     updateSite(site: any) {
-        // this.storage_service.showSideNav$.next(false);
         this.prevSite = this.currentSite;
         this.currentSite = site;
         this.currentSite = this.prevSite?.siteId === this.currentSite?.siteId ? undefined : site;

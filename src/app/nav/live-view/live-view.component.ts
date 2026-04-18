@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 import { GlobalClickDirective } from '../../../utilities/directives/global-click.directive';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { delay, filter, Observable, Subject, takeUntil } from 'rxjs';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -48,6 +48,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('gridContainer') gridContainer!: ElementRef;
   @ViewChildren('gridItem') gridItem!: QueryList<ElementRef>;
   private destroy$ = new Subject<void>();
+  _sideNav!: Observable<any>;
 
   gridTypes: any = [];
   // showSites = false;
@@ -65,6 +66,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
+    this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
     this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.sitesList = res.sites;
@@ -139,11 +141,6 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   navigate(type: string) {
     type === 'next' ? this.currentPage += 1 : this.currentPage -= 1;
     this.pagination()
-  }
-
-  updateSite(site: any) {
-    this.storage_service.showSideNav$.next(false);
-    this.storage_service.currentSite$.next(site);
   }
 
   ngOnDestroy(): void {

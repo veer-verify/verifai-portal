@@ -4,7 +4,7 @@
     <div
       class="hamburger"
       (click)="storage_service.openSideNav()"
-      *ngIf="!(storage_service.showSideNav$ | async)"
+      *ngIf="!(_sideNav | async)"
     >
       ☰
     </div>

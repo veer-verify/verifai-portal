@@ -2,12 +2,9 @@
 <!-- <app-sub-header></app-sub-header> -->
 <!-- <app-sb-hdr></app-sb-hdr> -->
 
-<main
-  class="main"
-  [style.marginLeft]="(storage_service.showSideNav$ | async) ? '300px' : '0'"
->
+<main class="main" [style.marginLeft]="(_sideNav | async) ? '300px' : '0'">
   <!--side navbar-->
-  @if (storage_service.showSideNav$ | async) {
+  @if (_sideNav | async) {
     <div class="side-sites">
       <div
         class="d-flex align-items-center gap-2 p-1"
@@ -43,7 +40,9 @@
               </p>
 
               @if (
-                camList && item?.siteId === currentSite?.siteId && !camLoader
+                camList.length &&
+                item?.siteId === currentSite?.siteId &&
+                !camLoader
               ) {
                 @for (cam of camList; track cam?.cameraId) {
                   <div class="cam-name">
