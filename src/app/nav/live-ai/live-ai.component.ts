@@ -11,6 +11,7 @@ import { StreamComponent } from '../../../utilities/components/stream/stream.com
 import { MatDialog } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-live-ai',
   standalone: true,
@@ -194,14 +195,15 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   }
 
   openClip(alert: any) {
+    console.log(alert)
     if (!alert.files || alert.files.length === 0) return;
 
     const fileName = alert.files[0];
-    const fileUrl = `https://usstaging.ivisecurity.com/common/downloadFile_1_0?requestName=staging-events&assetName=${fileName}`;
+    // const fileUrl = `${environment.commonDownUrl}/downloadFile_1_0?requestName=staging-events&assetName=${fileName}`;
     this.dialog.open(MediaDialogComponent, {
       data: {
         ...alert,
-        fileUrl: fileUrl,
+        fileUrl: fileName,
       },
       disableClose: true,
     });
