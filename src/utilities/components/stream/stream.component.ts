@@ -36,10 +36,9 @@ export class StreamComponent implements OnChanges, OnDestroy {
     if (changes['videoData'] && !changes['videoData'].firstChange) {
       const newUrl = changes['videoData'].currentValue?.httpUrl;
       const oldUrl = changes['videoData'].previousValue?.httpUrl;
-      
+
       // Only restart if URL actually changed
       if (newUrl && newUrl !== oldUrl) {
-        console.log('📹 Camera changed:', oldUrl, '→', newUrl);
         this.restartStream();
       }
     }
@@ -135,12 +134,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
     }
   };
 
-  //! =========================================
-  //! 🔄 RESTART STREAM (Camera Change)
-  //! =========================================
   restartStream(): void {
-    console.log('🔄 Restarting stream...');
-    
     // Close existing peer connection
     if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
       this.peerConnection.close();
@@ -157,7 +151,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
     this.sessionUrl = '';
     this.queuedCandidates = [];
     this.peerConnection = null as any;
-    
+
     // Clear video
     if (this.video && this.video.nativeElement) {
       this.video.nativeElement.srcObject = null;
@@ -398,7 +392,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
   //! =========================================
   ngOnDestroy(): void {
     console.log('🧹 Cleaning up stream component...');
-    
+
     // Close peer connection
     if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
       this.peerConnection.close();

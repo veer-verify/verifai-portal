@@ -12,7 +12,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0 30px;
-  height: 50px;
+  height: 40px;
   border-bottom: 1px solid #eee;
   background: #fff;
   align-items: center;
@@ -33,7 +33,7 @@
   gap: 10px;
   padding: 6px;
   white-space: nowrap;
-  margin: 0 25px;
+  margin: 0 24px;
 }
 
 .camera-scroll::-webkit-scrollbar {
@@ -272,7 +272,7 @@
   border-radius: 6px;
   background: red;
   color: #fff;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -341,17 +341,11 @@
 
 /* STRONG HEADER TEXT */
 .alerts-table th {
-  padding: 11px 24px;
-  font-size: 11px;
+  padding: 8px 4px;
+  font-size: 12px;
   font-weight: 600;
-  /* text-align: center; */
   white-space: nowrap;
 }
-
-/* ROW COLORS */
-/* .alerts-table tbody tr {
-  /* background: #ffffff; 
-} */
 
 .alerts-table tbody tr:nth-child(even) {
   background: #f9fafb;
@@ -364,10 +358,20 @@
 
 /* CELL */
 .alerts-table td {
-  padding: 6px 24px;
-  font-size: 11px;
-  /* text-align: center; */
+  padding: 4px;
+  font-size: 12px;
 }
+
+@media (max-width: 1536px) {
+  .alerts-table th {
+    font-size: 8px;
+  }
+
+  .alerts-table td {
+    font-size: 8px;
+  }
+}
+
 /* --- Status Indicators (Monitoring / AI) --- */
 .status-indicators {
   display: flex;

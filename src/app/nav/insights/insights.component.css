@@ -7,6 +7,7 @@
   border-radius: 6px;
   color: white;
   padding: 6px 12px;
+  font-size: 10px;
 }
 
 .dashboard {
@@ -50,8 +51,12 @@
   font-weight: 600;
   font-size: 12px;
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   border-radius: 6px;
+}
+
+.section-header span {
+  width: 50%;
 }
 
 .section-body {
@@ -61,12 +66,10 @@
 .analytics-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-
+  /* justify-content: space-between; */
   border-left: 1px solid rgba(0, 0, 0, 0.08);
   border-right: 1px solid rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-
   border-radius: 6px;
   padding: 8px 12px;
 }
@@ -76,7 +79,7 @@
   align-items: center;
   gap: 10px;
   min-width: 0;
-  flex: 1;
+  width: 50%;
 }
 
 .analytics-icon {
@@ -94,7 +97,7 @@
 }
 
 .analytics-value {
-  min-width: 60px;
+  min-width: 46px;
   text-align: right;
   padding-right: 4px;
   font-size: 11px;
@@ -111,6 +114,15 @@
 
 .select-with-icon select {
   width: 240px;
+}
+
+@media (max-width: 1280px) {
+  .tool-bar {
+    padding: 0 40px 0 10px;
+  }
+  .select-with-icon select {
+    width: 140px;
+  }
 }
 
 .btn-sec button {

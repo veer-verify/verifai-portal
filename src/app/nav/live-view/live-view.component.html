@@ -4,12 +4,12 @@
       <div
         class="hamburger"
         (click)="storage_service.openSideNav()"
-        *ngIf="!(_sideNav | async)"
+        *ngIf="!(storage_service.showSideNav$ | async)"
       >
         ☰
       </div>
 
-      <div class="select-with-icon">
+      <!-- <div class="select-with-icon">
         <img src="icons/drop_cam.svg" class="icon" />
         <select (change)="adjustGrid($event)">
           <option value="">
@@ -21,7 +21,7 @@
             </option>
           }
         </select>
-      </div>
+      </div> -->
     </div>
 
     <!-- pagination -->
@@ -29,11 +29,8 @@
       <div class="d-flex align-items-center gap-3">
         @for (item of gridTypes; track $index) {
           <a
-            [ngClass]="
-              itemsPerPage == item.noOfItems
-                ? 'grid-highlight'
-                : 'grid-highlight'
-            "
+            class="grid-highlight"
+            [style.opacity]="itemsPerPage == item.noOfItems ? '1' : '0.5'"
             (click)="adjustGrid(item.noOfItems)"
           >
             <img
@@ -87,7 +84,7 @@
   }
 </section>
 
-<!-- @if (_sideNav | async) {
+<!-- @if (storage_service.showSideNav$ | async) {
   <div class="side-sites">
     <div class="header">
       TOTAL SITES - {{ sitesList?.length }}

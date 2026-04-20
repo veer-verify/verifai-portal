@@ -48,7 +48,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('gridContainer') gridContainer!: ElementRef;
   @ViewChildren('gridItem') gridItem!: QueryList<ElementRef>;
   private destroy$ = new Subject<void>();
-  _sideNav!: Observable<any>;
+  // _sideNav!: Observable<any>;
 
   gridTypes: any = [];
   // showSites = false;
@@ -66,7 +66,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
-    this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
+    // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
     this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.sitesList = res.sites;
@@ -83,7 +83,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res) => {
         // this.getCamerasForSiteId(res);
         this.tempCamList = [];
-        this.storage_service.camData$.subscribe((res) => {
+        this.storage_service.camData$.pipe(delay(0)).subscribe((res) => {
           this.camList = res;
           this.tempCamList = this.camList;
           this.adjustGrid(this.itemsPerPage);

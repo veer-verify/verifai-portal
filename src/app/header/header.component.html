@@ -119,13 +119,18 @@
 
   <!-- mobile -->
   <div class="small-screens">
+    <div class="logo">
+      <img src="themes/verifai/logo-black.png" alt="" width="130px" />
+    </div>
+
     <span
       class="material-symbols-outlined hamburger-menu"
       (click)="openSideBar()"
     >
       menu
     </span>
-    @if (storage_service.currentSite$ | async; as site) {
+
+    <!-- @if (storage_service.currentSite$ | async; as site) {
       <div class="site-accordian">
         <a (click)="toggleSites()">{{ site.siteName }}</a>
 
@@ -151,7 +156,7 @@
           >keyboard_arrow_down</span
         >
       </div>
-    }
+    } -->
 
     <!-- side-bar -->
     @if (showSideBar) {
@@ -171,6 +176,7 @@
                 class="side-list-group-item"
                 routerLinkActive="side-active"
                 [routerLink]="item.routeLink"
+                (click)="openSideBar()"
               >
                 {{ item.label | titlecase }}
               </a>
@@ -181,30 +187,35 @@
             routerLink="/dashboard/service-requests"
             class="side-list-group-item"
             routerLinkActive="side-active"
+            (click)="openSideBar()"
             >Requests</a
           >
           <a
             routerLink="/dashboard/terms-conditions"
             class="side-list-group-item"
             routerLinkActive="side-active"
+            (click)="openSideBar()"
             >T&C</a
           >
           <a
             routerLink="/dashboard/contact"
             class="side-list-group-item"
             routerLinkActive="side-active"
+            (click)="openSideBar()"
             >Contact</a
           >
           <a
             routerLink="/dashboard/change-password"
             class="side-list-group-item"
             routerLinkActive="side-active"
+            (click)="openSideBar()"
             >Change Password</a
           >
           <a
             routerLink="/dashboard/profile"
             class="side-list-group-item"
             routerLinkActive="side-active"
+            (click)="openSideBar()"
             >Profile</a
           >
         </div>

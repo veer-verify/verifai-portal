@@ -4,7 +4,7 @@
     <div
       class="hamburger"
       (click)="storage_service.openSideNav()"
-      *ngIf="!(_sideNav | async)"
+      *ngIf="!(storage_service.showSideNav$ | async)"
     >
       ☰
     </div>
@@ -133,7 +133,7 @@
             <!-- <th>End Time</th> -->
             <th>Object Name</th>
             <th>Alert Tag</th>
-            <th>Image/Clip</th>
+            <th class="text-center">Image/Clip</th>
           </tr>
         </thead>
 
@@ -144,7 +144,7 @@
             <!-- <td>{{ alert.eventToTime }}</td> -->
             <td>{{ alert.objectName | titlecase }}</td>
             <td>{{ alert.subAlertTag }}</td>
-            <td>
+            <td class="text-center">
               <img
                 src="icons/play-circle-fill.svg"
                 class="clip-btn"

@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isDropdownOpen = false;
   showSideBar = false;
   searchSite!: string;
-  sitesList!: Observable<any>;
+  // sitesList!: Observable<any>;
   user: any;
   navItems: any;
   serviceData: any;
@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isAdmin = this.storage_service.isAdmin();
     this.user = this.storage_service.getData('user');
-    this.sitesList = this.storage_service.siteData$;
+    // this.sitesList = this.storage_service.siteData$;
     this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
@@ -85,21 +85,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  updateSite(site: any) {
-    this.showSite = !this.showSite;
-    this.storage_service.currentSite$.next(site);
-  }
+  // updateSite(site: any) {
+  //   this.showSite = !this.showSite;
+  //   this.storage_service.currentSite$.next(site);
+  // }
 
-  @ViewChild('siteInput') set siteInput(element: ElementRef) {
-    if (element && this.showSite) {
-      element.nativeElement.focus();
-    }
-  }
+  // @ViewChild('siteInput') set siteInput(element: ElementRef) {
+  //   if (element && this.showSite) {
+  //     element.nativeElement.focus();
+  //   }
+  // }
 
-  toggleSites(): void {
-    this.searchSite = '';
-    this.showSite = !this.showSite;
-  }
+  // toggleSites(): void {
+  //   this.searchSite = '';
+  //   this.showSite = !this.showSite;
+  // }
 
   logout() {
     this.router.navigate(['/login']);

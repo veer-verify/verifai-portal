@@ -47,7 +47,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   intervalId: any;
 
   private destroy$ = new Subject<void>();
-  _sideNav!: Observable<any>;
+  // _sideNav!: Observable<any>;
   http: any;
 
   constructor(
@@ -96,7 +96,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
   //   this.startAutoRefresh();
   // }
   ngOnInit(): void {
-    this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
+    // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
     this.storageService.currentSite$
       .pipe(
         filter((site) => !!site),
@@ -183,9 +183,6 @@ export class LiveAiComponent implements OnInit, OnDestroy {
           if (this.camerasList.length > 0) {
             // this.selectedCamera = this.camerasList[0].cameraId;
             this.selectedCamera = this.camerasList[0];
-
-            console.log('🎥 New Site → Default Camera:', this.selectedCamera);
-
             this.loadAlertCounts();
             this.loadCameraImage();
             this.loadEvents();
@@ -242,7 +239,6 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res: any) => {
           if (res.statusCode === 200) {
-            console.log('📊 Alert Counts:', res.aiTagCounts);
             this.alertCounts = res.aiTagCounts;
           } else {
             this.alertCounts = {};
@@ -314,7 +310,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
 
   // Helper to clear data if API fails
   private resetCameraData() {
-    // this.selectedCameraImage = 'icons/eyedisabled.svg';
+    this.selectedCameraImage = '';
     this.subtitles = [];
     this.monitoringStatus = false;
     this.aiStatus = false;

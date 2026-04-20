@@ -2,85 +2,89 @@
 <!-- <app-sub-header></app-sub-header> -->
 <!-- <app-sb-hdr></app-sb-hdr> -->
 
-<main class="main" [style.marginLeft]="(_sideNav | async) ? '300px' : '0'">
-  <!--side navbar-->
-  @if (_sideNav | async) {
-    <div class="side-sites">
-      <div
-        class="d-flex align-items-center gap-2 p-1"
-        style="background-color: #f8f9fa"
-      >
-        <div class="hamburger" (click)="close()">☰</div>
-        <input
-          type="search"
-          placeholder="Search Sites"
-          [(ngModel)]="searchSite"
-          class="site-search"
-        />
-      </div>
-
-      <div class="header">
-        TOTAL SITES ({{ sites?.length }})
-        <a class="close" (click)="close()"
-          ><span class="material-symbols-outlined"> arrow_left_alt </span></a
-        >
-      </div>
-      <div class="sites-content">
-        @for (item of sites | search: searchSite; track item?.siteId) {
-          <div class="site-list-item">
-            @if (storage_service.currentSite$ | async; as site) {
-              <p
-                (click)="updateSite(item)"
-                [style.color]="item?.siteId === site.siteId ? 'red' : '#000000'"
-              >
-                {{ item?.siteName }}
-                <span>
-                  {{ item?.siteId === currentSite?.siteId ? "-" : "+" }}
-                </span>
-              </p>
-
-              @if (
-                camList.length &&
-                item?.siteId === currentSite?.siteId &&
-                !camLoader
-              ) {
-                @for (cam of camList; track cam?.cameraId) {
-                  <div class="cam-name">
-                    <div>
-                      <img
-                        [src]="
-                          cam?.camMonitor === 'T'
-                            ? 'icons/camera-green.svg'
-                            : 'icons/camera-grey.svg'
-                        "
-                      />
-                      <span>{{ cam.name }}</span>
-                    </div>
-
-                    <div>
-                      <!-- <span
-                        class="dot"
-                        [style.backgroundColor]="
-                          cam?.camMonitor === 'T' ? 'green' : 'red'
-                        "
-                      ></span> -->
-                      <span
-                        class="material-symbols-outlined"
-                        style="font-size: 12px"
-                      >
-                        brightness_5
-                      </span>
-                    </div>
-                  </div>
-                }
-              } @else if (camLoader && item.siteId === currentSite?.siteId) {
-                <img src="gif/cam-loader.gif" height="100px" width="100%" />
-              }
-            }
-          </div>
-        }
-      </div>
-    </div>
-  }
+<main
+  class="main"
+  [style.marginLeft]="(storage_service.showSideNav$ | async) ? '300px' : '0'"
+>
   <router-outlet></router-outlet>
 </main>
+
+<!--side navbar-->
+@if (storage_service.showSideNav$ | async) {
+  <div class="side-sites">
+    <div
+      class="d-flex align-items-center gap-2 p-1"
+      style="background-color: #f8f9fa"
+    >
+      <div class="hamburger" (click)="close()">☰</div>
+      <input
+        type="search"
+        placeholder="Search Sites"
+        [(ngModel)]="searchSite"
+        class="site-search"
+      />
+    </div>
+
+    <div class="header">
+      TOTAL SITES ({{ sites?.length }})
+      <a class="close" (click)="close()"
+        ><span class="material-symbols-outlined"> arrow_left_alt </span></a
+      >
+    </div>
+    <div class="sites-content">
+      @for (item of sites | search: searchSite; track item?.siteId) {
+        <div class="site-list-item">
+          @if (storage_service.currentSite$ | async; as site) {
+            <p
+              (click)="updateSite(item)"
+              [style.color]="item?.siteId === site.siteId ? 'red' : '#000000'"
+            >
+              {{ item?.siteName }}
+              <span>
+                {{ item?.siteId === currentSite?.siteId ? "-" : "+" }}
+              </span>
+            </p>
+
+            @if (
+              camList.length &&
+              item?.siteId === currentSite?.siteId &&
+              !camLoader
+            ) {
+              @for (cam of camList; track cam?.cameraId) {
+                <div class="cam-name">
+                  <div>
+                    <img
+                      [src]="
+                        cam?.camMonitor === 'T'
+                          ? 'icons/camera-green.svg'
+                          : 'icons/camera-grey.svg'
+                      "
+                    />
+                    <span>{{ cam.name }}</span>
+                  </div>
+
+                  <div>
+                    <!-- <span
+                      class="dot"
+                      [style.backgroundColor]="
+                        cam?.camMonitor === 'T' ? 'green' : 'red'
+                      "
+                    ></span> -->
+                    <span
+                      class="material-symbols-outlined"
+                      style="font-size: 12px"
+                    >
+                      brightness_5
+                    </span>
+                  </div>
+                </div>
+              }
+            } @else if (camLoader && item.siteId === currentSite?.siteId) {
+              <img src="gif/cam-loader.gif" height="100px" width="100%" />
+            }
+          }
+        </div>
+      }
+    </div>
+  </div>
+}

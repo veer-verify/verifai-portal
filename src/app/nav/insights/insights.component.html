@@ -87,7 +87,7 @@
 
     <div class="btn-sec d-inline-flex gap-2">
       <button
-        class="d-inline-flex align-items-center gap-2 me-3"
+        class="d-inline-flex align-items-center gap-2"
         (click)="downloadBiReport()"
       >
         <img src="icons/download-insights.svg" alt="download" />
@@ -133,20 +133,23 @@
   </ng-container>
 
   <ng-container *ngIf="page === 'list' && selectedOption === 'business'">
-    <div class="dashboard">
+    <div
+      class="dashboard"
+      [style.margin]="(storage_service.showSideNav$ | async) ? '0' : '0 40px'"
+    >
       <!-- LEFT TABLE -->
       <div class="table-panel">
         <div class="analytics-section" *ngFor="let section of analyticsData">
           <div class="section-header">
             <span>{{ section.name }}</span>
-            <!-- <span>
+            <span>
               {{
                 section.name?.toUpperCase()?.includes("TIME") ||
                 section.name?.toUpperCase()?.includes("PRODUCTIVITY")
                   ? "TIME"
                   : "COUNT"
               }}
-            </span> -->
+            </span>
           </div>
 
           <div class="section-body">
@@ -179,6 +182,7 @@
           </div>
         </div>
       </div>
+
       <!-- RIGHT CHARTS -->
       <div class="chart-panel">
         <div *ngFor="let chart of charts">

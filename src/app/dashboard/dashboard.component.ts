@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
     public storage_service = inject(StorageService);
     private config_service = inject(ConfigService);
     private router = inject(Router);
-    _sideNav!: Observable<any>;
+    // _sideNav!: Observable<any>;
 
 
     sites: any = [];
@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
     camLoader = false;
 
     ngOnInit(): void {
-        this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
+        // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
         this.getSitesListForUserName();
     }
 
