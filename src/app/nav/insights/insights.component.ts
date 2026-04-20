@@ -77,6 +77,26 @@ export class InsightsComponent implements OnInit, OnDestroy {
   analyticsData: any = [];
   charts: any[] = [];
   selectedOption: string = 'business';
+  formatDateTime = (dateStr: string) => {
+    const [datePart, timePart] = dateStr.split(' ');
+
+    const date = new Date(datePart);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+
+    let hours = '00';
+    let mins = '00';
+
+    if (timePart) {
+      const [h, m] = timePart.split(':');
+      hours = h;
+      mins = m;
+    }
+
+    return `${day}-${month}-${year}-${hours}-${mins}`;
+  };
 
   ngOnInit(): void {
     this.gridOptions = gridOptions;
@@ -181,19 +201,25 @@ export class InsightsComponent implements OnInit, OnDestroy {
         toTime: this.toTime,
       })
       .subscribe({
-        next: (blob: Blob) => {
+        next: (res: any) => {
+          const blob = res.body;
+
+          let fileName = 'report.pdf';
+
+          if (this.fromDate && this.toDate) {
+            const from = this.formatDateTime(this.fromDate);
+            const to = this.formatDateTime(this.toDate);
+
+            fileName = `business_insights_report_${from}_to_${to}.pdf`;
+          }
+
           const fileURL = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = fileURL;
-
-          const from = this.fromDate ? this.fromDate : 'from';
-          const to = this.toDate ? this.toDate : 'to';
-
-          a.download = `bi_analytics_report_${this.currentSite?.siteId}_${from}_${to}.pdf`;
+          a.download = fileName;
           a.click();
 
           window.URL.revokeObjectURL(fileURL);
-          this.storage_service.info$.next('');
         },
         error: () => {
           this.storage_service.info$.next('failed to download report!');

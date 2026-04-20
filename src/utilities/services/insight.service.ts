@@ -114,7 +114,7 @@ export class InsightService {
     return this.http.get(url, { params: params });
   }
 
-  downloadBiVerifaiPdf(payload: any): Observable<Blob> {
+  downloadBiVerifaiPdf(payload: any): Observable<any> {
     const url =
       'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReportPdf_1_0';
 
@@ -155,6 +155,7 @@ export class InsightService {
     return this.http.get(url, {
       params,
       responseType: 'blob',
+      observe: 'response', // <-- THIS IS THE FIX
     });
   }
 }

@@ -133,7 +133,28 @@ export class AlertsComponent {
         this.incidentList();
       });
   }
+  formatDateTimeForFile(dateTime: string): string {
+    if (!dateTime) return '';
 
+    const [datePart, timePart] = dateTime.split('T');
+
+    const date = new Date(datePart);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+
+    let hours = '00';
+    let mins = '00';
+
+    if (timePart) {
+      const [h, m] = timePart.split(':');
+      hours = h;
+      mins = m;
+    }
+
+    return `${day}-${month}-${year}-${hours}-${mins}`;
+  }
   formatDateTimeLocal(date: Date): string {
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0');
@@ -231,7 +252,13 @@ export class AlertsComponent {
 
     this.alertService.downloadExcelReport(payload, token).subscribe({
       next: (blob: Blob) => {
-        const fileName = `Alert_Report_${Date.now()}.xlsx`;
+        const from = this.formatDateTimeForFile(formValue.fromDate);
+        const to = this.formatDateTimeForFile(formValue.toDate);
+
+        // optional: include tag/camera
+        const tagSuffix = formValue.actionTag ? `_${formValue.actionTag}` : '';
+
+        const fileName = `Alerts-Report_${from}_to_${to}${tagSuffix}.xlsx`;
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
 
