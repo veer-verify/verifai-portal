@@ -29,6 +29,7 @@ export const menuItems = [
     label: 'insights',
     routeLink: 'insights',
     call: (data: any) => (data?.key !== 'F' ? true : false),
+    // call: () => true,
   },
 
   // {
@@ -59,7 +60,7 @@ export const menuItems = [
   //   id: 'siteInfo',
   //   label: 'siteinfo',
   //   routeLink: 'siteinfo',
-  //   call: (data: any) => true,
+  //   call: () => true,
   // },
   // {
   //     id: 'deviceHealth',

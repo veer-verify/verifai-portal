@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { filter, map, Observable, Subject, takeUntil } from 'rxjs';
 import {
   CellClickedEvent,
   ColDef,
@@ -52,7 +52,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -72,10 +72,10 @@ export class AlertsComponent {
   today = new Date();
   todayDateTime = '';
   actionTag: any = '';
-  anyData: boolean = false;
-
+  // anyData: boolean = false;
   sfilterForm!: FormGroup;
   spinexcel: boolean = false;
+  siteAlerts!: Observable<any>;
 
   columnDefs: ColDef[] = [
     { field: 'name', headerName: 'Camera', filter: false },
@@ -111,39 +111,44 @@ export class AlertsComponent {
     this.initilizeFilterForm();
     // this.sfilterForm.patchValue({ fromTime: '00:00' });
     // this.sfilterForm.patchValue({ toTime: '00:00' });
-
-    // console.log(this.sfilterForm.value);
     const formValues = this.sfilterForm.value;
 
-    for (const key of Object.keys(formValues)) {
-      const value = formValues[key];
-      if (!value) continue;
-      this.anyData = true;
-      break;
-    }
-    this.getTypes();
+    // for (const key of Object.keys(formValues)) {
+    //   const value = formValues[key];
+    //   if (!value) continue;
+    //   this.anyData = true;
+    //   break;
+    // }
+
+    // this.getTypes();
     this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
         takeUntil(this.destroy$),
       )
       .subscribe((site) => {
+        // this.sfilterForm.reset()
+        this.clearData()
+        this.siteAlerts = this.incident_service.getSiteAlerts(site).pipe(map((response) => response.data));
+
         this.currentSite = site;
-        this.getcamerasForSiteId();
+        // this.getcamerasForSiteId();
         this.incidentList();
       });
+
+    this.storage_service.camData$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
+      this.camerasList = res;
+    });
   }
+
   formatDateTimeForFile(dateTime: string): string {
     if (!dateTime) return '';
 
     const [datePart, timePart] = dateTime.split('T');
-
     const date = new Date(datePart);
-
     const day = String(date.getDate()).padStart(2, '0');
     const month = date.toLocaleString('en-US', { month: 'short' });
     const year = date.getFullYear();
-
     let hours = '00';
     let mins = '00';
 
@@ -152,16 +157,22 @@ export class AlertsComponent {
       hours = h;
       mins = m;
     }
-
     return `${day}-${month}-${year}-${hours}-${mins}`;
   }
+
   formatDateTimeLocal(date: Date): string {
     const year = date.getFullYear();
     const month = `${date.getMonth() + 1}`.padStart(2, '0');
     const day = `${date.getDate()}`.padStart(2, '0');
     const hours = `${date.getHours()}`.padStart(2, '0');
     const minutes = `${date.getMinutes()}`.padStart(2, '0');
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+
+    if (date.getDay() === this.today.getDay()) {
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    } else {
+      return `${year}-${month}-${day}T${23}:${59}`;
+    }
+
   }
 
   formatDateTimeSeconds(dateTimeValue: string): string {
@@ -213,8 +224,8 @@ export class AlertsComponent {
       toTime: '',
     });
 
-    this.anyData = true;
-    this.incidentList();
+    // this.anyData = true;
+    // this.incidentList();
   }
 
   downloadExcelReport() {
@@ -254,8 +265,6 @@ export class AlertsComponent {
       next: (blob: Blob) => {
         const from = this.formatDateTimeForFile(formValue.fromDate);
         const to = this.formatDateTimeForFile(formValue.toDate);
-
-        // optional: include tag/camera
         const tagSuffix = formValue.actionTag ? `_${formValue.actionTag}` : '';
 
         const fileName = `Alerts-Report_${from}_to_${to}${tagSuffix}.xlsx`;
@@ -270,8 +279,7 @@ export class AlertsComponent {
         window.URL.revokeObjectURL(url);
         this.spinexcel = false;
       },
-      error: (err: any) => {
-        console.log('Download error =>', err);
+      error: () => {
         this.alertService.error('Download failed');
         this.spinexcel = false;
       },
@@ -281,10 +289,6 @@ export class AlertsComponent {
   openTimePicker(input: HTMLInputElement) {
     input.showPicker?.(); // Chrome, Edge
     input.focus(); // Fallback
-  }
-
-  get() {
-    // console.log(this.filterForm.value)
   }
 
   formatTime(minutes: number): string {
@@ -316,13 +320,13 @@ export class AlertsComponent {
     }
   }
 
-  getcamerasForSiteId() {
-    this.config_service
-      .getCamerasForSiteId(this.currentSite)
-      .subscribe((res: any) => {
-        this.camerasList = res;
-      });
-  }
+  // getcamerasForSiteId() {
+  //   this.config_service
+  //     .getCamerasForSiteId(this.currentSite)
+  //     .subscribe((res: any) => {
+  //       this.camerasList = res;
+  //     });
+  // }
 
   getTypes() {
     const res = this.storage_service.getType(36);
@@ -340,6 +344,7 @@ export class AlertsComponent {
       .subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
+
             this.rowData = res.IncidentList;
             this.totalPages = res.totalPages;
           } else {
@@ -361,8 +366,12 @@ export class AlertsComponent {
 
   onFilterChange() {
     this.pageNumber = 1;
-    this.anyData = true;
+    // this.anyData = true;
     this.incidentList();
+  }
+
+  setEndDate() {
+    this.sfilterForm.get('toDate')?.setValue(this.formatDateTimeLocal(new Date(this.sfilterForm.get('toDate')?.value)));
   }
 
   ngOnDestroy(): void {

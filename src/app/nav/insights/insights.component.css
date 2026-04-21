@@ -1,3 +1,7 @@
+section {
+  position: relative;
+}
+
 .calendar {
   width: 240px;
 }
@@ -36,7 +40,7 @@
   height: calc(100vh - 100px);
   overflow-y: auto;
   padding: 10px;
-  box-shadow: -5px 5px 5px #0000000d;
+  /* box-shadow: -5px 5px 5px #0000000d; */
   /* background-color: #ffffff; */
 }
 

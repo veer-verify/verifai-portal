@@ -41,13 +41,14 @@ import { Router } from '@angular/router';
   styleUrl: './insights.component.css',
 })
 export class InsightsComponent implements OnInit, OnDestroy {
+
   constructor(
     private insight_service: InsightService,
     public storage_service: StorageService,
     public configSrvc: ConfigService,
     private liveAiService: LiveAiService,
     private router: Router,
-  ) {}
+  ) { }
 
   columnDefs = [
     {
@@ -69,23 +70,21 @@ export class InsightsComponent implements OnInit, OnDestroy {
   currentSite: any;
   cameraId: any = '';
   today = new Date().toISOString().split('T')[0];
-  fromDate: any;
-  toDate: any;
-  fromTime: any;
-  toTime: any;
+  fromDate: string = new Date().toISOString().split('T')[0];
+  toDate: string = new Date().toISOString().split('T')[0];
+  fromTime: string = '00:00';
+  toTime: string = this.getCurrentTime();
   gridOptions!: GridOptions;
   analyticsData: any = [];
   charts: any[] = [];
   selectedOption: string = 'business';
+
   formatDateTime = (dateStr: string) => {
     const [datePart, timePart] = dateStr.split(' ');
-
     const date = new Date(datePart);
-
     const day = String(date.getDate()).padStart(2, '0');
     const month = date.toLocaleString('en-US', { month: 'short' });
     const year = date.getFullYear();
-
     let hours = '00';
     let mins = '00';
 
@@ -97,6 +96,13 @@ export class InsightsComponent implements OnInit, OnDestroy {
 
     return `${day}-${month}-${year}-${hours}-${mins}`;
   };
+
+  getCurrentTime(): string {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
 
   ngOnInit(): void {
     this.gridOptions = gridOptions;
@@ -112,10 +118,21 @@ export class InsightsComponent implements OnInit, OnDestroy {
         if (this.selectedOption === 'monitoring') {
           this.getAlertCounts();
         } else {
-          this.getNonWorkingDays();
+          this.biAnalyticsReport();
         }
       });
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  openTimePicker(input: HTMLInputElement) {
+    input.showPicker?.();
+    input.focus();
+  }
+
   getAnalyticsIcon(icon: string): string {
     if (!icon) return '';
 
@@ -125,10 +142,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
 
     return `icons/${icon}`;
   }
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+
 
   page: string = 'list';
   setPage(page: string) {
@@ -137,6 +151,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
     if (page === 'map') return;
     this.onRadioChange();
   }
+
   goToAlerts(item: any) {
     this.router.navigate(['/dashboard/alerts'], {
       queryParams: {
@@ -144,17 +159,20 @@ export class InsightsComponent implements OnInit, OnDestroy {
       },
     });
   }
-  getDates(data: any) {
-    this.fromDate = data.fromDate;
-  }
+
+  // getDates(data: any) {
+  //   this.fromDate = data.fromDate;
+  // }
+
   onRadioChange() {
     this.analyticsData = [];
     if (this.selectedOption === 'monitoring') {
       this.getAlertCounts();
     } else {
-      this.getNonWorkingDays();
+      this.biAnalyticsReport();
     }
   }
+
   alertCounts: any = {};
   getAlertCounts(): void {
     if (!this.currentSite?.siteId) return;
@@ -182,6 +200,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
       },
     });
   }
+
   //! downloadReportPDF
   downloadBiReport() {
     if (!this.currentSite?.siteId) {
@@ -237,41 +256,41 @@ export class InsightsComponent implements OnInit, OnDestroy {
     });
   }
 
-  getNonWorkingDays() {
-    this.storage_service.info$.next('loading...');
-    this.analyticsData = [];
-    this.charts = [];
+  // getNonWorkingDays() {
+  //   this.storage_service.info$.next('loading...');
+  //   this.analyticsData = [];
+  //   this.charts = [];
 
-    this.insight_service
-      .getNonWorkingDays({ siteId: this.currentSite?.siteId })
-      .subscribe({
-        next: (res) => {
-          if (res.status === 'Success') {
-            const now = new Date();
+  //   this.insight_service
+  //     .getNonWorkingDays({ siteId: this.currentSite?.siteId })
+  //     .subscribe({
+  //       next: (res) => {
+  //         if (res.status === 'Success') {
+  //           const now = new Date();
 
-            const yyyy = now.getFullYear();
-            const mm = String(now.getMonth() + 1).padStart(2, '0');
-            const dd = String(now.getDate()).padStart(2, '0');
-            const hh = String(now.getHours()).padStart(2, '0');
-            const min = String(now.getMinutes()).padStart(2, '0');
+  //           const yyyy = now.getFullYear();
+  //           const mm = String(now.getMonth() + 1).padStart(2, '0');
+  //           const dd = String(now.getDate()).padStart(2, '0');
+  //           const hh = String(now.getHours()).padStart(2, '0');
+  //           const min = String(now.getMinutes()).padStart(2, '0');
 
-            // keep old start-date logic exactly as it is
-            this.fromDate = new Date(res.LastWorkingDay)
-              .toISOString()
-              .split('T')[0];
+  //           // keep old start-date logic exactly as it is
+  //           this.fromDate = new Date(res.LastWorkingDay)
+  //             .toISOString()
+  //             .split('T')[0];
 
-            // only add end-date/current-time defaults
-            this.toDate = `${yyyy}-${mm}-${dd}`;
-            this.fromTime = '00:00';
-            this.toTime = `${hh}:${min}`;
+  //           // only add end-date/current-time defaults
+  //           this.toDate = `${yyyy}-${mm}-${dd}`;
+  //           this.fromTime = '00:00';
+  //           this.toTime = `${hh}:${min}`;
 
-            this.biAnalyticsReport();
-          } else {
-            this.storage_service.info$.next(res.message);
-          }
-        },
-      });
-  }
+  //           this.biAnalyticsReport();
+  //         } else {
+  //           this.storage_service.info$.next(res.message);
+  //         }
+  //       },
+  //     });
+  // }
 
   biAnalyticsReport() {
     this.storage_service.info$.next('loading');
@@ -322,9 +341,9 @@ export class InsightsComponent implements OnInit, OnDestroy {
       const chartData = hasData
         ? originalData
         : originalData.map((d: any) => ({
-            ...d,
-            value: 1,
-          }));
+          ...d,
+          value: 1,
+        }));
 
       return {
         title: section.name,
@@ -350,4 +369,5 @@ export class InsightsComponent implements OnInit, OnDestroy {
       };
     });
   }
+
 }

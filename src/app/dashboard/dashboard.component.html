@@ -40,9 +40,14 @@
               [style.color]="item?.siteId === site.siteId ? 'red' : '#000000'"
             >
               {{ item?.siteName }}
-              <span>
+              <!-- <span>
                 {{ item?.siteId === currentSite?.siteId ? "-" : "+" }}
-              </span>
+              </span> -->
+              @if (item?.siteId === currentSite?.siteId) {
+                <span class="material-symbols-outlined"> remove </span>
+              } @else {
+                <span class="material-symbols-outlined"> add </span>
+              }
             </p>
 
             @if (

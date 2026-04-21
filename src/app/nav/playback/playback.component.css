@@ -4,16 +4,13 @@ input[type="date"] {
 }
 
 input[type="time"] {
-  width: 80px;
+  width: 120px;
   border: none;
 }
 
 .playback {
-  display: flex;
+  /* display: flex; */
   height: calc(100vh - 60px);
-  /* background: #2f2f2f; */
-  background-color: #3a3a3a;
-  font-family: Arial, sans-serif;
 }
 
 /* Sidebar */
@@ -28,25 +25,22 @@ input[type="time"] {
   position: relative;
   margin-bottom: 10px;
   cursor: pointer;
-  border: 2px solid transparent;
-  border-radius: 6px;
-
-  img {
-    width: 100%;
-    border-radius: 6px;
-    height: 140px;
-    object-fit: cover;
-  }
 }
-.label {
+img {
+  width: 100%;
+  border-radius: 6px;
+  height: 140px;
+  object-fit: cover;
+}
+.cam-label {
   position: absolute;
-  bottom: 5px;
-  left: 5px;
-  color: white;
+  bottom: 0px;
+  /* left: 5px; */
+  color: rgb(95, 41, 41);
   font-size: 12px;
   background: rgba(0, 0, 0, 0.6);
   padding: 2px 6px;
-  border-radius: 4px;
+  /* border-radius: 4px; */
 }
 
 .camera.active {
@@ -57,7 +51,7 @@ input[type="time"] {
 .main {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
 }
 
 /* Topbar */
@@ -73,30 +67,30 @@ input[type="time"] {
 
 .date,
 .time-range {
-  /* background: #e5e5e5; */
   display: flex;
+  align-items: center;
   gap: 10px;
   color: black;
-  padding: 8px 14px;
   border-radius: 8px;
-  font-weight: 500;
 }
 
 .go-btn {
   background: #ff3b3b;
   border: none;
   color: white;
-  padding: 10px 16px;
+  padding: 4px 12px;
   border-radius: 8px;
   cursor: pointer;
 }
 
 /* Video Section */
 .video-container {
+  position: relative;
   flex: 1;
   display: flex;
   flex-direction: column;
   background: black;
+  height: 88vh;
 }
 
 .video {
@@ -105,13 +99,17 @@ input[type="time"] {
 
 /* Controls */
 .controls {
+  width: 100%;
   height: 110px;
-  background: linear-gradient(#3a3a3a, #2b2b2b);
+  /* background: linear-gradient(#3a3a3a, #2b2b2b); */
+  background-color: #ffffff;
   color: #ddd;
   display: flex;
   flex-direction: column;
   padding: 8px 12px;
   font-size: 12px;
+  position: absolute;
+  bottom: 0;
 }
 
 /* Top Controls Row */
@@ -120,19 +118,19 @@ input[type="time"] {
   align-items: center;
   gap: 10px;
   margin-bottom: 16px;
+}
 
-  button {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-  }
+/* button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+} */
 
-  input[type="range"] {
-    width: 120px;
-    accent-color: #ccc;
-  }
+input[type="range"] {
+  width: 120px;
+  accent-color: #ccc;
 }
 
 /* Timeline Wrapper */
@@ -171,28 +169,27 @@ input[type="time"] {
 .labels {
   position: absolute;
   top: -18px;
-  left: 0;
-  width: 100%;
+  /* left: 0; */
+  /* width: 100%; */
   height: 20px;
 }
 
 /* Individual label */
 .label {
   position: absolute;
-  transform: translateX(-50%);
   font-size: 10px;
   color: #aaa;
   white-space: nowrap;
+  width: 100%;
 }
 
 .fake-range {
   position: relative;
   background: #ffffff;
-  padding: 6px;
   border-radius: 8px;
   cursor: pointer;
-  min-width: 160px;
   text-align: center;
+  border: 1px solid #d1d1d1;
 }
 
 .dropdown {

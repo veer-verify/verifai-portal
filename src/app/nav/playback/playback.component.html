@@ -1,36 +1,35 @@
 <div class="playback">
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div
-      class="camera"
-      *ngFor="let cam of cameras"
-      (click)="selectCamera(cam)"
-      [class.active]="cam === selectedCamera"
-    >
-      <img [src]="cam.image" />
-      <div class="label">🔴 {{ cam.name }}</div>
+  <div class="tool-bar">
+    <div class="time-range">
+      <div class="calender">
+        <input type="date" />
+      </div>
+      <div class="fake-range" (click)="open = !open">
+        <!-- {{ startTime }} - {{ endTime }} -->
+
+        <div class="d-flex align-items-center gap-2">
+          <input type="time" [(ngModel)]="startTime" />
+          -
+          <input type="time" [(ngModel)]="endTime" />
+        </div>
+      </div>
     </div>
+
+    <button class="go-btn">➜</button>
   </div>
 
   <!-- Main -->
   <div class="main">
-    <!-- Top Bar -->
-    <div class="topbar">
-      <div class="time-range">
-        <input type="date" />
-
-        <div class="fake-range" (click)="open = !open">
-          <!-- {{ startTime }} - {{ endTime }} -->
-
-          <div class="d-flex align-items-center gap-2">
-            <input type="time" [(ngModel)]="startTime" />
-            -
-            <input type="time" [(ngModel)]="endTime" />
-          </div>
-        </div>
+    <div class="sidebar">
+      <div
+        class="camera"
+        *ngFor="let cam of cameras"
+        (click)="selectCamera(cam)"
+        [class.active]="cam === selectedCamera"
+      >
+        <img [src]="cam.image" />
+        <div class="cam-label">🔴 {{ cam.name }}</div>
       </div>
-
-      <button class="go-btn">➜</button>
     </div>
 
     <!-- Video Section -->

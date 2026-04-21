@@ -4,14 +4,14 @@ import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
 import { ConfigService } from '../../utilities/services/config.service';
 import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.component";
-import { AsyncPipe, JsonPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from "../../utilities/pipes/search.pipe";
 import { delay, finalize, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe, FormsModule, SearchPipe, JsonPipe],
+    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe, FormsModule, SearchPipe, JsonPipe, NgIf],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,
@@ -50,9 +50,10 @@ export class DashboardComponent implements OnInit {
                     if (res.Status === 'Success') {
                         this.sites = res.sites;
                         const [first] = res.sites;
-                        this.updateSite(first);
-                        this.getCamerasForSiteId(first);
                         this.storage_service.siteData$.next(res.sites);
+
+                        this.currentSite = first;
+                        this.getCamerasForSiteId(first);
                         this.storage_service.currentSite$.next(first);
                     }
                 },
@@ -78,19 +79,15 @@ export class DashboardComponent implements OnInit {
             });
     }
 
-
     currentSite: any;
     prevSite: any;
     updateSite(site: any) {
         this.prevSite = this.currentSite;
-        this.currentSite = site;
-        this.currentSite = this.prevSite?.siteId === this.currentSite?.siteId ? undefined : site;
+        this.currentSite = this.prevSite?.siteId === site?.siteId ? undefined : site;
+        this.storage_service.currentSite$.next(this.currentSite);
 
-        if (this.currentSite) {
-            this.getCamerasForSiteId(site);
-        }
-
-        this.storage_service.currentSite$.next(site);
+        if (!this.currentSite) return;
+        this.getCamerasForSiteId(site);
     }
 
     close() {

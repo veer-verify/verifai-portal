@@ -13,14 +13,10 @@
       <form class="left" [formGroup]="sfilterForm">
         <div class="select-with-icon">
           <img src="icons/drop_cam.svg" alt="" class="icon" />
-          <select
-            class="tag-select"
-            (change)="onFilterChange()"
-            formControlName="cameraId"
-          >
+          <select class="tag-select" formControlName="cameraId">
             <option value="">
               <img src="icons/drop_cam.svg" alt="" />ALL ({{
-                this.camerasList?.length || 0
+                this.camerasList.length ?? 0
               }})
             </option>
             @for (item of camerasList; track $index) {
@@ -31,14 +27,11 @@
           </select>
         </div>
 
-        <select
-          class="tag-select"
-          (change)="onFilterChange()"
-          formControlName="actionTag"
-        >
-          <option value="" selected disabled>ALL ACTION TAGS</option>
-          @for (item of actionTags; track $index) {
-            <option>{{ item.value }}</option>
+        <select class="tag-select" formControlName="actionTag">
+          <option value="" disabled>Alert Tags (All)</option>
+          <!-- <option>All</option> -->
+          @for (item of siteAlerts | async; track $index) {
+            <option [value]="item.alertId">{{ item.alert }}</option>
           }
         </select>
 
@@ -54,7 +47,6 @@
           <input
             type="datetime-local"
             [max]="todayDateTime"
-            (change)="onFilterChange()"
             formControlName="fromDate"
           />
 
@@ -86,7 +78,7 @@
           <input
             type="datetime-local"
             [max]="todayDateTime"
-            (change)="onFilterChange()"
+            (change)="setEndDate()"
             formControlName="toDate"
           />
 
@@ -110,6 +102,10 @@
             alt=""
           /> -->
         </div>
+        <button type="submit" class="clear" (click)="onFilterChange()">
+          Submit
+        </button>
+
         <div class="ec-download">
           <button
             type="button"
@@ -122,11 +118,11 @@
             </ng-container>
           </button>
         </div>
-        @if (anyData) {
+        <!-- @if (anyData) {
           <button type="reset" class="clear" (click)="clearData()">
             CLEAR
           </button>
-        }
+        } -->
       </form>
     </div>
 
