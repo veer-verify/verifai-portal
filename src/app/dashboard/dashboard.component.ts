@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
     // _sideNav!: Observable<any>;
 
 
-    sites: any = [];
+    sitesList: any = [];
     camList: any = [];
     tempCamList = [];
     searchSite!: string;
@@ -48,11 +48,11 @@ export class DashboardComponent implements OnInit {
             .subscribe({
                 next: (res) => {
                     if (res.Status === 'Success') {
-                        this.sites = res.sites;
+                        this.sitesList = res.sites;
                         const [first] = res.sites;
                         this.storage_service.siteData$.next(res.sites);
 
-                        this.currentSite = first;
+                        // this.currentSite = first;
                         this.getCamerasForSiteId(first);
                         this.storage_service.currentSite$.next(first);
                     }
@@ -79,15 +79,20 @@ export class DashboardComponent implements OnInit {
             });
     }
 
-    currentSite: any;
+    // currentSite: any;
     prevSite: any;
     updateSite(site: any) {
-        this.prevSite = this.currentSite;
-        this.currentSite = this.prevSite?.siteId === site?.siteId ? undefined : site;
-        this.storage_service.currentSite$.next(this.currentSite);
+        this.prevSite = this.storage_service.currentSite$.getValue();
+        // this.currentSite = this.prevSite?.siteId === site?.siteId ? undefined : site;
 
-        if (!this.currentSite) return;
-        this.getCamerasForSiteId(site);
+        // toggle logic
+        if (this.prevSite?.siteId === site?.siteId) {
+            this.storage_service.currentSite$.next(null);
+        } else {
+            this.storage_service.currentSite$.next(site);
+            this.getCamerasForSiteId(site);
+        }
+        // this.storage_service.currentSite$.next(this.currentSite);
     }
 
     close() {

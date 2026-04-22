@@ -85,16 +85,17 @@
 
 .site-list-item p {
   font-family: "Neometric Medium", sans-serif !important;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   text-decoration: none;
   display: inline-flex;
   justify-content: space-between;
   margin: 6px 0;
 }
 
-.site-list-item span {
+.site-list-item p span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .show-cameras {
