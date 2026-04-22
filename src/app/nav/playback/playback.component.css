@@ -1,11 +1,20 @@
 input[type="date"] {
   width: 200px;
   border-radius: 6px;
+  font-size: 12px !important;
+  padding: 8px 6px !important;
 }
 
 input[type="time"] {
+  color: #ababab !important;
   width: 120px;
   border: none;
+  border-radius: 8px;
+}
+
+.tool-bar {
+  justify-content: left;
+  gap: 10px;
 }
 
 .playback {
@@ -26,17 +35,20 @@ input[type="time"] {
   margin-bottom: 10px;
   cursor: pointer;
 }
-img {
+
+.sidebar img {
   width: 100%;
   border-radius: 6px;
   height: 140px;
   object-fit: cover;
 }
+
 .cam-label {
+  width: 100%;
   position: absolute;
   bottom: 0px;
   /* left: 5px; */
-  color: rgb(95, 41, 41);
+  color: #ffffff;
   font-size: 12px;
   background: rgba(0, 0, 0, 0.6);
   padding: 2px 6px;
@@ -78,7 +90,7 @@ img {
   background: #ff3b3b;
   border: none;
   color: white;
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: 8px;
   cursor: pointer;
 }
@@ -91,6 +103,7 @@ img {
   flex-direction: column;
   background: black;
   height: 88vh;
+  margin: 6px 6px 0 0;
 }
 
 .video {
@@ -162,7 +175,7 @@ input[type="range"] {
 
 .tick.major {
   height: 22px;
-  border-right: 2px solid #fff;
+  border-right: 2px solid #aaa;
 }
 
 /* Labels container */
@@ -172,6 +185,8 @@ input[type="range"] {
   /* left: 0; */
   /* width: 100%; */
   height: 20px;
+  display: flex;
+  width: 100%;
 }
 
 /* Individual label */
@@ -180,7 +195,7 @@ input[type="range"] {
   font-size: 10px;
   color: #aaa;
   white-space: nowrap;
-  width: 100%;
+  /* width: 100%; */
 }
 
 .fake-range {
