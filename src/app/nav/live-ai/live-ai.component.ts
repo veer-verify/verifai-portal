@@ -57,7 +57,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private dialog: MatDialog,
     public storage_service: StorageService,
-  ) { }
+  ) {}
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -182,8 +182,8 @@ export class LiveAiComponent implements OnInit, OnDestroy {
 
           //*  ALWAYS SELECT FIRST CAMERA
           if (this.camerasList.length > 0) {
-            // this.selectedCamera = this.camerasList[0].cameraId;
             this.selectedCamera = this.camerasList[0];
+            this.loadAllCameraStatuses();
             this.loadAlertCounts();
             this.loadCameraImage();
             this.loadEvents();
@@ -193,9 +193,50 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       error: (err) => console.error('❌ Camera API Error:', err),
     });
   }
+  loadAllCameraStatuses(): void {
+    if (!this.camerasList || !this.camerasList.length) return;
 
+    this.camerasList.forEach((cam: any) => {
+      this.liveAiService.getLatestCameraImage(cam.cameraId).subscribe({
+        next: (res: any) => {
+          if (res.statusCode === 200) {
+            this.camerasList = this.camerasList.map((camera: any) =>
+              camera.cameraId === cam.cameraId
+                ? {
+                    ...camera,
+                    monitoringStatus: res.monitoring === 'T',
+                    aiStatus: res.AI === 'T',
+                  }
+                : camera,
+            );
+
+            if (this.selectedCamera?.cameraId === cam.cameraId) {
+              const updatedCam = this.camerasList.find(
+                (camera: any) => camera.cameraId === cam.cameraId,
+              );
+
+              if (updatedCam) {
+                this.selectedCamera = { ...updatedCam };
+              }
+            }
+          }
+        },
+        error: () => {
+          this.camerasList = this.camerasList.map((camera: any) =>
+            camera.cameraId === cam.cameraId
+              ? {
+                  ...camera,
+                  monitoringStatus: false,
+                  aiStatus: false,
+                }
+              : camera,
+          );
+        },
+      });
+    });
+  }
   openClip(alert: any) {
-    console.log(alert)
+    console.log(alert);
     if (!alert.files || alert.files.length === 0) return;
 
     const fileName = alert.files[0];
@@ -284,10 +325,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             this.camerasList = this.camerasList.map((cam: any) =>
               cam.cameraId === this.selectedCamera.cameraId
                 ? {
-                  ...cam,
-                  monitoringStatus: this.monitoringStatus,
-                  aiStatus: this.aiStatus,
-                }
+                    ...cam,
+                    monitoringStatus: this.monitoringStatus,
+                    aiStatus: this.aiStatus,
+                  }
                 : cam,
             );
 
@@ -322,10 +363,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     this.camerasList = this.camerasList.map((cam: any) =>
       cam.cameraId === this.selectedCamera.cameraId
         ? {
-          ...cam,
-          monitoringStatus: false,
-          aiStatus: false,
-        }
+            ...cam,
+            monitoringStatus: false,
+            aiStatus: false,
+          }
         : cam,
     );
 
