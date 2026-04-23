@@ -28,7 +28,7 @@
         </div>
 
         <select class="tag-select" formControlName="actionTag">
-          <option value="" disabled>Alert Tags (All)</option>
+          <option value="">Alert Tags (All)</option>
           <!-- <option>All</option> -->
           @for (item of siteAlerts | async; track $index) {
             <option [value]="item.alertId">{{ item.alert }}</option>
@@ -103,8 +103,10 @@
           /> -->
         </div>
         <button type="submit" class="clear" (click)="onFilterChange()">
-          Submit
+          SUBMIT
         </button>
+
+        <button type="button" class="clear" (click)="clearData()">CLEAR</button>
 
         <div class="ec-download">
           <button
