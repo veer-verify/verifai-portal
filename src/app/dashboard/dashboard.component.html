@@ -43,13 +43,15 @@
                 : '#000000'
             "
           >
-            <span [title]="site?.siteName">{{ site?.siteName }}</span>
+            <span class="site-name" [title]="site?.siteName">{{
+              site?.siteName
+            }}</span>
             @if (
               site?.siteId === (storage_service.currentSite$ | async)?.siteId
             ) {
-              <span class="material-symbols-outlined"> remove </span>
+              <span class="material-symbols-outlined site-name"> remove </span>
             } @else {
-              <span class="material-symbols-outlined"> add </span>
+              <span class="material-symbols-outlined site-name"> add </span>
             }
           </p>
 

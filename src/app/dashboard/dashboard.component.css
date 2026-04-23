@@ -79,9 +79,9 @@
   } */
 }
 
-/* .site-list-item:hover a {
-  color: #ffffff !important;
-} */
+.site-list-item:hover .site-name {
+  color: #ed3237;
+}
 
 .site-list-item p {
   font-family: "Neometric Medium", sans-serif !important;
