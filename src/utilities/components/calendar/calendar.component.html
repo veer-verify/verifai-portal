@@ -35,23 +35,92 @@
       </button>
     </div>
 
-    <div class="field">
-      <label>START</label>
-      <div class="field-inputs">
-        <input
-          type="date"
-          [(ngModel)]="draftStartDate"
-          [max]="maxDate || null"
-        />
-        <input type="time" [(ngModel)]="draftStartTime" />
-      </div>
-    </div>
+    <div class="picker-layout">
+      <div class="inline-calendar-wrap">
+        <div class="field-toggle">
+          <button
+            type="button"
+            class="field-chip"
+            [class.active]="activeField === 'start'"
+            (click)="setActiveField('start')"
+          >
+            Start
+          </button>
+          <button
+            type="button"
+            class="field-chip"
+            [class.active]="activeField === 'end'"
+            (click)="setActiveField('end')"
+          >
+            End
+          </button>
+        </div>
 
-    <div class="field">
-      <label>END</label>
-      <div class="field-inputs">
-        <input type="date" [(ngModel)]="draftEndDate" [max]="maxDate || null" />
-        <input type="time" [(ngModel)]="draftEndTime" />
+        <mat-calendar
+          [selected]="selectedCalendarDate"
+          [maxDate]="maxCalendarDate"
+          (selectedChange)="onCalendarSelect($event)"
+        ></mat-calendar>
+      </div>
+
+      <div class="range-fields">
+        <div
+          class="range-card"
+          [class.active]="activeField === 'start'"
+          (click)="setActiveField('start')"
+        >
+          <div class="range-card-head">
+            <span class="range-card-label">Start</span>
+            <span class="range-card-value">{{ draftFormattedStart }}</span>
+          </div>
+          <div class="time-controls">
+            <label class="time-select">
+              <span>Hour</span>
+              <select [(ngModel)]="draftStartHour">
+                <option *ngFor="let hour of hourOptions" [value]="hour">
+                  {{ hour }}
+                </option>
+              </select>
+            </label>
+            <label class="time-select">
+              <span>Minute</span>
+              <select [(ngModel)]="draftStartMinute">
+                <option *ngFor="let minute of minuteOptions" [value]="minute">
+                  {{ minute }}
+                </option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div
+          class="range-card"
+          [class.active]="activeField === 'end'"
+          (click)="setActiveField('end')"
+        >
+          <div class="range-card-head">
+            <span class="range-card-label">End</span>
+            <span class="range-card-value">{{ draftFormattedEnd }}</span>
+          </div>
+          <div class="time-controls">
+            <label class="time-select">
+              <span>Hour</span>
+              <select [(ngModel)]="draftEndHour">
+                <option *ngFor="let hour of hourOptions" [value]="hour">
+                  {{ hour }}
+                </option>
+              </select>
+            </label>
+            <label class="time-select">
+              <span>Minute</span>
+              <select [(ngModel)]="draftEndMinute">
+                <option *ngFor="let minute of minuteOptions" [value]="minute">
+                  {{ minute }}
+                </option>
+              </select>
+            </label>
+          </div>
+        </div>
       </div>
     </div>
 

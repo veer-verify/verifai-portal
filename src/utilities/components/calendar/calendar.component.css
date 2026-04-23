@@ -70,12 +70,122 @@ label {
   top: calc(100% + 4px);
   left: 36px;
   z-index: 5;
-  width: min(360px, calc(100vw - 32px));
+  width: min(620px, calc(100vw - 32px));
   padding: 12px;
   border-radius: 6px;
   border: 1px solid #d8dee6;
   background: #ffffff;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.picker-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.inline-calendar-wrap {
+  border: 1px solid #e5eaf1;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f8fafc;
+}
+
+.field-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.field-chip {
+  border: 1px solid #d8dee6;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #52606d;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.field-chip.active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.range-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.range-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px;
+  background: #ffffff;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.range-card.active {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+  background: #fff8f8;
+}
+
+.range-card-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.range-card-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.range-card-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.time-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.time-select {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.time-select span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.time-select select {
+  width: 100%;
+  border: 1px solid #cfd7e3;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0f172a;
+  padding: 8px 10px;
+  font-size: 12px;
 }
 
 .close-btn-parent {
@@ -91,35 +201,6 @@ label {
   cursor: pointer;
   padding: 2px;
   border-radius: 50px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-bottom: 12px;
-}
-
-.field label {
-  font-size: 12px;
-  font-weight: 600;
-  color: #52606d;
-}
-
-.field-inputs {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 120px;
-  gap: 10px;
-}
-
-.field input {
-  width: 100%;
-  min-width: 0;
-  padding: 6px 10px;
-  border: 1px solid #cfd7e3;
-  border-radius: 6px;
-  background: #ffffff;
-  color: #000000;
 }
 
 .actions {
@@ -154,13 +235,18 @@ label {
 
   .picker-panel {
     width: 100%;
+    left: 0;
+  }
+
+  .picker-layout {
+    grid-template-columns: 1fr;
   }
 
   .nav-btn {
     flex-shrink: 0;
   }
 
-  .field-inputs {
+  .time-controls {
     grid-template-columns: 1fr;
   }
 }
