@@ -66,7 +66,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
-    // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
+    // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100));
     this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.sitesList = res.sites;
@@ -80,8 +80,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         filter((site) => !!site),
         takeUntil(this.destroy$)
       )
-      .subscribe((res) => {
-        // this.getCamerasForSiteId(res);
+      .subscribe(() => {
         this.tempCamList = [];
         this.storage_service.camData$.pipe(delay(0)).subscribe((res) => {
           this.camList = res;
@@ -90,17 +89,6 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         })
       });
   }
-
-  // getCamerasForSiteId(data: any) {
-  //   this.tempCamList = [];
-  //   this.configSrvc.getCamerasForSiteId(data).subscribe({
-  //     next: (res: any) => {
-  //       this.camList = res;
-  //       this.tempCamList = this.camList;
-  //       this.adjustGrid(this.itemsPerPage);
-  //     }
-  //   });
-  // }
 
   /**
    * pagination to split the cameras into multiple pages

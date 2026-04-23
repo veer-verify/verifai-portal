@@ -24,6 +24,23 @@ export class StorageService {
     this.showSideNav$.next(true);
   }
 
+  private activeRequests = 0;
+  incrementLoader() {
+    this.activeRequests++;
+
+    if (this.activeRequests === 1) {
+      this.loader$.next(true);
+    }
+  }
+
+  decrementLoader() {
+    this.activeRequests--;
+
+    if (this.activeRequests === 0) {
+      this.loader$.next(false);
+    }
+  }
+
   public encrypt(txt: string): string {
     return AES.encrypt(txt, this.key).toString();
   }

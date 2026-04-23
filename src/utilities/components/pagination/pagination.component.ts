@@ -1,9 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-pagination',
-  imports: [FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './pagination.component.html',
   styleUrl: './pagination.component.css'
 })
@@ -17,7 +18,7 @@ export class PaginationComponent {
   @Output() changePSize = new EventEmitter<void>();
 
   ngOnInit() {
-    if (this.totalPages === 0) this.totalPages = 1;
+    // if (this.totalPages === 0) this.totalPages = 1;
   }
 
   changePageSize(pSize: any) {
