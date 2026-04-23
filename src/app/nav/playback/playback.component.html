@@ -34,9 +34,9 @@
 
     <!-- Video Section -->
     <div class="video-container">
-      <!-- <div class="video"> -->
-      <img [src]="selectedCamera.image" width="100%" height="100%" />
-      <!-- </div> -->
+      <div class="video-frame">
+        <img class="playback-image" [src]="selectedCamera.image" />
+      </div>
 
       <!-- Controls -->
       <div class="controls">
@@ -56,26 +56,33 @@
 
         <!-- Timeline -->
         <div class="timeline-wrapper">
-          <!-- Timeline Bar -->
           <div class="tick-bar">
-            <!-- Ticks -->
-            <div
+            <span
               class="tick"
               *ngFor="let tick of ticks; let i = index"
               [class.major]="i % ticksPerHour === 0"
               [class.medium]="i % (ticksPerHour / 2) === 0"
-            ></div>
+            ></span>
 
-            <!-- Labels (aligned with major ticks) -->
             <div class="labels">
-              <div
+              <span
                 class="label"
                 *ngFor="let h of hours; let i = index"
                 [style.left.%]="(i / 24) * 100"
               >
                 {{ h }}
-              </div>
+              </span>
             </div>
+          </div>
+
+          <div class="timeline-nav-strip">
+            <button type="button" class="timeline-nav-btn" aria-label="Previous">
+              &#8249;
+            </button>
+            <div class="timeline-nav-track"></div>
+            <button type="button" class="timeline-nav-btn" aria-label="Next">
+              &#8250;
+            </button>
           </div>
         </div>
       </div>

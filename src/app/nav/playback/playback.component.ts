@@ -14,8 +14,8 @@ export class PlaybackComponent {
   constructor() {
     this.timeMarks = Array.from({ length: 25 }, (_, i) => i); // 0–24
 
-    this.ticks = Array.from({ length: 24 * this.ticksPerHour });
-    // 240 ticks = dense scale (like seconds/minutes feel)
+    this.ticks = Array.from({ length: 24 * this.ticksPerHour + 1 });
+    // Include the closing boundary tick at 24:00.
   }
 
   // 24-hour labels (00–24)
