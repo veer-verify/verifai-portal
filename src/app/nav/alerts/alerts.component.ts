@@ -52,7 +52,7 @@ export class AlertsComponent {
     private incident_service: IncidentService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-  ) { }
+  ) {}
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -128,17 +128,21 @@ export class AlertsComponent {
       )
       .subscribe((site) => {
         // this.sfilterForm.reset()
-        this.clearData()
-        this.siteAlerts = this.incident_service.getSiteAlerts(site).pipe(map((response) => response.data));
+        this.clearData();
+        this.siteAlerts = this.incident_service
+          .getSiteAlerts(site)
+          .pipe(map((response) => response.data));
 
         this.currentSite = site;
         // this.getcamerasForSiteId();
         this.incidentList();
       });
 
-    this.storage_service.camData$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
-      this.camerasList = res;
-    });
+    this.storage_service.camData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.camerasList = res;
+      });
   }
 
   formatDateTimeForFile(dateTime: string): string {
@@ -172,7 +176,6 @@ export class AlertsComponent {
     } else {
       return `${year}-${month}-${day}T${23}:${59}`;
     }
-
   }
 
   formatDateTimeSeconds(dateTimeValue: string): string {
@@ -209,23 +212,25 @@ export class AlertsComponent {
   }
 
   clearData() {
-    const now = new Date();
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
+    // const now = new Date();
+    // const startOfToday = new Date();
+    // startOfToday.setHours(0, 0, 0, 0);
 
-    this.todayDateTime = this.formatDateTimeLocal(now);
+    // this.todayDateTime = this.formatDateTimeLocal(now);
 
     this.sfilterForm.patchValue({
       cameraId: '',
       actionTag: '',
-      fromDate: this.formatDateTimeLocal(startOfToday),
-      toDate: this.formatDateTimeLocal(now),
-      fromTime: '',
-      toTime: '',
+      // fromDate: this.formatDateTimeLocal(startOfToday),
+      // toDate: this.formatDateTimeLocal(now),
+      // fromTime: '',
+      // toTime: '',
     });
 
     // this.anyData = true;
     // this.incidentList();
+    this.pageNumber = 1;
+    this.incidentList();
   }
 
   downloadExcelReport() {
@@ -344,7 +349,6 @@ export class AlertsComponent {
       .subscribe({
         next: (res) => {
           if (res.statusCode === 200) {
-
             this.rowData = res.IncidentList;
             this.totalPages = res.totalPages;
           } else {
@@ -371,7 +375,13 @@ export class AlertsComponent {
   }
 
   setEndDate() {
-    this.sfilterForm.get('toDate')?.setValue(this.formatDateTimeLocal(new Date(this.sfilterForm.get('toDate')?.value)));
+    this.sfilterForm
+      .get('toDate')
+      ?.setValue(
+        this.formatDateTimeLocal(
+          new Date(this.sfilterForm.get('toDate')?.value),
+        ),
+      );
   }
 
   ngOnDestroy(): void {

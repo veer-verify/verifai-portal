@@ -350,19 +350,19 @@ select::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
 }
 
-/* 🔥 FIXED ICON SIZE */
+/*  ICON SIZE */
 .excel-icon {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 
-/* Optional hover */
+/*  hover */
 .download-btn:hover .excel-icon {
-  transform: scale(1.1);
+  transform: scale(1.03);
 }
 
-/* Optional click effect */
+/*  click effect */
 .download-btn:active {
   transform: scale(0.95);
 }
