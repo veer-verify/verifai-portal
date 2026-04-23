@@ -1,0 +1,65 @@
+<div class="range-picker">
+  <div class="range-header">
+    <button
+      type="button"
+      class="nav-btn"
+      (click)="navigateDays(-1)"
+      [disabled]="!canNavigatePrevious"
+      aria-label="Previous date range"
+    >
+      &#8249;
+    </button>
+
+    <button type="button" class="range-trigger" (click)="toggleOpen()">
+      <span class="trigger-line">
+        {{ formattedStart }} to {{ formattedEnd }}
+      </span>
+      <img src="icons/calendar.svg" class="trigger-icon" />
+    </button>
+
+    <button
+      type="button"
+      class="nav-btn"
+      (click)="navigateDays(1)"
+      [disabled]="!canNavigateNext"
+      aria-label="Next date range"
+    >
+      &#8250;
+    </button>
+  </div>
+
+  <div class="picker-panel" *ngIf="isOpen">
+    <div class="close-btn-parent">
+      <button type="button" class="close-btn" (click)="toggleOpen()">
+        <span class="material-symbols-outlined"> close_small </span>
+      </button>
+    </div>
+
+    <div class="field">
+      <label>START</label>
+      <div class="field-inputs">
+        <input
+          type="date"
+          [(ngModel)]="draftStartDate"
+          [max]="maxDate || null"
+        />
+        <input type="time" [(ngModel)]="draftStartTime" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>END</label>
+      <div class="field-inputs">
+        <input type="date" [(ngModel)]="draftEndDate" [max]="maxDate || null" />
+        <input type="time" [(ngModel)]="draftEndTime" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="secondary-btn" (click)="reset()">
+        Reset
+      </button>
+      <button type="button" class="primary-btn" (click)="apply()">Apply</button>
+    </div>
+  </div>
+</div>

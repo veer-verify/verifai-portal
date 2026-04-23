@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --no-hmr",
+    "start": "ng serve --no-hmr --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --base-href /verifai-portal/ --configuration development",
     "test": "ng test"

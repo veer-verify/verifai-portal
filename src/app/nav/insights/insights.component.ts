@@ -21,6 +21,10 @@ import { AgCharts } from 'ag-charts-angular';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { LiveAiService } from '../../../utilities/services/live-ai.service';
 import { Router } from '@angular/router';
+import {
+  CalendarComponent,
+  DateRangePayload,
+} from '../../../utilities/components/calendar/calendar.component';
 @Component({
   selector: 'app-insights',
   imports: [
@@ -36,6 +40,7 @@ import { Router } from '@angular/router';
     SiteReportComponent,
     AgGridAngular,
     AgCharts,
+    CalendarComponent
   ],
   templateUrl: './insights.component.html',
   styleUrl: './insights.component.css',
@@ -173,14 +178,36 @@ export class InsightsComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRangeApply(range: DateRangePayload) {
+    this.fromDate = range.startDate;
+    this.fromTime = range.startTime;
+    this.toDate = range.endDate;
+    this.toTime = range.endTime;
+
+
+    this.analyticsData = [];
+    if (this.selectedOption === 'monitoring') {
+      this.getAlertCounts();
+    } else {
+      this.biAnalyticsReport();
+    }
+  }
+
   alertCounts: any = {};
   getAlertCounts(): void {
     if (!this.currentSite?.siteId) return;
 
-    const date = new Date().toISOString().split('T')[0];
+    // const date = new Date().toISOString().split('T')[0];
 
     this.storage_service.info$.next('');
-    this.liveAiService.getAlertCounts(this.currentSite.siteId, date).subscribe({
+    this.liveAiService.getAlertCounts({
+      siteId: this.currentSite?.siteId,
+      cameraId: this.cameraId,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+      fromTime: this.fromTime,
+      toTime: this.toTime,
+    }).subscribe({
       next: (res: any) => {
         if (res.statusCode === 200) {
           this.storage_service.info$.next('');
@@ -201,7 +228,6 @@ export class InsightsComponent implements OnInit, OnDestroy {
     });
   }
 
-  //! downloadReportPDF
   downloadBiReport() {
     if (!this.currentSite?.siteId) {
       this.storage_service.info$.next('site not found!');

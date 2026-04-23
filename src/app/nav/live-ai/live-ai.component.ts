@@ -57,7 +57,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     private storageService: StorageService,
     private dialog: MatDialog,
     public storage_service: StorageService,
-  ) {}
+  ) { }
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
 
@@ -184,7 +184,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
           if (this.camerasList.length > 0) {
             this.selectedCamera = this.camerasList[0];
             this.loadAllCameraStatuses();
-            this.loadAlertCounts();
+            // this.loadAlertCounts();
             this.loadCameraImage();
             this.loadEvents();
           }
@@ -203,10 +203,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             this.camerasList = this.camerasList.map((camera: any) =>
               camera.cameraId === cam.cameraId
                 ? {
-                    ...camera,
-                    monitoringStatus: res.monitoring === 'T',
-                    aiStatus: res.AI === 'T',
-                  }
+                  ...camera,
+                  monitoringStatus: res.monitoring === 'T',
+                  aiStatus: res.AI === 'T',
+                }
                 : camera,
             );
 
@@ -225,10 +225,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
           this.camerasList = this.camerasList.map((camera: any) =>
             camera.cameraId === cam.cameraId
               ? {
-                  ...camera,
-                  monitoringStatus: false,
-                  aiStatus: false,
-                }
+                ...camera,
+                monitoringStatus: false,
+                aiStatus: false,
+              }
               : camera,
           );
         },
@@ -261,38 +261,38 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     }
 
     this.loadEvents();
-    this.loadAlertCounts();
+    // this.loadAlertCounts();
   }
   //! =========================================
   //! ALert count
   //! =========================================
-  alertCounts: any = {};
+  // alertCounts: any = {};
 
-  loadAlertCounts(): void {
-    if (!this.selectedSiteId) return;
+  // loadAlertCounts(): void {
+  //   if (!this.selectedSiteId) return;
 
-    const today = new Date().toISOString().split('T')[0];
+  //   const today = new Date().toISOString().split('T')[0];
 
-    this.liveAiService
-      .getAlertCounts(
-        this.selectedSiteId,
-        today,
-        this.selectedCamera?.cameraId || undefined,
-      )
-      .subscribe({
-        next: (res: any) => {
-          if (res.statusCode === 200) {
-            this.alertCounts = res.aiTagCounts;
-          } else {
-            this.alertCounts = {};
-          }
-        },
-        error: (err) => {
-          console.error('❌ Alert Count API Error:', err);
-          this.alertCounts = {};
-        },
-      });
-  }
+  //   this.liveAiService
+  //     .getAlertCounts(
+  //       this.selectedSiteId,
+  //       today,
+  //       this.selectedCamera?.cameraId || undefined,
+  //     )
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         if (res.statusCode === 200) {
+  //           this.alertCounts = res.aiTagCounts;
+  //         } else {
+  //           this.alertCounts = {};
+  //         }
+  //       },
+  //       error: (err) => {
+  //         console.error('❌ Alert Count API Error:', err);
+  //         this.alertCounts = {};
+  //       },
+  //     });
+  // }
 
   //! =========================================
   //! LOAD IMAGE
@@ -325,10 +325,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             this.camerasList = this.camerasList.map((cam: any) =>
               cam.cameraId === this.selectedCamera.cameraId
                 ? {
-                    ...cam,
-                    monitoringStatus: this.monitoringStatus,
-                    aiStatus: this.aiStatus,
-                  }
+                  ...cam,
+                  monitoringStatus: this.monitoringStatus,
+                  aiStatus: this.aiStatus,
+                }
                 : cam,
             );
 
@@ -363,10 +363,10 @@ export class LiveAiComponent implements OnInit, OnDestroy {
     this.camerasList = this.camerasList.map((cam: any) =>
       cam.cameraId === this.selectedCamera.cameraId
         ? {
-            ...cam,
-            monitoringStatus: false,
-            aiStatus: false,
-          }
+          ...cam,
+          monitoringStatus: false,
+          aiStatus: false,
+        }
         : cam,
     );
 
@@ -459,7 +459,7 @@ export class LiveAiComponent implements OnInit, OnDestroy {
 
     this.intervalId = setInterval(() => {
       this.loadEvents();
-      this.loadAlertCounts();
+      // this.loadAlertCounts();
 
       if (this.selectedCamera?.cameraId) {
         this.loadCameraImage();

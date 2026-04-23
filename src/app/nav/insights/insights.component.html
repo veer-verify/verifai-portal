@@ -27,7 +27,6 @@
         </select>
       </div>
 
-      <!-- <div class="d-inline-flex align-items-center gap-2" *ngIf="page === 'list'"> -->
       <div class="d-inline-flex align-items-center gap-2">
         <input
           type="radio"
@@ -48,40 +47,43 @@
         />
         <span style="white-space: nowrap">Business Intelligence</span>
       </div>
-      <!-- </div> -->
 
-      <div class="calendar">
+      <!-- <div class="calendar">
         <span>START</span>
         <input type="date" #picker1 [(ngModel)]="fromDate" [max]="today" />
-        <!-- <img
+        <img
           src="icons/calendar.svg"
           class="calendar-icon"
           (click)="openTimePicker(picker1)"
-        /> -->
+        />
 
         <input matInput type="time" class="time-input" [(ngModel)]="fromTime" />
-
-        <!-- <mat-datepicker #picker1></mat-datepicker> -->
       </div>
 
       <div class="calendar">
         <span>END</span>
         <input type="date" [(ngModel)]="toDate" [max]="today" />
 
-        <!-- <img
+        <img
           src="icons/calendar.svg"
           class="calendar-icon"
-          (click)="picker2.open()"
-        /> -->
+        />
 
         <input matInput type="time" class="time-input" [(ngModel)]="toTime" />
+      </div> -->
 
-        <!-- <mat-datepicker #picker2></mat-datepicker> -->
-      </div>
-
-      <div>
+      <!-- <div>
         <button class="submit-btn" (click)="biAnalyticsReport()">Submit</button>
-      </div>
+      </div> -->
+
+      <app-calendar
+        [startDate]="fromDate"
+        [startTime]="fromTime"
+        [endDate]="toDate"
+        [endTime]="toTime"
+        [maxDate]="today"
+        (rangeApply)="onRangeApply($event)"
+      ></app-calendar>
     </div>
 
     <div class="btn-sec d-inline-flex gap-2">

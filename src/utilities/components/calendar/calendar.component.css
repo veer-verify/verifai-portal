@@ -1,0 +1,166 @@
+label {
+  margin: 0;
+}
+
+.range-picker {
+  position: relative;
+  min-width: 280px;
+}
+
+.range-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #d8dee6;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #415164;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.nav-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.range-trigger {
+  flex: 1;
+  border-radius: 6px;
+  border: 1px solid #d8dee6;
+  background: #ffffff;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.trigger-line {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.3;
+  color: #334155;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trigger-icon {
+  width: 16px;
+  height: 16px;
+  /* opacity: 0.7; */
+  flex-shrink: 0;
+}
+
+.picker-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 36px;
+  z-index: 5;
+  width: min(360px, calc(100vw - 32px));
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #d8dee6;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.close-btn-parent {
+  display: flex;
+  justify-content: end;
+}
+
+.close-btn {
+  border: 0;
+  border-radius: 8px;
+  background: #eef2f6;
+  padding: 6px 10px;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 50px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #52606d;
+}
+
+.field-inputs {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px;
+  gap: 10px;
+}
+
+.field input {
+  width: 100%;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid #cfd7e3;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #000000;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.actions button {
+  border: 0;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.primary-btn {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.secondary-btn {
+  background: #eef2f6;
+  color: #415164;
+}
+
+@media (max-width: 640px) {
+  .range-picker {
+    min-width: 100%;
+  }
+
+  .picker-panel {
+    width: 100%;
+  }
+
+  .nav-btn {
+    flex-shrink: 0;
+  }
+
+  .field-inputs {
+    grid-template-columns: 1fr;
+  }
+}

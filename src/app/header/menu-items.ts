@@ -27,8 +27,8 @@ export const menuItems = [
     id: 'insights',
     label: 'insights',
     routeLink: 'insights',
-    call: (data: any) => (data?.key !== 'F' ? true : false),
-    // call: () => true,
+    // call: (data: any) => (data?.key !== 'F' ? true : false),
+    call: () => true,
   },
 
   // {
