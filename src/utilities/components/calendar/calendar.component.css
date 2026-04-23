@@ -4,13 +4,18 @@ label {
 
 .range-picker {
   position: relative;
-  min-width: 280px;
+  min-width: 0;
+  width: min(100%, 460px);
+  max-width: 100%;
+  isolation: isolate;
 }
 
 .range-header {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  max-width: 100%;
 }
 
 .nav-btn {
@@ -35,6 +40,7 @@ label {
 
 .range-trigger {
   flex: 1;
+  min-width: 0;
   border-radius: 6px;
   border: 1px solid #d8dee6;
   background: #ffffff;
@@ -68,10 +74,13 @@ label {
 .picker-panel {
   position: absolute;
   top: calc(100% + 4px);
-  left: 36px;
-  z-index: 5;
-  width: min(620px, calc(100vw - 32px));
-  padding: 12px;
+  left: 0;
+  right: auto;
+  z-index: 9;
+  width: min(600px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  overflow-x: auto;
+  padding: 10px;
   border-radius: 6px;
   border: 1px solid #d8dee6;
   background: #ffffff;
@@ -81,7 +90,7 @@ label {
 .picker-layout {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
-  gap: 16px;
+  gap: 10px;
   align-items: start;
 }
 
@@ -90,12 +99,13 @@ label {
   border-radius: 10px;
   padding: 10px;
   background: #f8fafc;
+  min-width: 0;
 }
 
 .field-toggle {
   display: flex;
   gap: 8px;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 }
 
 .field-chip {
@@ -119,12 +129,13 @@ label {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
 }
 
 .range-card {
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 6px;
+  padding: 10px;
   background: #ffffff;
   cursor: pointer;
   transition:
@@ -143,7 +154,7 @@ label {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 .range-card-label {
@@ -169,7 +180,7 @@ label {
 .time-select {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 .time-select span {
@@ -181,10 +192,10 @@ label {
 .time-select select {
   width: 100%;
   border: 1px solid #cfd7e3;
-  border-radius: 8px;
+  border-radius: 6px;
   background: #ffffff;
   color: #0f172a;
-  padding: 8px 10px;
+  padding: 6px 10px;
   font-size: 12px;
 }
 
@@ -207,6 +218,7 @@ label {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .actions button {
@@ -228,25 +240,104 @@ label {
   color: #415164;
 }
 
+@media (max-width: 980px) {
+  .picker-panel {
+    left: 0;
+    width: min(520px, calc(100vw - 24px));
+    max-width: calc(100vw - 24px);
+  }
+
+  .picker-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .range-picker {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .range-header {
+    gap: 6px;
+  }
+
+  .nav-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .range-trigger {
+    padding: 8px 10px;
+  }
+
+  .trigger-line {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.4;
+  }
+
+  .picker-panel {
+    width: min(100vw - 24px, 100%);
+  }
+}
+
 @media (max-width: 640px) {
   .range-picker {
-    min-width: 100%;
+    width: 100%;
+    min-width: 0;
   }
 
   .picker-panel {
     width: 100%;
     left: 0;
+    max-width: 100%;
   }
 
   .picker-layout {
     grid-template-columns: 1fr;
   }
 
-  .nav-btn {
-    flex-shrink: 0;
+  .range-header {
+    align-items: stretch;
+  }
+
+  .range-trigger {
+    min-height: 44px;
+    align-items: flex-start;
+  }
+
+  .field-toggle {
+    flex-wrap: wrap;
   }
 
   .time-controls {
     grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions button {
+    flex: 1 1 140px;
+  }
+}
+
+@media (max-width: 420px) {
+  .picker-panel {
+    padding: 10px;
+  }
+
+  .inline-calendar-wrap,
+  .range-card {
+    padding: 10px;
+  }
+
+  .trigger-line {
+    font-size: 11px;
   }
 }

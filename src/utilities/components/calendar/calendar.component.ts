@@ -1,6 +1,8 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   Output,
@@ -30,6 +32,8 @@ export type DateRangePayload = {
   styleUrls: ['./calendar.component.css'],
 })
 export class CalendarComponent {
+  constructor(private elementRef: ElementRef<HTMLElement>) { }
+
   @Input() startDate = '';
   @Input() startTime = '';
   @Input() endDate = '';
@@ -65,6 +69,18 @@ export class CalendarComponent {
     ) {
       this.syncDraftFromInputs();
     }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.isOpen) return;
+
+    const target = event.target as Node | null;
+    if (target && this.elementRef.nativeElement.contains(target)) {
+      return;
+    }
+
+    this.isOpen = false;
   }
 
   get displayRange(): string {
@@ -178,12 +194,12 @@ export class CalendarComponent {
 
   get draftFormattedStart(): string {
     if (!this.draftStartDate) return 'Select start date';
-    return `${this.formatDisplayDate(this.draftStartDate)} • ${this.buildTime(this.draftStartHour, this.draftStartMinute)}`;
+    return `${this.formatDisplayDate(this.draftStartDate)}, ${this.buildTime(this.draftStartHour, this.draftStartMinute)}`;
   }
 
   get draftFormattedEnd(): string {
     if (!this.draftEndDate) return 'Select end date';
-    return `${this.formatDisplayDate(this.draftEndDate)} • ${this.buildTime(this.draftEndHour, this.draftEndMinute)}`;
+    return `${this.formatDisplayDate(this.draftEndDate)}, ${this.buildTime(this.draftEndHour, this.draftEndMinute)}`;
   }
 
   private syncDraftFromInputs() {

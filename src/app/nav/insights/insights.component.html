@@ -3,87 +3,141 @@
 
   <div class="tool-bar">
     <div *ngIf="page === 'map'"></div>
-    <div class="d-inline-flex align-items-center gap-3" *ngIf="page === 'list'">
+
+    <div class="toolbar-filters" *ngIf="page === 'list'">
       <div
         class="hamburger py-1"
         (click)="storage_service.openSideNav()"
         *ngIf="!(storage_service.showSideNav$ | async)"
       >
-        ☰
+        &#9776;
       </div>
-      <div class="select-with-icon">
-        <img src="icons/drop_cam.svg" alt="" class="icon" />
-        <select
-          class="tag-select"
-          [(ngModel)]="cameraId"
-          (ngModelChange)="biAnalyticsReport()"
+
+      <div class="toolbar-inline-filters" *ngIf="!isCompactFilters">
+        <div class="select-with-icon">
+          <img src="icons/drop_cam.svg" alt="" class="icon" />
+          <select
+            class="tag-select"
+            [(ngModel)]="cameraId"
+            (ngModelChange)="biAnalyticsReport()"
+          >
+            <option value="" selected>
+              <img src="icons/drop_cam.svg" alt="" />ALL ({{ camList.length }})
+            </option>
+            <option *ngFor="let item of camList" [value]="item.cameraId">
+              {{ item?.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-radio-group toolbar-radio-group">
+          <label class="filter-radio">
+            <input
+              type="radio"
+              name="type"
+              value="monitoring"
+              [(ngModel)]="selectedOption"
+              (ngModelChange)="onRadioChange()"
+            />
+            <span>Monitoring</span>
+          </label>
+
+          <label class="filter-radio">
+            <input
+              type="radio"
+              name="type"
+              value="business"
+              [(ngModel)]="selectedOption"
+              (ngModelChange)="onRadioChange()"
+            />
+            <span>Business Intelligence</span>
+          </label>
+        </div>
+
+        <app-calendar
+          [startDate]="fromDate"
+          [startTime]="fromTime"
+          [endDate]="toDate"
+          [endTime]="toTime"
+          [maxDate]="today"
+          (rangeApply)="onRangeApply($event)"
+        ></app-calendar>
+      </div>
+
+      <div class="filters-dropdown" *ngIf="isCompactFilters">
+        <button
+          type="button"
+          class="filters-trigger"
+          (click)="showFiltersDropdown = !showFiltersDropdown"
         >
-          <option value="" selected>
-            <img src="icons/drop_cam.svg" alt="" />ALL ({{ camList.length }})
-          </option>
-          <option *ngFor="let item of camList" [value]="item.cameraId">
-            {{ item?.name }}
-          </option>
-        </select>
+          <span class="material-symbols-outlined">tune</span>
+          <span>Filters</span>
+        </button>
+
+        <div class="filters-panel" *ngIf="showFiltersDropdown">
+          <div class="filters-panel-header">
+            <span>Filters</span>
+            <button
+              type="button"
+              class="filters-close"
+              (click)="showFiltersDropdown = false"
+            >
+              <span class="material-symbols-outlined">close_small</span>
+            </button>
+          </div>
+
+          <div class="filters-panel-body">
+            <div class="select-with-icon">
+              <img src="icons/drop_cam.svg" alt="" class="icon" />
+              <select
+                class="tag-select"
+                [(ngModel)]="cameraId"
+                (ngModelChange)="biAnalyticsReport()"
+              >
+                <option value="" selected>
+                  <img src="icons/drop_cam.svg" alt="" />ALL ({{ camList.length }})
+                </option>
+                <option *ngFor="let item of camList" [value]="item.cameraId">
+                  {{ item?.name }}
+                </option>
+              </select>
+            </div>
+
+            <div class="filter-radio-group">
+              <label class="filter-radio">
+                <input
+                  type="radio"
+                  name="type"
+                  value="monitoring"
+                  [(ngModel)]="selectedOption"
+                  (ngModelChange)="onRadioChange()"
+                />
+                <span>Monitoring</span>
+              </label>
+
+              <label class="filter-radio">
+                <input
+                  type="radio"
+                  name="type"
+                  value="business"
+                  [(ngModel)]="selectedOption"
+                  (ngModelChange)="onRadioChange()"
+                />
+                <span>Business Intelligence</span>
+              </label>
+            </div>
+
+            <app-calendar
+              [startDate]="fromDate"
+              [startTime]="fromTime"
+              [endDate]="toDate"
+              [endTime]="toTime"
+              [maxDate]="today"
+              (rangeApply)="onRangeApply($event)"
+            ></app-calendar>
+          </div>
+        </div>
       </div>
-
-      <div class="d-inline-flex align-items-center gap-2">
-        <input
-          type="radio"
-          name="type"
-          value="monitoring"
-          [(ngModel)]="selectedOption"
-          (ngModelChange)="onRadioChange()"
-        />
-        <span>Monitoring</span>
-      </div>
-      <div class="d-inline-flex align-items-center gap-2">
-        <input
-          type="radio"
-          name="type"
-          value="business"
-          [(ngModel)]="selectedOption"
-          (ngModelChange)="onRadioChange()"
-        />
-        <span style="white-space: nowrap">Business Intelligence</span>
-      </div>
-
-      <!-- <div class="calendar">
-        <span>START</span>
-        <input type="date" #picker1 [(ngModel)]="fromDate" [max]="today" />
-        <img
-          src="icons/calendar.svg"
-          class="calendar-icon"
-          (click)="openTimePicker(picker1)"
-        />
-
-        <input matInput type="time" class="time-input" [(ngModel)]="fromTime" />
-      </div>
-
-      <div class="calendar">
-        <span>END</span>
-        <input type="date" [(ngModel)]="toDate" [max]="today" />
-
-        <img
-          src="icons/calendar.svg"
-          class="calendar-icon"
-        />
-
-        <input matInput type="time" class="time-input" [(ngModel)]="toTime" />
-      </div> -->
-
-      <!-- <div>
-        <button class="submit-btn" (click)="biAnalyticsReport()">Submit</button>
-      </div> -->
-
-      <app-calendar
-        [startDate]="fromDate"
-        [startTime]="fromTime"
-        [endDate]="toDate"
-        [endTime]="toTime"
-        [maxDate]="today"
-        (rangeApply)="onRangeApply($event)"
-      ></app-calendar>
     </div>
 
     <div class="btn-sec d-inline-flex gap-2">
@@ -119,7 +173,6 @@
     </div>
   </div>
 
-  <!--  MONITORING VIEW -->
   <ng-container *ngIf="selectedOption === 'monitoring' && page === 'list'">
     <div class="monitoring-container">
       <div class="alert-card" *ngFor="let item of alertCounts | keyvalue">
@@ -138,7 +191,6 @@
       class="dashboard"
       [style.margin]="(storage_service.showSideNav$ | async) ? '0' : '0 40px'"
     >
-      <!-- LEFT TABLE -->
       <div class="table-panel">
         <div class="analytics-section" *ngFor="let section of analyticsData">
           <div class="section-header">
@@ -156,7 +208,6 @@
           <div class="section-body">
             <div class="analytics-row" *ngFor="let row of section.data">
               <div class="analytics-left">
-                <!-- ICON -->
                 <img
                   *ngIf="row.icon && !row._iconError"
                   class="analytics-icon"
@@ -165,7 +216,6 @@
                   alt=""
                 />
 
-                <!-- RED DOT FALLBACK -->
                 <span
                   *ngIf="!row.icon || row._iconError"
                   class="fallback-dot"
@@ -184,7 +234,6 @@
         </div>
       </div>
 
-      <!-- RIGHT CHARTS -->
       <div
         class="chart-panel"
         [style.boxShadow]="analyticsData.length ? '-5px 5px 5px #0000000d' : ''"
@@ -194,17 +243,10 @@
             {{ chart.title }}
           </div>
 
-          <!-- <div class="chart-container">
-            <ag-charts class="donut-chart" [options]="chart.options">
-            </ag-charts>
-          </div> -->
-
           <div class="chart-row">
-            <!-- Donut -->
             <ag-charts class="donut-chart" [options]="chart.options">
             </ag-charts>
 
-            <!-- Custom Legend -->
             <div class="legend">
               <div
                 class="legend-item"

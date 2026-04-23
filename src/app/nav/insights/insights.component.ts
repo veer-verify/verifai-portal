@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { AgChartOptions } from 'ag-charts-community';
 
 import { GridOptions } from 'ag-grid-community';
@@ -83,6 +89,8 @@ export class InsightsComponent implements OnInit, OnDestroy {
   analyticsData: any = [];
   charts: any[] = [];
   selectedOption: string = 'business';
+  showFiltersDropdown = false;
+  isCompactFilters = false;
 
   formatDateTime = (dateStr: string) => {
     const [datePart, timePart] = dateStr.split(' ');
@@ -111,6 +119,7 @@ export class InsightsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.gridOptions = gridOptions;
+    this.updateFilterLayout();
 
     this.storage_service.currentSite$
       .pipe(
@@ -131,6 +140,11 @@ export class InsightsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    this.updateFilterLayout();
   }
 
   openTimePicker(input: HTMLInputElement) {
@@ -183,13 +197,20 @@ export class InsightsComponent implements OnInit, OnDestroy {
     this.fromTime = range.startTime;
     this.toDate = range.endDate;
     this.toTime = range.endTime;
-
+    this.showFiltersDropdown = false;
 
     this.analyticsData = [];
     if (this.selectedOption === 'monitoring') {
       this.getAlertCounts();
     } else {
       this.biAnalyticsReport();
+    }
+  }
+
+  private updateFilterLayout() {
+    this.isCompactFilters = window.innerWidth <= 1280;
+    if (!this.isCompactFilters) {
+      this.showFiltersDropdown = false;
     }
   }
 

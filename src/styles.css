@@ -19,7 +19,7 @@ body {
 }
 
 label {
-  display: block !important;
+  display: block;
   margin-top: 6px;
   opacity: 0.8;
   font-size: 12px;
