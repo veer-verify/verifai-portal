@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, inject, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
@@ -17,6 +17,8 @@ import { delay, finalize, Observable } from 'rxjs';
     standalone: true,
 })
 export class DashboardComponent implements OnInit {
+
+    @ViewChildren('siteItem') siteItems!: QueryList<ElementRef<HTMLElement>>;
 
     public storage_service = inject(StorageService);
     private config_service = inject(ConfigService);
@@ -91,8 +93,20 @@ export class DashboardComponent implements OnInit {
         } else {
             this.storage_service.currentSite$.next(site);
             this.getCamerasForSiteId(site);
+            setTimeout(() => this.scrollSiteIntoView(site?.siteId), 0);
         }
         // this.storage_service.currentSite$.next(this.currentSite);
+    }
+
+    private scrollSiteIntoView(siteId: any) {
+        const siteElement = this.siteItems?.find((item) =>
+            item.nativeElement.dataset['siteId'] === String(siteId)
+        );
+
+        siteElement?.nativeElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+        });
     }
 
     close() {

@@ -33,7 +33,7 @@
     </div>
     <div class="sites-content">
       @for (site of sitesList | search: searchSite; track site?.siteId) {
-        <div class="site-list-item">
+        <div class="site-list-item" #siteItem [attr.data-site-id]="site?.siteId">
           <!-- @if (storage_service.currentSite$ | async; as currentSite) { -->
           <p
             (click)="updateSite(site)"
