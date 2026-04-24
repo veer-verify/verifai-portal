@@ -73,6 +73,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   paginatedList: any[] = [];
   isDragEnabled = false;
   isDotEnabled = false;
+  maximizedCamera: any | null = null;
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
@@ -95,6 +96,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.storage_service.camData$.pipe(delay(0)).subscribe((res) => {
           this.camList = res;
           this.tempCamList = this.camList;
+          this.maximizedCamera = null;
           this.adjustGrid(this.itemsPerPage);
         })
       });
@@ -107,6 +109,10 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.paginatedList = this.tempCamList.slice(start, end);
+  }
+
+  get visibleStreams(): any[] {
+    return this.maximizedCamera ? [this.maximizedCamera] : this.paginatedList;
   }
 
   private updateGridLayout(count: number): void {
@@ -154,6 +160,15 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pagination()
   }
 
+  toggleMaximize(camera: any): void {
+    if (this.maximizedCamera?.cameraId === camera?.cameraId) {
+      this.maximizedCamera = null;
+      return;
+    }
+
+    this.maximizedCamera = camera;
+  }
+
   toggleDragDrop(): void {
     this.isDragEnabled = !this.isDragEnabled;
     if (this.isDragEnabled) {
@@ -169,6 +184,10 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   dropStream(event: CdkDragDrop<any[]>): void {
+    if (this.maximizedCamera) {
+      return;
+    }
+
     if (event.previousIndex === event.currentIndex) {
       return;
     }

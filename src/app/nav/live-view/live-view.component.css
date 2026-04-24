@@ -131,6 +131,11 @@
   background-color: #000;
 }
 
+.grid-container.maximized-mode {
+  grid-template-columns: 1fr !important;
+  grid-template-rows: 1fr !important;
+}
+
 .grid-item {
   position: relative;
   border: 1px solid #9c9696;
@@ -217,6 +222,10 @@
 
 .single-view {
   min-height: 100%;
+}
+
+.grid-container.maximized-mode .grid-item {
+  border-color: #243046;
 }
 
 .cam-info {

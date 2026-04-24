@@ -94,19 +94,22 @@
 <!-- camera container -->
 <section
   class="grid-container"
+  [class.maximized-mode]="!!maximizedCamera"
   #gridContainer
   cdkDropList
-  [cdkDropListData]="paginatedList"
-  [cdkDropListDisabled]="!isDragEnabled"
+  [cdkDropListData]="visibleStreams"
+  [cdkDropListDisabled]="!isDragEnabled || !!maximizedCamera"
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
 >
-  @for (item of paginatedList; track item.cameraId) {
+  @for (item of visibleStreams; track item.cameraId) {
     <div
       class="grid-item"
-      [ngClass]="itemsPerPage === 1 ? 'single-view' : ''"
+      [ngClass]="
+        itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''
+      "
       cdkDrag
-      [cdkDragDisabled]="!isDragEnabled"
+      [cdkDragDisabled]="!isDragEnabled || !!maximizedCamera"
       #gridItem
     >
       @if (isDragEnabled) {
@@ -126,6 +129,7 @@
         [isChecked]="isChecked"
         [dotEnabled]="isDotEnabled"
         (dotPlaced)="onDotPlaced($event)"
+        (streamDoubleClicked)="toggleMaximize($event)"
       ></app-stream>
     </div>
   }

@@ -22,6 +22,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
   @Input() isChecked: any;
   @Input() dotEnabled = true;
   @Output() dotPlaced = new EventEmitter<any>();
+  @Output() streamDoubleClicked = new EventEmitter<any>();
   @ViewChild('video') video!: ElementRef;
 
   peerConnection!: RTCPeerConnection;
@@ -364,6 +365,11 @@ export class StreamComponent implements OnChanges, OnDestroy {
     const imgUrl = this.captureFrameDataUrl(true);
     if (!imgUrl) return;
     this.downloadImage(imgUrl);
+  }
+
+  onStreamDoubleClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.streamDoubleClicked.emit(this.videoData);
   }
 
   placeDot(event: MouseEvent) {
