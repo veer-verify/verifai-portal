@@ -20,6 +20,7 @@ export const environment = {
     helpdeskUrl: `${dev_url}/supportRequests`,
     incidentsUrl: `${dev_url}/guard_monitoring`,
     eventDataUrl: `${dev_url}/events_data`,
+    verifaiInsightsUrl: `${dev_url}/bi_verifai`
 
     //     authUrl: `${local_url}:3002/userDetails`,
     // sitesUrl: `${local_url}:3004/vipsites`,

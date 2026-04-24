@@ -1,45 +1,33 @@
-import { IncidentService } from './../../../utilities/services/incident.service';
 import { Component } from '@angular/core';
-import { CommonModule, formatDate } from '@angular/common';
-import { MatSelectModule } from '@angular/material/select';
-import { TableComponent } from '../../../utilities/components/table/table.component';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { StorageService } from '../../../utilities/services/storage.service';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ConfigService } from '../../../utilities/services/config.service';
 import { filter, map, Observable, Subject, takeUntil } from 'rxjs';
-import {
-  CellClickedEvent,
-  ColDef,
-  GridOptions,
-  GridReadyEvent,
-  IServerSideDatasource,
-  themeQuartz,
-} from 'ag-grid-community';
+import { CellClickedEvent, ColDef, GridOptions } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
-import { gridOptions } from '../../../grid.config';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
-import { MatMenuModule } from '@angular/material/menu';
-import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSelectModule } from '@angular/material/select';
+import { gridOptions } from '../../../grid.config';
+import { StorageService } from '../../../utilities/services/storage.service';
 import { AlertService } from '../../../utilities/services/alert.service';
-import { CdkAutofill } from '@angular/cdk/text-field';
+import { IncidentService } from '../../../utilities/services/incident.service';
+import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
+import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
+import {
+  CalendarComponent,
+  DateRangePayload,
+} from '../../../utilities/components/calendar/calendar.component';
 
 @Component({
   selector: 'app-alerts',
   standalone: true,
   imports: [
     CommonModule,
-    MatSelectModule,
-    ReactiveFormsModule,
     FormsModule,
+    MatSelectModule,
     AgGridAngular,
     MatDialogModule,
-    MatMenuModule,
     PaginationComponent,
-    MatDatepickerModule,
-    CdkAutofill,
+    CalendarComponent,
   ],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css',
@@ -47,35 +35,29 @@ import { CdkAutofill } from '@angular/cdk/text-field';
 export class AlertsComponent {
   constructor(
     public storage_service: StorageService,
-    private config_service: ConfigService,
     private alertService: AlertService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
-    private fb: FormBuilder,
   ) {}
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
   currentSite: any;
-  incidentdata: any = [];
-  isChecked: boolean = false;
-  camerasList: any = [];
-  actionTags: any = [];
-  pageSize: any = 25;
-  pageNumber: any = 1;
-  rowData: any;
+  camerasList: any[] = [];
+  pageSize = 25;
+  pageNumber = 1;
+  rowData: any[] = [];
   totalPages = 0;
-  filterObj: any;
-  camId: any;
-  fromDate: any;
-  toDate: any;
-  today = new Date();
-  todayDateTime = '';
-  actionTag: any = '';
-  // anyData: boolean = false;
-  sfilterForm!: FormGroup;
-  spinexcel: boolean = false;
+  spinexcel = false;
   siteAlerts!: Observable<any>;
+
+  today = new Date().toISOString().split('T')[0];
+  fromDate = this.today;
+  toDate = this.today;
+  fromTime = '00:00';
+  toTime = this.getCurrentTime();
+  cameraId = '';
+  actionTag = '';
 
   columnDefs: ColDef[] = [
     { field: 'name', headerName: 'Camera', filter: false },
@@ -101,143 +83,85 @@ export class AlertsComponent {
     },
   ];
 
-  resetForm() {
-    this.filterForm.reset();
-  }
-
-  filterForm!: FormGroup;
   ngOnInit() {
     this.gridOptions = gridOptions;
-    this.initilizeFilterForm();
-    // this.sfilterForm.patchValue({ fromTime: '00:00' });
-    // this.sfilterForm.patchValue({ toTime: '00:00' });
-    const formValues = this.sfilterForm.value;
 
-    // for (const key of Object.keys(formValues)) {
-    //   const value = formValues[key];
-    //   if (!value) continue;
-    //   this.anyData = true;
-    //   break;
-    // }
-
-    // this.getTypes();
     this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
         takeUntil(this.destroy$),
       )
       .subscribe((site) => {
-        // this.sfilterForm.reset()
-        this.clearData();
+        this.currentSite = site;
+        this.clearData(false);
         this.siteAlerts = this.incident_service
           .getSiteAlerts(site)
           .pipe(map((response) => response.data));
-
-        this.currentSite = site;
-        // this.getcamerasForSiteId();
         this.incidentList();
       });
 
     this.storage_service.camData$
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
-        this.camerasList = res;
+        this.camerasList = res ?? [];
       });
   }
 
-  formatDateTimeForFile(dateTime: string): string {
-    if (!dateTime) return '';
+  getCurrentTime(): string {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
 
-    const [datePart, timePart] = dateTime.split('T');
-    const date = new Date(datePart);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = date.toLocaleString('en-US', { month: 'short' });
-    const year = date.getFullYear();
-    let hours = '00';
-    let mins = '00';
+  buildDateTime(date: string, time: string): string {
+    if (!date) return '';
+    return `${date}T${time || '00:00'}:00`;
+  }
 
-    if (timePart) {
-      const [h, m] = timePart.split(':');
-      hours = h;
-      mins = m;
-    }
+  formatDateTimeSeconds(date: string, time: string): string {
+    const value = this.buildDateTime(date, time);
+    return value ? value.replace('T', ' ') : '';
+  }
+
+  formatDateTimeForFile(date: string, time: string): string {
+    if (!date) return '';
+
+    const currentDate = new Date(date);
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = currentDate.toLocaleString('en-US', { month: 'short' });
+    const year = currentDate.getFullYear();
+    const [hours = '00', mins = '00'] = (time || '00:00').split(':');
+
     return `${day}-${month}-${year}-${hours}-${mins}`;
   }
 
-  formatDateTimeLocal(date: Date): string {
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2, '0');
-    const day = `${date.getDate()}`.padStart(2, '0');
-    const hours = `${date.getHours()}`.padStart(2, '0');
-    const minutes = `${date.getMinutes()}`.padStart(2, '0');
+  clearData(shouldReload = true) {
+    this.cameraId = '';
+    this.actionTag = '';
+    this.fromDate = this.today;
+    this.toDate = this.today;
+    this.fromTime = '00:00';
+    this.toTime = this.getCurrentTime();
+    this.pageNumber = 1;
 
-    if (date.getDay() === this.today.getDay()) {
-      return `${year}-${month}-${day}T${hours}:${minutes}`;
-    } else {
-      return `${year}-${month}-${day}T${23}:${59}`;
+    if (shouldReload) {
+      this.incidentList();
     }
   }
 
-  formatDateTimeSeconds(dateTimeValue: string): string {
-    if (!dateTimeValue) return '';
-    return dateTimeValue.replace('T', ' ') + ':00';
-  }
-
-  initilizeFilterForm(): void {
-    const now = new Date();
-    const startOfToday = new Date();
-    startOfToday.setHours(0, 0, 0, 0);
-
-    this.todayDateTime = this.formatDateTimeLocal(now);
-
-    this.filterForm = this.fb.group({
-      cameraId: [''],
-      actionTag: [''],
-      fromDate: [this.formatDateTimeLocal(startOfToday)],
-      toDate: [this.formatDateTimeLocal(now)],
-      fromTime: [''],
-      toTime: [''],
-      durationStart: [1],
-      durationEnd: [60],
-    });
-
-    this.sfilterForm = this.fb.group({
-      cameraId: [''],
-      actionTag: [''],
-      fromDate: [this.formatDateTimeLocal(startOfToday)],
-      fromTime: [''],
-      toTime: [''],
-      toDate: [this.formatDateTimeLocal(now)],
-    });
-  }
-
-  clearData() {
-    // const now = new Date();
-    // const startOfToday = new Date();
-    // startOfToday.setHours(0, 0, 0, 0);
-
-    // this.todayDateTime = this.formatDateTimeLocal(now);
-
-    this.sfilterForm.patchValue({
-      cameraId: '',
-      actionTag: '',
-      // fromDate: this.formatDateTimeLocal(startOfToday),
-      // toDate: this.formatDateTimeLocal(now),
-      // fromTime: '',
-      // toTime: '',
-    });
-
-    // this.anyData = true;
-    // this.incidentList();
-    this.pageNumber = 1;
-    this.incidentList();
+  onRangeApply(range: DateRangePayload) {
+    this.fromDate = range.startDate;
+    this.fromTime = range.startTime;
+    this.toDate = range.endDate;
+    this.toTime = range.endTime;
+    this.onFilterChange();
   }
 
   downloadExcelReport() {
-    const formValue = this.sfilterForm.value;
     const siteId = this.currentSite?.siteId;
 
-    if (!formValue.fromDate || !formValue.toDate || !siteId) {
+    if (!this.fromDate || !this.toDate || !siteId) {
       this.alertService.error('From Date, To Date and Site Id are mandatory');
       return;
     }
@@ -253,25 +177,24 @@ export class AlertsComponent {
     this.spinexcel = true;
 
     const payload: any = {
-      fromDate: this.formatDateTimeSeconds(formValue.fromDate),
-      toDate: this.formatDateTimeSeconds(formValue.toDate),
-      siteId: siteId,
+      fromDate: this.formatDateTimeSeconds(this.fromDate, this.fromTime),
+      toDate: this.formatDateTimeSeconds(this.toDate, this.toTime),
+      siteId,
     };
 
-    if (formValue.cameraId) {
-      payload.cameraId = formValue.cameraId;
+    if (this.cameraId) {
+      payload.cameraId = this.cameraId;
     }
 
-    if (formValue.actionTag) {
-      payload.actionTag = formValue.actionTag;
+    if (this.actionTag) {
+      payload.actionTag = this.actionTag;
     }
 
     this.alertService.downloadExcelReport(payload, token).subscribe({
       next: (blob: Blob) => {
-        const from = this.formatDateTimeForFile(formValue.fromDate);
-        const to = this.formatDateTimeForFile(formValue.toDate);
-        const tagSuffix = formValue.actionTag ? `_${formValue.actionTag}` : '';
-
+        const from = this.formatDateTimeForFile(this.fromDate, this.fromTime);
+        const to = this.formatDateTimeForFile(this.toDate, this.toTime);
+        const tagSuffix = this.actionTag ? `_${this.actionTag}` : '';
         const fileName = `Alerts-Report_${from}_to_${to}${tagSuffix}.xlsx`;
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -291,28 +214,6 @@ export class AlertsComponent {
     });
   }
 
-  openTimePicker(input: HTMLInputElement) {
-    input.showPicker?.(); // Chrome, Edge
-    input.focus(); // Fallback
-  }
-
-  formatTime(minutes: number): string {
-    const hrs = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    return `${hrs.toString().padStart(2, '0')}:${mins
-      .toString()
-      .padStart(2, '0')}`;
-  }
-
-  syncDuration() {
-    const start = this.filterForm.value.durationStart;
-    const end = this.filterForm.value.durationEnd;
-
-    if (start > end) {
-      this.filterForm.patchValue({ durationStart: end });
-    }
-  }
-
   onCellClicked(event: CellClickedEvent) {
     if (
       event.event?.target instanceof HTMLElement &&
@@ -325,24 +226,14 @@ export class AlertsComponent {
     }
   }
 
-  // getcamerasForSiteId() {
-  //   this.config_service
-  //     .getCamerasForSiteId(this.currentSite)
-  //     .subscribe((res: any) => {
-  //       this.camerasList = res;
-  //     });
-  // }
-
-  getTypes() {
-    const res = this.storage_service.getType(36);
-    this.actionTags = res[0]?.metadata;
-  }
-
   incidentList() {
     this.incident_service
       .incidentList({
         ...this.currentSite,
-        ...this.sfilterForm.value,
+        cameraId: this.cameraId,
+        actionTag: this.actionTag,
+        fromDate: this.buildDateTime(this.fromDate, this.fromTime),
+        toDate: this.buildDateTime(this.toDate, this.toTime),
         page: this.pageNumber,
         pageSize: this.pageSize,
       })
@@ -353,35 +244,25 @@ export class AlertsComponent {
             this.totalPages = res.totalPages;
           } else {
             this.rowData = [];
+            this.totalPages = 0;
           }
         },
       });
   }
 
   changePageSize(pSize: any) {
-    this.pageSize = pSize;
+    this.pageSize = Number(pSize);
     this.incidentList();
   }
 
   changePage(pageNo: any) {
-    this.pageNumber = pageNo;
+    this.pageNumber = Number(pageNo);
     this.incidentList();
   }
 
   onFilterChange() {
     this.pageNumber = 1;
-    // this.anyData = true;
     this.incidentList();
-  }
-
-  setEndDate() {
-    this.sfilterForm
-      .get('toDate')
-      ?.setValue(
-        this.formatDateTimeLocal(
-          new Date(this.sfilterForm.get('toDate')?.value),
-        ),
-      );
   }
 
   ngOnDestroy(): void {

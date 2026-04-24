@@ -1,289 +1,30 @@
-/* .calendar {
-  width: 300px;
-} */
-
-.date-time {
-  display: inline-flex;
-  align-items: center;
-  width: 100%;
-  gap: 6px;
-  padding: 2px;
-  border-radius: 6px;
-  border: 1px solid #e0e0e0;
-  background-color: #fafafa;
-  height: 30px;
-  overflow: hidden;
+.tool-bar {
+  position: relative;
+  z-index: 30;
 }
 
-/* left section */
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
 .left {
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.left > select {
-  height: 30px;
-}
-
-.all-label {
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 11px;
+  flex-wrap: wrap;
 }
 
 .tag-select {
   width: 200px;
 }
 
-.date-time-inputs {
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.date-time-inputs input {
-  border: none;
-  background: transparent;
-  font-size: 12px !important;
-  padding: 4px 6px;
-  outline: none;
-}
-
-.date-time-inputs input[type="date"] {
-  width: 80%;
-  height: 30px;
-}
-
-.date-time-inputs input[type="time"] {
-  width: 20%;
-}
-
-.date-time-inputs .divider {
-  width: 1px;
-  height: 14px;
-  background: #8d8d8d;
-  margin: 0px 4px;
-  position: absolute;
-  left: 56%;
-}
-
-/* Chrome, Edge, Safari */
-.time-input::-webkit-calendar-picker-indicator {
-  display: none;
-  -webkit-appearance: none;
-}
-
-/* Firefox */
-.time-input {
-  appearance: textfield;
-  -moz-appearance: textfield;
+.grid-wrap {
   position: relative;
-}
-
-/* Layout */
-.split-input {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  padding: 0 8px;
-  height: 40px;
-  background: #fff;
-}
-
-.split-input input {
-  border: none;
-  outline: none;
-  height: 100%;
-  padding: 0 8px;
-}
-
-.calendar-icon,
-.time-icon {
-  width: 24px;
-  cursor: pointer;
-  opacity: 0.8;
-  /* margin-left: 6px; */
-}
-
-.time-input::after {
-  content: "";
-  border-left: 0.5px solid grey !important;
-  position: absolute;
-  top: 6px;
-  left: 3px;
-  height: 60%;
-}
-
-/* center section (start/end) */
-.center {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* right section (analytics + toggle) */
-.right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.analyticsred {
-  color: #ff3b30;
-}
-
-.duration-wrapper {
-  margin-top: 8px;
-}
-
-.duration-values {
-  display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-.range-container {
-  position: relative;
-  height: 6px;
-  margin: 14px 0;
-
-  --min: 0;
-  --max: 120;
-}
-
-.range-container input[type="range"] {
-  -webkit-appearance: none;
-  appearance: none;
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 14px; /* thumb height */
-  transform: translateY(-50%);
-  background: transparent;
-  margin: 0;
-  pointer-events: none;
-  outline: none;
-  border: none;
-}
-
-/* base track */
-.range-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: #ddd;
-  border-radius: 4px;
-}
-
-/* 🎯 gradient between sliders */
-.range-container::after {
-  content: "";
-  position: absolute;
-  height: 100%;
-  border-radius: 4px;
-
-  left: calc((var(--start) - var(--min)) / (var(--max) - var(--min)) * 100%);
-  width: calc((var(--end) - var(--start)) / (var(--max) - var(--min)) * 100%);
-
-  background: linear-gradient(to right, black, #ed3237);
-}
-
-/* sliders */
-.range-container input[type="range"] {
-  position: absolute;
-  width: 100%;
-  background: none;
-  pointer-events: none;
-}
-
-/* thumb */
-.range-container input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  pointer-events: auto;
-
-  height: 14px;
-  width: 14px;
-  border-radius: 50%;
-  background: black;
-  /* border: 2px solid #000; */
-  margin-top: -4px;
-}
-
-.thumb2::-webkit-slider-thumb {
-  background: #ed3237;
-}
-
-.range-container input[type="range"]::-moz-range-thumb {
-  pointer-events: auto;
-  height: 14px;
-  width: 14px;
-  border-radius: 50%;
-  background: #ed3237;
-  /* border: 2px solid #000; */
-}
-
-/* REMOVE native track (Chrome, Edge, Safari) */
-.range-container input[type="range"]::-webkit-slider-runnable-track {
-  background: transparent;
-  height: 6px;
-}
-
-/* REMOVE native track (Firefox) */
-.range-container input[type="range"]::-moz-range-track {
-  background: transparent;
-  height: 6px;
-}
-
-/* REMOVE native track (IE / old Edge) */
-.range-container input[type="range"]::-ms-track {
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-  height: 6px;
-}
-
-.range-container::before,
-.range-container::after {
   z-index: 1;
 }
-
-.range-container input[type="range"] {
-  z-index: 2;
-}
-
-.range-container input[type="range"]::-webkit-slider-thumb {
-  margin-top: -4px; /* aligns thumb to 6px track */
-}
-
-.range-container input[type="range"]::-moz-range-thumb {
-  margin-top: 0;
-}
-
-.duration-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: #777;
-  margin-top: 4px;
-}
-
-/* .custom-grid .ag-header-cell,
-.custom-grid .ag-header-group-cell {
-  padding: 8px 12px;
-}
-
-.custom-grid .ag-cell {
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-} */
 
 select::-webkit-scrollbar {
   width: 8px;
@@ -333,13 +74,13 @@ select::-webkit-scrollbar-thumb:hover {
   pointer-events: none;
   cursor: not-allowed;
 }
+
 .ec-download {
   display: flex;
   align-items: center;
   margin-left: 8px;
 }
 
-/* Button reset + alignment */
 .download-btn {
   background: transparent;
   border: none;
@@ -350,19 +91,16 @@ select::-webkit-scrollbar-thumb:hover {
   cursor: pointer;
 }
 
-/*  ICON SIZE */
 .excel-icon {
   width: 24px;
   height: 24px;
   object-fit: contain;
 }
 
-/*  hover */
 .download-btn:hover .excel-icon {
   transform: scale(1.03);
 }
 
-/*  click effect */
 .download-btn:active {
   transform: scale(0.95);
 }
