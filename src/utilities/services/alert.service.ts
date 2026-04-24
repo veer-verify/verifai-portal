@@ -4,6 +4,7 @@ import Swal from 'sweetalert2';
 import { ConfigService } from './config.service';
 import { environment } from '../../environments/environment.development';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { delay, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -90,5 +91,13 @@ export class AlertService {
       params,
       responseType: 'blob',
     });
+  }
+
+  checkLiveDummy(payload: any) {
+    return of({
+      statusCode: 200,
+      message: 'Dummy live check API called successfully',
+      data: payload,
+    }).pipe(delay(400));
   }
 }

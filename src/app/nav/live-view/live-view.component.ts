@@ -131,6 +131,23 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.pagination()
   }
 
+  onDotPlaced(payload: any) {
+    this.alert_service.checkLiveDummy(payload).subscribe({
+      next: (res: any) => {
+        if (res.statusCode === 200) {
+          console.log('Dummy live check payload:', res.data);
+          payload.removeDot?.();
+          this.alert_service.success(`${payload.cameraName} checked at ${payload.clickedAt}`);
+        } else {
+          this.alert_service.error(res.message || 'Dummy live check failed');
+        }
+      },
+      error: () => {
+        this.alert_service.error('Dummy live check failed');
+      }
+    });
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();

@@ -79,7 +79,11 @@
       [ngClass]="itemsPerPage === 1 ? 'single-view' : ''"
       #gridItem
     >
-      <app-stream [videoData]="item" [isChecked]="isChecked"></app-stream>
+      <app-stream
+        [videoData]="item"
+        [isChecked]="isChecked"
+        (dotPlaced)="onDotPlaced($event)"
+      ></app-stream>
     </div>
   }
 </section>

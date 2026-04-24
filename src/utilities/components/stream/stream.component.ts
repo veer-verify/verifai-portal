@@ -1,5 +1,5 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AlertService } from '../../services/alert.service';
 
@@ -19,6 +19,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
 
   @Input({ required: true }) videoData: any;
   @Input() isChecked: any;
+  @Output() dotPlaced = new EventEmitter<any>();
   @ViewChild('video') video!: ElementRef;
 
   peerConnection!: RTCPeerConnection;
@@ -30,6 +31,8 @@ export class StreamComponent implements OnChanges, OnDestroy {
   hitStream: boolean = false;
   encoded: any;
   previousUrl: string = '';
+  markerPositions: Array<{ id: number; x: number; y: number }> = [];
+  private markerSequence = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
     // 🔄 When videoData changes, restart the stream
@@ -356,16 +359,109 @@ export class StreamComponent implements OnChanges, OnDestroy {
   };
 
   capture() {
-    const canvas = document.createElement("canvas");
+    const imgUrl = this.captureFrameDataUrl(true);
+    if (!imgUrl) return;
+    this.downloadImage(imgUrl);
+  }
+
+  placeDot(event: MouseEvent) {
+    const container = event.currentTarget as HTMLElement | null;
+    const videoElement = this.video?.nativeElement as HTMLVideoElement | undefined;
+
+    if (!container || !videoElement || videoElement.readyState < 2) {
+      return;
+    }
+
+    const rect = container.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const markerId = ++this.markerSequence;
+    this.markerPositions = [...this.markerPositions, { id: markerId, x, y }];
+
+    const screenshot = this.captureFrameDataUrl(true);
+    const clickedAt = new Date().toISOString();
+    if (screenshot) {
+      this.downloadImage(screenshot, clickedAt);
+    }
+
+    this.dotPlaced.emit({
+      cameraId: this.videoData?.cameraId,
+      cameraName: this.videoData?.name,
+      clickedAt,
+      screenshot,
+      markerId,
+      dots: this.markerPositions,
+      x,
+      y,
+      xPercent: Number(((x / rect.width) * 100).toFixed(2)),
+      yPercent: Number(((y / rect.height) * 100).toFixed(2)),
+      removeDot: () => this.removeMarker(markerId),
+    });
+  }
+
+  private removeMarker(markerId: number) {
+    this.markerPositions = this.markerPositions.filter(
+      (marker) => marker.id !== markerId,
+    );
+  }
+
+  private captureFrameDataUrl(includeMarkers = false): string | null {
+    const videoElement = this.video?.nativeElement as HTMLVideoElement | undefined;
+    if (!videoElement || videoElement.readyState < 2) {
+      return null;
+    }
+
+    const canvas = document.createElement('canvas');
     canvas.width = 1280;
     canvas.height = 720;
     const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    ctx.drawImage(this.video.nativeElement, 0, 0, canvas.width, canvas.height);
-    const imgUrl = canvas.toDataURL('image/png');
+    if (!ctx) return null;
+
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    if (includeMarkers) {
+      this.drawMarkersOnCanvas(ctx, canvas.width, canvas.height);
+    }
+    return canvas.toDataURL('image/png');
+  }
+
+  private drawMarkersOnCanvas(
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+  ) {
+    const container = this.video?.nativeElement?.parentElement as HTMLElement | null;
+    if (!container || !this.markerPositions.length) {
+      return;
+    }
+
+    const rect = container.getBoundingClientRect();
+    const scaleX = rect.width ? width / rect.width : 1;
+    const scaleY = rect.height ? height / rect.height : 1;
+
+    for (const marker of this.markerPositions) {
+      const x = marker.x * scaleX;
+      const y = marker.y * scaleY;
+
+      ctx.beginPath();
+      ctx.arc(x, y, 8, 0, Math.PI * 2);
+      ctx.fillStyle = '#ed3237';
+      ctx.fill();
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#ffffff';
+      ctx.stroke();
+    }
+  }
+
+  private downloadImage(imgUrl: string, timestamp?: string) {
     const link = document.createElement('a');
+    const cameraName = (this.videoData?.name || 'camera')
+      .toString()
+      .replace(/[^a-zA-Z0-9-_]+/g, '_');
+    const suffix = (timestamp || new Date().toISOString()).replace(/[:.]/g, '-');
+
     link.href = imgUrl;
-    link.download = `${new Date()}.png`
+    link.download = `${cameraName}_${suffix}.png`;
     link.click();
   }
 
