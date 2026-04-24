@@ -25,13 +25,14 @@
     </div>
 
     <!-- pagination -->
-    <div class="d-flex gap-3">
-      <div class="d-flex align-items-center gap-3">
+    <div class="sub-header-toolbar">
+      <div class="grid-selection">
         @for (item of gridTypes; track $index) {
           <a
             class="grid-highlight"
             [style.opacity]="itemsPerPage == item.noOfItems ? '1' : '0.5'"
             (click)="adjustGrid(item.noOfItems)"
+            [title]="item?.label"
           >
             <img
               [src]="
@@ -45,7 +46,7 @@
         }
       </div>
 
-      <div class="d-inline-flex align-items-center">
+      <div class="pagination-controls">
         <button (click)="navigate('prev')" [disabled]="currentPage === 1">
           <span class="material-symbols-outlined">keyboard_arrow_left </span>
         </button>
@@ -59,14 +60,14 @@
       </div>
     </div>
 
-    <div class="interaction-controls">
+    <!-- <div class="interaction-controls">
       <button
         type="button"
         class="mode-button"
         [class.active]="isDragEnabled"
         (click)="toggleDragDrop()"
       >
-        {{ isDragEnabled ? 'Disable Drag' : 'Enable Drag' }}
+        {{ isDragEnabled ? "Disable Drag" : "Enable Drag" }}
       </button>
       <button
         type="button"
@@ -74,11 +75,11 @@
         [class.active]="isDotEnabled"
         (click)="toggleDotPlacement()"
       >
-        {{ isDotEnabled ? 'Disable Dot' : 'Enable Dot' }}
+        {{ isDotEnabled ? "Disable Dot" : "Enable Dot" }}
       </button>
-    </div>
+    </div> -->
 
-    <div class="d-inline-flex align-items-center gap-2">
+    <div class="camera-info-toggle">
       <span class="hover-bar" [class.analyticsred]="isChecked"
         >camera info</span
       >

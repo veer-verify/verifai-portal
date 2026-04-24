@@ -13,6 +13,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatInputModule } from '@angular/material/input';
@@ -71,7 +72,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPages: number = 0;
   paginatedList: any[] = [];
   isDragEnabled = false;
-  isDotEnabled = true;
+  isDotEnabled = false;
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
@@ -113,11 +114,15 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const gridSize = Math.ceil(Math.sqrt(count));
+    const selectedGrid =
+      this.gridTypes.find((item: any) => item.noOfItems === count) ?? null;
+    const columns = selectedGrid?.columns ?? Math.ceil(Math.sqrt(count));
+    const rows =
+      selectedGrid?.rows ?? Math.ceil(count / Math.max(columns, 1));
     const el = this.gridContainer.nativeElement as HTMLElement;
 
-    el.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-    el.style.gridTemplateRows = `repeat(${gridSize}, minmax(0, 1fr))`;
+    el.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    el.style.gridTemplateRows = `repeat(${rows}, minmax(0, 1fr))`;
   }
 
   /**
