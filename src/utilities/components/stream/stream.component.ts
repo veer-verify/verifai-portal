@@ -413,6 +413,8 @@ export class StreamComponent implements OnChanges, OnDestroy {
     }
 
     const canvas = document.createElement('canvas');
+    // canvas.width = videoElement.videoWidth || 1280;
+    // canvas.height = videoElement.videoHeight || 720;
     canvas.width = 1280;
     canvas.height = 720;
     const ctx = canvas.getContext('2d');

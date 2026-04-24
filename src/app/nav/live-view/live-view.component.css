@@ -37,13 +37,16 @@
   overflow-y: auto;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
   background-color: #000;
 }
 
 .grid-item {
   position: relative;
   border: 1px solid #9c9696;
-  height: 45vh;
+  box-sizing: border-box;
+  min-height: 0;
+  height: 100%;
 }
 
 .grid-item:hover .cam-info {
@@ -51,7 +54,7 @@
 }
 
 .single-view {
-  height: calc(100vh - 100px);
+  min-height: 100%;
 }
 
 .cam-info {

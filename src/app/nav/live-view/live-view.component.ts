@@ -99,6 +99,18 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paginatedList = this.tempCamList.slice(start, end);
   }
 
+  private updateGridLayout(count: number): void {
+    if (!this.gridContainer) {
+      return;
+    }
+
+    const gridSize = Math.ceil(Math.sqrt(count));
+    const el = this.gridContainer.nativeElement as HTMLElement;
+
+    el.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    el.style.gridTemplateRows = `repeat(${gridSize}, minmax(0, 1fr))`;
+  }
+
   /**
    * @param count it may be event or number beacuse same function used for different use cases
    * to change layout of cameras in live view
@@ -108,10 +120,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       this.currentPage = 1;
       this.itemsPerPage = count;
       this.totalPages = Math.ceil(this.tempCamList.length / this.itemsPerPage);
-      const el = this.gridContainer.nativeElement;
-      el.style.gridTemplateColumns = `repeat(${Math.ceil(
-        Math.sqrt(count)
-      )}, 1fr)`;
+      this.updateGridLayout(count);
     } else {
       this.adjustGrid(1);
       const target = count.target as HTMLSelectElement;
