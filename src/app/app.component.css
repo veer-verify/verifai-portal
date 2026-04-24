@@ -137,6 +137,18 @@
   max-width: 100% !important;
 }
 
+::ng-deep .mat-calendar {
+  font-family: "Neometric Medium" !important;
+}
+
+::ng-deep .mat-mdc-button {
+  font-family: "Neometric Medium" !important;
+}
+
+::ng-deep .mat-calendar-body-cell-content {
+  font-family: "Neometric Medium" !important;
+}
+
 /* ag grid */
 ::ng-deep .ag-root-wrapper {
   border-radius: 0 !important;
