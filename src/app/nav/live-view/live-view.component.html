@@ -59,6 +59,25 @@
       </div>
     </div>
 
+    <div class="interaction-controls">
+      <button
+        type="button"
+        class="mode-button"
+        [class.active]="isDragEnabled"
+        (click)="toggleDragDrop()"
+      >
+        {{ isDragEnabled ? 'Disable Drag' : 'Enable Drag' }}
+      </button>
+      <button
+        type="button"
+        class="mode-button"
+        [class.active]="isDotEnabled"
+        (click)="toggleDotPlacement()"
+      >
+        {{ isDotEnabled ? 'Disable Dot' : 'Enable Dot' }}
+      </button>
+    </div>
+
     <div class="d-inline-flex align-items-center gap-2">
       <span class="hover-bar" [class.analyticsred]="isChecked"
         >camera info</span
@@ -72,43 +91,41 @@
 </section>
 
 <!-- camera container -->
-<section class="grid-container" #gridContainer>
+<section
+  class="grid-container"
+  #gridContainer
+  cdkDropList
+  [cdkDropListData]="paginatedList"
+  [cdkDropListDisabled]="!isDragEnabled"
+  cdkDropListOrientation="mixed"
+  (cdkDropListDropped)="dropStream($event)"
+>
   @for (item of paginatedList; track item.cameraId) {
     <div
       class="grid-item"
       [ngClass]="itemsPerPage === 1 ? 'single-view' : ''"
+      cdkDrag
+      [cdkDragDisabled]="!isDragEnabled"
       #gridItem
     >
+      @if (isDragEnabled) {
+        <button
+          type="button"
+          class="drag-handle"
+          cdkDragHandle
+          title="Drag to reorder"
+          aria-label="Drag stream to reorder"
+          (click)="$event.stopPropagation()"
+        >
+          <span class="material-symbols-outlined">drag_indicator</span>
+        </button>
+      }
       <app-stream
         [videoData]="item"
         [isChecked]="isChecked"
+        [dotEnabled]="isDotEnabled"
         (dotPlaced)="onDotPlaced($event)"
       ></app-stream>
     </div>
   }
 </section>
-
-<!-- @if (storage_service.showSideNav$ | async) {
-  <div class="side-sites">
-    <div class="header">
-      TOTAL SITES - {{ sitesList?.length }}
-      <a class="close" (click)="close()"
-        ><span class="material-symbols-outlined"> arrow_left_alt </span></a
-      >
-    </div>
-    <div class="sites-content">
-      @for (item of sitesList; track item.siteId) {
-        <div class="site-list-item">
-          @if (storage_service.currentSite$ | async; as site) {
-            <a
-              (click)="updateSite(item)"
-              [style.color]="item?.siteId === site.siteId ? '#ef7146' : ''"
-            >
-              {{ item.siteName }}
-            </a>
-          }
-        </div>
-      }
-    </div>
-  </div>
-} -->

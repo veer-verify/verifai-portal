@@ -5,6 +5,10 @@
   cursor: crosshair;
 }
 
+.video-container.dot-disabled {
+  cursor: default;
+}
+
 video {
   display: block;
   width: 100%;

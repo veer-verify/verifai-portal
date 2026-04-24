@@ -21,6 +21,31 @@
   align-items: center;
 }
 
+.interaction-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mode-button {
+  height: 30px;
+  border: 1px solid #c7ccd5;
+  border-radius: 6px;
+  padding: 0 12px;
+  background: #fff;
+  color: #243046;
+  font-size: 12px;
+  font-family: "Neometric Medium", sans-serif !important;
+  transition: background-color 180ms ease, color 180ms ease,
+    border-color 180ms ease;
+}
+
+.mode-button.active {
+  background: #243046;
+  border-color: #243046;
+  color: #fff;
+}
+
 /* mat-form-field{
   height: 30px;
 } */
@@ -47,6 +72,76 @@
   box-sizing: border-box;
   min-height: 0;
   height: 100%;
+  overflow: hidden;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.grid-item.cdk-drag {
+  cursor: default;
+}
+
+.grid-item.cdk-drag-preview {
+  border: 1px solid #9c9696;
+  background: #000;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 18px 36px rgb(0 0 0 / 35%);
+  transform: scale(0.98);
+}
+
+.drag-handle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 55%);
+  color: #fff;
+  cursor: move;
+  transition: background-color 180ms ease, transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.drag-handle .material-symbols-outlined {
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.grid-item:hover .drag-handle {
+  background: rgb(0 0 0 / 72%);
+}
+
+.drag-handle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgb(0 0 0 / 22%);
+}
+
+.grid-item.cdk-drag-dragging {
+  z-index: 30;
+}
+
+.grid-item.cdk-drag-placeholder {
+  opacity: 0.2;
+  border-style: dashed;
+  border-color: rgb(255 255 255 / 30%);
+  background: rgb(255 255 255 / 4%);
+}
+
+.grid-container.cdk-drop-list-dragging .grid-item:not(.cdk-drag-placeholder) {
+  transition: transform 260ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.grid-item.cdk-drag-animating {
+  transition: transform 260ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .grid-item:hover .cam-info {

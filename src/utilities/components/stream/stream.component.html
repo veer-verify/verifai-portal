@@ -1,4 +1,8 @@
-<div class="video-container" (click)="placeDot($event)">
+<div
+  class="video-container"
+  [class.dot-disabled]="!dotEnabled"
+  (click)="placeDot($event)"
+>
   @if (showLoader) {
     <div class="eye-logo">
       <img src="gif/loading-gif.gif" alt="" width="200" />

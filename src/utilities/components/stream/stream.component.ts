@@ -5,6 +5,7 @@ import { AlertService } from '../../services/alert.service';
 
 @Component({
   selector: 'app-stream',
+  standalone: true,
   imports: [],
   templateUrl: './stream.component.html',
   styleUrl: './stream.component.css',
@@ -19,6 +20,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
 
   @Input({ required: true }) videoData: any;
   @Input() isChecked: any;
+  @Input() dotEnabled = true;
   @Output() dotPlaced = new EventEmitter<any>();
   @ViewChild('video') video!: ElementRef;
 
@@ -365,6 +367,10 @@ export class StreamComponent implements OnChanges, OnDestroy {
   }
 
   placeDot(event: MouseEvent) {
+    if (!this.dotEnabled) {
+      return;
+    }
+
     const container = event.currentTarget as HTMLElement | null;
     const videoElement = this.video?.nativeElement as HTMLVideoElement | undefined;
 

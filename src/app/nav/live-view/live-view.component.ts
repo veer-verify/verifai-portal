@@ -1,4 +1,9 @@
 import {
+  CdkDragDrop,
+  DragDropModule,
+  moveItemInArray,
+} from '@angular/cdk/drag-drop';
+import {
   AfterViewInit,
   Component,
   ElementRef,
@@ -23,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { gridTypes } from './grid-list';
 @Component({
   selector: 'app-live-view',
+  standalone: true,
   imports: [
     MatGridListModule,
     MatMenuModule,
@@ -33,6 +39,7 @@ import { gridTypes } from './grid-list';
     GlobalClickDirective,
     StreamComponent,
     MatSelectModule,
+    DragDropModule,
   ],
   templateUrl: './live-view.component.html',
   styleUrl: './live-view.component.css',
@@ -57,12 +64,14 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   isChecked: boolean = true;
   paginatedCameraList: any = [];
   searchText: any;
-  camList: any = [];
-  tempCamList = [];
+  camList: any[] = [];
+  tempCamList: any[] = [];
   currentPage: number = 1;
   itemsPerPage: number = 9;
   totalPages: number = 0;
-  paginatedList: any = [];
+  paginatedList: any[] = [];
+  isDragEnabled = false;
+  isDotEnabled = true;
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
@@ -138,6 +147,37 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   navigate(type: string) {
     type === 'next' ? this.currentPage += 1 : this.currentPage -= 1;
     this.pagination()
+  }
+
+  toggleDragDrop(): void {
+    this.isDragEnabled = !this.isDragEnabled;
+    if (this.isDragEnabled) {
+      this.isDotEnabled = false;
+    }
+  }
+
+  toggleDotPlacement(): void {
+    this.isDotEnabled = !this.isDotEnabled;
+    if (this.isDotEnabled) {
+      this.isDragEnabled = false;
+    }
+  }
+
+  dropStream(event: CdkDragDrop<any[]>): void {
+    if (event.previousIndex === event.currentIndex) {
+      return;
+    }
+
+    moveItemInArray(this.paginatedList, event.previousIndex, event.currentIndex);
+
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    this.tempCamList.splice(
+      start,
+      this.paginatedList.length,
+      ...this.paginatedList,
+    );
+    this.camList = [...this.tempCamList];
+    this.paginatedList = [...this.paginatedList];
   }
 
   onDotPlaced(payload: any) {
