@@ -480,6 +480,10 @@ export class StreamComponent implements OnChanges, OnDestroy {
   }
 
   playSiren1() {
+    if (!this.videoData?.audioUrl) {
+      return;
+    }
+
     this.http
       .get(`${environment.sitesUrl}/play_1_0/${this.videoData.cameraId}`)
       .subscribe(

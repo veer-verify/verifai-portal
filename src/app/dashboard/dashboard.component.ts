@@ -9,6 +9,9 @@ import { FormsModule } from '@angular/forms';
 import { SearchPipe } from "../../utilities/pipes/search.pipe";
 import { finalize, Subject, takeUntil } from 'rxjs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { AlertService } from '../../utilities/services/alert.service';
 
 @Component({
     selector: 'app-dashboard',
@@ -24,6 +27,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public storage_service = inject(StorageService);
     private config_service = inject(ConfigService);
     private router = inject(Router);
+    private http = inject(HttpClient);
+    private alert_service = inject(AlertService);
     // _sideNav!: Observable<any>;
 
 
@@ -123,6 +128,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     isCameraInLive(cameraId: any): boolean {
         return this.liveCameraIds.includes(cameraId);
+    }
+
+    playSiren1(camera: any, event: MouseEvent) {
+        event.stopPropagation();
+
+        if (!camera?.audioUrl) {
+            return;
+        }
+
+        this.http
+            .get(`${environment.sitesUrl}/play_1_0/${camera.cameraId}`)
+            .subscribe(
+                (res: any) => {
+                    if (res.statusCode === 200) {
+                        this.alert_service.success(res.message);
+                    } else {
+                        this.alert_service.error(res.message);
+                    }
+                },
+                (err: HttpErrorResponse) => {
+                    this.alert_service.error('Failed');
+                }
+            );
     }
 
     ngOnDestroy(): void {

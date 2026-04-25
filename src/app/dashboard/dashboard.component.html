@@ -97,6 +97,7 @@
                       [class.disabled]="!cam?.audioUrl"
                       [attr.aria-disabled]="!cam?.audioUrl"
                       [title]="cam?.audioUrl ? 'Siren available' : 'Siren unavailable'"
+                      (click)="playSiren1(cam, $event)"
                     >
                       siren
                     </span>
