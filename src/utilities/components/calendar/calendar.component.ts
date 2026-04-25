@@ -131,13 +131,14 @@ export class CalendarComponent {
 
     this.startDate = this.shiftDate(this.startDate, offset);
     this.endDate = this.shiftDate(this.endDate, offset);
+    this.endTime = this.getEndTimeForDate(this.endDate);
     this.syncDraftFromInputs();
 
     this.rangeApply.emit({
       startDate: this.startDate,
       startTime: this.startTime || '00:00',
       endDate: this.endDate,
-      endTime: this.endTime || '23:59',
+      endTime: this.endTime,
       origin: 'navigation',
     });
   }
@@ -171,9 +172,6 @@ export class CalendarComponent {
   }
 
   onCalendarSelect(date: Date | null) {
-
-
-
     if (!date) return;
 
     const value = this.formatDateForInput(date);
@@ -181,32 +179,12 @@ export class CalendarComponent {
       this.draftStartDate = value;
       return;
     }
-    this.adjustEndDate(value);
+
     this.draftEndDate = value;
+    const [hour, minute] = this.splitTime(this.getEndTimeForDate(value));
+    this.draftEndHour = hour;
+    this.draftEndMinute = minute;
   }
-
-adjustEndDate(endDateStr: any) {
-  const endDate = new Date(endDateStr);
-  const todayOnly = new Date();
-  todayOnly.setHours(0, 0, 0, 0);
-  const endDateOnly = new Date(endDate);
-  endDateOnly.setHours(0, 0, 0, 0);
-  if (endDateOnly < todayOnly) {
-
-    this.draftEndHour = '23';
-    this.draftEndMinute = '59';
-  }
-  else if (endDateOnly.getTime() === todayOnly.getTime()) {
-
-    const now = new Date();
-    this.draftEndHour = String(now.getHours()).padStart(2, '0');
-    this.draftEndMinute = String(now.getMinutes()).padStart(2, '0');
-  }
-
-  return endDate;
-}
-
-
 
 
   get selectedCalendarDate(): Date | null {
@@ -265,5 +243,20 @@ adjustEndDate(endDateStr: any) {
 
   private buildTime(hour: string, minute: string): string {
     return `${hour}:${minute}`;
+  }
+
+  private getEndTimeForDate(dateString: string): string {
+    return dateString === this.getTodayDate() ? this.getCurrentTime() : '23:59';
+  }
+
+  private getTodayDate(): string {
+    return this.formatDateForInput(new Date());
+  }
+
+  private getCurrentTime(): string {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }
