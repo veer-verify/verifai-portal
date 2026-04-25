@@ -116,11 +116,40 @@
   margin-right: 6px;
 }
 
+.cam-title-wrap {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.cam-title-wrap span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .cam-status-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   flex: 0 0 auto;
+}
+
+.siren-status-icon {
+  color: #8a94a6;
+  font-size: 16px;
+}
+
+.siren-status-icon.has-audio {
+  color: #ed3237;
+}
+
+.siren-status-icon.disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 .live-status-icon {

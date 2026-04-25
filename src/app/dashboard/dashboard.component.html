@@ -33,7 +33,11 @@
     </div>
     <div class="sites-content">
       @for (site of sitesList | search: searchSite; track site?.siteId) {
-        <div class="site-list-item" #siteItem [attr.data-site-id]="site?.siteId">
+        <div
+          class="site-list-item"
+          #siteItem
+          [attr.data-site-id]="site?.siteId"
+        >
           <!-- @if (storage_service.currentSite$ | async; as currentSite) { -->
           <p
             (click)="updateSite(site)"
@@ -69,7 +73,7 @@
             >
               @for (cam of camList; track cam?.cameraId) {
                 <div class="cam-name" cdkDrag [cdkDragData]="cam">
-                  <div>
+                  <div class="cam-title-wrap">
                     <img
                       [src]="
                         cam?.camMonitor === 'T'
@@ -82,11 +86,20 @@
 
                   <div class="cam-status-wrap">
                     <!-- <span
-                        class="dot"
-                        [style.backgroundColor]="
-                          cam?.camMonitor === 'T' ? 'green' : 'red'
-                        "
-                      ></span> -->
+                    class="dot"
+                    [style.backgroundColor]="
+                    cam?.camMonitor === 'T' ? 'green' : 'red'
+                    "
+                    ></span> -->
+                    <span
+                      class="material-symbols-outlined siren-status-icon"
+                      [class.has-audio]="!!cam?.audioUrl"
+                      [class.disabled]="!cam?.audioUrl"
+                      [attr.aria-disabled]="!cam?.audioUrl"
+                      [title]="cam?.audioUrl ? 'Siren available' : 'Siren unavailable'"
+                    >
+                      siren
+                    </span>
                     <span
                       class="material-symbols-outlined live-status-icon"
                       [class.in-live]="isCameraInLive(cam?.cameraId)"
