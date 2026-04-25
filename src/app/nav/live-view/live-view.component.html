@@ -104,8 +104,10 @@
   [class.maximized-mode]="!!maximizedCamera"
   #gridContainer
   cdkDropList
-  [cdkDropListData]="visibleStreams"
-  [cdkDropListDisabled]="!isDragEnabled || !!maximizedCamera"
+  id="liveViewDropList"
+  [cdkDropListData]="paginatedList"
+  [cdkDropListConnectedTo]="['cameraListDropList']"
+  [cdkDropListDisabled]="!!maximizedCamera"
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
 >
@@ -114,9 +116,20 @@
       class="grid-item"
       [ngClass]="itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''"
       cdkDrag
+      [cdkDragData]="item"
       [cdkDragDisabled]="!isDragEnabled || !!maximizedCamera"
       #gridItem
     >
+      <button
+        type="button"
+        class="remove-camera-btn"
+        title="Remove camera"
+        aria-label="Remove camera from live view"
+        (click)="removeCameraFromLive(item, $event)"
+      >
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
       @if (isDragEnabled) {
         <button
           type="button"

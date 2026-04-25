@@ -59,35 +59,44 @@
             site?.siteId === (storage_service.currentSite$ | async)?.siteId &&
             !camLoader
           ) {
-            @for (cam of camList; track cam?.cameraId) {
-              <div class="cam-name">
-                <div>
-                  <img
-                    [src]="
-                      cam?.camMonitor === 'T'
-                        ? 'icons/camera-green.svg'
-                        : 'icons/camera-grey.svg'
-                    "
-                  />
-                  <span>{{ cam?.name }}</span>
-                </div>
-
-                <div>
-                  <!-- <span
-                      class="dot"
-                      [style.backgroundColor]="
-                        cam?.camMonitor === 'T' ? 'green' : 'red'
+            <div
+              class="camera-drag-list"
+              cdkDropList
+              id="cameraListDropList"
+              [cdkDropListData]="camList"
+              [cdkDropListConnectedTo]="['liveViewDropList']"
+              [cdkDropListSortingDisabled]="true"
+            >
+              @for (cam of camList; track cam?.cameraId) {
+                <div class="cam-name" cdkDrag [cdkDragData]="cam">
+                  <div>
+                    <img
+                      [src]="
+                        cam?.camMonitor === 'T'
+                          ? 'icons/camera-green.svg'
+                          : 'icons/camera-grey.svg'
                       "
-                    ></span> -->
-                  <span
-                    class="material-symbols-outlined"
-                    style="font-size: 12px"
-                  >
-                    brightness_5
-                  </span>
+                    />
+                    <span>{{ cam?.name }}</span>
+                  </div>
+
+                  <div>
+                    <!-- <span
+                        class="dot"
+                        [style.backgroundColor]="
+                          cam?.camMonitor === 'T' ? 'green' : 'red'
+                        "
+                      ></span> -->
+                    <span
+                      class="material-symbols-outlined"
+                      style="font-size: 12px"
+                    >
+                      brightness_5
+                    </span>
+                  </div>
                 </div>
-              </div>
-            }
+              }
+            </div>
           } @else if (
             camLoader &&
             site?.siteId === (storage_service.currentSite$ | async)?.siteId

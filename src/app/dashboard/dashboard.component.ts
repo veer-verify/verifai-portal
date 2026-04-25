@@ -8,10 +8,11 @@ import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from "../../utilities/pipes/search.pipe";
 import { delay, finalize, Observable } from 'rxjs';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe, FormsModule, SearchPipe, JsonPipe, NgIf],
+    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe, FormsModule, SearchPipe, JsonPipe, NgIf, DragDropModule],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,

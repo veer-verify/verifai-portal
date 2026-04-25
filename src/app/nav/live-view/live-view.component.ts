@@ -95,7 +95,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.tempCamList = [];
         this.storage_service.camData$.pipe(delay(0)).subscribe((res) => {
           this.camList = res;
-          this.tempCamList = this.camList;
+          this.tempCamList = [...this.camList];
           this.maximizedCamera = null;
           this.adjustGrid(this.itemsPerPage);
         })
@@ -139,7 +139,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     if (typeof count === 'number') {
       this.currentPage = 1;
       this.itemsPerPage = count;
-      this.totalPages = Math.ceil(this.tempCamList.length / this.itemsPerPage);
+      this.totalPages = this.getTotalPages();
       this.updateGridLayout(count);
     } else {
       this.adjustGrid(1);
@@ -196,6 +196,11 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    if (event.previousContainer !== event.container) {
+      this.addCameraToLive(event.item.data, event.currentIndex);
+      return;
+    }
+
     if (event.previousIndex === event.currentIndex) {
       return;
     }
@@ -208,8 +213,56 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       this.paginatedList.length,
       ...this.paginatedList,
     );
-    this.camList = [...this.tempCamList];
     this.paginatedList = [...this.paginatedList];
+  }
+
+  removeCameraFromLive(camera: any, event: MouseEvent): void {
+    event.stopPropagation();
+
+    this.tempCamList = this.tempCamList.filter(
+      (item: any) => item?.cameraId !== camera?.cameraId,
+    );
+
+    if (this.maximizedCamera?.cameraId === camera?.cameraId) {
+      this.maximizedCamera = null;
+    }
+
+    this.refreshLiveList();
+  }
+
+  private addCameraToLive(camera: any, dropIndex: number): void {
+    if (!camera?.cameraId) {
+      return;
+    }
+
+    const existingIndex = this.tempCamList.findIndex(
+      (item: any) => item?.cameraId === camera.cameraId,
+    );
+
+    if (existingIndex >= 0) {
+      this.currentPage = Math.floor(existingIndex / this.itemsPerPage) + 1;
+      this.pagination();
+      return;
+    }
+
+    const pageStart = (this.currentPage - 1) * this.itemsPerPage;
+    const insertIndex = Math.min(
+      pageStart + Math.max(dropIndex, 0),
+      this.tempCamList.length,
+    );
+
+    this.tempCamList.splice(insertIndex, 0, camera);
+    this.refreshLiveList(this.currentPage);
+  }
+
+  private refreshLiveList(preferredPage = this.currentPage): void {
+    this.totalPages = this.getTotalPages();
+    this.currentPage = Math.min(Math.max(preferredPage, 1), this.totalPages);
+    this.pagination();
+  }
+
+  private getTotalPages(): number {
+    return Math.max(Math.ceil(this.tempCamList.length / this.itemsPerPage), 1);
   }
 
   onDotPlaced(payload: any) {
