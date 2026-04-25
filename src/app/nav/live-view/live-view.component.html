@@ -60,24 +60,31 @@
       </div>
     </div>
 
-    <!-- <div class="interaction-controls">
-      <button
-        type="button"
-        class="mode-button"
-        [class.active]="isDragEnabled"
-        (click)="toggleDragDrop()"
-      >
-        {{ isDragEnabled ? "Disable Drag" : "Enable Drag" }}
-      </button>
-      <button
-        type="button"
-        class="mode-button"
-        [class.active]="isDotEnabled"
-        (click)="toggleDotPlacement()"
-      >
-        {{ isDotEnabled ? "Disable Dot" : "Enable Dot" }}
-      </button>
-    </div> -->
+    <div class="interaction-controls">
+      <div class="camera-info-toggle">
+        <span class="hover-bar" [class.analyticsred]="isDragEnabled">drag</span>
+        <label class="switch">
+          <input
+            type="checkbox"
+            [ngModel]="isDragEnabled"
+            (ngModelChange)="setDragDrop($event)"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <div class="camera-info-toggle">
+        <span class="hover-bar" [class.analyticsred]="isDotEnabled">dot</span>
+        <label class="switch">
+          <input
+            type="checkbox"
+            [ngModel]="isDotEnabled"
+            (ngModelChange)="setDotPlacement($event)"
+          />
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
 
     <div class="camera-info-toggle">
       <span class="hover-bar" [class.analyticsred]="isChecked"
@@ -105,9 +112,7 @@
   @for (item of visibleStreams; track item.cameraId) {
     <div
       class="grid-item"
-      [ngClass]="
-        itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''
-      "
+      [ngClass]="itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''"
       cdkDrag
       [cdkDragDisabled]="!isDragEnabled || !!maximizedCamera"
       #gridItem

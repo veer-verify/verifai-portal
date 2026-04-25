@@ -170,15 +170,23 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   toggleDragDrop(): void {
-    this.isDragEnabled = !this.isDragEnabled;
-    if (this.isDragEnabled) {
+    this.setDragDrop(!this.isDragEnabled);
+  }
+
+  setDragDrop(isEnabled: boolean): void {
+    this.isDragEnabled = isEnabled;
+    if (isEnabled) {
       this.isDotEnabled = false;
     }
   }
 
   toggleDotPlacement(): void {
-    this.isDotEnabled = !this.isDotEnabled;
-    if (this.isDotEnabled) {
+    this.setDotPlacement(!this.isDotEnabled);
+  }
+
+  setDotPlacement(isEnabled: boolean): void {
+    this.isDotEnabled = isEnabled;
+    if (isEnabled) {
       this.isDragEnabled = false;
     }
   }

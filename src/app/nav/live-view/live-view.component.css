@@ -90,27 +90,6 @@
   flex: 0 0 auto;
 }
 
-.mode-button {
-  height: 30px;
-  border: 1px solid #c7ccd5;
-  border-radius: 6px;
-  padding: 0 12px;
-  background: #fff;
-  color: #243046;
-  font-size: 12px;
-  font-family: "Neometric Medium", sans-serif !important;
-  transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    border-color 180ms ease;
-}
-
-.mode-button.active {
-  background: #243046;
-  border-color: #243046;
-  color: #fff;
-}
-
 /* mat-form-field{
   height: 30px;
 } */
@@ -375,7 +354,6 @@
 
 @media (max-width: 1280px) {
   .hover-bar,
-  .mode-button,
   .pagination-controls a {
     font-size: 11px;
   }
@@ -386,11 +364,6 @@
 
   .grid-highlight img {
     width: 14px;
-  }
-
-  .mode-button {
-    height: 28px;
-    padding: 0 10px;
   }
 
   .pagination-controls button {
