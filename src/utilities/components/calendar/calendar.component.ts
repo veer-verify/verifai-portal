@@ -171,6 +171,9 @@ export class CalendarComponent {
   }
 
   onCalendarSelect(date: Date | null) {
+
+
+
     if (!date) return;
 
     const value = this.formatDateForInput(date);
@@ -178,9 +181,33 @@ export class CalendarComponent {
       this.draftStartDate = value;
       return;
     }
-
+    this.adjustEndDate(value);
     this.draftEndDate = value;
   }
+
+adjustEndDate(endDateStr: any) {
+  const endDate = new Date(endDateStr);
+  const todayOnly = new Date();
+  todayOnly.setHours(0, 0, 0, 0);
+  const endDateOnly = new Date(endDate);
+  endDateOnly.setHours(0, 0, 0, 0);
+  if (endDateOnly < todayOnly) {
+
+    this.draftEndHour = '23';
+    this.draftEndMinute = '59';
+  }
+  else if (endDateOnly.getTime() === todayOnly.getTime()) {
+
+    const now = new Date();
+    this.draftEndHour = String(now.getHours()).padStart(2, '0');
+    this.draftEndMinute = String(now.getMinutes()).padStart(2, '0');
+  }
+
+  return endDate;
+}
+
+
+
 
   get selectedCalendarDate(): Date | null {
     const current =
