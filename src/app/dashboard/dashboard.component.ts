@@ -1,4 +1,4 @@
-import { Component, ElementRef, QueryList, ViewChildren, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
@@ -7,7 +7,7 @@ import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.c
 import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from "../../utilities/pipes/search.pipe";
-import { delay, finalize, Observable } from 'rxjs';
+import { finalize, Subject, takeUntil } from 'rxjs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -17,7 +17,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     styleUrl: './dashboard.component.css',
     standalone: true,
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
     @ViewChildren('siteItem') siteItems!: QueryList<ElementRef<HTMLElement>>;
 
@@ -32,10 +32,17 @@ export class DashboardComponent implements OnInit {
     tempCamList = [];
     searchSite!: string;
     camLoader = false;
+    liveCameraIds: any[] = [];
+    private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
         // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
         this.getSitesListForUserName();
+        this.storage_service.liveCameraIds$
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((ids) => {
+                this.liveCameraIds = ids ?? [];
+            });
     }
 
     check(): boolean {
@@ -112,6 +119,15 @@ export class DashboardComponent implements OnInit {
 
     close() {
         this.storage_service.showSideNav$.next(false);
+    }
+
+    isCameraInLive(cameraId: any): boolean {
+        return this.liveCameraIds.includes(cameraId);
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

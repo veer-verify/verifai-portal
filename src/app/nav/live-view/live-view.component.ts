@@ -92,12 +92,10 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.tempCamList = [];
         this.storage_service.camData$.pipe(delay(0)).subscribe((res) => {
-          this.camList = res;
-          this.tempCamList = [...this.camList];
+          this.camList = res ?? [];
           this.maximizedCamera = null;
-          this.adjustGrid(this.itemsPerPage);
+          this.refreshLiveList();
         })
       });
   }
@@ -259,10 +257,17 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.totalPages = this.getTotalPages();
     this.currentPage = Math.min(Math.max(preferredPage, 1), this.totalPages);
     this.pagination();
+    this.publishLiveCameraIds();
   }
 
   private getTotalPages(): number {
     return Math.max(Math.ceil(this.tempCamList.length / this.itemsPerPage), 1);
+  }
+
+  private publishLiveCameraIds(): void {
+    this.storage_service.liveCameraIds$.next(
+      this.tempCamList.map((camera: any) => camera?.cameraId),
+    );
   }
 
   onDotPlaced(payload: any) {
@@ -283,6 +288,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.storage_service.liveCameraIds$.next([]);
     this.destroy$.next();
     this.destroy$.complete();
   }

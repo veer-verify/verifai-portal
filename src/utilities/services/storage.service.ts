@@ -17,6 +17,7 @@ export class StorageService {
   public info$ = new BehaviorSubject('');
   public siteData$ = new BehaviorSubject([]);
   public camData$ = new BehaviorSubject([]);
+  public liveCameraIds$ = new BehaviorSubject<any[]>([]);
   public showSideNav$ = new BehaviorSubject(true);
   public currentSite$ = new BehaviorSubject<Site | null>(null);
 

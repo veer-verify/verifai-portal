@@ -80,7 +80,7 @@
                     <span>{{ cam?.name }}</span>
                   </div>
 
-                  <div>
+                  <div class="cam-status-wrap">
                     <!-- <span
                         class="dot"
                         [style.backgroundColor]="
@@ -88,10 +88,19 @@
                         "
                       ></span> -->
                     <span
-                      class="material-symbols-outlined"
-                      style="font-size: 12px"
+                      class="material-symbols-outlined live-status-icon"
+                      [class.in-live]="isCameraInLive(cam?.cameraId)"
+                      [title]="
+                        isCameraInLive(cam?.cameraId)
+                          ? 'Added to live view'
+                          : 'Not in live view'
+                      "
                     >
-                      brightness_5
+                      {{
+                        isCameraInLive(cam?.cameraId)
+                          ? "videocam"
+                          : "add_to_queue"
+                      }}
                     </span>
                   </div>
                 </div>

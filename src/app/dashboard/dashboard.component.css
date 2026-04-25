@@ -116,6 +116,32 @@
   margin-right: 6px;
 }
 
+.cam-status-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.live-status-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #d7dce4;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a94a6;
+  background: #ffffff;
+  font-size: 13px;
+}
+
+.live-status-icon.in-live {
+  border-color: rgb(45 164 78 / 24%);
+  color: #2da44e;
+  background: rgb(45 164 78 / 10%);
+}
+
 .camera-drag-list {
   display: flex;
   flex-direction: column;

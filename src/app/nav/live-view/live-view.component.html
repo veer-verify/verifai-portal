@@ -111,6 +111,20 @@
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
 >
+  @if (!visibleStreams.length) {
+    <div class="live-empty-state">
+      <div class="empty-icon-wrap">
+        <span class="material-symbols-outlined">add_to_queue</span>
+      </div>
+      <!-- <h2>Build your live view</h2> -->
+      <p>Drag cameras from the site list and drop here.</p>
+      <div class="empty-drop-preview">
+        <span class="material-symbols-outlined">photo_camera</span>
+        <span>Drop camera here</span>
+      </div>
+    </div>
+  }
+
   @for (item of visibleStreams; track item.cameraId) {
     <div
       class="grid-item"
