@@ -62,6 +62,7 @@ label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 700;
 }
 
 .trigger-icon {
@@ -77,7 +78,7 @@ label {
   left: 0;
   right: auto;
   z-index: 9;
-  width: min(600px, calc(100vw - 32px));
+  width: min(550px, calc(100vw - 32px));
   max-width: calc(100vw - 32px);
   overflow-x: auto;
   padding: 10px;
@@ -190,7 +191,7 @@ label {
 }
 
 .time-select select {
-  width: 100%;
+  width: 80px;
   border: 1px solid #cfd7e3;
   border-radius: 6px;
   background: #ffffff;

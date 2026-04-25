@@ -149,6 +149,21 @@
   font-family: "Neometric Medium" !important;
 }
 
+::ng-deep .mat-calendar-body-selected {
+  background-color: #ed3237 !important;
+}
+
+::ng-deep
+  .mat-calendar-body-today:not(.mat-calendar-body-selected):not(
+    .mat-calendar-body-comparison-identical
+  ) {
+  border-color: #ed3237 !important;
+}
+
+::ng-deep .mat-calendar-body-selected.mat-calendar-body-today {
+  box-shadow: 0 0 0 1px #ed3237 !important;
+}
+
 /* ag grid */
 ::ng-deep .ag-root-wrapper {
   border-radius: 0 !important;
