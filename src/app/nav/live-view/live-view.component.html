@@ -122,70 +122,71 @@
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
 >
-  @if (!visibleStreams.length) {
-    <div class="live-empty-state">
-      <div class="empty-icon-wrap">
-        <span class="material-symbols-outlined">add_to_queue</span>
-      </div>
-      <!-- <h2>Build your live view</h2> -->
-      <p>Drag cameras from the site list and drop here.</p>
-      <div class="empty-drop-preview">
-        <span class="material-symbols-outlined">photo_camera</span>
-        <span>Drop camera here</span>
-      </div>
-    </div>
-  }
-
-  @for (item of visibleStreams; track item.cameraId) {
+  @for (slot of visibleSlots; track slot.slotIndex) {
     <div
       class="grid-item"
       [ngClass]="itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''"
+      [class.empty-grid-slot]="!slot.camera"
       cdkDrag
-      [cdkDragData]="item"
-      [cdkDragDisabled]="!isDragEnabled || !!maximizedCamera"
+      [cdkDragData]="{ camera: slot.camera, slotIndex: slot.slotIndex }"
+      [cdkDragDisabled]="!slot.camera || !isDragEnabled || !!maximizedCamera"
       #gridItem
     >
-      <ng-template cdkDragPreview>
-        <div class="stream-drag-preview-card">
-          <div class="stream-preview-screen">
-            <span class="material-symbols-outlined">videocam</span>
-            <span class="stream-preview-live-dot"></span>
+      @if (slot.camera) {
+        <ng-template cdkDragPreview>
+          <div class="stream-drag-preview-card">
+            <div class="stream-preview-screen">
+              <span class="material-symbols-outlined">videocam</span>
+              <span class="stream-preview-live-dot"></span>
+            </div>
+            <div class="stream-preview-name">
+              {{
+                slot.camera?.name ||
+                  slot.camera?.cameraName ||
+                  slot.camera?.cameraId
+              }}
+            </div>
           </div>
-          <div class="stream-preview-name">
-            {{ item?.name || item?.cameraName || item?.cameraId }}
-          </div>
-        </div>
-      </ng-template>
+        </ng-template>
 
-      <button
-        type="button"
-        class="remove-camera-btn"
-        title="Remove camera"
-        aria-label="Remove camera from live view"
-        (click)="removeCameraFromLive(item, $event)"
-      >
-        <span class="material-symbols-outlined">close</span>
-      </button>
-
-      @if (isDragEnabled) {
         <button
           type="button"
-          class="drag-handle"
-          cdkDragHandle
-          title="Drag to reorder"
-          aria-label="Drag stream to reorder"
-          (click)="$event.stopPropagation()"
+          class="remove-camera-btn"
+          title="Remove camera"
+          aria-label="Remove camera from live view"
+          (click)="removeCameraFromLive(slot.camera, $event)"
         >
-          <span class="material-symbols-outlined">drag_indicator</span>
+          <span class="material-symbols-outlined">close</span>
         </button>
+
+        @if (isDragEnabled) {
+          <button
+            type="button"
+            class="drag-handle"
+            cdkDragHandle
+            title="Drag to reorder"
+            aria-label="Drag stream to reorder"
+            (click)="$event.stopPropagation()"
+          >
+            <span class="material-symbols-outlined">drag_indicator</span>
+          </button>
+        }
+        <app-stream
+          [videoData]="slot.camera"
+          [isChecked]="isChecked"
+          [dotEnabled]="isDotEnabled"
+          (dotPlaced)="onDotPlaced($event)"
+          (streamDoubleClicked)="toggleMaximize($event)"
+        ></app-stream>
+      } @else {
+        <div class="grid-slot-placeholder">
+          <span class="material-symbols-outlined">add_to_queue</span>
+          <div>
+            <strong>Drop camera here</strong>
+            <small>Slot {{ (slot.slotIndex % itemsPerPage) + 1 }}</small>
+          </div>
+        </div>
       }
-      <app-stream
-        [videoData]="item"
-        [isChecked]="isChecked"
-        [dotEnabled]="isDotEnabled"
-        (dotPlaced)="onDotPlaced($event)"
-        (streamDoubleClicked)="toggleMaximize($event)"
-      ></app-stream>
     </div>
   }
 </section>

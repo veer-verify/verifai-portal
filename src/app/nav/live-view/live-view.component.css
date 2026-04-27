@@ -230,6 +230,62 @@
   will-change: transform;
 }
 
+.empty-grid-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-style: dashed;
+  border-color: rgb(255 255 255 / 22%);
+  background: rgb(255 255 255 / 3%);
+}
+
+.grid-slot-placeholder {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px dashed rgb(237 50 55 / 55%);
+  border-radius: 8px;
+  background: rgb(237 50 55 / 8%);
+  color: #ffffff;
+  pointer-events: none;
+}
+
+.grid-slot-placeholder .material-symbols-outlined {
+  color: #ed3237;
+  font-size: 24px;
+}
+
+.grid-slot-placeholder div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.grid-slot-placeholder strong,
+.grid-slot-placeholder small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grid-slot-placeholder strong {
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.grid-slot-placeholder small {
+  color: #cbd5e1;
+  font-size: 11px;
+}
+
+.grid-container.cdk-drop-list-receiving .empty-grid-slot,
+.grid-container.cdk-drop-list-dragging .empty-grid-slot {
+  border-color: rgb(237 50 55 / 58%);
+  background: rgb(237 50 55 / 8%);
+}
+
 .grid-item.cdk-drag {
   cursor: default;
 }

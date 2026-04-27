@@ -1,7 +1,6 @@
 import {
   CdkDragDrop,
   DragDropModule,
-  moveItemInArray,
 } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
@@ -108,8 +107,17 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.paginatedList = this.tempCamList.slice(start, end);
   }
 
-  get visibleStreams(): any[] {
-    return this.maximizedCamera ? [this.maximizedCamera] : this.paginatedList;
+  get visibleSlots(): Array<{ camera: any | null; slotIndex: number }> {
+    if (this.maximizedCamera) {
+      return [{ camera: this.maximizedCamera, slotIndex: 0 }];
+    }
+
+    const pageStart = (this.currentPage - 1) * this.itemsPerPage;
+
+    return Array.from({ length: this.itemsPerPage }, (_, index) => ({
+      camera: this.paginatedList[index] ?? null,
+      slotIndex: pageStart + index,
+    }));
   }
 
   private updateGridLayout(count: number): void {
@@ -194,23 +202,21 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (event.previousContainer !== event.container) {
-      this.addDroppedItemToLive(event.item.data, event.currentIndex);
+      this.addDroppedItemToLive(
+        event.item.data,
+        this.getDropSlotIndex(event),
+      );
       return;
     }
 
-    if (event.previousIndex === event.currentIndex) {
+    const previousSlotIndex = event.item.data?.slotIndex;
+    const currentSlotIndex = this.getDropSlotIndex(event);
+
+    if (previousSlotIndex === currentSlotIndex) {
       return;
     }
 
-    moveItemInArray(this.paginatedList, event.previousIndex, event.currentIndex);
-
-    const start = (this.currentPage - 1) * this.itemsPerPage;
-    this.tempCamList.splice(
-      start,
-      this.paginatedList.length,
-      ...this.paginatedList,
-    );
-    this.paginatedList = [...this.paginatedList];
+    this.moveCameraSlot(previousSlotIndex, currentSlotIndex);
   }
 
   removeCameraFromLive(camera: any, event: MouseEvent): void {
@@ -308,8 +314,20 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    const insertIndex = this.getLiveInsertIndex(dropIndex);
-    this.tempCamList.splice(insertIndex, 0, ...uniqueCameras);
+    let insertIndex = this.getLiveInsertIndex(dropIndex);
+
+    for (const camera of uniqueCameras) {
+      if (this.tempCamList[insertIndex]?.cameraId) {
+        this.tempCamList.splice(insertIndex, 0, camera);
+      } else {
+        this.ensureSlotExists(insertIndex);
+        this.tempCamList[insertIndex] = camera;
+      }
+
+      insertIndex += 1;
+    }
+
+    this.trimTrailingEmptySlots();
     this.refreshLiveList(this.currentPage);
   }
 
@@ -330,24 +348,93 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const insertIndex = this.getLiveInsertIndex(dropIndex);
 
-    this.tempCamList.splice(insertIndex, 0, camera);
+    if (this.tempCamList[insertIndex]?.cameraId) {
+      this.tempCamList.splice(insertIndex, 0, camera);
+    } else {
+      this.ensureSlotExists(insertIndex);
+      this.tempCamList[insertIndex] = camera;
+    }
+
+    this.trimTrailingEmptySlots();
     this.refreshLiveList(this.currentPage);
   }
 
   private getLiveInsertIndex(dropIndex: number): number {
     const pageStart = (this.currentPage - 1) * this.itemsPerPage;
-    const pageItemCount = this.paginatedList.length;
-    const maxDropIndex =
-      pageItemCount >= this.itemsPerPage
-        ? this.itemsPerPage - 1
-        : pageItemCount;
-    const pageDropIndex = Math.min(Math.max(dropIndex, 0), maxDropIndex);
-    const insertIndex = Math.min(
-      pageStart + pageDropIndex,
-      this.tempCamList.length,
+    const pageDropIndex = Math.min(
+      Math.max(dropIndex, 0),
+      this.itemsPerPage - 1,
     );
 
-    return insertIndex;
+    return pageStart + pageDropIndex;
+  }
+
+  private getDropSlotIndex(event: CdkDragDrop<any[]>): number {
+    if (!this.gridContainer || this.maximizedCamera) {
+      return 0;
+    }
+
+    const selectedGrid =
+      this.gridTypes.find((item: any) => item.noOfItems === this.itemsPerPage) ??
+      null;
+    const columns = selectedGrid?.columns ?? Math.ceil(Math.sqrt(this.itemsPerPage));
+    const rows =
+      selectedGrid?.rows ?? Math.ceil(this.itemsPerPage / Math.max(columns, 1));
+    const rect = (this.gridContainer.nativeElement as HTMLElement).getBoundingClientRect();
+    const dropPoint = event.dropPoint;
+
+    if (!dropPoint || !rect.width || !rect.height) {
+      return Math.min(Math.max(event.currentIndex, 0), this.itemsPerPage - 1);
+    }
+
+    const x = Math.min(Math.max(dropPoint.x - rect.left, 0), rect.width - 1);
+    const y = Math.min(Math.max(dropPoint.y - rect.top, 0), rect.height - 1);
+    const column = Math.min(Math.floor(x / (rect.width / columns)), columns - 1);
+    const row = Math.min(Math.floor(y / (rect.height / rows)), rows - 1);
+
+    return Math.min(row * columns + column, this.itemsPerPage - 1);
+  }
+
+  private moveCameraSlot(previousSlotIndex: number, currentSlotIndex: number): void {
+    if (
+      previousSlotIndex === undefined ||
+      previousSlotIndex < 0 ||
+      currentSlotIndex < 0
+    ) {
+      return;
+    }
+
+    this.ensureSlotExists(Math.max(previousSlotIndex, currentSlotIndex));
+    const camera = this.tempCamList[previousSlotIndex];
+    if (!camera?.cameraId) {
+      return;
+    }
+
+    this.tempCamList[previousSlotIndex] = null;
+
+    if (this.tempCamList[currentSlotIndex]?.cameraId) {
+      this.tempCamList.splice(currentSlotIndex, 0, camera);
+    } else {
+      this.tempCamList[currentSlotIndex] = camera;
+    }
+
+    this.trimTrailingEmptySlots();
+    this.refreshLiveList(this.currentPage);
+  }
+
+  private ensureSlotExists(slotIndex: number): void {
+    while (this.tempCamList.length <= slotIndex) {
+      this.tempCamList.push(null);
+    }
+  }
+
+  private trimTrailingEmptySlots(): void {
+    while (
+      this.tempCamList.length &&
+      !this.tempCamList[this.tempCamList.length - 1]?.cameraId
+    ) {
+      this.tempCamList.pop();
+    }
   }
 
   private refreshLiveList(preferredPage = this.currentPage): void {
@@ -363,7 +450,9 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private publishLiveCameraIds(): void {
     this.storage_service.liveCameraIds$.next(
-      this.tempCamList.map((camera: any) => camera?.cameraId),
+      this.tempCamList
+        .filter((camera: any) => camera?.cameraId)
+        .map((camera: any) => camera.cameraId),
     );
   }
 
