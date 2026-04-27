@@ -9,7 +9,6 @@ import { AlertService } from '../../services/alert.service';
   imports: [],
   templateUrl: './stream.component.html',
   styleUrl: './stream.component.css',
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StreamComponent implements OnChanges, OnDestroy {
 
@@ -486,24 +485,21 @@ export class StreamComponent implements OnChanges, OnDestroy {
 
     this.http
       .get(`${environment.sitesUrl}/play_1_0/${this.videoData.cameraId}`)
-      .subscribe(
-        (res: any) => {
+      .subscribe({
+        next: (res: any) => {
           if (res.statusCode === 200) {
             this.alert_service.success(res.message);
-            // console.log()
           } else {
             this.alert_service.error(res.message);
           }
         },
-        (err: HttpErrorResponse) => {
+        error: (err: HttpErrorResponse) => {
           this.alert_service.error('Failed');
         }
+      }
       );
   }
 
-  //! =========================================
-  //! 🧹 CLEANUP ON DESTROY
-  //! =========================================
   ngOnDestroy(): void {
     console.log('🧹 Cleaning up stream component...');
 

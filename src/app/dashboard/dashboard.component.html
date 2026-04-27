@@ -169,6 +169,11 @@
                     </span>
                   </div>
                 </div>
+              } @empty {
+                <div class="sidebar-empty-state compact">
+                  <span class="material-symbols-outlined">videocam_off</span>
+                  <p>No cameras available</p>
+                </div>
               }
             </div>
           } @else if (
@@ -178,6 +183,11 @@
             <img src="gif/cam-loader.gif" height="100px" width="100%" />
           }
           <!-- } -->
+        </div>
+      } @empty {
+        <div class="sidebar-empty-state">
+          <span class="material-symbols-outlined">domain_disabled</span>
+          <p>No sites available</p>
         </div>
       }
     </div>

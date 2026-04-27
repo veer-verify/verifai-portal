@@ -23,7 +23,7 @@
     <div class="sidebar">
       <div
         class="camera"
-        *ngFor="let cam of cameras"
+        *ngFor="let cam of playbackList"
         (click)="selectCamera(cam)"
         [class.active]="cam === selectedCamera"
       >
@@ -35,7 +35,7 @@
     <!-- Video Section -->
     <div class="video-container">
       <div class="video-frame">
-        <img class="playback-image" [src]="selectedCamera.image" />
+        <video [src]="selectedCamera?.url"></video>
       </div>
 
       <!-- Controls -->
@@ -76,7 +76,11 @@
           </div>
 
           <div class="timeline-nav-strip">
-            <button type="button" class="timeline-nav-btn" aria-label="Previous">
+            <button
+              type="button"
+              class="timeline-nav-btn"
+              aria-label="Previous"
+            >
               &#8249;
             </button>
             <div class="timeline-nav-track"></div>

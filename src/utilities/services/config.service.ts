@@ -74,4 +74,9 @@ export class ConfigService {
     return this.http.get(url, { params });
   }
 
+  getPlayback() {
+    const url = 'http://192.168.0.171:9632/get-video-links?requestName=streams%2FGISINORINTESTINGG&fromDatetime=2026-04-23_03-46-00&toDatetime=2026-04-23_03-50-00&level=GISINORINTESTINGGC1&expires=3600';
+    return this.http.get(url);
+  }
+
 }

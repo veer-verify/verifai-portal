@@ -5,12 +5,12 @@ export const menuItems = [
     routeLink: 'live-view',
     call: (data: any) => (data?.key !== 'F' ? true : false),
   },
-  // {
-  //   id: 'playback',
-  //   label: 'playback',
-  //   routeLink: 'playback',
-  //   call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
-  // },
+  {
+    id: 'playback',
+    label: 'playback',
+    routeLink: 'playback',
+    call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
+  },
   {
     id: 'liveAI',
     label: 'live ai',

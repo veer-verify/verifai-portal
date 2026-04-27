@@ -176,6 +176,34 @@
   flex-direction: column;
 }
 
+.sidebar-empty-state {
+  min-height: 120px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #7a8495;
+  text-align: center;
+}
+
+.sidebar-empty-state.compact {
+  min-height: 74px;
+  padding: 12px 8px;
+}
+
+.sidebar-empty-state .material-symbols-outlined {
+  color: #a8b0bf;
+  font-size: 28px;
+}
+
+.sidebar-empty-state p {
+  margin: 0;
+  font-family: "Neometric Medium", sans-serif !important;
+  font-size: 12px;
+}
+
 .cam-name.cdk-drag-dragging {
   cursor: grabbing;
 }

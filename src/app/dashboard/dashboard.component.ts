@@ -4,7 +4,7 @@ import { HeaderComponent } from '../header/header.component';
 import { StorageService } from '../../utilities/services/storage.service';
 import { ConfigService } from '../../utilities/services/config.service';
 import { ErrInfoComponent } from "../../utilities/components/err-info/err-info.component";
-import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SearchPipe } from "../../utilities/pipes/search.pipe";
 import { finalize, Subject, takeUntil } from 'rxjs';
@@ -15,7 +15,7 @@ import { AlertService } from '../../utilities/services/alert.service';
 
 @Component({
     selector: 'app-dashboard',
-    imports: [RouterOutlet, HeaderComponent, ErrInfoComponent, AsyncPipe, FormsModule, SearchPipe, JsonPipe, NgIf, DragDropModule],
+    imports: [RouterOutlet, HeaderComponent, AsyncPipe, FormsModule, SearchPipe, DragDropModule],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css',
     standalone: true,
@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private http = inject(HttpClient);
     private alert_service = inject(AlertService);
-    // _sideNav!: Observable<any>;
 
 
     sitesList: any = [];
@@ -41,7 +40,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
-        // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100))
         this.getSitesListForUserName();
         this.storage_service.liveCameraIds$
             .pipe(takeUntil(this.destroy$))
@@ -94,11 +92,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             });
     }
 
-    // currentSite: any;
     prevSite: any;
     updateSite(site: any) {
         this.prevSite = this.storage_service.currentSite$.getValue();
-        // this.currentSite = this.prevSite?.siteId === site?.siteId ? undefined : site;
 
         // toggle logic
         if (this.prevSite?.siteId === site?.siteId) {
@@ -108,7 +104,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.getCamerasForSiteId(site);
             setTimeout(() => this.scrollSiteIntoView(site?.siteId), 0);
         }
-        // this.storage_service.currentSite$.next(this.currentSite);
     }
 
     private scrollSiteIntoView(siteId: any) {

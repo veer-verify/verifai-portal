@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ConfigService } from '../../../utilities/services/config.service';
 
 @Component({
   selector: 'app-playback',
@@ -11,42 +12,31 @@ import { FormsModule } from '@angular/forms';
 export class PlaybackComponent {
   timeMarks!: number[];
   ticks!: number[];
-  constructor() {
-    this.timeMarks = Array.from({ length: 25 }, (_, i) => i); // 0–24
 
+  constructor(
+    private config_service: ConfigService
+  ) {
+    this.timeMarks = Array.from({ length: 25 }, (_, i) => i);
     this.ticks = Array.from({ length: 24 * this.ticksPerHour + 1 });
-    // Include the closing boundary tick at 24:00.
   }
 
-  // 24-hour labels (00–24)
-  hours = Array.from({ length: 25 }, (_, i) => i.toString().padStart(2, '0'));
+  ngOnInit(): void {
+    this.getPlayback();
+  }
 
-  // ticks per hour (adjust density here)
+  playbackList: any = [];
+  getPlayback() {
+    this.config_service.getPlayback().subscribe({
+      next: (res: any) => {
+        this.playbackList = res.videos
+      }
+    })
+  }
+
+  hours = Array.from({ length: 25 }, (_, i) => i.toString().padStart(2, '0'));
   ticksPerHour = 10;
 
-  // total ticks
-
-  cameras = [
-    {
-      name: 'Camera 01 (Dispensing Counter)',
-      image: 'https://images.unsplash.com/photo-1581091215367-59ab6b2e3c3c',
-    },
-    {
-      name: 'Camera 02 (Storage)',
-      image: 'https://images.unsplash.com/photo-1588776814546-ec7e65b3fbb9',
-    },
-    {
-      name: 'Camera 03 (Pharmacy Floor)',
-      image: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88',
-    },
-    {
-      name: 'Camera 04 (Medicines Close-up)',
-      image: 'https://images.unsplash.com/photo-1580281657521-6f0c3f5c6b89',
-    },
-  ];
-
-  selectedCamera = this.cameras[0];
-
+  selectedCamera: any;
   selectCamera(cam: any) {
     this.selectedCamera = cam;
   }

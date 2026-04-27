@@ -58,7 +58,6 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   gridTypes: any = [];
-  // showSites = false;
   searchSite!: string;
   sitesList: any = [];
   isChecked: boolean = true;
@@ -76,7 +75,6 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
-    // this._sideNav = this.storage_service.showSideNav$.pipe(delay(100));
     this.storage_service.siteData$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         this.sitesList = res.sites;
