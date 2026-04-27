@@ -119,6 +119,7 @@
   [cdkDropListData]="paginatedList"
   [cdkDropListConnectedTo]="['cameraListDropList', 'siteListDropList']"
   [cdkDropListDisabled]="!!maximizedCamera"
+  [cdkDropListSortingDisabled]="true"
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
 >

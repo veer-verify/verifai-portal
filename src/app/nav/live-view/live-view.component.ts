@@ -432,11 +432,11 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.tempCamList[previousSlotIndex] = null;
-
     if (this.tempCamList[currentSlotIndex]?.cameraId) {
+      this.tempCamList.splice(previousSlotIndex, 1);
       this.tempCamList.splice(currentSlotIndex, 0, camera);
     } else {
+      this.tempCamList[previousSlotIndex] = null;
       this.tempCamList[currentSlotIndex] = camera;
     }
 
