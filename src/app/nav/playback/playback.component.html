@@ -2,11 +2,9 @@
   <div class="tool-bar">
     <div class="time-range">
       <div class="calender">
-        <input type="date" />
+        <input type="date" [(ngModel)]="selectedDate" />
       </div>
-      <div class="fake-range" (click)="open = !open">
-        <!-- {{ startTime }} - {{ endTime }} -->
-
+      <div class="fake-range">
         <div class="d-flex align-items-center gap-2">
           <input type="time" [(ngModel)]="startTime" />
           -
@@ -15,46 +13,107 @@
       </div>
     </div>
 
-    <button class="go-btn">➜</button>
+    <button class="go-btn" (click)="applyRange()" [disabled]="isLoading">
+      {{ isLoading ? "..." : "Go" }}
+    </button>
   </div>
 
-  <!-- Main -->
   <div class="main">
     <div class="sidebar">
+      <div class="sidebar-title">Cameras</div>
       <div
         class="camera"
-        *ngFor="let cam of playbackList"
+        *ngFor="let cam of cameraList"
         (click)="selectCamera(cam)"
         [class.active]="cam === selectedCamera"
       >
-        <img [src]="cam.image" />
-        <div class="cam-label">🔴 {{ cam.name }}</div>
+        <div class="camera-thumb">
+          <span class="material-symbols-outlined">videocam</span>
+        </div>
+        <div class="cam-label">
+          {{ cam.name || cam.cameraName || cam.cameraId }}
+        </div>
       </div>
+
+      <div class="empty-state compact" *ngIf="!cameraList.length">
+        No cameras available
+      </div>
+
+      <!-- <div class="sidebar-title clips-title">Playback Clips</div>
+      <div
+        class="clip"
+        *ngFor="let video of playbackList; let i = index"
+        (click)="selectVideo(video)"
+        [class.active]="video === selectedVideo"
+      >
+        <span class="material-symbols-outlined">movie</span>
+        <div>
+          <strong>{{ video.datetime || "Clip " + (i + 1) }}</strong>
+          <small>{{ video.key }}</small>
+        </div>
+      </div>
+
+      <div class="empty-state compact" *ngIf="!playbackList.length && !isLoading">
+        No playback clips
+      </div> -->
     </div>
 
-    <!-- Video Section -->
     <div class="video-container">
       <div class="video-frame">
-        <video [src]="selectedCamera?.url"></video>
+        <video
+          #playbackVideo
+          *ngIf="selectedVideo?.url; else playbackEmpty"
+          [src]="selectedVideo.url"
+          autoplay
+          (loadedmetadata)="onVideoLoaded()"
+          (timeupdate)="updateProgress()"
+          (play)="isPlaying = true"
+          (pause)="isPlaying = false"
+          (ended)="isPlaying = false"
+        ></video>
+
+        <ng-template #playbackEmpty>
+          <div class="empty-state">
+            {{
+              errorMessage || "Select a camera and time range to load playback"
+            }}
+          </div>
+        </ng-template>
       </div>
 
-      <!-- Controls -->
       <div class="controls">
-        <!-- Left Controls -->
         <div class="left-controls">
-          🔊
-          <button>-</button>
-          <input type="range" min="0" max="100" />
-          <button>+</button>
+          <span class="material-symbols-outlined">volume_up</span>
+          <button type="button" (click)="changeVolume(-10)">-</button>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            [ngModel]="volume"
+            (ngModelChange)="updateVolume($event)"
+          />
+          <button type="button" (click)="changeVolume(10)">+</button>
 
-          <button>▶</button>
-          <button>■</button>
+          <button type="button" (click)="togglePlayback()">
+            {{ isPlaying ? "Pause" : "Play" }}
+          </button>
+          <button type="button" (click)="stopPlayback()">Stop</button>
 
-          <input type="range" min="0" max="100" />
-          <span>1x</span>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            [ngModel]="progress"
+            (ngModelChange)="seekVideo($event)"
+          />
+          <button type="button" class="speed-btn" (click)="setPlaybackRate()">
+            {{ playbackRate }}x
+          </button>
+          <span class="playback-count" *ngIf="playbackMeta">
+            {{ playbackMeta.count || playbackList.length }} clips
+          </span>
         </div>
 
-        <!-- Timeline -->
         <div class="timeline-wrapper">
           <div class="tick-bar">
             <span
@@ -83,7 +142,17 @@
             >
               &#8249;
             </button>
-            <div class="timeline-nav-track"></div>
+            <div class="timeline-nav-track">
+              <button
+                type="button"
+                class="timeline-clip"
+                *ngFor="let video of playbackList"
+                [class.active]="video === selectedVideo"
+                [style.left.%]="getClipPosition(video)"
+                (click)="selectVideo(video)"
+                [title]="video.datetime"
+              ></button>
+            </div>
             <button type="button" class="timeline-nav-btn" aria-label="Next">
               &#8250;
             </button>
