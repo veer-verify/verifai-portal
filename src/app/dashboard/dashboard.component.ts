@@ -126,6 +126,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.storage_service.showSideNav$.next(false);
     }
 
+    getSiteDragData(site: any) {
+        const currentSite = this.storage_service.currentSite$.getValue();
+        const cameras = currentSite?.siteId === site?.siteId ? this.camList : null;
+
+        return {
+            dragType: 'site',
+            site,
+            cameras,
+        };
+    }
+
     isCameraInLive(cameraId: any): boolean {
         return this.liveCameraIds.includes(cameraId);
     }

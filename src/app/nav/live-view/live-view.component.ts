@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
 import { GlobalClickDirective } from '../../../utilities/directives/global-click.directive';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
-import { delay, filter, Observable, Subject, takeUntil } from 'rxjs';
+import { delay, filter, Subject, take, takeUntil } from 'rxjs';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -56,7 +56,6 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('gridContainer') gridContainer!: ElementRef;
   @ViewChildren('gridItem') gridItem!: QueryList<ElementRef>;
   private destroy$ = new Subject<void>();
-  // _sideNav!: Observable<any>;
 
   gridTypes: any = [];
   // showSites = false;
@@ -197,7 +196,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     if (event.previousContainer !== event.container) {
-      this.addCameraToLive(event.item.data, event.currentIndex);
+      this.addDroppedItemToLive(event.item.data, event.currentIndex);
       return;
     }
 
@@ -230,6 +229,92 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.refreshLiveList();
   }
 
+  clearLiveView(): void {
+    this.tempCamList = [];
+    this.paginatedList = [];
+    this.maximizedCamera = null;
+    this.currentPage = 1;
+    this.refreshLiveList(1);
+  }
+
+  private addDroppedItemToLive(item: any, dropIndex: number): void {
+    if (item?.dragType === 'site') {
+      this.addSiteToLive(item, dropIndex);
+      return;
+    }
+
+    this.addCameraToLive(item, dropIndex);
+  }
+
+  private addSiteToLive(payload: any, dropIndex: number): void {
+    const cameras = this.normalizeCameraList(payload?.cameras);
+
+    if (cameras.length) {
+      this.addCamerasToLive(cameras, dropIndex);
+      return;
+    }
+
+    if (!payload?.site) {
+      return;
+    }
+
+    this.configSrvc
+      .getCamerasForSiteId(payload.site)
+      .pipe(take(1))
+      .subscribe({
+        next: (res: any) => {
+          this.addCamerasToLive(this.normalizeCameraList(res), dropIndex);
+        },
+        error: () => {
+          this.alert_service.error('Failed to load site cameras');
+        },
+      });
+  }
+
+  private normalizeCameraList(value: any): any[] {
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    if (Array.isArray(value?.cameras)) {
+      return value.cameras;
+    }
+
+    if (Array.isArray(value?.data)) {
+      return value.data;
+    }
+
+    return [];
+  }
+
+  private addCamerasToLive(cameras: any[], dropIndex: number): void {
+    const uniqueCameras = cameras.filter(
+      (camera: any) =>
+        camera?.cameraId &&
+        !this.tempCamList.some(
+          (item: any) => item?.cameraId === camera.cameraId,
+        ),
+    );
+
+    if (!uniqueCameras.length) {
+      const firstCamera = cameras.find((camera: any) => camera?.cameraId);
+      const existingIndex = this.tempCamList.findIndex(
+        (item: any) => item?.cameraId === firstCamera?.cameraId,
+      );
+
+      if (existingIndex >= 0) {
+        this.currentPage = Math.floor(existingIndex / this.itemsPerPage) + 1;
+        this.pagination();
+      }
+
+      return;
+    }
+
+    const insertIndex = this.getLiveInsertIndex(dropIndex);
+    this.tempCamList.splice(insertIndex, 0, ...uniqueCameras);
+    this.refreshLiveList(this.currentPage);
+  }
+
   private addCameraToLive(camera: any, dropIndex: number): void {
     if (!camera?.cameraId) {
       return;
@@ -245,6 +330,13 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
+    const insertIndex = this.getLiveInsertIndex(dropIndex);
+
+    this.tempCamList.splice(insertIndex, 0, camera);
+    this.refreshLiveList(this.currentPage);
+  }
+
+  private getLiveInsertIndex(dropIndex: number): number {
     const pageStart = (this.currentPage - 1) * this.itemsPerPage;
     const pageItemCount = this.paginatedList.length;
     const maxDropIndex =
@@ -257,8 +349,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       this.tempCamList.length,
     );
 
-    this.tempCamList.splice(insertIndex, 0, camera);
-    this.refreshLiveList(this.currentPage);
+    return insertIndex;
   }
 
   private refreshLiveList(preferredPage = this.currentPage): void {

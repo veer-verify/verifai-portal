@@ -61,6 +61,17 @@
     </div>
 
     <div class="interaction-controls">
+      <button
+        type="button"
+        class="clear-live-btn"
+        title="Clear all cameras"
+        aria-label="Clear all cameras from live view"
+        [disabled]="!tempCamList.length"
+        (click)="clearLiveView()"
+      >
+        <span class="material-symbols-outlined">delete_sweep</span>
+      </button>
+
       <div class="camera-info-toggle">
         <span class="hover-bar" [class.analyticsred]="isDragEnabled">drag</span>
         <label class="switch">
@@ -106,7 +117,7 @@
   cdkDropList
   id="liveViewDropList"
   [cdkDropListData]="paginatedList"
-  [cdkDropListConnectedTo]="['cameraListDropList']"
+  [cdkDropListConnectedTo]="['cameraListDropList', 'siteListDropList']"
   [cdkDropListDisabled]="!!maximizedCamera"
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
@@ -134,6 +145,18 @@
       [cdkDragDisabled]="!isDragEnabled || !!maximizedCamera"
       #gridItem
     >
+      <ng-template cdkDragPreview>
+        <div class="stream-drag-preview-card">
+          <div class="stream-preview-screen">
+            <span class="material-symbols-outlined">videocam</span>
+            <span class="stream-preview-live-dot"></span>
+          </div>
+          <div class="stream-preview-name">
+            {{ item?.name || item?.cameraName || item?.cameraId }}
+          </div>
+        </div>
+      </ng-template>
+
       <button
         type="button"
         class="remove-camera-btn"

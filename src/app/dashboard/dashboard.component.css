@@ -192,6 +192,134 @@
   opacity: 0.35;
 }
 
+.camera-drag-preview-card {
+  width: 240px;
+  min-height: 160px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgb(237 50 55 / 70%);
+  border-radius: 8px;
+  background: #101216;
+  color: #ffffff;
+  box-shadow: 0 18px 36px rgb(0 0 0 / 32%);
+  box-sizing: border-box;
+  cursor: grabbing;
+}
+
+.camera-preview-frame {
+  position: relative;
+  width: 58px;
+  height: 44px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 6px;
+  background:
+    linear-gradient(rgb(255 255 255 / 6%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 6%) 1px, transparent 1px), #050608;
+  background-size: 14px 14px;
+}
+
+.camera-preview-frame img {
+  width: 26px;
+  height: 26px;
+  margin: 0;
+}
+
+.camera-preview-lens {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ed3237;
+  box-shadow: 0 0 0 3px rgb(237 50 55 / 18%);
+}
+
+.camera-preview-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.camera-preview-label,
+.camera-preview-status {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.camera-preview-label {
+  font-size: 12px;
+  font-family: "Neometric Medium", sans-serif !important;
+}
+
+.camera-preview-status {
+  color: #aeb7c6;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.site-drag-preview-card {
+  width: 230px;
+  min-height: 64px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgb(237 50 55 / 70%);
+  border-radius: 8px;
+  background: #101216;
+  color: #ffffff;
+  box-shadow: 0 18px 36px rgb(0 0 0 / 32%);
+  box-sizing: border-box;
+  cursor: grabbing;
+}
+
+.site-drag-preview-card .material-symbols-outlined {
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(255 255 255 / 16%);
+  border-radius: 6px;
+  background: rgb(237 50 55 / 12%);
+  color: #ed3237;
+  font-size: 22px;
+}
+
+.site-preview-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.site-preview-label,
+.site-preview-status {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-preview-label {
+  font-size: 12px;
+  font-family: "Neometric Medium", sans-serif !important;
+}
+
+.site-preview-status {
+  color: #aeb7c6;
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
 .dot {
   display: block;
   height: 8px;
