@@ -405,7 +405,7 @@ button {
 }
 
 input[type="date"] {
-  color: #ababab;
+  /* color: #ababab; */
   text-transform: uppercase;
 }
 

@@ -123,7 +123,7 @@
   cdkDropListOrientation="mixed"
   (cdkDropListDropped)="dropStream($event)"
 >
-  @for (slot of visibleSlots; track slot.slotIndex) {
+  @for (slot of visibleSlots; track trackLiveSlot($index, slot)) {
     <div
       class="grid-item"
       [ngClass]="itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''"

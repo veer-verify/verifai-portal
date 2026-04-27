@@ -125,6 +125,10 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }));
   }
 
+  trackLiveSlot(index: number, slot: { camera: any | null; slotIndex: number }): string {
+    return slot.camera?.cameraId ?? `empty-${slot.slotIndex}`;
+  }
+
   private updateGridLayout(count: number): void {
     if (!this.gridContainer) {
       return;

@@ -198,8 +198,11 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   setPlaybackRate(): void {
     const rates = [1, 1.5, 2, 0.5];
     const nextIndex = (rates.indexOf(this.playbackRate) + 1) % rates.length;
-    this.playbackRate = rates[nextIndex];
+    this.updatePlaybackRate(rates[nextIndex]);
+  }
 
+  updatePlaybackRate(value: any): void {
+    this.playbackRate = Number(value);
     const video = this.playbackVideo?.nativeElement;
     if (video) {
       video.playbackRate = this.playbackRate;
