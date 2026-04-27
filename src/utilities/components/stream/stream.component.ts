@@ -34,6 +34,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
   encoded: any;
   previousUrl: string = '';
   markerPositions: Array<{ id: number; x: number; y: number }> = [];
+  hasVideoError = false;
   private markerSequence = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,6 +71,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
   requestICEServers() {
     if (this.hitStream) {
       this.showLoader = true;
+      this.hasVideoError = false;
       fetch(`${this.videoData?.httpUrl}/whep`, {
         method: 'OPTIONS',
         headers: {
@@ -90,8 +92,6 @@ export class StreamComponent implements OnChanges, OnDestroy {
         };
         this.createOffer();
       }).catch((err) => {
-        this.video.nativeElement.src = '/gif/error.mp4';
-        // this.hitStream = false;
         this.showLoader = false;
         this.onError(err.toString());
       });
@@ -121,6 +121,15 @@ export class StreamComponent implements OnChanges, OnDestroy {
   }
 
   onError(err: any) {
+    this.hasVideoError = true;
+    this.showLoader = false;
+
+    if (this.video?.nativeElement) {
+      this.video.nativeElement.srcObject = null;
+      this.video.nativeElement.removeAttribute('src');
+      this.video.nativeElement.load();
+    }
+
     if (this.restartTimeout === null) {
       this.peerConnection?.close();
 
@@ -140,6 +149,8 @@ export class StreamComponent implements OnChanges, OnDestroy {
   };
 
   restartStream(): void {
+    this.hasVideoError = false;
+
     // Close existing peer connection
     if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
       this.peerConnection.close();
@@ -191,6 +202,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
   };
 
   onTrack(evt: RTCTrackEvent) {
+    this.hasVideoError = false;
     this.video.nativeElement.srcObject = evt.streams[0];
   };
 
@@ -205,6 +217,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
         this.sendOffer(offer);
       }).catch((err) => {
         this.showLoader = false
+        this.onError(err.toString());
       });
   };
 
