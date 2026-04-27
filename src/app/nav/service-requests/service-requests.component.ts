@@ -67,7 +67,13 @@ export class ServiceRequestsComponent {
 
   columnDefs: ColDef[] = [
     { field: 'serviceReqId', headerName: 'Id', filter: false },
-    { field: 'siteName', headerName: 'Site', filter: false },
+    {
+      field: 'siteName',
+      headerName: 'Site',
+      filter: false,
+      minWidth: 220,
+      tooltipField: 'siteName',
+    },
     {
       field: 'createdTime',
       filter: false,
@@ -131,7 +137,16 @@ export class ServiceRequestsComponent {
   totalPages: any = 0;
 
   ngOnInit() {
-    this.gridOptions = gridOptions;
+    this.gridOptions = {
+      ...gridOptions,
+      defaultColDef: {
+        ...gridOptions.defaultColDef,
+        flex: undefined,
+        resizable: true,
+      },
+      onFirstDataRendered: () => this.autoSizeColumns(),
+      onGridSizeChanged: () => this.autoSizeColumns(),
+    };
 
     this.initilizeFilterForm();
     this.filterForm.patchValue({
@@ -153,7 +168,7 @@ export class ServiceRequestsComponent {
   }
 
   gridApi!: GridApi;
-  onGridReady(params: any) {
+  onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
     this.gridApi.showLoadingOverlay();
   }
@@ -170,8 +185,10 @@ export class ServiceRequestsComponent {
         if (res.statusCode === 200) {
           this.rowData = res.serviceRequestList;
           this.totalPages = res.totalPages;
+          this.autoSizeColumns();
         } else {
           this.rowData = [];
+          this.autoSizeColumns();
         }
       });
   }
@@ -323,6 +340,7 @@ export class ServiceRequestsComponent {
         if (res.statusCode === 200) {
           this.rowData = res.serviceRequestList;
           this.totalPages = res.totalPages;
+          this.autoSizeColumns();
         }
       });
   }
@@ -334,6 +352,12 @@ export class ServiceRequestsComponent {
   onFilterChange() {
     // console.log(this.filterForm.value)
     this.getHelpDeskRequests();
+  }
+
+  private autoSizeColumns() {
+    setTimeout(() => {
+      this.gridApi?.autoSizeAllColumns(false);
+    });
   }
 
   changePage(page: number) {

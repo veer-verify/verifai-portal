@@ -86,6 +86,8 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    this.updateGridLayout(this.itemsPerPage);
+
     this.storage_service.currentSite$
       .pipe(
         filter((site) => !!site),
@@ -244,8 +246,14 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const pageStart = (this.currentPage - 1) * this.itemsPerPage;
+    const pageItemCount = this.paginatedList.length;
+    const maxDropIndex =
+      pageItemCount >= this.itemsPerPage
+        ? this.itemsPerPage - 1
+        : pageItemCount;
+    const pageDropIndex = Math.min(Math.max(dropIndex, 0), maxDropIndex);
     const insertIndex = Math.min(
-      pageStart + Math.max(dropIndex, 0),
+      pageStart + pageDropIndex,
       this.tempCamList.length,
     );
 
