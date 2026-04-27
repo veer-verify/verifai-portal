@@ -90,11 +90,16 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        this.storage_service.camData$.pipe(delay(0)).subscribe((res) => {
-          this.camList = res ?? [];
-          this.maximizedCamera = null;
-          this.refreshLiveList();
-        })
+        this.maximizedCamera = null;
+      });
+
+    this.storage_service.camData$
+      .pipe(delay(0), takeUntil(this.destroy$))
+      .subscribe((res) => {
+        this.camList = res ?? [];
+        this.appendCamerasToLive(this.camList);
+        this.maximizedCamera = null;
+        this.refreshLiveList(this.currentPage);
       });
   }
 
@@ -329,6 +334,23 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.trimTrailingEmptySlots();
     this.refreshLiveList(this.currentPage);
+  }
+
+  private appendCamerasToLive(cameras: any[]): void {
+    const uniqueCameras = cameras.filter(
+      (camera: any) =>
+        camera?.cameraId &&
+        !this.tempCamList.some(
+          (item: any) => item?.cameraId === camera.cameraId,
+        ),
+    );
+
+    if (!uniqueCameras.length) {
+      return;
+    }
+
+    this.tempCamList.push(...uniqueCameras);
+    this.trimTrailingEmptySlots();
   }
 
   private addCameraToLive(camera: any, dropIndex: number): void {

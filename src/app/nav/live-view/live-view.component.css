@@ -220,7 +220,8 @@
 
 .grid-item {
   position: relative;
-  border: 1px solid #9c9696;
+  border-right: 1px solid #9c9696;
+  border-bottom: 1px solid #9c9696;
   box-sizing: border-box;
   min-height: 0;
   height: 100%;
@@ -234,7 +235,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-style: dashed;
   border-color: rgb(255 255 255 / 22%);
   background: rgb(255 255 255 / 3%);
 }
@@ -243,9 +243,9 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 14px;
+  padding: 6px 12px;
   border: 1px dashed rgb(237 50 55 / 55%);
-  border-radius: 8px;
+  border-radius: 6px;
   background: rgb(237 50 55 / 8%);
   color: #ffffff;
   pointer-events: none;
@@ -323,8 +323,7 @@
   overflow: hidden;
   background:
     linear-gradient(rgb(255 255 255 / 5%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 5%) 1px, transparent 1px),
-    #050608;
+    linear-gradient(90deg, rgb(255 255 255 / 5%) 1px, transparent 1px), #050608;
   background-size: 20px 20px;
 }
 
