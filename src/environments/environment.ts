@@ -19,5 +19,4 @@ export const environment = {
     incidentsUrl: `${prod_url}/guard_monitoring`,
     eventDataUrl: `${prod_url}/events_data`,
     verifaiInsightsUrl: `${prod_url}/bi_verifai`,
-    playbackUrl: `http://192.168.0.171:9632`
 };

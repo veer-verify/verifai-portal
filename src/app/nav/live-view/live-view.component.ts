@@ -22,7 +22,7 @@ import { CommonModule } from '@angular/common';
 import { GlobalClickDirective } from '../../../utilities/directives/global-click.directive';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
-import { delay, filter, Subject, take, takeUntil } from 'rxjs';
+import { catchError, delay, filter, forkJoin, map, of, Subject, take, takeUntil } from 'rxjs';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { MatSelectModule } from '@angular/material/select';
@@ -374,8 +374,21 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.tempCamList.push(...uniqueCameras);
-    this.trimTrailingEmptySlots();
+    forkJoin(uniqueCameras.map((camera) => this.resolveCameraForLive(camera)))
+      .pipe(take(1))
+      .subscribe((resolvedCameras) => {
+        const playableCameras = resolvedCameras.filter(
+          (camera: any) => camera?.cameraId,
+        );
+
+        if (!playableCameras.length) {
+          return;
+        }
+
+        this.tempCamList.push(...playableCameras);
+        this.trimTrailingEmptySlots();
+        this.refreshLiveList(this.currentPage);
+      });
   }
 
   private addCameraToLive(camera: any, dropIndex: number): void {
@@ -395,15 +408,71 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const insertIndex = this.getLiveInsertIndex(dropIndex);
 
-    if (this.tempCamList[insertIndex]?.cameraId) {
-      this.tempCamList.splice(insertIndex, 0, camera);
-    } else {
-      this.ensureSlotExists(insertIndex);
-      this.tempCamList[insertIndex] = camera;
+    this.resolveCameraForLive(camera)
+      .pipe(take(1))
+      .subscribe((resolvedCamera) => {
+        if (!resolvedCamera?.cameraId) {
+          this.alert_service.error('Failed to load camera stream');
+          return;
+        }
+
+        if (this.tempCamList[insertIndex]?.cameraId) {
+          this.tempCamList.splice(insertIndex, 0, resolvedCamera);
+        } else {
+          this.ensureSlotExists(insertIndex);
+          this.tempCamList[insertIndex] = resolvedCamera;
+        }
+
+        this.trimTrailingEmptySlots();
+        this.refreshLiveList(this.currentPage);
+      });
+  }
+
+  private resolveCameraForLive(camera: any) {
+    if (!camera?.cameraId) {
+      return of(null);
     }
 
-    this.trimTrailingEmptySlots();
-    this.refreshLiveList(this.currentPage);
+    const cameraWithUrl = this.withPlayableUrl(camera);
+
+    if (cameraWithUrl.httpUrl || !cameraWithUrl.siteId) {
+      return of(cameraWithUrl);
+    }
+
+    return this.configSrvc.getCamerasForSiteId({ siteId: cameraWithUrl.siteId }).pipe(
+      take(1),
+      map((res: any) => {
+        const siteCamera = this.normalizeCameraList(res).find(
+          (item: any) => String(item?.cameraId) === String(cameraWithUrl.cameraId),
+        );
+
+        return this.withPlayableUrl({
+          ...(siteCamera || {}),
+          ...cameraWithUrl,
+          httpUrl: cameraWithUrl.httpUrl || siteCamera?.httpUrl,
+          audioUrl: cameraWithUrl.audioUrl || siteCamera?.audioUrl,
+          name: cameraWithUrl.name || siteCamera?.name || siteCamera?.cameraName,
+        });
+      }),
+      catchError(() => of(cameraWithUrl)),
+    );
+  }
+
+  private withPlayableUrl(camera: any): any {
+    if (!camera) {
+      return camera;
+    }
+
+    return {
+      ...camera,
+      httpUrl:
+        camera.httpUrl ||
+        camera.httpURL ||
+        camera.hlsTunnel ||
+        camera.hlsUrl ||
+        camera.liveUrl ||
+        camera.rtspUrl,
+    };
   }
 
   private getLiveInsertIndex(dropIndex: number): number {

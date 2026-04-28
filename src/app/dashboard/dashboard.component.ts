@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.expandedProfileId === profile.id) {
       const profileCameras = (profile.cameras || []);
 
-      // this.storage_service.camData$.next(profileCameras);
+      this.storage_service.camData$.next(profileCameras);
     }
   }
 
