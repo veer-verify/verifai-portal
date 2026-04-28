@@ -46,7 +46,7 @@ export class InsightService {
   }
 
   bi_verifai(payload: any): Observable<any> {
-    const url = `${environment.verifaiInsightsUrl}/bi_verifai/biAnalyticsReport_1_0`;
+    const url = `${environment.verifaiInsightsUrl}/biAnalyticsReport_1_0`;
     let params = new HttpParams().set('SiteId', payload?.siteId);
 
     // FROM DATE
@@ -113,7 +113,7 @@ export class InsightService {
   }
 
   downloadBiVerifaiPdf(payload: any): Observable<any> {
-    const url = `${environment.verifaiInsightsUrl}/bi_verifai/biAnalyticsReportPdf_1_0`;
+    const url = `${environment.verifaiInsightsUrl}/biAnalyticsReportPdf_1_0`;
     let params = new HttpParams().set('SiteId', payload?.siteId);
 
     if (payload?.fromDate) {

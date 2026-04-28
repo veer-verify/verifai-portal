@@ -83,11 +83,19 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     this.playbackList = [];
     this.selectedVideo = null;
 
+    // const payload = {
+    //   requestName: `streams/GISINORINTESTINGG`,
+    //   fromDatetime: this.toPlaybackDateTime(this.selectedDate, this.startTime),
+    //   toDatetime: this.toPlaybackDateTime(this.selectedDate, this.endTime),
+    //   level: 'GISINORINTESTINGGC1',
+    //   expires: 3600,
+    // };
+
     const payload = {
-      requestName: `streams/GISINORINTESTINGG`,
+      requestName: this.selectedCamera?.requestName,
       fromDatetime: this.toPlaybackDateTime(this.selectedDate, this.startTime),
       toDatetime: this.toPlaybackDateTime(this.selectedDate, this.endTime),
-      level: 'GISINORINTESTINGGC1',
+      level: this.selectedCamera?.cameraId,
       expires: 3600,
     };
 

@@ -470,13 +470,35 @@
 .profile-folder-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
-.profile-delete-icon {
-  font-size: 17px;
-  color: #ef3b3b;
+.profile-delete-action {
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgb(237 50 55 / 24%);
+  border-radius: 4px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(237 50 55 / 8%);
+  color: #ed3237;
   cursor: pointer;
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.profile-delete-action .material-symbols-outlined {
+  font-size: 15px;
+}
+
+.profile-delete-action:hover {
+  border-color: #ed3237;
+  background: #ed3237;
+  color: #ffffff;
 }
 
 @keyframes slideIn {

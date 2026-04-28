@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { ConfigService } from '../../services/config.service';
-import { Subject, takeUntil } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-stream',
   standalone: true,
@@ -298,30 +298,27 @@ export class StreamComponent implements OnChanges, OnDestroy {
   }
 
   openBookmarkInput() {
-    const currentSite = this.storage_service.currentSite$.getValue();
-
-    if (!this.videoData || !currentSite) return;
+    if (!this.videoData) return;
 
     if (this.isBookmarked) {
-      let favoriteCameraId = null;
-      for (const profile of this.profiles) {
-        const cam = profile.cameras?.find(
-          (c: any) =>
-            c.cameraId === this.videoData.cameraId &&
-            String(c.siteId) === String(currentSite.siteId)
-        );
-        if (cam && cam.id) {
-          favoriteCameraId = cam.id;
-          break;
-        }
-      }
+      const siteId = this.getCurrentSiteId();
+      const favoriteCameraIds = this.getFavoriteCameraIdsForCurrentCamera(siteId);
 
-      if (favoriteCameraId) {
+      if (favoriteCameraIds.length) {
         const user = this.storage_service.getData('user');
         const modifiedBy = user?.UserId || user?.userId;
 
-        this.config_service.deleteFavoriteCamera(favoriteCameraId, modifiedBy).subscribe({
+        if (!modifiedBy) {
+          return;
+        }
+
+        forkJoin(
+          favoriteCameraIds.map((id) =>
+            this.config_service.deleteFavoriteCamera(id, modifiedBy),
+          ),
+        ).subscribe({
           next: () => {
+            this.removeCameraFromLocalProfiles(siteId);
             this.isBookmarked = false;
             this.storage_service.profilesRefresh$.next(true);
 
@@ -334,12 +331,82 @@ export class StreamComponent implements OnChanges, OnDestroy {
           },
           error: (err: any) => {
             console.error('delete camera failed', err);
+            this.alert_service.error('Delete bookmark failed');
           }
         });
       } else {
+        console.error('Missing favorite camera delete id', this.videoData, this.profiles);
         this.isBookmarked = false;
       }
     }
+  }
+
+  private getFavoriteCameraIdsForCurrentCamera(siteId: any): any[] {
+    const matchingCameras = this.getMatchingFavoriteCameras(siteId);
+    const fallbackCameras = matchingCameras.length
+      ? matchingCameras
+      : this.getMatchingFavoriteCameras(null);
+
+    return Array.from(
+      new Set(
+        fallbackCameras
+          .map((cam: any) => this.getFavoriteCameraId(cam))
+          .filter((id: any) => !!id),
+      ),
+    );
+  }
+
+  private getMatchingFavoriteCameras(siteId: any): any[] {
+    const cameraId = this.videoData?.cameraId;
+
+    return this.profiles.flatMap((profile: any) =>
+      (profile.cameras || []).filter((cam: any) => {
+        const sameCamera = String(this.getCameraId(cam)) === String(cameraId);
+        const sameSite =
+          siteId == null ||
+          this.getCameraSiteId(cam) == null ||
+          String(this.getCameraSiteId(cam)) === String(siteId);
+
+        return sameCamera && sameSite;
+      }),
+    );
+  }
+
+  private removeCameraFromLocalProfiles(siteId: any): void {
+    const cameraId = this.videoData?.cameraId;
+
+    this.profiles = this.profiles.map((profile: any) => ({
+      ...profile,
+      cameras: (profile.cameras || []).filter((cam: any) => {
+        const sameCamera = String(this.getCameraId(cam)) === String(cameraId);
+        const sameSite =
+          siteId == null ||
+          this.getCameraSiteId(cam) == null ||
+          String(this.getCameraSiteId(cam)) === String(siteId);
+
+        return !(sameCamera && sameSite);
+      }),
+    }));
+
+    this.storage_service.profilesData$.next(this.profiles);
+  }
+
+  private getCameraId(camera: any): any {
+    return camera?.cameraId ?? camera?.camera_id;
+  }
+
+  private getCameraSiteId(camera: any): any {
+    return camera?.siteId ?? camera?.site_id;
+  }
+
+  private getFavoriteCameraId(camera: any): any {
+    return camera?.userFolderCameraId ??
+      camera?.favoriteCameraId ??
+      camera?.favouriteCameraId ??
+      camera?.favorite_id ??
+      camera?.favourite_id ??
+      camera?.userFavoriteId ??
+      camera?.userFavoritesId;
   }
 
   requestICEServers() {

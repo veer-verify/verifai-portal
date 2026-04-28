@@ -199,13 +199,15 @@
               </span>
 
               <span class="profile-folder-actions">
-                <span
-                  class="material-symbols-outlined profile-delete-icon"
-                  title="Delete folder"
+                <button
+                  type="button"
+                  class="profile-delete-action"
+                  [title]="'Delete profile ' + (profile?.name || '')"
+                  [attr.aria-label]="'Delete profile ' + (profile?.name || '')"
                   (click)="deleteFavoriteFolder(profile, $event)"
                 >
-                  delete
-                </span>
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
 
                 @if (expandedProfileId === profile?.id) {
                   <span class="material-symbols-outlined site-name"
@@ -293,7 +295,7 @@
                           removeProfileCamera(profile.id, cam);
                           $event.stopPropagation()
                         "
-                        title="Remove"
+                        title="Remove camera from profile"
                       >
                         close
                       </span>

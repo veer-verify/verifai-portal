@@ -131,7 +131,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.expandedProfileId === profile.id) {
       const profileCameras = (profile.cameras || []);
 
-      this.storage_service.camData$.next(profileCameras);
+      // this.storage_service.camData$.next(profileCameras);
     }
   }
 
@@ -143,34 +143,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     if (!profile?.id || !modifiedBy) return;
 
-    this.config_service.deleteFavoriteFolder(profile.id, modifiedBy).subscribe({
-      next: () => {
-        this.profiles = this.profiles.filter((p: any) => p.id !== profile.id);
-        this.storage_service.profilesData$.next(this.profiles);
-        this.storage_service.profilesRefresh$.next(true);
-      },
-      error: (err: any) => {
-        console.error('delete folder failed', err);
-      },
-    });
+    const profileName = profile?.name || profile?.folderName || 'this profile';
+
+    this.alert_service
+      .confirm(`Delete "${profileName}" and all cameras saved in it?`)
+      .then((result: any) => {
+        if (!result?.isConfirmed) {
+          return;
+        }
+
+        this.config_service.deleteFavoriteFolder(profile.id, modifiedBy).subscribe({
+          next: (res: any) => {
+            this.profiles = this.profiles.filter((p: any) => p.id !== profile.id);
+            this.storage_service.profilesData$.next(this.profiles);
+            this.storage_service.profilesRefresh$.next(true);
+            this.alert_service.success(res?.message || 'Profile deleted');
+          },
+          error: (err: any) => {
+            console.error('delete folder failed', err);
+            this.alert_service.error('Delete profile failed');
+          },
+        });
+      });
   }
 
   removeProfileCamera(profileId: any, cam: any): void {
     const user = this.storage_service.getData('user');
     const modifiedBy = user?.UserId || user?.userId;
 
-    if (!cam?.id || !modifiedBy) {
+    if (!cam?.userFolderCameraId || !modifiedBy) {
       console.error('Missing favorite camera delete id', cam);
       return;
     }
 
-    this.config_service.deleteFavoriteCamera(cam.id, modifiedBy).subscribe({
+    this.config_service.deleteFavoriteCamera(cam.userFolderCameraId, modifiedBy).subscribe({
       next: () => {
         this.profiles = this.profiles.map((profile: any) => {
           if (profile.id === profileId) {
             return {
               ...profile,
-              cameras: profile.cameras.filter((c: any) => c.id !== cam.id),
+              cameras: profile.cameras.filter((c: any) => c.id !== cam.userFolderCameraId),
             };
           }
           return profile;

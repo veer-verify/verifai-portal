@@ -9,7 +9,8 @@ export const menuItems = [
     id: 'playback',
     label: 'playback',
     routeLink: 'playback',
-    call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
+    // call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
+    call: () => true,
   },
   {
     id: 'liveAI',
@@ -21,7 +22,8 @@ export const menuItems = [
     id: 'alerts',
     label: 'alerts',
     routeLink: 'alerts',
-    call: (data: any) => (data?.key !== 'F' ? true : false),
+    // call: (data: any) => (data?.key !== 'F' ? true : false),
+    call: () => true,
   },
   {
     id: 'insights',
@@ -37,12 +39,12 @@ export const menuItems = [
   //   routeLink: 'trends',
   //   call: (data: any) => (data?.key !== 'F' ? true : false),
   // },
-  {
-    id: 'timeLapse',
-    label: 'timelapse',
-    routeLink: 'timelapse',
-    call: (data: any) => (data?.key !== 'F' ? true : false),
-  },
+  // {
+  //   id: 'timeLapse',
+  //   label: 'timelapse',
+  //   routeLink: 'timelapse',
+  //   call: (data: any) => (data?.key !== 'F' ? true : false),
+  // },
   // {
   //   id: 'nvr',
   //   label: 'nvr',
