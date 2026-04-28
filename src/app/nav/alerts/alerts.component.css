@@ -1,6 +1,20 @@
+.alerts-page,
+:host {
+  display: block;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.alerts-page {
+  width: 100%;
+}
+
 .tool-bar {
   position: relative;
   z-index: 30;
+  min-width: 0;
+  overflow-x: hidden;
+  padding-inline: 16px;
 }
 
 .filters-row {
@@ -8,22 +22,51 @@
   align-items: center;
   gap: 8px;
   min-width: 0;
+  width: 100%;
 }
 
 .left {
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .tag-select {
   width: 200px;
 }
 
+.left .select-with-icon,
+.left .tag-select,
+.left app-calendar {
+  flex: 0 0 auto;
+}
+
+.left .select-with-icon select {
+  width: 200px;
+  max-width: 200px;
+}
+
+.left app-calendar {
+  display: block;
+  min-width: 0;
+}
+
 .grid-wrap {
   position: relative;
   z-index: 1;
+  height: calc(100dvh - 154px);
+  min-width: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.custom-grid {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
 }
 
 select::-webkit-scrollbar {
@@ -103,4 +146,12 @@ select::-webkit-scrollbar-thumb:hover {
 
 .download-btn:active {
   transform: scale(0.95);
+}
+
+@media (max-width: 1280px) {
+  .left .select-with-icon select,
+  .tag-select {
+    width: 160px;
+    max-width: 160px;
+  }
 }

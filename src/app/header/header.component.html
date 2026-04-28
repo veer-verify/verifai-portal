@@ -53,7 +53,7 @@
       </a>
 
       <!-- request menu -->
-      <mat-menu #requestMenu="matMenu">
+      <mat-menu #requestMenu>
         <button
           routerLink="/dashboard/service-requests"
           routerLinkActive="active"
@@ -95,7 +95,7 @@
       </div>
 
       <!-- profile-menu -->
-      <mat-menu #profileMenu="matMenu">
+      <mat-menu #profileMenu>
         <button
           routerLink="/dashboard/profile"
           routerLinkActive="active"
@@ -217,6 +217,12 @@
             routerLinkActive="side-active"
             (click)="openSideBar()"
             >Profile</a
+          >
+          <a
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            (click)="openSideBar(); logout()"
+            >Logout</a
           >
         </div>
       </aside>

@@ -118,9 +118,9 @@
 </div>
 
 <!-- table -->
-<div style="height: calc(100vh - 154px)">
+<div class="service-grid-wrap">
   <ag-grid-angular
-    style="height: 100%"
+    class="service-grid"
     [columnDefs]="columnDefs"
     [rowData]="rowData"
     [gridOptions]="gridOptions"
@@ -130,7 +130,7 @@
 </div>
 
 <app-pagination
-  [totalPages]="totalPages - 1 == 0 ? 2 : totalPages"
+  [totalPages]="totalPages"
   (changePageNumber)="changePageNumber($event)"
   (changePSize)="changePSize($event)"
 ></app-pagination>

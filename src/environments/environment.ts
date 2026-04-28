@@ -2,8 +2,6 @@ const prod_url: string = 'https://prod.ivisecurity.com';
 const local_url: string = 'http://192.168.0.235:3002';
 
 export const environment = {
-    // configUrl: 'http://usstaging.ivisecurity.com:8943',
-    // incidentUrl: 'http://usstaging.ivisecurity.com:8945',
 
     authUrl: `${prod_url}/userDetails`,
     sitesUrl: `${prod_url}/vipsites`,
@@ -20,4 +18,6 @@ export const environment = {
     helpdeskUrl: `${prod_url}/supportRequests`,
     incidentsUrl: `${prod_url}/guard_monitoring`,
     eventDataUrl: `${prod_url}/events_data`,
+    verifaiInsightsUrl: `${prod_url}/bi_verifai`,
+    playbackUrl: `http://192.168.0.171:9632`
 };

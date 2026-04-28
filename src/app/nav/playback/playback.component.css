@@ -1,12 +1,16 @@
+input {
+  font-size: 12px !important;
+}
+
 input[type="date"] {
   width: 200px;
   border-radius: 6px;
   font-size: 12px !important;
-  padding: 8px 6px !important;
+  padding: 6px 6px !important;
 }
 
 input[type="time"] {
-  color: #ababab !important;
+  /* color: #ababab !important; */
   width: 120px;
   border: none;
   border-radius: 8px;
@@ -20,14 +24,14 @@ input[type="time"] {
 .playback {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 62px);
   min-height: 0;
 }
 
 .sidebar {
-  width: 260px;
+  width: 300px;
   overflow-y: auto;
-  padding: 6px;
+  margin: 6px 2px;
 }
 
 .sidebar-title {
@@ -44,23 +48,23 @@ input[type="time"] {
 
 .camera {
   position: relative;
-  margin-bottom: 10px;
+  margin-bottom: 2px;
   border: 1px solid #e3e6eb;
-  border-radius: 6px;
+  /* border-radius: 6px; */
   overflow: hidden;
   background: #ffffff;
   cursor: pointer;
+  box-shadow: 0 6px 14px rgb(20 28 42 / 8%);
 }
 
 .camera-thumb {
-  height: 92px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   background:
     linear-gradient(rgb(255 255 255 / 6%) 1px, transparent 1px),
-    linear-gradient(90deg, rgb(255 255 255 / 6%) 1px, transparent 1px),
-    #101216;
+    linear-gradient(90deg, rgb(255 255 255 / 6%) 1px, transparent 1px), #101216;
   background-size: 18px 18px;
 }
 
@@ -69,13 +73,46 @@ input[type="time"] {
   font-size: 34px;
 }
 
-.cam-label {
+.camera-thumb img {
   width: 100%;
-  padding: 6px 8px;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.camera-thumb img.dummy-thumb {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  opacity: 0.78;
+}
+
+.cam-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   overflow: hidden;
-  color: #243046;
-  background: #ffffff;
+  background: rgb(0 0 0 / 62%);
+  color: #fff;
+  box-sizing: border-box;
+}
+
+.cam-label .material-symbols-outlined {
+  flex: 0 0 auto;
+  color: #ed3237;
   font-size: 12px;
+}
+
+.cam-label strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -201,32 +238,72 @@ input[type="time"] {
 .video-frame video {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
   display: block;
 }
 
 input[type="range"] {
-  width: 120px;
-  accent-color: #ccc;
+  width: 90px;
+  accent-color: #ed3237;
 }
 
 .controls {
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
 }
 
 .left-controls {
+  min-height: 28px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 10px;
-  background: #e9e9e9;
+  gap: 9px;
+  flex-wrap: nowrap;
+  padding: 4px 8px;
+  background: #eeeeee;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .left-controls .material-symbols-outlined {
-  font-size: 18px;
+  font-size: 17px;
+}
+
+.control-leading-icon {
+  color: #a3a3a3;
+}
+
+.control-icon-btn {
+  width: 18px;
+  height: 20px;
+  border: 0;
+  border-radius: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #b0b0b0;
+  cursor: pointer;
+  padding: 0;
+}
+
+.control-icon-btn .material-symbols-outlined {
+  font-size: 17px;
+}
+
+.control-icon-btn:hover {
+  color: #ed3237;
+}
+
+.control-icon-btn.primary {
+  color: #a8a8a8;
+  background: transparent;
+}
+
+.control-icon-btn.primary:hover {
+  color: #ed3237;
 }
 
 .playback-count {
@@ -236,15 +313,43 @@ input[type="range"] {
 }
 
 .speed-btn {
-  min-width: 44px;
+  height: 20px;
+  min-width: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #a8a8a8;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.speed-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.speed-control .material-symbols-outlined {
+  color: #666666;
+  font-size: 18px;
+}
+
+.speed-control input[type="range"] {
+  width: 96px;
+}
+
+.progress-slider {
+  width: 92px;
 }
 
 .timeline-wrapper {
   position: relative;
   width: 100%;
-  padding: 26px 0 0;
+  height: 67px;
+  padding: 18px 0 0;
   border: 1px solid #d8d8d8;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .tick-bar {
@@ -252,42 +357,43 @@ input[type="range"] {
   display: flex;
   align-items: flex-end;
   width: 100%;
-  height: 40px;
-  padding-bottom: 6px;
+  height: 28px;
+  padding: 0 24px 4px;
   border-bottom: 1px solid #d8d8d8;
   background: #ffffff;
+  box-sizing: border-box;
   overflow: visible;
 }
 
 .tick {
   flex: 1;
   min-width: 0;
-  height: 8px;
+  height: 6px;
   border-right: 1px solid #9d9d9d;
 }
 
 .tick.medium {
-  height: 14px;
+  height: 10px;
   border-right-color: #8f8f8f;
 }
 
 .tick.major {
-  height: 20px;
+  height: 15px;
   border-right: 1px solid #6f6f6f;
 }
 
 .labels {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: -8px;
-  height: 18px;
+  left: 24px;
+  right: 24px;
+  top: -7px;
+  height: 14px;
 }
 
 .label {
   position: absolute;
   transform: translateX(-50%);
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1;
   color: #7c7c7c;
   white-space: nowrap;
@@ -305,19 +411,19 @@ input[type="range"] {
   display: flex;
   align-items: center;
   width: 100%;
-  height: 28px;
+  height: 20px;
   background: #e9e9e9;
   border-top: 1px solid #d0d0d0;
 }
 
 .timeline-nav-btn {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 20px;
   border: 0;
   background: transparent;
   color: #666666;
   padding: 0;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -337,9 +443,9 @@ input[type="range"] {
 
 .timeline-clip {
   position: absolute;
-  top: 7px;
-  width: 8px;
-  height: 14px;
+  top: 5px;
+  width: 7px;
+  height: 10px;
   padding: 0;
   border: 0;
   border-radius: 3px;
@@ -349,7 +455,7 @@ input[type="range"] {
 }
 
 .timeline-clip.active {
-  top: 5px;
-  height: 18px;
+  top: 3px;
+  height: 14px;
   box-shadow: 0 0 0 3px rgb(237 50 55 / 18%);
 }

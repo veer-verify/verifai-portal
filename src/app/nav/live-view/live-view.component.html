@@ -113,23 +113,32 @@
 <section
   class="grid-container"
   [class.maximized-mode]="!!maximizedCamera"
+  [class.drag-active]="isLiveDragActive"
   #gridContainer
   cdkDropList
   id="liveViewDropList"
   [cdkDropListData]="paginatedList"
   [cdkDropListConnectedTo]="['cameraListDropList', 'siteListDropList']"
   [cdkDropListDisabled]="!!maximizedCamera"
+  [cdkDropListSortingDisabled]="true"
   cdkDropListOrientation="mixed"
+  (cdkDropListEntered)="isLiveDragActive = true"
+  (cdkDropListExited)="isLiveDragActive = false"
   (cdkDropListDropped)="dropStream($event)"
 >
-  @for (slot of visibleSlots; track slot.slotIndex) {
+  @for (slot of visibleSlots; track trackLiveSlot($index, slot)) {
     <div
       class="grid-item"
       [ngClass]="itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''"
       [class.empty-grid-slot]="!slot.camera"
+      [class.active-drop-slot]="activeDropSlotIndex === slot.slotIndex"
+      [class.tile-drag-enabled]="slot.camera && isDragEnabled && !maximizedCamera"
       cdkDrag
       [cdkDragData]="{ camera: slot.camera, slotIndex: slot.slotIndex }"
       [cdkDragDisabled]="!slot.camera || !isDragEnabled || !!maximizedCamera"
+      (cdkDragStarted)="onGridDragStarted()"
+      (cdkDragMoved)="onGridDragMoved($event)"
+      (cdkDragEnded)="onGridDragEnded()"
       #gridItem
     >
       @if (slot.camera) {
@@ -159,18 +168,6 @@
           <span class="material-symbols-outlined">close</span>
         </button>
 
-        @if (isDragEnabled) {
-          <button
-            type="button"
-            class="drag-handle"
-            cdkDragHandle
-            title="Drag to reorder"
-            aria-label="Drag stream to reorder"
-            (click)="$event.stopPropagation()"
-          >
-            <span class="material-symbols-outlined">drag_indicator</span>
-          </button>
-        }
         <app-stream
           [videoData]="slot.camera"
           [isChecked]="isChecked"

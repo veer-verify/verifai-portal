@@ -144,6 +144,8 @@
       <button
         class="d-inline-flex align-items-center gap-2"
         (click)="downloadBiReport()"
+        [disabled]="!hasDownloadData"
+        [class.disabled]="!hasDownloadData"
       >
         <img src="icons/download-insights.svg" alt="download" />
         <span>DOWNLOAD</span>

@@ -66,30 +66,53 @@ export class ServiceRequestsComponent {
   ) { }
 
   columnDefs: ColDef[] = [
-    { field: 'serviceReqId', headerName: 'Id', filter: false },
+    {
+      field: 'serviceReqId',
+      headerName: 'Id',
+      filter: false,
+      minWidth: 70,
+      maxWidth: 90,
+    },
     {
       field: 'siteName',
       headerName: 'Site',
       filter: false,
-      minWidth: 220,
+      minWidth: 140,
       tooltipField: 'siteName',
     },
     {
       field: 'createdTime',
       filter: false,
       headerName: 'Date',
+      minWidth: 130,
       cellRenderer: (col: any) =>
         this.datePipe.transform(col.data?.createdTime, 'short'),
     },
-    { field: 'service_cat_name', headerName: 'Category', filter: false },
-    { field: 'service_subcat_name', headerName: 'Sub Category', filter: false },
-    { field: 'priority', filter: false },
-    { field: 'createdByName', headerName: 'Assigned By', filter: false },
+    {
+      field: 'service_cat_name',
+      headerName: 'Category',
+      filter: false,
+      minWidth: 110,
+    },
+    {
+      field: 'service_subcat_name',
+      headerName: 'Sub Category',
+      filter: false,
+      minWidth: 120,
+    },
+    { field: 'priority', filter: false, minWidth: 85 },
+    {
+      field: 'createdByName',
+      headerName: 'Assigned By',
+      filter: false,
+      minWidth: 115,
+    },
     // { field: 'assignedToName', headerName: 'Assigned To' },
     {
       field: 'assignedToName',
       filter: false,
       headerName: 'Assigned To',
+      minWidth: 115,
       cellRenderer: (col: any) => {
         if (col.data?.assignedToName) {
           return `<button class="btn-open text-primary">${col.data.assignedToName}</button>`;
@@ -110,6 +133,8 @@ export class ServiceRequestsComponent {
     {
       field: 'Action',
       filter: false,
+      minWidth: 80,
+      maxWidth: 95,
       cellRenderer: () =>
         `<span class="material-symbols-outlined btn-view me-1" style="vertical-align: middle; opacity: 0.7;">info</span>
       <span class="material-symbols-outlined btn-edit" style="vertical-align: middle; opacity: 0.7;">edit</span>`,
@@ -133,7 +158,7 @@ export class ServiceRequestsComponent {
   closeRequestInfo = false;
   rowData: any = [];
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 25;
   totalPages: any = 0;
 
   ngOnInit() {
@@ -141,7 +166,8 @@ export class ServiceRequestsComponent {
       ...gridOptions,
       defaultColDef: {
         ...gridOptions.defaultColDef,
-        flex: undefined,
+        flex: 1,
+        minWidth: 90,
         resizable: true,
       },
       onFirstDataRendered: () => this.autoSizeColumns(),
@@ -356,7 +382,7 @@ export class ServiceRequestsComponent {
 
   private autoSizeColumns() {
     setTimeout(() => {
-      this.gridApi?.autoSizeAllColumns(false);
+      this.gridApi?.sizeColumnsToFit();
     });
   }
 

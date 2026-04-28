@@ -12,17 +12,22 @@ export class MediaPipe implements PipeTransform {
   // storage_service = inject(StorageService);
 
   async transform(src: string): Promise<any> {
-    if (!src) return;
-    const blob = await firstValueFrom(this.http.get(src, { responseType: 'blob' }));
-    return new Promise((reslove, reject) => {
-      const fileReader = new FileReader();
-      if (blob) {
-        fileReader.onloadend = () => reslove(fileReader.result as string);
-        fileReader.readAsDataURL(blob);
-      } else {
-        reject(new Error('failed to load image'));
-      }
-    });
+    if (!src) return null;
+
+    try {
+      const blob = await firstValueFrom(this.http.get(src, { responseType: 'blob' }));
+      return new Promise((reslove, reject) => {
+        const fileReader = new FileReader();
+        if (blob) {
+          fileReader.onloadend = () => reslove(fileReader.result as string);
+          fileReader.readAsDataURL(blob);
+        } else {
+          reject(new Error('failed to load image'));
+        }
+      });
+    } catch {
+      return null;
+    }
   }
 
 }

@@ -14,13 +14,13 @@
     </div>
 
     <button class="go-btn" (click)="applyRange()" [disabled]="isLoading">
-      {{ isLoading ? "..." : "Go" }}
+      <span class="material-symbols-outlined"> arrow_forward </span>
     </button>
   </div>
 
   <div class="main">
     <div class="sidebar">
-      <div class="sidebar-title">Cameras</div>
+      <!-- <div class="sidebar-title">Cameras</div> -->
       <div
         class="camera"
         *ngFor="let cam of cameraList"
@@ -28,10 +28,15 @@
         [class.active]="cam === selectedCamera"
       >
         <div class="camera-thumb">
-          <span class="material-symbols-outlined">videocam</span>
+          <img
+            [src]="(cam.snapshotUrl | media | async) || dummyCameraImage"
+            alt="Camera thumbnail"
+            (error)="onCameraThumbError($event)"
+          />
         </div>
         <div class="cam-label">
-          {{ cam.name || cam.cameraName || cam.cameraId }}
+          <span class="material-symbols-outlined">videocam</span>
+          <strong>{{ cam.name || cam.cameraName || cam.cameraId }}</strong>
         </div>
       </div>
 
@@ -83,8 +88,17 @@
 
       <div class="controls">
         <div class="left-controls">
-          <span class="material-symbols-outlined">volume_up</span>
-          <button type="button" (click)="changeVolume(-10)">-</button>
+          <span class="material-symbols-outlined control-leading-icon"
+            >volume_up</span
+          >
+          <button
+            type="button"
+            class="control-icon-btn"
+            (click)="changeVolume(-10)"
+            title="Volume down"
+          >
+            <span class="material-symbols-outlined">remove</span>
+          </button>
           <input
             type="range"
             min="0"
@@ -92,26 +106,58 @@
             [ngModel]="volume"
             (ngModelChange)="updateVolume($event)"
           />
-          <button type="button" (click)="changeVolume(10)">+</button>
-
-          <button type="button" (click)="togglePlayback()">
-            {{ isPlaying ? "Pause" : "Play" }}
+          <button
+            type="button"
+            class="control-icon-btn"
+            (click)="changeVolume(10)"
+            title="Volume up"
+          >
+            <span class="material-symbols-outlined">add</span>
           </button>
-          <button type="button" (click)="stopPlayback()">Stop</button>
 
-          <input
+          <button
+            type="button"
+            class="control-icon-btn primary"
+            (click)="togglePlayback()"
+            [title]="isPlaying ? 'Pause' : 'Play'"
+          >
+            <span class="material-symbols-outlined">
+              {{ isPlaying ? "pause" : "play_arrow" }}
+            </span>
+          </button>
+          <button
+            type="button"
+            class="control-icon-btn"
+            (click)="stopPlayback()"
+            title="Stop"
+          >
+            <span class="material-symbols-outlined">stop</span>
+          </button>
+
+          <!-- <input
+            class="progress-slider"
             type="range"
             min="0"
             max="100"
             [ngModel]="progress"
             (ngModelChange)="seekVideo($event)"
-          />
+          /> -->
+          <div class="speed-control">
+            <input
+              type="range"
+              min="0.25"
+              max="4"
+              step="0.25"
+              [ngModel]="playbackRate"
+              (ngModelChange)="updatePlaybackRate($event)"
+            />
+          </div>
           <button type="button" class="speed-btn" (click)="setPlaybackRate()">
             {{ playbackRate }}x
           </button>
-          <span class="playback-count" *ngIf="playbackMeta">
+          <!-- <span class="playback-count" *ngIf="playbackMeta">
             {{ playbackMeta.count || playbackList.length }} clips
-          </span>
+          </span> -->
         </div>
 
         <div class="timeline-wrapper">

@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MediaPipe } from "../../../utilities/pipes/media.pipe";
 
 @Component({
   selector: 'app-playback',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MediaPipe],
   templateUrl: './playback.component.html',
   styleUrl: './playback.component.css',
 })
@@ -69,6 +70,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   volume = 80;
   progress = 0;
   playbackRate = 1;
+  readonly dummyCameraImage = 'icons/camera-grey.svg';
 
   getPlayback() {
     if (!this.currentSite?.siteId || !this.selectedCamera?.cameraId) {
@@ -112,6 +114,12 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     this.selectedVideo = null;
     this.playbackMeta = null;
     this.errorMessage = '';
+  }
+
+  onCameraThumbError(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    image.src = this.dummyCameraImage;
+    image.classList.add('dummy-thumb');
   }
 
   selectVideo(video: any) {
@@ -198,8 +206,11 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   setPlaybackRate(): void {
     const rates = [1, 1.5, 2, 0.5];
     const nextIndex = (rates.indexOf(this.playbackRate) + 1) % rates.length;
-    this.playbackRate = rates[nextIndex];
+    this.updatePlaybackRate(rates[nextIndex]);
+  }
 
+  updatePlaybackRate(value: any): void {
+    this.playbackRate = Number(value);
     const video = this.playbackVideo?.nativeElement;
     if (video) {
       video.playbackRate = this.playbackRate;

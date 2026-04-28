@@ -1,5 +1,6 @@
 import {
   CdkDragDrop,
+  CdkDragMove,
   DragDropModule,
 } from '@angular/cdk/drag-drop';
 import {
@@ -71,6 +72,8 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   isDragEnabled = false;
   isDotEnabled = false;
   maximizedCamera: any | null = null;
+  isLiveDragActive = false;
+  activeDropSlotIndex: number | null = null;
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
@@ -123,6 +126,10 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       camera: this.paginatedList[index] ?? null,
       slotIndex: pageStart + index,
     }));
+  }
+
+  trackLiveSlot(index: number, slot: { camera: any | null; slotIndex: number }): string {
+    return slot.camera?.cameraId ?? `empty-${slot.slotIndex}`;
   }
 
   private updateGridLayout(count: number): void {
@@ -202,6 +209,9 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   dropStream(event: CdkDragDrop<any[]>): void {
+    this.isLiveDragActive = false;
+    this.activeDropSlotIndex = null;
+
     if (this.maximizedCamera) {
       return;
     }
@@ -222,6 +232,21 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.moveCameraSlot(previousSlotIndex, currentSlotIndex);
+  }
+
+  onGridDragStarted(): void {
+    this.isLiveDragActive = true;
+  }
+
+  onGridDragMoved(event: CdkDragMove<any>): void {
+    this.activeDropSlotIndex = this.getDropSlotIndexFromPoint(
+      event.pointerPosition,
+    );
+  }
+
+  onGridDragEnded(): void {
+    this.isLiveDragActive = false;
+    this.activeDropSlotIndex = null;
   }
 
   removeCameraFromLive(camera: any, event: MouseEvent): void {
@@ -392,6 +417,13 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private getDropSlotIndex(event: CdkDragDrop<any[]>): number {
+    return this.getDropSlotIndexFromPoint(event.dropPoint, event.currentIndex);
+  }
+
+  private getDropSlotIndexFromPoint(
+    point: { x: number; y: number } | null | undefined,
+    fallbackIndex = 0,
+  ): number {
     if (!this.gridContainer || this.maximizedCamera) {
       return 0;
     }
@@ -403,14 +435,13 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     const rows =
       selectedGrid?.rows ?? Math.ceil(this.itemsPerPage / Math.max(columns, 1));
     const rect = (this.gridContainer.nativeElement as HTMLElement).getBoundingClientRect();
-    const dropPoint = event.dropPoint;
 
-    if (!dropPoint || !rect.width || !rect.height) {
-      return Math.min(Math.max(event.currentIndex, 0), this.itemsPerPage - 1);
+    if (!point || !rect.width || !rect.height) {
+      return Math.min(Math.max(fallbackIndex, 0), this.itemsPerPage - 1);
     }
 
-    const x = Math.min(Math.max(dropPoint.x - rect.left, 0), rect.width - 1);
-    const y = Math.min(Math.max(dropPoint.y - rect.top, 0), rect.height - 1);
+    const x = Math.min(Math.max(point.x - rect.left, 0), rect.width - 1);
+    const y = Math.min(Math.max(point.y - rect.top, 0), rect.height - 1);
     const column = Math.min(Math.floor(x / (rect.width / columns)), columns - 1);
     const row = Math.min(Math.floor(y / (rect.height / rows)), rows - 1);
 
@@ -432,11 +463,11 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.tempCamList[previousSlotIndex] = null;
-
     if (this.tempCamList[currentSlotIndex]?.cameraId) {
+      this.tempCamList.splice(previousSlotIndex, 1);
       this.tempCamList.splice(currentSlotIndex, 0, camera);
     } else {
+      this.tempCamList[previousSlotIndex] = null;
       this.tempCamList[currentSlotIndex] = camera;
     }
 

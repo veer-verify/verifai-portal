@@ -2,7 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { filter, map, Observable, Subject, takeUntil } from 'rxjs';
-import { CellClickedEvent, ColDef, GridOptions } from 'ag-grid-community';
+import {
+  CellClickedEvent,
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+} from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -38,9 +44,10 @@ export class AlertsComponent {
     private alertService: AlertService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
+  gridApi!: GridApi;
   gridOptions!: GridOptions;
   currentSite: any;
   camerasList: any[] = [];
@@ -60,16 +67,67 @@ export class AlertsComponent {
   actionTag = '';
 
   columnDefs: ColDef[] = [
-    { field: 'name', headerName: 'Camera', filter: false },
-    { field: 'eventDate', filter: false },
-    { field: 'eventFromTime', headerName: 'Start Time', filter: false },
-    { field: 'eventToTime', headerName: 'End Time', filter: false },
-    { field: 'duration', filter: false },
-    { field: 'objectName', headerName: 'Object Identified', filter: false },
-    { field: 'subAlertTag', filter: false },
+    {
+      field: 'name',
+      headerName: 'Camera',
+      filter: false,
+      minWidth: 135,
+      flex: 0,
+      tooltipField: 'name',
+    },
+    {
+      field: 'eventDate',
+      headerName: 'Date',
+      filter: false,
+      minWidth: 115,
+      flex: 0,
+    },
+    {
+      field: 'eventFromTime',
+      headerName: 'Start Time',
+      filter: false,
+      minWidth: 120,
+      flex: 0,
+    },
+    {
+      field: 'eventToTime',
+      headerName: 'End Time',
+      filter: false,
+      minWidth: 115,
+      flex: 0,
+    },
+    {
+      field: 'duration',
+      headerName: 'Duration',
+      filter: false,
+      minWidth: 115,
+      flex: 0,
+    },
+    {
+      field: 'objectName',
+      headerName: 'Object Identified',
+      filter: false,
+      minWidth: 150,
+      flex: 1,
+      wrapHeaderText: true,
+      autoHeaderHeight: true,
+      tooltipField: 'objectName',
+    },
+    {
+      field: 'subAlertTag',
+      headerName: 'Alert Tag',
+      filter: false,
+      minWidth: 130,
+      flex: 1,
+      tooltipField: 'subAlertTag',
+    },
     {
       field: 'clip',
+      headerName: 'Clip',
       filter: false,
+      minWidth: 70,
+      maxWidth: 80,
+      flex: 0,
       cellRenderer: (params: any) => {
         const isDisabled = params.data.files.length === 0;
         const disabledAttr = isDisabled ? 'disabled' : '';
@@ -84,7 +142,16 @@ export class AlertsComponent {
   ];
 
   ngOnInit() {
-    this.gridOptions = gridOptions;
+    this.gridOptions = {
+      ...gridOptions,
+      defaultColDef: {
+        ...gridOptions.defaultColDef,
+        minWidth: 80,
+        resizable: true,
+      },
+      onFirstDataRendered: () => this.fitColumns(),
+      onGridSizeChanged: () => this.fitColumns(),
+    };
 
     this.storage_service.currentSite$
       .pipe(
@@ -105,6 +172,11 @@ export class AlertsComponent {
       .subscribe((res) => {
         this.camerasList = res ?? [];
       });
+  }
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.fitColumns();
   }
 
   getCurrentTime(): string {
@@ -246,8 +318,15 @@ export class AlertsComponent {
             this.rowData = [];
             this.totalPages = 0;
           }
+          this.fitColumns();
         },
       });
+  }
+
+  private fitColumns() {
+    setTimeout(() => {
+      this.gridApi?.sizeColumnsToFit();
+    });
   }
 
   changePageSize(pSize: any) {

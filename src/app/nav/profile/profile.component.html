@@ -1,4 +1,14 @@
 <div class="profile-container">
+  <div class="tool-bar">
+    <div
+      class="hamburger py-1"
+      (click)="storage_service.openSideNav()"
+      *ngIf="!(storage_service.showSideNav$ | async)"
+    >
+      &#9776;
+    </div>
+  </div>
+
   <div class="upper-container">
     <a (click)="update()" style="position: relative">
       <img
@@ -64,6 +74,10 @@
               <label>Managed Users</label>
               <h5>{{ subUsers.length }}</h5>
             </div>
+            <div class="role">
+              <label>Role</label>
+              <h5>{{ userData?.roleList[0]?.roleName || "-" }}</h5>
+            </div>
             <div class="user-status">
               <label>Status</label>
               <h5 [style.color]="userData?.active == 'T' ? 'green' : ''">
@@ -91,17 +105,17 @@
 
   <div class="lower-container">
     <div class="low-heading">
-      <strong>Total Users - {{ subUsers.length }}</strong>
+      <strong>USERS ({{ subUsers.length }})</strong>
       <div class="user-toggles">
         <div class="self">
-          <strong>Created by self</strong>
+          <span>Created by Self</span>
           <label class="switch">
             <input type="checkbox" />
             <span class="slider"> </span>
           </label>
         </div>
         <div class="others">
-          <strong>Created by others</strong>
+          <span>Created by Other</span>
           <label class="switch">
             <input type="checkbox" />
             <span class="slider"> </span>
@@ -130,7 +144,7 @@
       </div>
     </div>
 
-    <hr />
+    <hr style="margin: 8px" />
 
     <div [ngClass]="changeList ? 'listUsers' : 'gridUsers'">
       @for (usr of subUsers; track usr) {
@@ -144,32 +158,16 @@
           <img
             [src]="usr?.profileImageUrl | media | async"
             alt=""
-            width="70px"
-            height="70px"
             onerror="this.src = 'icons/def_profile_image.png'"
             class="pr-image"
-            [ngStyle]="
-              changeList
-                ? { height: '30px', width: '30px', 'margin-bottom': '0' }
-                : { height: '60px', width: '60px' }
-            "
           />
           <span class="user-name">{{ usr?.User_Name | uppercase }}</span>
           <p class="role-name">{{ usr.roleName }}</p>
-          <button
-            class="assign-btn"
-            [ngStyle]="changeList ? { width: '200px' } : { width: '100px' }"
-            (click)="siteActions(usr.userId)"
-          >
+          <button class="assign-btn" (click)="siteActions(usr.userId)">
             Assign Sites
           </button>
 
-          <div *ngIf="changeList" style="width: 100px"></div>
-
-          <div
-            class="extra-btns"
-            [ngStyle]="changeList ? { right: '20px' } : { bottom: '4px' }"
-          >
+          <div class="extra-btns">
             <span
               class="material-symbols-outlined text-danger"
               (click)="deleteUser(usr)"
@@ -256,7 +254,12 @@
         }
       </div>
     } @else {
-      <p class="text-center" style="height: 30vh">No Sites!</p>
+      <p
+        class="d-flex align-items-center justify-content-center"
+        style="height: 30vh"
+      >
+        {{ filter === 2 ? "No Sites Assigned" : "All Sites Assigned" }}
+      </p>
     }
 
     <div class="d-flex justify-content-center my-2">

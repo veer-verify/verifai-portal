@@ -2,8 +2,6 @@ const dev_url: string = 'https://usstaging.ivisecurity.com';
 const local_url: string = 'http://localhost';
 
 export const environment = {
-    // configUrl: 'http://usstaging.ivisecurity.com:8943',
-    // incidentUrl: 'http://usstaging.ivisecurity.com:8945',
 
     authUrl: `${dev_url}/userDetails`,
     sitesUrl: `${dev_url}/vipsites`,
@@ -21,11 +19,11 @@ export const environment = {
     incidentsUrl: `${dev_url}/guard_monitoring`,
     eventDataUrl: `${dev_url}/events_data`,
     verifaiInsightsUrl: `${dev_url}/bi_verifai`,
+    playbackUrl: `http://192.168.0.171:9632`,
     userDetailsUrl: `${dev_url}/userDetails`,
 
 
-
-    //     authUrl: `${local_url}:3002/userDetails`,
+    // authUrl: `${local_url}:3002/userDetails`,
     // sitesUrl: `${local_url}:3004/vipsites`,
     // metadataUrl: `${local_url}:8844/metadata`,
     // commonDownUrl: `${local_url}:80/common`,

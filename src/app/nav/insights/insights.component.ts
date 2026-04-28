@@ -215,6 +215,14 @@ export class InsightsComponent implements OnInit, OnDestroy {
   }
 
   alertCounts: any = {};
+  get hasDownloadData(): boolean {
+    if (this.selectedOption === 'monitoring') {
+      return Object.keys(this.alertCounts ?? {}).length > 0;
+    }
+
+    return (this.analyticsData ?? []).length > 0;
+  }
+
   getAlertCounts(): void {
     if (!this.currentSite?.siteId) return;
 
@@ -250,6 +258,11 @@ export class InsightsComponent implements OnInit, OnDestroy {
   }
 
   downloadBiReport() {
+    if (!this.hasDownloadData) {
+      this.storage_service.info$.next('no data to download!');
+      return;
+    }
+
     if (!this.currentSite?.siteId) {
       this.storage_service.info$.next('site not found!');
       return;
