@@ -243,7 +243,7 @@ input[type="time"] {
 }
 
 input[type="range"] {
-  width: 120px;
+  width: 90px;
   accent-color: #ed3237;
 }
 
@@ -255,33 +255,38 @@ input[type="range"] {
 }
 
 .left-controls {
-  min-height: 36px;
+  min-height: 28px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   flex-wrap: nowrap;
-  padding: 5px 10px;
-  background: #e9e9e9;
+  padding: 4px 8px;
+  background: #eeeeee;
   box-sizing: border-box;
   overflow-x: auto;
   overflow-y: hidden;
 }
 
 .left-controls .material-symbols-outlined {
-  font-size: 18px;
+  font-size: 17px;
+}
+
+.control-leading-icon {
+  color: #a3a3a3;
 }
 
 .control-icon-btn {
-  width: 26px;
-  height: 26px;
-  border: 1px solid #cfd4dd;
-  border-radius: 6px;
+  width: 18px;
+  height: 20px;
+  border: 0;
+  border-radius: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
-  color: #243046;
+  background: transparent;
+  color: #b0b0b0;
   cursor: pointer;
+  padding: 0;
 }
 
 .control-icon-btn .material-symbols-outlined {
@@ -289,18 +294,16 @@ input[type="range"] {
 }
 
 .control-icon-btn:hover {
-  border-color: #ed3237;
   color: #ed3237;
 }
 
 .control-icon-btn.primary {
-  border-color: #ed3237;
-  background: #ed3237;
-  color: #ffffff;
+  color: #a8a8a8;
+  background: transparent;
 }
 
 .control-icon-btn.primary:hover {
-  color: #ffffff;
+  color: #ed3237;
 }
 
 .playback-count {
@@ -310,10 +313,14 @@ input[type="range"] {
 }
 
 .speed-btn {
-  height: 26px;
-  min-width: 44px;
-  padding: 0 8px;
-  font-size: 14px;
+  height: 20px;
+  min-width: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #a8a8a8;
+  font-size: 11px;
+  cursor: pointer;
 }
 
 .speed-control {
@@ -329,6 +336,10 @@ input[type="range"] {
 
 .speed-control input[type="range"] {
   width: 96px;
+}
+
+.progress-slider {
+  width: 92px;
 }
 
 .timeline-wrapper {
