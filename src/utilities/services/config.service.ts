@@ -13,7 +13,7 @@ export class ConfigService {
     private http: HttpClient,
     private storageSrvc: StorageService,
     private date: DatePipe,
-  ) {}
+  ) { }
 
   public dataFromSubheader = new BehaviorSubject<any>([]);
   public site_add_sub = new BehaviorSubject<any>({});
@@ -86,7 +86,7 @@ export class ConfigService {
   }
 
   getUserFavorites(userId: any): Observable<any> {
-    let url = `${environment.userDetailsUrl}/getUserFavorites_1_0`;
+    let url = `${environment.authUrl}/getUserFavorites_1_0`;
 
     const params = new HttpParams().set('userId', String(userId));
 
@@ -94,7 +94,7 @@ export class ConfigService {
   }
 
   addUserFavorite(payload: any): Observable<any> {
-    const url = `${environment.userDetailsUrl}/addUserFavorites_1_0`;
+    const url = `${environment.authUrl}/addUserFavorites_1_0`;
 
     const params = new HttpParams()
       .set('siteId', String(payload.siteId))
@@ -107,23 +107,23 @@ export class ConfigService {
     return this.http.post(url, null, { params });
   }
   deleteFavoriteCamera(id: any, modifiedBy: any): Observable<any> {
-  const url = `${environment.userDetailsUrl}/deleteFavoriteCamera_1_0`;
+    const url = `${environment.authUrl}/deleteFavoriteCamera_1_0`;
 
-  const params = new HttpParams()
-    .set('id', String(id))
-    .set('modifiedBy', String(modifiedBy));
+    const params = new HttpParams()
+      .set('id', String(id))
+      .set('modifiedBy', String(modifiedBy));
 
-  return this.http.delete(url, { params });
-}
+    return this.http.delete(url, { params });
+  }
 
-deleteFavoriteFolder(folderId: any, modifiedBy: any): Observable<any> {
-  const url = `${environment.userDetailsUrl}/deleteFavoriteFolder_1_0`;
+  deleteFavoriteFolder(folderId: any, modifiedBy: any): Observable<any> {
+    const url = `${environment.authUrl}/deleteFavoriteFolder_1_0`;
 
-  const params = new HttpParams()
-    .set('folderId', String(folderId))
-    .set('modifiedBy', String(modifiedBy));
+    const params = new HttpParams()
+      .set('folderId', String(folderId))
+      .set('modifiedBy', String(modifiedBy));
 
-  return this.http.delete(url, { params });
-}
+    return this.http.delete(url, { params });
+  }
 
 }

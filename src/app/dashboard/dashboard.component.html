@@ -2,251 +2,322 @@
 
 <app-header></app-header>
 
-<main class="main" [style.marginLeft]="(storage_service.showSideNav$ | async) ? '300px' : '0'">
+<main
+  class="main"
+  [style.marginLeft]="(storage_service.showSideNav$ | async) ? '300px' : '0'"
+>
   <router-outlet></router-outlet>
 </main>
 
 @if (storage_service.showSideNav$ | async) {
-<div class="side-sites">
-  <div class="d-flex align-items-center gap-2 p-1" style="background-color: #f8f9fa">
-    <div class="hamburger" (click)="close()">☰</div>
-    <input type="search" placeholder="Search Sites" [(ngModel)]="searchSite" class="site-search" />
-  </div>
+  <div class="side-sites">
+    <div
+      class="d-flex align-items-center gap-2 p-1"
+      style="background-color: #f8f9fa"
+    >
+      <div class="hamburger" (click)="close()">☰</div>
+      <input
+        type="search"
+        placeholder="Search Sites"
+        [(ngModel)]="searchSite"
+        class="site-search"
+      />
+    </div>
 
-  <div class="header">
-    SITES ({{ sitesList?.length }})
-    <a class="close" (click)="close()">
-      <span class="material-symbols-outlined">arrow_left_alt</span>
-    </a>
-  </div>
+    <div class="header">
+      SITES ({{ sitesList?.length }})
+      <a class="close" (click)="close()">
+        <span class="material-symbols-outlined">arrow_left_alt</span>
+      </a>
+    </div>
 
-  <div class="sites-content" cdkDropList id="siteListDropList" [cdkDropListData]="sitesList"
-    [cdkDropListConnectedTo]="['liveViewDropList']" [cdkDropListSortingDisabled]="true">
-    @for (site of sitesList | search: searchSite; track site?.siteId) {
-    <div class="site-list-item" #siteItem [attr.data-site-id]="site?.siteId">
-      <p cdkDrag [cdkDragData]="getSiteDragData(site)" (click)="updateSite(site)" [style.color]="
+    <div
+      class="sites-content"
+      cdkDropList
+      id="siteListDropList"
+      [cdkDropListData]="sitesList"
+      [cdkDropListConnectedTo]="['liveViewDropList']"
+      [cdkDropListSortingDisabled]="true"
+    >
+      @for (site of sitesList | search: searchSite; track site?.siteId) {
+        <div
+          class="site-list-item"
+          #siteItem
+          [attr.data-site-id]="site?.siteId"
+        >
+          <p
+            cdkDrag
+            [cdkDragData]="getSiteDragData(site)"
+            (click)="updateSite(site)"
+            [style.color]="
               site?.siteId === (storage_service.currentSite$ | async)?.siteId
                 ? 'red'
                 : '#000000'
-            ">
-        <ng-template cdkDragPreview>
-          <div class="site-drag-preview-card">
-            <span class="material-symbols-outlined">domain</span>
-            <div class="site-preview-meta">
-              <span class="site-preview-label">
-                {{ site?.siteName || site?.name || site?.siteId }}
-              </span>
-              <span class="site-preview-status">Drag all cameras</span>
-            </div>
-          </div>
-        </ng-template>
+            "
+          >
+            <ng-template cdkDragPreview>
+              <div class="site-drag-preview-card">
+                <span class="material-symbols-outlined">domain</span>
+                <div class="site-preview-meta">
+                  <span class="site-preview-label">
+                    {{ site?.siteName || site?.name || site?.siteId }}
+                  </span>
+                  <span class="site-preview-status">Drag all cameras</span>
+                </div>
+              </div>
+            </ng-template>
 
-        <span class="site-name" [title]="site?.siteName">
-          {{ site?.siteName }}
-        </span>
+            <span class="site-name" [title]="site?.siteName">
+              {{ site?.siteName }}
+            </span>
 
-        @if (
-        site?.siteId === (storage_service.currentSite$ | async)?.siteId
-        ) {
-        <span class="material-symbols-outlined site-name">remove</span>
-        } @else {
-        <span class="material-symbols-outlined site-name">add</span>
-        }
-      </p>
+            @if (
+              site?.siteId === (storage_service.currentSite$ | async)?.siteId
+            ) {
+              <span class="material-symbols-outlined site-name">remove</span>
+            } @else {
+              <span class="material-symbols-outlined site-name">add</span>
+            }
+          </p>
 
-      @if (
-      site?.siteId === (storage_service.currentSite$ | async)?.siteId &&
-      !camLoader
-      ) {
-      <div class="camera-drag-list" cdkDropList id="cameraListDropList" [cdkDropListData]="camList"
-        [cdkDropListConnectedTo]="['liveViewDropList']" [cdkDropListSortingDisabled]="true">
-        @for (cam of camList; track cam?.cameraId) {
-        <div class="cam-name" cdkDrag [cdkDragData]="cam">
-          <ng-template cdkDragPreview>
-            <div class="camera-drag-preview-card">
-              <div class="camera-preview-frame">
-                <img [src]="
+          @if (
+            site?.siteId === (storage_service.currentSite$ | async)?.siteId &&
+            !camLoader
+          ) {
+            <div
+              class="camera-drag-list"
+              cdkDropList
+              id="cameraListDropList"
+              [cdkDropListData]="camList"
+              [cdkDropListConnectedTo]="['liveViewDropList']"
+              [cdkDropListSortingDisabled]="true"
+            >
+              @for (cam of camList; track cam?.cameraId) {
+                <div class="cam-name" cdkDrag [cdkDragData]="cam">
+                  <ng-template cdkDragPreview>
+                    <div class="camera-drag-preview-card">
+                      <div class="camera-preview-frame">
+                        <img
+                          [src]="
                             cam?.camMonitor === 'T'
                               ? 'icons/camera-green.svg'
                               : 'icons/camera-grey.svg'
-                          " alt="" />
-                <span class="camera-preview-lens"></span>
-              </div>
+                          "
+                          alt=""
+                        />
+                        <span class="camera-preview-lens"></span>
+                      </div>
 
-              <div class="camera-preview-meta">
-                <span class="camera-preview-label">
-                  {{ cam?.name || cam?.cameraName || cam?.cameraId }}
-                </span>
-                <span class="camera-preview-status">
-                  {{
-                  cam?.camMonitor === "T"
-                  ? "Monitoring camera"
-                  : "Non-Monitoring camera"
-                  }}
-                </span>
-              </div>
-            </div>
-          </ng-template>
+                      <div class="camera-preview-meta">
+                        <span class="camera-preview-label">
+                          {{ cam?.name || cam?.cameraName || cam?.cameraId }}
+                        </span>
+                        <span class="camera-preview-status">
+                          {{
+                            cam?.camMonitor === "T"
+                              ? "Monitoring camera"
+                              : "Non-Monitoring camera"
+                          }}
+                        </span>
+                      </div>
+                    </div>
+                  </ng-template>
 
-          <div class="cam-title-wrap">
-            <img [src]="
+                  <div class="cam-title-wrap">
+                    <img
+                      [src]="
                         cam?.camMonitor === 'T'
                           ? 'icons/camera-green.svg'
                           : 'icons/camera-grey.svg'
-                      " />
-            <span>{{ cam?.name }}</span>
-          </div>
+                      "
+                    />
+                    <span>{{ cam?.name }}</span>
+                  </div>
 
-          <div class="cam-status-wrap">
-            <span class="material-symbols-outlined siren-status-icon" [class.has-audio]="!!cam?.audioUrl"
-              [class.disabled]="!cam?.audioUrl" [attr.aria-disabled]="!cam?.audioUrl" [title]="
+                  <div class="cam-status-wrap">
+                    <span
+                      class="material-symbols-outlined siren-status-icon"
+                      [class.has-audio]="!!cam?.audioUrl"
+                      [class.disabled]="!cam?.audioUrl"
+                      [attr.aria-disabled]="!cam?.audioUrl"
+                      [title]="
                         cam?.audioUrl ? 'Siren available' : 'Siren unavailable'
-                      " (click)="playSiren1(cam, $event)">
-              siren
-            </span>
+                      "
+                      (click)="playSiren1(cam, $event)"
+                    >
+                      siren
+                    </span>
 
-            <span class="material-symbols-outlined live-status-icon" [class.in-live]="isCameraInLive(cam?.cameraId)"
-              [title]="
+                    <span
+                      class="material-symbols-outlined live-status-icon"
+                      [class.in-live]="isCameraInLive(cam?.cameraId)"
+                      [title]="
                         isCameraInLive(cam?.cameraId)
                           ? 'Added to live view'
                           : 'Not in live view'
-                      ">
-              {{
-              isCameraInLive(cam?.cameraId)
-              ? "videocam"
-              : "add_to_queue"
-              }}
-            </span>
-          </div>
+                      "
+                    >
+                      {{
+                        isCameraInLive(cam?.cameraId)
+                          ? "videocam"
+                          : "add_to_queue"
+                      }}
+                    </span>
+                  </div>
+                </div>
+              } @empty {
+                <div class="sidebar-empty-state compact">
+                  <span class="material-symbols-outlined">videocam_off</span>
+                  <p>No cameras available</p>
+                </div>
+              }
+            </div>
+          } @else if (
+            camLoader &&
+            site?.siteId === (storage_service.currentSite$ | async)?.siteId
+          ) {
+            <img src="gif/cam-loader.gif" height="100px" width="100%" />
+          }
         </div>
-        } @empty {
-        <div class="sidebar-empty-state compact">
-          <span class="material-symbols-outlined">videocam_off</span>
-          <p>No cameras available</p>
+      } @empty {
+        <div class="sidebar-empty-state">
+          <span class="material-symbols-outlined">domain_disabled</span>
+          <p>No sites available</p>
         </div>
-        }
-      </div>
-      } @else if (
-      camLoader &&
-      site?.siteId === (storage_service.currentSite$ | async)?.siteId
-      ) {
-      <img src="gif/cam-loader.gif" height="100px" width="100%" />
       }
     </div>
-    } @empty {
-    <div class="sidebar-empty-state">
-      <span class="material-symbols-outlined">domain_disabled</span>
-      <p>No sites available</p>
-    </div>
-    }
-  </div>
 
-  <div class="header">
-    PROFILES ({{ profiles?.length }})
-    <!-- <a class="close" (click)="close()">
-      <span class="material-symbols-outlined">arrow_left_alt</span>
-    </a> -->
-  </div>
+    <div class="header">PROFILES ({{ profiles.length }})</div>
 
-  <div class="profiles-content">
-    @if (profiles?.length) {
-    @for (profile of profiles; track profile?.id) {
-    <div class="site-list-item">
-      <p (click)="toggleProfile(profile)">
-        <span class="site-name" [title]="profile?.name">
-          {{ profile?.name }}
-        </span>
+    <div class="profiles-content">
+      @if (profiles.length) {
+        @for (profile of profiles; track profile?.id) {
+          <div class="site-list-item">
+            <p (click)="toggleProfile(profile)">
+              <span class="site-name" [title]="profile?.name">
+                {{ profile?.name }}
+              </span>
 
-        <span class="profile-folder-actions">
-          <span class="material-symbols-outlined profile-delete-icon" title="Delete folder"
-            (click)="deleteFavoriteFolder(profile, $event)">
-            delete
-          </span>
-
-          @if (expandedProfileId === profile?.id) {
-          <span class="material-symbols-outlined site-name">remove</span>
-          } @else {
-          <span class="material-symbols-outlined site-name">add</span>
-          }
-        </span>
-      </p>
-
-      @if (expandedProfileId === profile?.id) {
-      <div class="camera-drag-list" cdkDropList [cdkDropListData]="profile?.cameras"
-        [cdkDropListConnectedTo]="['liveViewDropList']" [cdkDropListSortingDisabled]="true">
-        @for (
-        cam of profile?.cameras;
-        track cam?.cameraId + "_" + cam?.siteId
-        ) {
-        <div class="cam-name profile-cam-row" cdkDrag [cdkDragData]="cam">
-          <ng-template cdkDragPreview>
-            <div class="camera-drag-preview-card">
-              <div class="camera-preview-frame">
-                <span class="material-symbols-outlined profile-bookmark-icon">
-                  bookmark
+              <span class="profile-folder-actions">
+                <span
+                  class="material-symbols-outlined profile-delete-icon"
+                  title="Delete folder"
+                  (click)="deleteFavoriteFolder(profile, $event)"
+                >
+                  delete
                 </span>
-              </div>
 
-              <div class="camera-preview-meta">
-                <span class="camera-preview-label">
-                  {{ cam?.name || cam?.cameraName || cam?.cameraId }}
-                </span>
-                <span class="camera-preview-status">
-                  Favorite camera
-                </span>
-              </div>
-            </div>
-          </ng-template>
+                @if (expandedProfileId === profile?.id) {
+                  <span class="material-symbols-outlined site-name"
+                    >remove</span
+                  >
+                } @else {
+                  <span class="material-symbols-outlined site-name">add</span>
+                }
+              </span>
+            </p>
 
-          <div class="profile-cam-left">
-            <span class="material-symbols-outlined profile-bookmark-icon" style="color: #f5a623">
-              bookmark
-            </span>
+            @if (expandedProfileId === profile?.id) {
+              <div
+                class="camera-drag-list"
+                cdkDropList
+                [cdkDropListData]="profile?.cameras"
+                [cdkDropListConnectedTo]="['liveViewDropList']"
+                [cdkDropListSortingDisabled]="true"
+              >
+                @for (
+                  cam of profile?.cameras;
+                  track cam?.cameraId + "_" + cam?.siteId
+                ) {
+                  <div
+                    class="cam-name profile-cam-row"
+                    cdkDrag
+                    [cdkDragData]="cam"
+                  >
+                    <ng-template cdkDragPreview>
+                      <div class="camera-drag-preview-card">
+                        <div class="camera-preview-frame">
+                          <span
+                            class="material-symbols-outlined profile-bookmark-icon"
+                          >
+                            bookmark
+                          </span>
+                        </div>
 
-            <span [title]="cam?.name || cam?.cameraName || cam?.cameraId">
-              {{ cam?.name || cam?.cameraName || cam?.cameraId }}
-            </span>
-          </div>
+                        <div class="camera-preview-meta">
+                          <span class="camera-preview-label">
+                            {{ cam?.name || cam?.cameraName || cam?.cameraId }}
+                          </span>
+                          <span class="camera-preview-status">
+                            Favorite camera
+                          </span>
+                        </div>
+                      </div>
+                    </ng-template>
 
-          <div class="profile-cam-right">
-            <span class="material-symbols-outlined live-status-icon" [class.in-live]="isCameraInLive(cam?.cameraId)"
-              [title]="
+                    <div class="profile-cam-left">
+                      <span
+                        class="material-symbols-outlined profile-bookmark-icon"
+                        style="color: #f5a623"
+                      >
+                        bookmark
+                      </span>
+
+                      <span
+                        [title]="cam?.name || cam?.cameraName || cam?.cameraId"
+                      >
+                        {{ cam?.name || cam?.cameraName || cam?.cameraId }}
+                      </span>
+                    </div>
+
+                    <div class="profile-cam-right">
+                      <span
+                        class="material-symbols-outlined live-status-icon"
+                        [class.in-live]="isCameraInLive(cam?.cameraId)"
+                        [title]="
                           isCameraInLive(cam?.cameraId)
                             ? 'Added to live view'
                             : 'Not in live view'
-                        ">
-              {{
-              isCameraInLive(cam?.cameraId)
-              ? "videocam"
-              : "add_to_queue"
-              }}
-            </span>
+                        "
+                      >
+                        {{
+                          isCameraInLive(cam?.cameraId)
+                            ? "videocam"
+                            : "add_to_queue"
+                        }}
+                      </span>
 
-            <span class="material-symbols-outlined profile-remove-icon" (click)="
+                      <span
+                        class="material-symbols-outlined profile-remove-icon"
+                        (click)="
                           removeProfileCamera(profile.id, cam);
                           $event.stopPropagation()
-                        " title="Remove">
-              close
-            </span>
+                        "
+                        title="Remove"
+                      >
+                        close
+                      </span>
+                    </div>
+                  </div>
+                } @empty {
+                  <div class="sidebar-empty-state compact">
+                    <span class="material-symbols-outlined"
+                      >bookmark_remove</span
+                    >
+                    <p>No cameras in this profile</p>
+                  </div>
+                }
+              </div>
+            }
           </div>
-        </div>
-        } @empty {
-        <div class="sidebar-empty-state compact">
-          <span class="material-symbols-outlined">bookmark_remove</span>
-          <p>No cameras in this profile</p>
-        </div>
         }
-      </div>
+      } @else {
+        <div class="site-list-item no-profile-row">
+          <p>
+            <span class="site-name">No saved profiles</span>
+          </p>
+        </div>
       }
     </div>
-    }
-    } @else {
-    <div class="site-list-item no-profile-row">
-      <p>
-        <span class="site-name">No saved profiles</span>
-      </p>
-    </div>
-    }
   </div>
-</div>
 }

@@ -5,7 +5,8 @@
   justify-content: space-between;
   flex-wrap: nowrap;
   gap: 12px;
-  background: transparent linear-gradient(180deg, #ffffff 0%, #eeeeee 100%) 0% 0% no-repeat padding-box;
+  background: transparent linear-gradient(180deg, #ffffff 0%, #eeeeee 100%) 0%
+    0% no-repeat padding-box;
   min-height: 40px;
   padding: 0 40px;
   overflow-x: auto;
@@ -135,7 +136,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, minmax(0, 1fr));
-  /* background:
+  background:
     linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
     linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px), #050608;
   /* background-size: 44px 44px; */
@@ -328,7 +329,10 @@
 
 ::ng-deep .grid-item.tile-drag-enabled.cdk-drag-dragging app-stream,
 ::ng-deep .grid-item.tile-drag-enabled.cdk-drag-dragging app-stream *,
-::ng-deep .grid-item.tile-drag-enabled.cdk-drag-dragging app-stream .video-container {
+::ng-deep
+  .grid-item.tile-drag-enabled.cdk-drag-dragging
+  app-stream
+  .video-container {
   cursor: grabbing !important;
 }
 
@@ -446,7 +450,7 @@
   background: rgb(255 255 255 / 4%);
 }
 
-.grid-container>.cdk-drag-placeholder {
+.grid-container > .cdk-drag-placeholder {
   position: absolute !important;
   width: 0 !important;
   height: 0 !important;
@@ -625,7 +629,6 @@
 }
 
 @media (max-width: 1280px) {
-
   .hover-bar,
   .pagination-controls a {
     font-size: 11px;

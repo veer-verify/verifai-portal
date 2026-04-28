@@ -20,7 +20,6 @@ export const environment = {
     eventDataUrl: `${dev_url}/events_data`,
     verifaiInsightsUrl: `${dev_url}/bi_verifai`,
     playbackUrl: `http://192.168.0.171:9632`,
-    userDetailsUrl: `${dev_url}/userDetails`,
 
 
     // authUrl: `${local_url}:3002/userDetails`,
