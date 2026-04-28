@@ -46,7 +46,7 @@
           (rangeApply)="onRangeApply($event)"
         ></app-calendar>
 
-        <div class="ec-download">
+        <div class="ec-download" *ngIf="rowData.length">
           <button
             type="button"
             class="download-btn"

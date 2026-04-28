@@ -130,7 +130,7 @@
 </div>
 
 <app-pagination
-  [totalPages]="totalPages - 1 == 0 ? 2 : totalPages"
+  [totalPages]="totalPages"
   (changePageNumber)="changePageNumber($event)"
   (changePSize)="changePSize($event)"
 ></app-pagination>

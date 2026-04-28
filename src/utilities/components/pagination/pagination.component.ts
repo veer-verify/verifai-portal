@@ -18,7 +18,6 @@ export class PaginationComponent {
   @Output() changePSize = new EventEmitter<void>();
 
   ngOnInit() {
-    // if (this.totalPages === 0) this.totalPages = 1;
   }
 
   changePageSize(pSize: any) {

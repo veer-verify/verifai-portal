@@ -133,7 +133,7 @@ export class ServiceRequestsComponent {
   closeRequestInfo = false;
   rowData: any = [];
   pageNumber = 1;
-  pageSize = 10;
+  pageSize = 25;
   totalPages: any = 0;
 
   ngOnInit() {

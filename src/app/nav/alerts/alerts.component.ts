@@ -38,7 +38,7 @@ export class AlertsComponent {
     private alertService: AlertService,
     private incident_service: IncidentService,
     private dialog: MatDialog,
-  ) {}
+  ) { }
 
   private destroy$ = new Subject<void>();
   gridOptions!: GridOptions;
@@ -60,16 +60,72 @@ export class AlertsComponent {
   actionTag = '';
 
   columnDefs: ColDef[] = [
-    { field: 'name', headerName: 'Camera', filter: false },
-    { field: 'eventDate', filter: false },
-    { field: 'eventFromTime', headerName: 'Start Time', filter: false },
-    { field: 'eventToTime', headerName: 'End Time', filter: false },
-    { field: 'duration', filter: false },
-    { field: 'objectName', headerName: 'Object Identified', filter: false },
-    { field: 'subAlertTag', filter: false },
+    {
+      field: 'name',
+      headerName: 'Camera',
+      filter: false,
+      width: 180,
+      minWidth: 150,
+      flex: 0,
+      tooltipField: 'name',
+    },
+    {
+      field: 'eventDate',
+      headerName: 'Date',
+      filter: false,
+      width: 150,
+      minWidth: 140,
+      flex: 0,
+    },
+    {
+      field: 'eventFromTime',
+      headerName: 'Start Time',
+      filter: false,
+      width: 160,
+      minWidth: 135,
+      flex: 0,
+    },
+    {
+      field: 'eventToTime',
+      headerName: 'End Time',
+      filter: false,
+      width: 145,
+      minWidth: 135,
+      flex: 0,
+    },
+    {
+      field: 'duration',
+      headerName: 'Duration',
+      filter: false,
+      width: 150,
+      minWidth: 140,
+      flex: 0,
+    },
+    {
+      field: 'objectName',
+      headerName: 'Object Identified',
+      filter: false,
+      minWidth: 250,
+      flex: 0,
+      wrapHeaderText: true,
+      autoHeaderHeight: true,
+      tooltipField: 'objectName',
+    },
+    {
+      field: 'subAlertTag',
+      headerName: 'Alert Tag',
+      filter: false,
+      minWidth: 150,
+      flex: 1,
+      tooltipField: 'subAlertTag',
+    },
     {
       field: 'clip',
+      headerName: 'Clip',
       filter: false,
+      width: 80,
+      minWidth: 140,
+      flex: 0,
       cellRenderer: (params: any) => {
         const isDisabled = params.data.files.length === 0;
         const disabledAttr = isDisabled ? 'disabled' : '';
