@@ -4,10 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { Subject, takeUntil } from 'rxjs';
+import { MediaPipe } from "../../../utilities/pipes/media.pipe";
 
 @Component({
   selector: 'app-playback',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MediaPipe],
   templateUrl: './playback.component.html',
   styleUrl: './playback.component.css',
 })

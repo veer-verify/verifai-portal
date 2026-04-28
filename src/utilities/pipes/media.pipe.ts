@@ -12,6 +12,7 @@ export class MediaPipe implements PipeTransform {
   // storage_service = inject(StorageService);
 
   async transform(src: string): Promise<any> {
+    console.log(src)
     if (!src) return;
     const blob = await firstValueFrom(this.http.get(src, { responseType: 'blob' }));
     return new Promise((reslove, reject) => {

@@ -14,7 +14,7 @@
     </div>
 
     <button class="go-btn" (click)="applyRange()" [disabled]="isLoading">
-      {{ isLoading ? "..." : "Go" }}
+      <span class="material-symbols-outlined"> arrow_forward </span>
     </button>
   </div>
 
@@ -28,7 +28,8 @@
         [class.active]="cam === selectedCamera"
       >
         <div class="camera-thumb">
-          <span class="material-symbols-outlined">videocam</span>
+          <!-- <span class="material-symbols-outlined">videocam</span> -->
+          <img [src]="cam.snapshotUrl | media | async" />
         </div>
         <div class="cam-label">
           {{ cam.name || cam.cameraName || cam.cameraId }}
