@@ -51,14 +51,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((ids) => {
         this.liveCameraIds = ids ?? [];
       });
-    this.storage_service.profilesRefresh$.subscribe((refresh: boolean) => {
-      if (refresh) {
-        this.getUserFavorites();
-        this.storage_service.profilesRefresh$.next(false);
-      }
-    });
+    this.storage_service.profilesRefresh$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((refresh: boolean) => {
+        if (refresh) {
+          this.getUserFavorites();
+          this.storage_service.profilesRefresh$.next(false);
+        }
+      });
 
   }
+
   getUserFavorites(): void {
     const user = this.storage_service.getData('user');
     const userId = user?.UserId || user?.userId;

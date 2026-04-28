@@ -211,6 +211,18 @@ video {
   overflow: hidden !important;
 }
 
+::ng-deep .bookmark-menu-panel .mat-mdc-menu-item.bookmark-profile-active {
+  background: rgb(245 166 35 / 14%) !important;
+  color: #9a5f00 !important;
+}
+
+::ng-deep
+  .bookmark-menu-panel
+  .mat-mdc-menu-item.bookmark-profile-active
+  .material-symbols-outlined {
+  color: #f5a623 !important;
+}
+
 /* ellipsis for long names */
 ::ng-deep .bookmark-menu-panel .mat-mdc-menu-item span:last-child,
 .bookmark-create-trigger span:last-child {

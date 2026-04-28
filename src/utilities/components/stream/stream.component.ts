@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 import { ConfigService } from '../../services/config.service';
+import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-stream',
   standalone: true,
@@ -35,7 +36,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
     private alert_service: AlertService,
     private storage_service: StorageService,
     private config_service: ConfigService,
-  ) {}
+  ) { }
 
   @Input({ required: true }) videoData: any;
   @Input() isChecked: any;
@@ -57,19 +58,20 @@ export class StreamComponent implements OnChanges, OnDestroy {
   markerPositions: Array<{ id: number; x: number; y: number }> = [];
   hasVideoError = false;
   private markerSequence = 0;
+  private destroy$ = new Subject<void>();
 
-  
-profiles: any[] = [];
-sortedProfiles: any[] = [];
-newProfileName = '';
-showCreateProfileInput = false;
-isBookmarked = false;
+
+  profiles: any[] = [];
+  sortedProfiles: any[] = [];
+  newProfileName = '';
+  showCreateProfileInput = false;
+  isBookmarked = false;
 
   ngOnChanges(changes: SimpleChanges): void {
     // 🔄 When videoData changes, restart the stream
     if (changes['videoData'] && changes['videoData'].currentValue) {
       this.checkBookmarkState();
-this.checkCurrentCameraBookmarked();
+      this.checkCurrentCameraBookmarked();
       if (!changes['videoData'].firstChange) {
         const newUrl = changes['videoData'].currentValue?.httpUrl;
         const oldUrl = changes['videoData'].previousValue?.httpUrl;
@@ -103,16 +105,13 @@ this.checkCurrentCameraBookmarked();
 
     this.hitStream = true;
     this.requestICEServers();
-this.storage_service.profilesData$.subscribe((profiles: any[]) => {
-  this.profiles = profiles || [];
-  this.sortedProfiles = this.profiles.map((profile: any) => ({
-    id: profile.id,
-    name: profile.name,
-    cameras: profile.cameras || [],
-  }));
-
-  this.checkCurrentCameraBookmarked();
-});
+    this.storage_service.profilesData$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((profiles: any[]) => {
+        this.profiles = profiles || [];
+        this.loadSortedProfiles();
+        this.checkCurrentCameraBookmarked();
+      });
   }
 
   ngAfterViewInit() {
@@ -121,6 +120,7 @@ this.storage_service.profilesData$.subscribe((profiles: any[]) => {
     this.video.nativeElement.playsInline = true;
     this.video.nativeElement.muted = true;
   }
+
   openCreateProfileInput(event: Event) {
     event.stopPropagation();
     event.preventDefault();
@@ -131,11 +131,7 @@ this.storage_service.profilesData$.subscribe((profiles: any[]) => {
     const currentSite = this.storage_service.currentSite$.getValue();
 
     this.isBookmarked = this.profiles.some((profile: any) =>
-      profile.cameras?.some(
-        (cam: any) =>
-          cam.cameraId === this.videoData?.cameraId &&
-          String(cam.siteId) === String(currentSite?.siteId),
-      ),
+      this.isCameraInProfile(profile, currentSite?.siteId),
     );
 
     this.sortedProfiles = [...this.profiles].sort((a: any, b: any) =>
@@ -144,18 +140,41 @@ this.storage_service.profilesData$.subscribe((profiles: any[]) => {
       }),
     );
   }
-checkCurrentCameraBookmarked(): void {
-  const cameraId = this.videoData?.cameraId;
+  checkCurrentCameraBookmarked(): void {
+    const cameraId = this.videoData?.cameraId;
 
-  if (!cameraId || !this.profiles?.length) {
-    this.isBookmarked = false;
-    return;
+    if (!cameraId || !this.profiles?.length) {
+      this.isBookmarked = false;
+      return;
+    }
+
+    this.isBookmarked = this.profiles.some((profile: any) =>
+      this.isCameraInProfile(profile)
+    );
   }
 
-  this.isBookmarked = this.profiles.some((profile: any) =>
-    (profile.cameras || []).some((cam: any) => cam.cameraId === cameraId)
-  );
-}
+  isCameraInProfile(profile: any, siteId = this.getCurrentSiteId()): boolean {
+    const cameraId = this.videoData?.cameraId;
+
+    if (!cameraId) {
+      return false;
+    }
+
+    return (profile?.cameras || []).some((cam: any) => {
+      const sameCamera = String(cam?.cameraId) === String(cameraId);
+      const sameSite =
+        siteId == null ||
+        cam?.siteId == null ||
+        String(cam.siteId) === String(siteId);
+
+      return sameCamera && sameSite;
+    });
+  }
+
+  private getCurrentSiteId(): any {
+    return this.videoData?.siteId || this.storage_service.currentSite$.value?.siteId;
+  }
+
   prepareBookmarkMenu(event?: Event) {
     event?.stopPropagation();
     this.loadSortedProfiles();
@@ -173,106 +192,110 @@ checkCurrentCameraBookmarked(): void {
   }
 
   showLoader: boolean = false;
-saveToExistingProfile(profile: any, event?: Event): void {
-  event?.stopPropagation();
+  saveToExistingProfile(profile: any, event?: Event): void {
+    event?.stopPropagation();
 
-  const user = this.storage_service.getData('user');
-  const currentSite = this.storage_service.currentSite$.value;
+    if (this.isCameraInProfile(profile)) {
+      return;
+    }
 
-  const userId = user?.UserId || user?.userId;
-  const siteId = this.videoData?.siteId || currentSite?.siteId;
-  const cameraId = this.videoData?.cameraId;
+    const user = this.storage_service.getData('user');
+    const currentSite = this.storage_service.currentSite$.value;
 
-  const httpUrl =
-    this.videoData?.httpUrl ||
-    this.videoData?.httpURL ||
-    this.videoData?.hlsTunnel ||
-    this.videoData?.hlsUrl ||
-    this.videoData?.liveUrl ||
-    this.videoData?.rtspUrl ||
-    '';
+    const userId = user?.UserId || user?.userId;
+    const siteId = this.videoData?.siteId || currentSite?.siteId;
+    const cameraId = this.videoData?.cameraId;
 
-  const folderName = profile?.name || profile?.folderName;
+    const httpUrl =
+      this.videoData?.httpUrl ||
+      this.videoData?.httpURL ||
+      this.videoData?.hlsTunnel ||
+      this.videoData?.hlsUrl ||
+      this.videoData?.liveUrl ||
+      this.videoData?.rtspUrl ||
+      '';
 
-  console.log('SAVE FAVORITE CLICKED =>', {
-    profile,
-    folderName,
-    userId,
-    siteId,
-    cameraId,
-    httpUrl,
-    videoData: this.videoData,
-  });
+    const folderName = profile?.name || profile?.folderName;
 
-  if (!userId || !siteId || !cameraId || !httpUrl || !folderName) {
-    console.error('Missing favorite payload');
-    return;
+    console.log('SAVE FAVORITE CLICKED =>', {
+      profile,
+      folderName,
+      userId,
+      siteId,
+      cameraId,
+      httpUrl,
+      videoData: this.videoData,
+    });
+
+    if (!userId || !siteId || !cameraId || !httpUrl || !folderName) {
+      console.error('Missing favorite payload');
+      return;
+    }
+
+    const payload = {
+      siteId,
+      cameraId,
+      userId,
+      httpUrl,
+      createdBy: userId,
+      folderName,
+    };
+
+    this.config_service.addUserFavorite(payload).subscribe({
+      next: (res: any) => {
+        console.log('ADD FAVORITE RESPONSE =>', res);
+
+        if (res?.status === 'success' || res?.status === 'Success') {
+          this.isBookmarked = true;
+          this.showCreateProfileInput = false;
+          this.newProfileName = '';
+
+          this.bookmarkMenuTrigger?.closeMenu();
+
+          // reload sidebar + stream profiles
+          this.storage_service.profilesRefresh$.next(true);
+        }
+      },
+      error: (err: any) => {
+        console.error('ADD FAVORITE FAILED =>', err);
+      },
+    });
   }
 
-  const payload = {
-    siteId,
-    cameraId,
-    userId,
-    httpUrl,
-    createdBy: userId,
-    folderName,
-  };
+  createAndSaveProfile(event?: Event): void {
+    event?.stopPropagation();
 
-  this.config_service.addUserFavorite(payload).subscribe({
-    next: (res: any) => {
-      console.log('ADD FAVORITE RESPONSE =>', res);
+    const folderName = this.newProfileName?.trim();
 
-      if (res?.status === 'success' || res?.status === 'Success') {
-        this.isBookmarked = true;
-        this.showCreateProfileInput = false;
-        this.newProfileName = '';
+    if (!folderName) return;
 
-        this.bookmarkMenuTrigger?.closeMenu();
-
-        // reload sidebar + stream profiles
-        this.storage_service.profilesRefresh$.next(true);
-      }
-    },
-    error: (err: any) => {
-      console.error('ADD FAVORITE FAILED =>', err);
-    },
-  });
-}
-
-createAndSaveProfile(event?: Event): void {
-  event?.stopPropagation();
-
-  const folderName = this.newProfileName?.trim();
-
-  if (!folderName) return;
-
-  this.saveToExistingProfile(
-    {
-      name: folderName,
-      folderName: folderName,
-    },
-    event
-  );
-}
+    this.saveToExistingProfile(
+      {
+        name: folderName,
+        folderName: folderName,
+      },
+      event
+    );
+  }
 
   cancelCreateProfile(event?: Event) {
     event?.stopPropagation();
     this.closeBookmarkMenu();
   }
 
-handleCreateProfileKey(event: KeyboardEvent): void {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    event.stopPropagation();
-    this.createAndSaveProfile(event);
-  }
+  handleCreateProfileKey(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.createAndSaveProfile(event);
+    }
 
-  if (event.key === 'Escape') {
-    event.preventDefault();
-    event.stopPropagation();
-    this.cancelCreateProfile(event);
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      this.cancelCreateProfile(event);
+    }
   }
-}
 
   openBookmarkInput() {
     const currentSite = this.storage_service.currentSite$.getValue();
@@ -798,6 +821,9 @@ handleCreateProfileKey(event: KeyboardEvent): void {
 
   ngOnDestroy(): void {
     console.log('🧹 Cleaning up stream component...');
+
+    this.destroy$.next();
+    this.destroy$.complete();
 
     // Close peer connection
     if (
