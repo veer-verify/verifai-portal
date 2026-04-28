@@ -2,19 +2,18 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from './storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.development';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfigService {
-
   constructor(
     private http: HttpClient,
     private storageSrvc: StorageService,
-    private date: DatePipe
-  ) { }
+    private date: DatePipe,
+  ) {}
 
   public dataFromSubheader = new BehaviorSubject<any>([]);
   public site_add_sub = new BehaviorSubject<any>({});
@@ -35,12 +34,12 @@ export class ConfigService {
   listTimeLapseVideos(payload: any) {
     let url = `${environment.timelapseUrl}/listTimeLapseVideos_1_0`;
     let params = new HttpParams();
-    params = params.set('siteId', payload?.siteId)
+    params = params.set('siteId', payload?.siteId);
     if (payload?.active) {
-      params = params.set('active', payload?.active)
+      params = params.set('active', payload?.active);
     }
     if (payload?.cameraId) {
-      params = params.set('cameraId', payload?.cameraId)
+      params = params.set('cameraId', payload?.cameraId);
     }
     if (payload?.fromDate) {
       let x: any = this.date.transform(payload?.fromDate, 'yyyy-MM-dd');
@@ -57,7 +56,7 @@ export class ConfigService {
     let url = `${environment.incidentsUrl}/NVRList_1_0`;
     let params = new HttpParams();
     if (payload?.siteId) {
-      params = params.set('siteId', payload?.siteId)
+      params = params.set('siteId', payload?.siteId);
     }
     return this.http.get(url, { params });
   }
@@ -85,5 +84,46 @@ export class ConfigService {
 
     return this.http.get(url, { params });
   }
+
+  getUserFavorites(userId: any): Observable<any> {
+    let url = `${environment.userDetailsUrl}/getUserFavorites_1_0`;
+
+    const params = new HttpParams().set('userId', String(userId));
+
+    return this.http.get(url, { params });
+  }
+
+  addUserFavorite(payload: any): Observable<any> {
+    const url = `${environment.userDetailsUrl}/addUserFavorites_1_0`;
+
+    const params = new HttpParams()
+      .set('siteId', String(payload.siteId))
+      .set('cameraId', String(payload.cameraId))
+      .set('userId', String(payload.userId))
+      // .set('httpUrl', String(payload.httpUrl))
+      .set('createdBy', String(payload.createdBy))
+      .set('folderName', String(payload.folderName));
+
+    return this.http.post(url, null, { params });
+  }
+  deleteFavoriteCamera(id: any, modifiedBy: any): Observable<any> {
+  const url = `${environment.userDetailsUrl}/deleteFavoriteCamera_1_0`;
+
+  const params = new HttpParams()
+    .set('id', String(id))
+    .set('modifiedBy', String(modifiedBy));
+
+  return this.http.delete(url, { params });
+}
+
+deleteFavoriteFolder(folderId: any, modifiedBy: any): Observable<any> {
+  const url = `${environment.userDetailsUrl}/deleteFavoriteFolder_1_0`;
+
+  const params = new HttpParams()
+    .set('folderId', String(folderId))
+    .set('modifiedBy', String(modifiedBy));
+
+  return this.http.delete(url, { params });
+}
 
 }

@@ -24,7 +24,13 @@ export class StorageService {
   openSideNav() {
     this.showSideNav$.next(true);
   }
-
+  bookmarkPanelState$ = new BehaviorSubject<any>({
+    showProfileInput: false,
+    selectedCamera: null,
+    selectedSite: null,
+  });
+  public profilesData$ = new BehaviorSubject<any[]>([]);
+  public profilesRefresh$ = new BehaviorSubject<boolean>(false);
   private activeRequests = 0;
   incrementLoader() {
     this.activeRequests++;

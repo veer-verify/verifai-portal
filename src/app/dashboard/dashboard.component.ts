@@ -1,3 +1,4 @@
+////!--------dashboard component.ts--------
 import { Component, ElementRef, QueryList, ViewChildren, inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
@@ -37,22 +38,216 @@ export class DashboardComponent implements OnInit, OnDestroy {
     searchSite!: string;
     camLoader = false;
     liveCameraIds: any[] = [];
+    profiles: any[] = [];
+expandedProfileId: any = null;
+selectedBookmarkCamera: any = null;
     private destroy$ = new Subject<void>();
 
     ngOnInit(): void {
+          this.getUserFavorites();
         this.getSitesListForUserName();
+           this.loadProfilesFromLocalStorage();
         this.storage_service.liveCameraIds$
             .pipe(takeUntil(this.destroy$))
             .subscribe((ids) => {
                 this.liveCameraIds = ids ?? [];
             });
-    }
+         this.storage_service.profilesRefresh$.subscribe((refresh: boolean) => {
+  if (refresh) {
+    this.getUserFavorites();
+    this.storage_service.profilesRefresh$.next(false);
+  }
+});
 
+    }
+getUserFavorites(): void {
+  const user = this.storage_service.getData('user');
+  const userId = user?.UserId || user?.userId;
+
+  if (!userId) {
+    this.profiles = [];
+    this.storage_service.profilesData$.next([]);
+    return;
+  }
+
+  this.config_service.getUserFavorites(userId).subscribe({
+    next: (res: any) => {
+      if (res?.statusCode === 200 && Array.isArray(res?.data)) {
+        this.profiles = res.data.map((folder: any) => ({
+          id: folder.folderId,
+          name: folder.folderName,
+          folderName: folder.folderName,
+
+          cameras: (folder.favorites || []).map((fav: any) => {
+            const cam = fav.cameraDetails || {};
+
+            return {
+              ...cam,
+
+              // favorite-delete id
+              id: fav.userFolderCameraId,
+
+              // folder mapping
+              folderId: folder.folderId,
+              folderName: folder.folderName,
+
+              // required camera fields
+              siteId: fav.siteId || cam.siteId,
+              cameraId: fav.cameraId || cam.cameraId,
+              name: cam.name || fav.cameraId,
+              cameraName: cam.name || fav.cameraId,
+
+              // live stream fields
+              httpUrl: cam.httpUrl,
+              hlsTunnel: cam.hlsTunnel,
+              rtspUrl: cam.rtspUrl,
+              requestName: cam.requestName,
+
+              // siren/audio fields
+              audioUrl: cam.audioUrl,
+              audioHoursFlag: cam.audioHoursFlag,
+              audioDays: cam.audioDays,
+              audioHours: cam.audioHours,
+              audioSpeakerType: cam.audioSpeakerType,
+
+              // UI fields
+              camMonitor: cam.camMonitor,
+              siteName: cam.siteName,
+              timezone: cam.timezone,
+              snapshotUrl: cam.snapshotUrl,
+              unitId: cam.unitId,
+              centralBoxId: cam.centralBoxId,
+            };
+          }),
+        }));
+
+        this.storage_service.profilesData$.next(this.profiles);
+      } else {
+        this.profiles = [];
+        this.storage_service.profilesData$.next([]);
+      }
+    },
+    error: (err: any) => {
+      console.error('get favorites failed', err);
+      this.profiles = [];
+      this.storage_service.profilesData$.next([]);
+    },
+  });
+}
     check(): boolean {
         const session = this.storage_service.getData('session');
         return session ? true : false;
     }
 
+    loadProfilesFromLocalStorage() {
+    const data = localStorage.getItem('cameraProfiles');
+    const profiles = data ? JSON.parse(data) : [];
+
+    this.profiles = [...profiles].sort((a: any, b: any) =>
+      (a.name || '').localeCompare(b.name || '', undefined, {
+        sensitivity: 'base',
+      }),
+    );
+
+    if (this.profiles.length) {
+      const expandedStillExists = this.profiles.some(
+        (profile: any) => profile.id === this.expandedProfileId,
+      );
+
+      if (!expandedStillExists) {
+        this.expandedProfileId = this.profiles[0].id;
+      }
+    } else {
+      this.expandedProfileId = null;
+    }
+  }
+
+toggleProfile(profile: any): void {
+  this.expandedProfileId =
+    this.expandedProfileId === profile.id ? null : profile.id;
+
+  if (this.expandedProfileId === profile.id) {
+    const profileCameras = (profile.cameras || []).map((cam: any) => ({
+      ...cam,
+      name: cam.name || cam.cameraName || cam.cameraId,
+      cameraName: cam.cameraName || cam.name || cam.cameraId,
+      cameraId: cam.cameraId,
+      siteId: cam.siteId,
+
+      // live
+      httpUrl: cam.httpUrl,
+      hlsTunnel: cam.hlsTunnel,
+      rtspUrl: cam.rtspUrl,
+      requestName: cam.requestName,
+
+      // siren
+      audioUrl: cam.audioUrl,
+      audioHoursFlag: cam.audioHoursFlag,
+      audioDays: cam.audioDays,
+      audioHours: cam.audioHours,
+      audioSpeakerType: cam.audioSpeakerType,
+
+      camMonitor: cam.camMonitor,
+      siteName: cam.siteName,
+      timezone: cam.timezone,
+      snapshotUrl: cam.snapshotUrl,
+      unitId: cam.unitId,
+      centralBoxId: cam.centralBoxId,
+    }));
+
+    this.storage_service.camData$.next(profileCameras);
+  }
+}
+
+  deleteFavoriteFolder(profile: any, event: Event): void {
+  event.stopPropagation();
+
+  const user = this.storage_service.getData('user');
+  const modifiedBy = user?.UserId || user?.userId;
+
+  if (!profile?.id || !modifiedBy) return;
+
+  this.config_service.deleteFavoriteFolder(profile.id, modifiedBy).subscribe({
+    next: () => {
+      this.profiles = this.profiles.filter((p: any) => p.id !== profile.id);
+      this.storage_service.profilesData$.next(this.profiles);
+      this.storage_service.profilesRefresh$.next(true);
+    },
+    error: (err: any) => {
+      console.error('delete folder failed', err);
+    },
+  });
+}
+
+removeProfileCamera(profileId: any, cam: any): void {
+  const user = this.storage_service.getData('user');
+  const modifiedBy = user?.UserId || user?.userId;
+
+  if (!cam?.id || !modifiedBy) {
+    console.error('Missing favorite camera delete id', cam);
+    return;
+  }
+
+  this.config_service.deleteFavoriteCamera(cam.id, modifiedBy).subscribe({
+    next: () => {
+      this.profiles = this.profiles.map((profile: any) => {
+        if (profile.id === profileId) {
+          return {
+            ...profile,
+            cameras: profile.cameras.filter((c: any) => c.id !== cam.id),
+          };
+        }
+        return profile;
+      });
+
+      this.storage_service.profilesData$.next(this.profiles);
+      this.storage_service.profilesRefresh$.next(true);
+    },
+    error: (err: any) => {
+      console.error('delete camera failed', err);
+    },
+  });
+}
     /**
      * single time sites loading throuh this method
      */

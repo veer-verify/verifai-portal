@@ -1,21 +1,41 @@
+//!----------- stream.component.ts--------
+
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+  OnChanges,
+  SimpleChanges,
+  OnDestroy,
+} from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { AlertService } from '../../services/alert.service';
 
+import { StorageService } from '../../services/storage.service';
+import { FormsModule } from '@angular/forms';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { ConfigService } from '../../services/config.service';
 @Component({
   selector: 'app-stream',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, MatMenuModule, MatDividerModule],
   templateUrl: './stream.component.html',
   styleUrl: './stream.component.css',
 })
 export class StreamComponent implements OnChanges, OnDestroy {
-
   constructor(
     private http: HttpClient,
-    private alert_service: AlertService
-  ) { }
+    private alert_service: AlertService,
+    private storage_service: StorageService,
+    private config_service: ConfigService,
+  ) {}
 
   @Input({ required: true }) videoData: any;
   @Input() isChecked: any;
@@ -23,6 +43,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
   @Output() dotPlaced = new EventEmitter<any>();
   @Output() streamDoubleClicked = new EventEmitter<any>();
   @ViewChild('video') video!: ElementRef;
+  @ViewChild(MatMenuTrigger) bookmarkMenuTrigger!: MatMenuTrigger;
 
   peerConnection!: RTCPeerConnection;
   restartTimeout: any = null;
@@ -37,27 +58,61 @@ export class StreamComponent implements OnChanges, OnDestroy {
   hasVideoError = false;
   private markerSequence = 0;
 
+  
+profiles: any[] = [];
+sortedProfiles: any[] = [];
+newProfileName = '';
+showCreateProfileInput = false;
+isBookmarked = false;
+
   ngOnChanges(changes: SimpleChanges): void {
     // 🔄 When videoData changes, restart the stream
-    if (changes['videoData'] && !changes['videoData'].firstChange) {
-      const newUrl = changes['videoData'].currentValue?.httpUrl;
-      const oldUrl = changes['videoData'].previousValue?.httpUrl;
+    if (changes['videoData'] && changes['videoData'].currentValue) {
+      this.checkBookmarkState();
+this.checkCurrentCameraBookmarked();
+      if (!changes['videoData'].firstChange) {
+        const newUrl = changes['videoData'].currentValue?.httpUrl;
+        const oldUrl = changes['videoData'].previousValue?.httpUrl;
 
-      // Only restart if URL actually changed
-      if (newUrl && newUrl !== oldUrl) {
-        this.restartStream();
+        // Only restart if URL actually changed
+        if (newUrl && newUrl !== oldUrl) {
+          this.restartStream();
+        }
       }
     }
   }
+  closeBookmarkMenu() {
+    this.showCreateProfileInput = false;
+    this.newProfileName = '';
+
+    if (this.bookmarkMenuTrigger?.menuOpen) {
+      this.bookmarkMenuTrigger.closeMenu();
+    }
+  }
+
+  onBookmarkMenuClosed() {
+    this.showCreateProfileInput = false;
+    this.newProfileName = '';
+  }
 
   ngOnInit(): void {
-    const username = "admin";
-    const password = "verifai123789";
+    const username = 'admin';
+    const password = 'verifai123789';
     let credentails = `${username}:${password}`;
     this.encoded = btoa(credentails);
 
     this.hitStream = true;
     this.requestICEServers();
+this.storage_service.profilesData$.subscribe((profiles: any[]) => {
+  this.profiles = profiles || [];
+  this.sortedProfiles = this.profiles.map((profile: any) => ({
+    id: profile.id,
+    name: profile.name,
+    cameras: profile.cameras || [],
+  }));
+
+  this.checkCurrentCameraBookmarked();
+});
   }
 
   ngAfterViewInit() {
@@ -66,8 +121,204 @@ export class StreamComponent implements OnChanges, OnDestroy {
     this.video.nativeElement.playsInline = true;
     this.video.nativeElement.muted = true;
   }
+  openCreateProfileInput(event: Event) {
+    event.stopPropagation();
+    event.preventDefault();
+    this.showCreateProfileInput = true;
+  }
+
+  checkBookmarkState() {
+    const currentSite = this.storage_service.currentSite$.getValue();
+
+    this.isBookmarked = this.profiles.some((profile: any) =>
+      profile.cameras?.some(
+        (cam: any) =>
+          cam.cameraId === this.videoData?.cameraId &&
+          String(cam.siteId) === String(currentSite?.siteId),
+      ),
+    );
+
+    this.sortedProfiles = [...this.profiles].sort((a: any, b: any) =>
+      (a.name || '').localeCompare(b.name || '', undefined, {
+        sensitivity: 'base',
+      }),
+    );
+  }
+checkCurrentCameraBookmarked(): void {
+  const cameraId = this.videoData?.cameraId;
+
+  if (!cameraId || !this.profiles?.length) {
+    this.isBookmarked = false;
+    return;
+  }
+
+  this.isBookmarked = this.profiles.some((profile: any) =>
+    (profile.cameras || []).some((cam: any) => cam.cameraId === cameraId)
+  );
+}
+  prepareBookmarkMenu(event?: Event) {
+    event?.stopPropagation();
+    this.loadSortedProfiles();
+    this.checkBookmarkState();
+    this.showCreateProfileInput = false;
+    this.newProfileName = '';
+  }
+
+  loadSortedProfiles() {
+    this.sortedProfiles = [...this.profiles].sort((a: any, b: any) =>
+      (a.name || '').localeCompare(b.name || '', undefined, {
+        sensitivity: 'base',
+      }),
+    );
+  }
 
   showLoader: boolean = false;
+saveToExistingProfile(profile: any, event?: Event): void {
+  event?.stopPropagation();
+
+  const user = this.storage_service.getData('user');
+  const currentSite = this.storage_service.currentSite$.value;
+
+  const userId = user?.UserId || user?.userId;
+  const siteId = this.videoData?.siteId || currentSite?.siteId;
+  const cameraId = this.videoData?.cameraId;
+
+  const httpUrl =
+    this.videoData?.httpUrl ||
+    this.videoData?.httpURL ||
+    this.videoData?.hlsTunnel ||
+    this.videoData?.hlsUrl ||
+    this.videoData?.liveUrl ||
+    this.videoData?.rtspUrl ||
+    '';
+
+  const folderName = profile?.name || profile?.folderName;
+
+  console.log('SAVE FAVORITE CLICKED =>', {
+    profile,
+    folderName,
+    userId,
+    siteId,
+    cameraId,
+    httpUrl,
+    videoData: this.videoData,
+  });
+
+  if (!userId || !siteId || !cameraId || !httpUrl || !folderName) {
+    console.error('Missing favorite payload');
+    return;
+  }
+
+  const payload = {
+    siteId,
+    cameraId,
+    userId,
+    httpUrl,
+    createdBy: userId,
+    folderName,
+  };
+
+  this.config_service.addUserFavorite(payload).subscribe({
+    next: (res: any) => {
+      console.log('ADD FAVORITE RESPONSE =>', res);
+
+      if (res?.status === 'success' || res?.status === 'Success') {
+        this.isBookmarked = true;
+        this.showCreateProfileInput = false;
+        this.newProfileName = '';
+
+        this.bookmarkMenuTrigger?.closeMenu();
+
+        // reload sidebar + stream profiles
+        this.storage_service.profilesRefresh$.next(true);
+      }
+    },
+    error: (err: any) => {
+      console.error('ADD FAVORITE FAILED =>', err);
+    },
+  });
+}
+
+createAndSaveProfile(event?: Event): void {
+  event?.stopPropagation();
+
+  const folderName = this.newProfileName?.trim();
+
+  if (!folderName) return;
+
+  this.saveToExistingProfile(
+    {
+      name: folderName,
+      folderName: folderName,
+    },
+    event
+  );
+}
+
+  cancelCreateProfile(event?: Event) {
+    event?.stopPropagation();
+    this.closeBookmarkMenu();
+  }
+
+handleCreateProfileKey(event: KeyboardEvent): void {
+  if (event.key === 'Enter') {
+    event.preventDefault();
+    event.stopPropagation();
+    this.createAndSaveProfile(event);
+  }
+
+  if (event.key === 'Escape') {
+    event.preventDefault();
+    event.stopPropagation();
+    this.cancelCreateProfile(event);
+  }
+}
+
+  openBookmarkInput() {
+    const currentSite = this.storage_service.currentSite$.getValue();
+
+    if (!this.videoData || !currentSite) return;
+
+    if (this.isBookmarked) {
+      let favoriteCameraId = null;
+      for (const profile of this.profiles) {
+        const cam = profile.cameras?.find(
+          (c: any) =>
+            c.cameraId === this.videoData.cameraId &&
+            String(c.siteId) === String(currentSite.siteId)
+        );
+        if (cam && cam.id) {
+          favoriteCameraId = cam.id;
+          break;
+        }
+      }
+
+      if (favoriteCameraId) {
+        const user = this.storage_service.getData('user');
+        const modifiedBy = user?.UserId || user?.userId;
+
+        this.config_service.deleteFavoriteCamera(favoriteCameraId, modifiedBy).subscribe({
+          next: () => {
+            this.isBookmarked = false;
+            this.storage_service.profilesRefresh$.next(true);
+
+            this.storage_service.bookmarkPanelState$.next({
+              showProfileInput: false,
+              selectedCamera: null,
+              selectedSite: null,
+              refresh: Date.now(),
+            });
+          },
+          error: (err: any) => {
+            console.error('delete camera failed', err);
+          }
+        });
+      } else {
+        this.isBookmarked = false;
+      }
+    }
+  }
+
   requestICEServers() {
     if (this.hitStream) {
       this.showLoader = true;
@@ -75,26 +326,31 @@ export class StreamComponent implements OnChanges, OnDestroy {
       fetch(`${this.videoData?.httpUrl}/whep`, {
         method: 'OPTIONS',
         headers: {
-          'Authorization': `Basic ${this.encoded}`
-        }
-      }).then((res) => {
-        this.showLoader = false;
-        this.peerConnection = new RTCPeerConnection({
-          iceServers: this.linkToIceServers(res.headers.get('Link')),
+          Authorization: `Basic ${this.encoded}`,
+        },
+      })
+        .then((res) => {
+          this.showLoader = false;
+          this.peerConnection = new RTCPeerConnection({
+            iceServers: this.linkToIceServers(res.headers.get('Link')),
+          });
+          const direction = 'sendrecv';
+          this.peerConnection.addTransceiver('video', { direction });
+          this.peerConnection.addTransceiver('audio', { direction });
+          this.peerConnection.onicecandidate = (
+            evt: RTCPeerConnectionIceEvent,
+          ) => this.onLocalCandidate(evt);
+          this.peerConnection.oniceconnectionstatechange = () =>
+            this.onConnectionState();
+          this.peerConnection.ontrack = (evt: RTCTrackEvent) => {
+            this.onTrack(evt);
+          };
+          this.createOffer();
+        })
+        .catch((err) => {
+          this.showLoader = false;
+          this.onError(err.toString());
         });
-        const direction = 'sendrecv';
-        this.peerConnection.addTransceiver('video', { direction });
-        this.peerConnection.addTransceiver('audio', { direction });
-        this.peerConnection.onicecandidate = (evt: RTCPeerConnectionIceEvent) => this.onLocalCandidate(evt);
-        this.peerConnection.oniceconnectionstatechange = () => this.onConnectionState();
-        this.peerConnection.ontrack = (evt: RTCTrackEvent) => {
-          this.onTrack(evt)
-        };
-        this.createOffer();
-      }).catch((err) => {
-        this.showLoader = false;
-        this.onError(err.toString());
-      });
     }
   }
 
@@ -102,20 +358,22 @@ export class StreamComponent implements OnChanges, OnDestroy {
     const ics: RTCIceServer[] = [];
 
     if (links !== null) {
-      links.split(', ').forEach(link => {
-        const m = link.match(/^<(.+?)>; rel="ice-server"(; username="(.*?)"; credential="(.*?)"; credential-type="password")?/i);
+      links.split(', ').forEach((link) => {
+        const m = link.match(
+          /^<(.+?)>; rel="ice-server"(; username="(.*?)"; credential="(.*?)"; credential-type="password")?/i,
+        );
         if (m !== null) {
           let ic: RTCIceServer = {
-            urls: [m[1]]
+            urls: [m[1]],
           };
           ic.urls = [m[1]];
           if (m[3] !== undefined) {
-            ic.username = JSON.parse(`"${m[3]}"`)
-            ic.credential = JSON.parse(`"${m[4]}"`)
+            ic.username = JSON.parse(`"${m[3]}"`);
+            ic.credential = JSON.parse(`"${m[4]}"`);
           }
-          ics.push(ic)
+          ics.push(ic);
         }
-      })
+      });
     }
     return ics;
   }
@@ -146,13 +404,16 @@ export class StreamComponent implements OnChanges, OnDestroy {
       this.sessionUrl = '';
       this.queuedCandidates = [];
     }
-  };
+  }
 
   restartStream(): void {
     this.hasVideoError = false;
 
     // Close existing peer connection
-    if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
+    if (
+      this.peerConnection &&
+      this.peerConnection.signalingState !== 'closed'
+    ) {
       this.peerConnection.close();
     }
 
@@ -160,7 +421,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
     if (this.sessionUrl) {
       fetch(this.sessionUrl, {
         method: 'DELETE',
-      }).catch(err => console.error('Failed to delete session:', err));
+      }).catch((err) => console.error('Failed to delete session:', err));
     }
 
     // Reset state
@@ -176,7 +437,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
     // Restart the stream with new URL
     this.hitStream = true;
     this.requestICEServers();
-  };
+  }
 
   onLocalCandidate(evt: RTCPeerConnectionIceEvent): void {
     if (this.restartTimeout !== null) {
@@ -187,10 +448,10 @@ export class StreamComponent implements OnChanges, OnDestroy {
       if (this.sessionUrl === '') {
         this.queuedCandidates.push(evt.candidate);
       } else {
-        this.sendLocalCandidates([evt.candidate])
+        this.sendLocalCandidates([evt.candidate]);
       }
     }
-  };
+  }
 
   onConnectionState() {
     if (this.restartTimeout !== null) {
@@ -199,12 +460,12 @@ export class StreamComponent implements OnChanges, OnDestroy {
     if (this.peerConnection!.iceConnectionState === 'disconnected') {
       this.onError('peer connection disconnected');
     }
-  };
+  }
 
   onTrack(evt: RTCTrackEvent) {
     this.hasVideoError = false;
     this.video.nativeElement.srcObject = evt.streams[0];
-  };
+  }
 
   createOffer() {
     this.showLoader = true;
@@ -215,11 +476,12 @@ export class StreamComponent implements OnChanges, OnDestroy {
         this.offerData = this.parseOffer(offer.sdp!);
         this.peerConnection!.setLocalDescription(offer);
         this.sendOffer(offer);
-      }).catch((err) => {
-        this.showLoader = false
+      })
+      .catch((err) => {
+        this.showLoader = false;
         this.onError(err.toString());
       });
-  };
+  }
 
   editOffer(offer: RTCSessionDescriptionInit) {
     const sections = offer.sdp!.split('m=');
@@ -230,7 +492,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
       }
     }
     offer.sdp = sections.join('m=');
-  };
+  }
 
   parseOffer(offer: string) {
     const ret: any = {
@@ -249,14 +511,17 @@ export class StreamComponent implements OnChanges, OnDestroy {
       }
     }
     return ret;
-  };
+  }
 
   enableStereoOpus(section: any) {
     let opusPayloadFormat = '';
     let lines = section.split('\r\n');
 
     for (let i = 0; i < lines.length; i++) {
-      if (lines[i].startsWith('a=rtpmap:') && lines[i].toLowerCase().includes('opus/')) {
+      if (
+        lines[i].startsWith('a=rtpmap:') &&
+        lines[i].toLowerCase().includes('opus/')
+      ) {
         opusPayloadFormat = lines[i].slice('a=rtpmap:'.length).split(' ')[0];
         break;
       }
@@ -278,7 +543,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
     }
 
     return lines.join('\r\n');
-  };
+  }
 
   sendOffer(offer: RTCSessionDescriptionInit) {
     this.showLoader = true;
@@ -286,42 +551,50 @@ export class StreamComponent implements OnChanges, OnDestroy {
       method: 'POST',
       headers: {
         'Content-Type': 'application/sdp',
-        'Authorization': `Basic ${this.encoded}`
+        Authorization: `Basic ${this.encoded}`,
       },
       body: offer.sdp,
-    }).then((res: any) => {
-      this.showLoader = false;
-      switch (res.status) {
-        case 201:
-          break;
-        case 404:
-          throw new Error('stream not found');
-        default:
-          throw new Error(`bad status code ${res.status}`);
-      }
-      this.sessionUrl = new URL(res.headers.get('location'), this.videoData?.httpUrl).toString();
-      return res.text();
-    }).then((sdp) => this.onRemoteAnswer(sdp)).catch((err) => {
-      this.showLoader = false;
-      this.onError(err.toString());
-    });
-  };
+    })
+      .then((res: any) => {
+        this.showLoader = false;
+        switch (res.status) {
+          case 201:
+            break;
+          case 404:
+            throw new Error('stream not found');
+          default:
+            throw new Error(`bad status code ${res.status}`);
+        }
+        this.sessionUrl = new URL(
+          res.headers.get('location'),
+          this.videoData?.httpUrl,
+        ).toString();
+        return res.text();
+      })
+      .then((sdp) => this.onRemoteAnswer(sdp))
+      .catch((err) => {
+        this.showLoader = false;
+        this.onError(err.toString());
+      });
+  }
 
   onRemoteAnswer(sdp: string) {
     if (this.restartTimeout !== null) return;
 
     if (this.peerConnection?.signalingState !== 'closed') {
-      this.peerConnection!.setRemoteDescription(new RTCSessionDescription({
-        type: 'answer',
-        sdp,
-      }));
+      this.peerConnection!.setRemoteDescription(
+        new RTCSessionDescription({
+          type: 'answer',
+          sdp,
+        }),
+      );
     }
 
     if (this.queuedCandidates.length !== 0) {
       this.sendLocalCandidates(this.queuedCandidates);
       this.queuedCandidates = [];
     }
-  };
+  }
 
   sendLocalCandidates(candidates: RTCIceCandidate[]) {
     this.showLoader = true;
@@ -332,21 +605,23 @@ export class StreamComponent implements OnChanges, OnDestroy {
         'If-Match': '*',
       },
       body: this.generateSdpFragment(this.offerData, candidates),
-    }).then((res) => {
-      this.showLoader = false;
-      switch (res.status) {
-        case 204:
-          break;
-        case 404:
-          throw new Error('stream not found');
-        default:
-          throw new Error(`bad status code ${res.status}`);
-      }
-    }).catch((err) => {
-      this.showLoader = false;
-      this.onError(err.toString());
-    });
-  };
+    })
+      .then((res) => {
+        this.showLoader = false;
+        switch (res.status) {
+          case 204:
+            break;
+          case 404:
+            throw new Error('stream not found');
+          default:
+            throw new Error(`bad status code ${res.status}`);
+        }
+      })
+      .catch((err) => {
+        this.showLoader = false;
+        this.onError(err.toString());
+      });
+  }
 
   generateSdpFragment(od: any, candidates: RTCIceCandidate[]) {
     const candidatesByMedia: any = {};
@@ -357,7 +632,8 @@ export class StreamComponent implements OnChanges, OnDestroy {
       }
       candidatesByMedia[mid!].push(candidate);
     }
-    let frag = 'a=ice-ufrag:' + od.iceUfrag + '\r\n' + 'a=ice-pwd:' + od.icePwd + '\r\n';
+    let frag =
+      'a=ice-ufrag:' + od.iceUfrag + '\r\n' + 'a=ice-pwd:' + od.icePwd + '\r\n';
     let mid = 0;
 
     for (const media of od.medias) {
@@ -371,7 +647,7 @@ export class StreamComponent implements OnChanges, OnDestroy {
       mid++;
     }
     return frag;
-  };
+  }
 
   capture() {
     const imgUrl = this.captureFrameDataUrl(true);
@@ -390,7 +666,9 @@ export class StreamComponent implements OnChanges, OnDestroy {
     }
 
     const container = event.currentTarget as HTMLElement | null;
-    const videoElement = this.video?.nativeElement as HTMLVideoElement | undefined;
+    const videoElement = this.video?.nativeElement as
+      | HTMLVideoElement
+      | undefined;
 
     if (!container || !videoElement || videoElement.readyState < 2) {
       return;
@@ -431,7 +709,9 @@ export class StreamComponent implements OnChanges, OnDestroy {
   }
 
   private captureFrameDataUrl(includeMarkers = false): string | null {
-    const videoElement = this.video?.nativeElement as HTMLVideoElement | undefined;
+    const videoElement = this.video?.nativeElement as
+      | HTMLVideoElement
+      | undefined;
     if (!videoElement || videoElement.readyState < 2) {
       return null;
     }
@@ -456,7 +736,8 @@ export class StreamComponent implements OnChanges, OnDestroy {
     width: number,
     height: number,
   ) {
-    const container = this.video?.nativeElement?.parentElement as HTMLElement | null;
+    const container = this.video?.nativeElement
+      ?.parentElement as HTMLElement | null;
     if (!container || !this.markerPositions.length) {
       return;
     }
@@ -484,7 +765,10 @@ export class StreamComponent implements OnChanges, OnDestroy {
     const cameraName = (this.videoData?.name || 'camera')
       .toString()
       .replace(/[^a-zA-Z0-9-_]+/g, '_');
-    const suffix = (timestamp || new Date().toISOString()).replace(/[:.]/g, '-');
+    const suffix = (timestamp || new Date().toISOString()).replace(
+      /[:.]/g,
+      '-',
+    );
 
     link.href = imgUrl;
     link.download = `${cameraName}_${suffix}.png`;
@@ -508,16 +792,18 @@ export class StreamComponent implements OnChanges, OnDestroy {
         },
         error: (err: HttpErrorResponse) => {
           this.alert_service.error('Failed');
-        }
-      }
-      );
+        },
+      });
   }
 
   ngOnDestroy(): void {
     console.log('🧹 Cleaning up stream component...');
 
     // Close peer connection
-    if (this.peerConnection && this.peerConnection.signalingState !== 'closed') {
+    if (
+      this.peerConnection &&
+      this.peerConnection.signalingState !== 'closed'
+    ) {
       this.peerConnection.close();
     }
 
@@ -525,7 +811,9 @@ export class StreamComponent implements OnChanges, OnDestroy {
     if (this.sessionUrl) {
       fetch(this.sessionUrl, {
         method: 'DELETE',
-      }).catch(err => console.error('Failed to delete session on destroy:', err));
+      }).catch((err) =>
+        console.error('Failed to delete session on destroy:', err),
+      );
     }
 
     // Clear references
