@@ -1,6 +1,20 @@
+.alerts-page,
+:host {
+  display: block;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.alerts-page {
+  width: 100%;
+}
+
 .tool-bar {
   position: relative;
   z-index: 30;
+  min-width: 0;
+  overflow-x: hidden;
+  padding-inline: 16px;
 }
 
 .filters-row {
@@ -8,6 +22,7 @@
   align-items: center;
   gap: 8px;
   min-width: 0;
+  width: 100%;
 }
 
 .left {
@@ -15,6 +30,7 @@
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .tag-select {
@@ -24,6 +40,17 @@
 .grid-wrap {
   position: relative;
   z-index: 1;
+  height: calc(100dvh - 154px);
+  min-width: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.custom-grid {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
 }
 
 select::-webkit-scrollbar {

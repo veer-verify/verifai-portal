@@ -2,7 +2,13 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { filter, map, Observable, Subject, takeUntil } from 'rxjs';
-import { CellClickedEvent, ColDef, GridOptions } from 'ag-grid-community';
+import {
+  CellClickedEvent,
+  ColDef,
+  GridApi,
+  GridOptions,
+  GridReadyEvent,
+} from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
@@ -41,6 +47,7 @@ export class AlertsComponent {
   ) { }
 
   private destroy$ = new Subject<void>();
+  gridApi!: GridApi;
   gridOptions!: GridOptions;
   currentSite: any;
   camerasList: any[] = [];
@@ -64,8 +71,7 @@ export class AlertsComponent {
       field: 'name',
       headerName: 'Camera',
       filter: false,
-      width: 180,
-      minWidth: 150,
+      minWidth: 135,
       flex: 0,
       tooltipField: 'name',
     },
@@ -73,40 +79,36 @@ export class AlertsComponent {
       field: 'eventDate',
       headerName: 'Date',
       filter: false,
-      width: 150,
-      minWidth: 140,
+      minWidth: 115,
       flex: 0,
     },
     {
       field: 'eventFromTime',
       headerName: 'Start Time',
       filter: false,
-      width: 160,
-      minWidth: 135,
+      minWidth: 120,
       flex: 0,
     },
     {
       field: 'eventToTime',
       headerName: 'End Time',
       filter: false,
-      width: 145,
-      minWidth: 135,
+      minWidth: 115,
       flex: 0,
     },
     {
       field: 'duration',
       headerName: 'Duration',
       filter: false,
-      width: 150,
-      minWidth: 140,
+      minWidth: 115,
       flex: 0,
     },
     {
       field: 'objectName',
       headerName: 'Object Identified',
       filter: false,
-      minWidth: 250,
-      flex: 0,
+      minWidth: 150,
+      flex: 1,
       wrapHeaderText: true,
       autoHeaderHeight: true,
       tooltipField: 'objectName',
@@ -115,7 +117,7 @@ export class AlertsComponent {
       field: 'subAlertTag',
       headerName: 'Alert Tag',
       filter: false,
-      minWidth: 150,
+      minWidth: 130,
       flex: 1,
       tooltipField: 'subAlertTag',
     },
@@ -123,8 +125,8 @@ export class AlertsComponent {
       field: 'clip',
       headerName: 'Clip',
       filter: false,
-      width: 80,
-      minWidth: 140,
+      minWidth: 70,
+      maxWidth: 80,
       flex: 0,
       cellRenderer: (params: any) => {
         const isDisabled = params.data.files.length === 0;
@@ -140,7 +142,16 @@ export class AlertsComponent {
   ];
 
   ngOnInit() {
-    this.gridOptions = gridOptions;
+    this.gridOptions = {
+      ...gridOptions,
+      defaultColDef: {
+        ...gridOptions.defaultColDef,
+        minWidth: 80,
+        resizable: true,
+      },
+      onFirstDataRendered: () => this.fitColumns(),
+      onGridSizeChanged: () => this.fitColumns(),
+    };
 
     this.storage_service.currentSite$
       .pipe(
@@ -161,6 +172,11 @@ export class AlertsComponent {
       .subscribe((res) => {
         this.camerasList = res ?? [];
       });
+  }
+
+  onGridReady(params: GridReadyEvent) {
+    this.gridApi = params.api;
+    this.fitColumns();
   }
 
   getCurrentTime(): string {
@@ -302,8 +318,15 @@ export class AlertsComponent {
             this.rowData = [];
             this.totalPages = 0;
           }
+          this.fitColumns();
         },
       });
+  }
+
+  private fitColumns() {
+    setTimeout(() => {
+      this.gridApi?.sizeColumnsToFit();
+    });
   }
 
   changePageSize(pSize: any) {

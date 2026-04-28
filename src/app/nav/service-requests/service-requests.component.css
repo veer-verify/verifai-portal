@@ -15,6 +15,36 @@
   border: 1px solid #d1d1d1;
 }
 
+:host {
+  display: block;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.tool-bar,
+.service-grid-wrap,
+app-pagination {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.tool-bar {
+  overflow-x: hidden;
+}
+
+.service-grid-wrap {
+  height: calc(100dvh - 154px);
+  overflow: hidden;
+  width: 100%;
+}
+
+.service-grid {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  width: 100%;
+}
+
 .date-time {
   display: inline-flex;
   align-items: center;

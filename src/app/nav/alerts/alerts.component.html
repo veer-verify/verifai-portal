@@ -1,4 +1,4 @@
-<main>
+<main class="alerts-page">
   <div class="tool-bar">
     <div class="filters-row">
       <div
@@ -62,14 +62,14 @@
     </div>
   </div>
 
-  <div class="grid-wrap" style="height: calc(100vh - 154px)">
+  <div class="grid-wrap">
     <ag-grid-angular
       class="custom-grid"
-      style="height: 100%"
       [columnDefs]="columnDefs"
       [gridOptions]="gridOptions"
       [rowData]="rowData"
       (cellClicked)="onCellClicked($event)"
+      (gridReady)="onGridReady($event)"
     ></ag-grid-angular>
   </div>
 
