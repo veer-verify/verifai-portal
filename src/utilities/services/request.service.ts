@@ -14,7 +14,7 @@ export class RequestService {
     private storage_service: StorageService
   ) { }
 
-  baseurl = "http://usmgmt.iviscloud.net:777/"
+  // baseurl = "http://usmgmt.iviscloud.net:777/"
 
   getHelpDeskCategories() {
     let url = `${environment.helpdeskUrl}/categoryList_1_0`;

@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
-import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe, NgStyle, NgIf } from '@angular/common';
+import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe, NgIf } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { FormsModule } from '@angular/forms';
 import { UpdateuserComponent } from './update-user/updateuser.component';
@@ -30,7 +30,6 @@ import { SearchPipe } from '../../../utilities/pipes/search.pipe';
     AddUserComponent,
     MatDialogContent,
     MatDialogClose,
-    NgStyle,
     NgIf
   ],
   providers: [SearchPipe],
@@ -40,7 +39,7 @@ import { SearchPipe } from '../../../utilities/pipes/search.pipe';
 export class ProfileComponent {
   constructor(
     private auth_service: AuthService,
-    private storage_service: StorageService,
+    public storage_service: StorageService,
     private alert_service: AlertService,
     private router: Router,
     private dialog: MatDialog,

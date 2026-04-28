@@ -11,7 +11,7 @@ export class InsightService {
   constructor(
     private http: HttpClient,
     private fordate: DatePipe,
-  ) {}
+  ) { }
 
   getNonWorkingDays(payload: any): Observable<any> {
     let url = `${environment.insightsUrl}/notWorkingDays_1_0`;
@@ -46,9 +46,7 @@ export class InsightService {
   }
 
   bi_verifai(payload: any): Observable<any> {
-    const url =
-      'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReport_1_0';
-
+    const url = `${environment.verifaiInsightsUrl}/bi_verifai/biAnalyticsReport_1_0`;
     let params = new HttpParams().set('SiteId', payload?.siteId);
 
     // FROM DATE
@@ -115,9 +113,7 @@ export class InsightService {
   }
 
   downloadBiVerifaiPdf(payload: any): Observable<any> {
-    const url =
-      'https://usstaging.ivisecurity.com/bi_verifai/biAnalyticsReportPdf_1_0';
-
+    const url = `${environment.verifaiInsightsUrl}/bi_verifai/biAnalyticsReportPdf_1_0`;
     let params = new HttpParams().set('SiteId', payload?.siteId);
 
     if (payload?.fromDate) {
@@ -155,7 +151,7 @@ export class InsightService {
     return this.http.get(url, {
       params,
       responseType: 'blob',
-      observe: 'response', // <-- THIS IS THE FIX
+      observe: 'response',
     });
   }
 }

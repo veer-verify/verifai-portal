@@ -75,7 +75,7 @@ export class ConfigService {
   }
 
   getPlayback(payload: any) {
-    const url = 'http://192.168.0.171:9632/get-video-links';
+    const url = `${environment.playbackUrl}/get-video-links`;
     let params = new HttpParams()
       .set('requestName', payload?.requestName)
       .set('fromDatetime', payload?.fromDatetime)
