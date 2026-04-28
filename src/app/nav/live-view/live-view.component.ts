@@ -71,6 +71,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   isDragEnabled = false;
   isDotEnabled = false;
   maximizedCamera: any | null = null;
+  isLiveDragActive = false;
 
   ngOnInit(): void {
     this.gridTypes = gridTypes;
@@ -206,6 +207,8 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   dropStream(event: CdkDragDrop<any[]>): void {
+    this.isLiveDragActive = false;
+
     if (this.maximizedCamera) {
       return;
     }

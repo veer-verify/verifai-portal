@@ -130,6 +130,7 @@
 } */
 
 .grid-container {
+  position: relative;
   height: calc(100vh - 100px);
   overflow-y: auto;
   display: grid;
@@ -240,6 +241,9 @@
 }
 
 .grid-slot-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -249,6 +253,7 @@
   background: rgb(237 50 55 / 8%);
   color: #ffffff;
   pointer-events: none;
+  transform: translate(-50%, -50%);
 }
 
 .grid-slot-placeholder .material-symbols-outlined {
@@ -284,6 +289,11 @@
 .grid-container.cdk-drop-list-dragging .empty-grid-slot {
   border-color: rgb(237 50 55 / 58%);
   background: rgb(237 50 55 / 8%);
+}
+
+.grid-container.cdk-drop-list-receiving .grid-slot-placeholder,
+.grid-container.cdk-drop-list-dragging .grid-slot-placeholder {
+  display: inline-flex;
 }
 
 .grid-item.cdk-drag {
@@ -434,6 +444,19 @@
   border-style: dashed;
   border-color: rgb(255 255 255 / 30%);
   background: rgb(255 255 255 / 4%);
+}
+
+.grid-container > .cdk-drag-placeholder {
+  position: absolute !important;
+  width: 0 !important;
+  height: 0 !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .grid-container.cdk-drop-list-dragging .grid-item:not(.cdk-drag-placeholder) {

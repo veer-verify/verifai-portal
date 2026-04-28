@@ -113,6 +113,7 @@
 <section
   class="grid-container"
   [class.maximized-mode]="!!maximizedCamera"
+  [class.drag-active]="isLiveDragActive"
   #gridContainer
   cdkDropList
   id="liveViewDropList"
@@ -121,6 +122,8 @@
   [cdkDropListDisabled]="!!maximizedCamera"
   [cdkDropListSortingDisabled]="true"
   cdkDropListOrientation="mixed"
+  (cdkDropListEntered)="isLiveDragActive = true"
+  (cdkDropListExited)="isLiveDragActive = false"
   (cdkDropListDropped)="dropStream($event)"
 >
   @for (slot of visibleSlots; track trackLiveSlot($index, slot)) {

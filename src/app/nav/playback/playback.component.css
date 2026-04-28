@@ -213,15 +213,20 @@ input[type="range"] {
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
+  flex: 0 0 auto;
 }
 
 .left-controls {
+  min-height: 36px;
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   padding: 5px 10px;
   background: #e9e9e9;
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .left-controls .material-symbols-outlined {
@@ -290,9 +295,11 @@ input[type="range"] {
 .timeline-wrapper {
   position: relative;
   width: 100%;
+  height: 67px;
   padding: 18px 0 0;
   border: 1px solid #d8d8d8;
   background: #ffffff;
+  box-sizing: border-box;
 }
 
 .tick-bar {
@@ -301,9 +308,10 @@ input[type="range"] {
   align-items: flex-end;
   width: 100%;
   height: 28px;
-  padding-bottom: 4px;
+  padding: 0 24px 4px;
   border-bottom: 1px solid #d8d8d8;
   background: #ffffff;
+  box-sizing: border-box;
   overflow: visible;
 }
 
@@ -326,8 +334,8 @@ input[type="range"] {
 
 .labels {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 24px;
+  right: 24px;
   top: -7px;
   height: 14px;
 }
