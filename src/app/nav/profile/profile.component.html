@@ -256,7 +256,12 @@
         }
       </div>
     } @else {
-      <p class="text-center" style="height: 30vh">No Sites!</p>
+      <p
+        class="d-flex align-items-center justify-content-center"
+        style="height: 30vh"
+      >
+        {{ filter === 2 ? "No Sites Assigned" : "All Sites Assigned" }}
+      </p>
     }
 
     <div class="d-flex justify-content-center my-2">

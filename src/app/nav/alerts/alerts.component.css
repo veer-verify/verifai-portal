@@ -29,12 +29,28 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   min-width: 0;
 }
 
 .tag-select {
   width: 200px;
+}
+
+.left .select-with-icon,
+.left .tag-select,
+.left app-calendar {
+  flex: 0 0 auto;
+}
+
+.left .select-with-icon select {
+  width: 200px;
+  max-width: 200px;
+}
+
+.left app-calendar {
+  display: block;
+  min-width: 0;
 }
 
 .grid-wrap {
@@ -130,4 +146,12 @@ select::-webkit-scrollbar-thumb:hover {
 
 .download-btn:active {
   transform: scale(0.95);
+}
+
+@media (max-width: 1280px) {
+  .left .select-with-icon select,
+  .tag-select {
+    width: 160px;
+    max-width: 160px;
+  }
 }
