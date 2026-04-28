@@ -28,11 +28,15 @@
         [class.active]="cam === selectedCamera"
       >
         <div class="camera-thumb">
-          <!-- <span class="material-symbols-outlined">videocam</span> -->
-          <img [src]="cam.snapshotUrl | media | async" />
+          <img
+            [src]="(cam.snapshotUrl | media | async) || dummyCameraImage"
+            alt="Camera thumbnail"
+            (error)="onCameraThumbError($event)"
+          />
         </div>
         <div class="cam-label">
-          {{ cam.name || cam.cameraName || cam.cameraId }}
+          <span class="material-symbols-outlined">videocam</span>
+          <strong>{{ cam.name || cam.cameraName || cam.cameraId }}</strong>
         </div>
       </div>
 

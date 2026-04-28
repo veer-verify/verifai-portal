@@ -218,6 +218,12 @@
             (click)="openSideBar()"
             >Profile</a
           >
+          <a
+            class="side-list-group-item"
+            routerLinkActive="side-active"
+            (click)="openSideBar(); logout()"
+            >Logout</a
+          >
         </div>
       </aside>
     }

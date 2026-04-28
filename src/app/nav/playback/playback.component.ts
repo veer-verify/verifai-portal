@@ -70,6 +70,7 @@ export class PlaybackComponent implements OnInit, OnDestroy {
   volume = 80;
   progress = 0;
   playbackRate = 1;
+  readonly dummyCameraImage = 'icons/camera-grey.svg';
 
   getPlayback() {
     if (!this.currentSite?.siteId || !this.selectedCamera?.cameraId) {
@@ -113,6 +114,12 @@ export class PlaybackComponent implements OnInit, OnDestroy {
     this.selectedVideo = null;
     this.playbackMeta = null;
     this.errorMessage = '';
+  }
+
+  onCameraThumbError(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    image.src = this.dummyCameraImage;
+    image.classList.add('dummy-thumb');
   }
 
   selectVideo(video: any) {
