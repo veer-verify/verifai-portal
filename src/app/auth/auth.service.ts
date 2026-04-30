@@ -22,7 +22,7 @@ export class AuthService {
     const user = {
       userName: payload.userName,
       password: this.storage_service.encrypt(payload.password),
-      callingSystemDetail: '',
+      callingSystemDetail: 'portal',
     };
     return this.http.post(url, user);
   }

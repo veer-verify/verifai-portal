@@ -1,5 +1,7 @@
 const dev_url: string = 'https://usstaging.ivisecurity.com';
-const local_url: string = 'http://localhost';
+// const local_url: string = 'http://localhost';
+
+const local_url: string = 'http://192.168.0.229';
 
 export const environment = {
 
@@ -22,6 +24,8 @@ export const environment = {
     // faqUrl: `${dev_url}/faq`,
 
 
+
+
     commonDownUrl: `${local_url}:3001/common`,
     authUrl: `${local_url}:3002/userDetails`,
     sitesUrl: `${local_url}:3004/vipsites`,
@@ -39,4 +43,5 @@ export const environment = {
     sensorUrl: `${local_url}:8859/sensors`,
     simsUrl: `${local_url}:8865/simDevices`,
     faqUrl: `${local_url}:8866/faq`,
+
 };
