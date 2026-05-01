@@ -43,8 +43,6 @@ import {
     MatDatepickerModule,
     SiteMapComponent,
     ErrInfoComponent,
-    SiteReportComponent,
-    AgGridAngular,
     AgCharts,
     CalendarComponent
   ],

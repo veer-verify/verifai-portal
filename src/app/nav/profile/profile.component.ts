@@ -22,13 +22,11 @@ import { SearchPipe } from '../../../utilities/pipes/search.pipe';
     MediaPipe,
     AsyncPipe,
     UpperCasePipe,
-    TitleCasePipe,
     NgClass,
     FormsModule,
     SearchPipe,
     UpdateuserComponent,
     AddUserComponent,
-    MatDialogContent,
     MatDialogClose,
     CommonModule
   ],
