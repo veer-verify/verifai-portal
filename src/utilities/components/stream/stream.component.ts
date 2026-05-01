@@ -887,8 +887,6 @@ export class StreamComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    console.log('🧹 Cleaning up stream component...');
-
     this.destroy$.next();
     this.destroy$.complete();
 
