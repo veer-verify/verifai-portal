@@ -37,7 +37,6 @@ import { gridTypes } from './grid-list';
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    GlobalClickDirective,
     StreamComponent,
     MatSelectModule,
     DragDropModule,

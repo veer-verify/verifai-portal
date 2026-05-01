@@ -171,7 +171,6 @@ app-pagination {
   transform: translateY(-50%);
   pointer-events: none;
   background: none;
-  -webkit-appearance: none;
   z-index: 1;
 }
 
@@ -182,7 +181,6 @@ app-pagination {
 }
 
 .range-slider input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
   pointer-events: all;
   width: 14px;
   height: 14px;
