@@ -1,12 +1,9 @@
-/* ================= PAGE ================= */
 .live-ai-page {
   display: flex;
   flex-direction: column;
-  /* padding: 0 20px; */
   background: #f3f4f6;
 }
 
-/* ================= TOP FILTER BAR ================= */
 .top-filter-bar {
   display: flex;
   justify-content: space-between;
@@ -15,10 +12,8 @@
   height: 40px;
   border-bottom: 1px solid #eee;
   background: #fff;
-  align-items: center;
 }
 
-/* ================= CAMERA SCROLL ================= */
 .camera-scroll-wrapper {
   display: flex;
   align-items: center;
@@ -40,7 +35,6 @@
   display: none;
 }
 
-/* ================= CAMERA CHIP ================= */
 .camera-chip {
   display: inline-flex;
   align-items: center;
@@ -92,13 +86,6 @@
   opacity: 1;
 }
 
-/* .dot {
-  width: 4px;
-  height: 4px;
-  background: red;
-  border-radius: 50%;
-} */
-
 .chip-status-dots {
   display: flex;
   flex-direction: column;
@@ -126,7 +113,6 @@
   background: #9ca3af;
 }
 
-/* ================= SCROLL BUTTONS ================= */
 .scroll-btn {
   position: absolute;
   top: 50%;
@@ -150,30 +136,21 @@
 .live-ai-container {
   display: flex;
   height: calc(100vh - 174px);
-  /* height: 82vh; */
-  /* gap: 12px; */
-  /* overflow: hidden; */
 }
 
 .camera-section {
   width: 60%;
   height: 55vh;
-  /* background: #e5e7eb; */
   display: flex;
   flex-direction: column;
   padding: 0 20px;
-  /* border-radius: 8px; */
 }
 
-/* GRID */
 .camera-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  /* gap: 10px; */
-  /* height: 100%; */
 }
 
-/* CAMERA BOX */
 .camera-box {
   position: relative;
   display: flex;
@@ -182,7 +159,6 @@
   background: #000;
   height: 50vh;
   border: 1px #ababab solid;
-  /* overflow: hidden; */
 }
 
 .camera-feed,
@@ -193,21 +169,16 @@
   object-fit: fill;
 }
 
-/* ================= ALERTS SECTION ================= */
 .alerts-section {
   background: #f5f6f8 !important;
   position: relative;
   width: 40%;
   display: flex;
   flex-direction: column;
-  /* border-left: 1px solid #ddd; */
   padding: 0 20px 0 0;
-  /* background: #fff; */
-  /* border-radius: 8px; */
   overflow-y: auto;
 }
 
-/* ================= CLIP ================= */
 .clip-btn {
   width: 14px;
   cursor: pointer;
@@ -218,7 +189,6 @@
   pointer-events: none;
 }
 
-/* ================= EMPTY ================= */
 .no-data {
   color: #888;
   font-size: 18px;
@@ -230,7 +200,6 @@
   text-transform: uppercase;
 }
 
-/* ================= FOOTER ================= */
 .footer {
   width: 100%;
   padding: 10px;
@@ -243,7 +212,6 @@
   background: #fafafa;
 }
 
-/* SELECT */
 .footer select {
   appearance: none;
   display: flex;
@@ -260,7 +228,6 @@
   background-position: right 8px center;
 }
 
-/* ================= HEADER RIGHT ================= */
 .header-right {
   display: flex;
   align-items: center;
@@ -276,7 +243,6 @@
   cursor: pointer;
 }
 
-/* ================= RESPONSIVE ================= */
 @media (max-width: 1024px) {
   .live-ai-container {
     flex-direction: column;
@@ -292,7 +258,6 @@
   }
 }
 
-/* CAMERA HEADER STYLE */
 .camera-header {
   display: flex;
   justify-content: space-between;
@@ -300,10 +265,6 @@
   font-size: 12px;
   font-weight: 600;
   margin: 0px 5px 4px;
-  /* margin-bottom: 4px; */
-  /* background: #e5e7eb; */
-  /* padding: 6px 20px; */
-  /* border-radius: 4px; */
 }
 
 .camera-header p {
@@ -312,24 +273,20 @@
 
 .camera-header p:first-child {
   font-size: 14px;
-  /* letter-spacing: 1px; */
   text-transform: uppercase;
 }
 
 .camera-header p:last-child {
   font-size: 10px;
-  /* letter-spacing: 1px; */
   text-transform: uppercase;
 }
 
-/* ================= TABLE ================= */
 .alerts-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 12px;
 }
 
-/* TABLE HEADER (DARK LIKE WIREFRAME) */
 .alerts-table thead {
   background: #f5f6f8 !important;
   color: #000;
@@ -339,7 +296,6 @@
   border-bottom: 1px solid #d6d3d3;
 }
 
-/* STRONG HEADER TEXT */
 .alerts-table th {
   padding: 8px 4px;
   font-size: 12px;
@@ -351,12 +307,10 @@
   background: #f9fafb;
 }
 
-/* HOVER */
 .alerts-table tbody tr:hover {
   background: #e5e7eb;
 }
 
-/* CELL */
 .alerts-table td {
   padding: 4px;
   font-size: 12px;
@@ -372,7 +326,6 @@
   }
 }
 
-/* --- Status Indicators (Monitoring / AI) --- */
 .status-indicators {
   display: flex;
   gap: 15px;
@@ -400,17 +353,10 @@
 }
 .status-dot.red {
   background: #ff0000;
-  /* box-shadow: 0 0 5px red; */
 }
 .status-dot.green {
   background: #00ff00;
-  /* box-shadow: 0 0 5px #00ff00; */
 }
-
-/* Fix header spacing */
-/* .camera-header {
-  padding: 10px 0;
-} */
 
 .site-name {
   color: #333;
@@ -420,13 +366,11 @@
 .cam-id {
   color: #888;
 }
-/* --- Subtitles / Legend Style --- */
 .subtitles-overlay {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
   align-items: center;
-  /* margin-top: 12px; */
   max-width: 100%;
   pointer-events: none;
 }
@@ -435,7 +379,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  /* background: transparent; */
   color: #665858;
   padding: 0;
   border-radius: 0;
@@ -454,12 +397,6 @@
   display: inline-block;
   margin-bottom: 3px;
 }
-
-/* .sub-label {
-  color: #bfbfbf;
-  font-size: 14px;
-  font-weight: 500;
-} */
 
 .sub-count {
   display: none;

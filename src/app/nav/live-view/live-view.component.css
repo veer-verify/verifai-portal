@@ -170,20 +170,10 @@
   transform: translate(-50%, -50%);
 }
 
-.grid-slot-placeholder div {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
 .grid-slot-placeholder strong {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.grid-slot-placeholder strong {
   font-size: 12px;
   text-transform: uppercase;
 }
@@ -214,33 +204,9 @@
   cursor: grab;
 }
 
-::ng-deep .grid-item.tile-drag-enabled app-stream,
-::ng-deep .grid-item.tile-drag-enabled app-stream .video-container {
-  cursor: grab !important;
-}
-
 .grid-item.tile-drag-enabled.cdk-drag-dragging,
 .grid-item.tile-drag-enabled.cdk-drag-dragging * {
   cursor: grabbing;
-}
-
-::ng-deep .grid-item.tile-drag-enabled.cdk-drag-dragging app-stream,
-::ng-deep
-  .grid-item.tile-drag-enabled.cdk-drag-dragging
-  app-stream
-  .video-container {
-  cursor: grabbing !important;
-}
-
-.grid-item.cdk-drag-preview {
-  border: 1px solid #9c9696;
-  background: #000;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 18px 36px rgb(0 0 0 / 35%);
-  transform: scale(0.98) translateZ(0);
-  transition: none;
 }
 
 .stream-drag-preview-card {
@@ -357,14 +323,6 @@
   border: 0 !important;
   opacity: 0 !important;
   pointer-events: none !important;
-}
-
-.grid-container.cdk-drop-list-dragging .grid-item:not(.cdk-drag-placeholder) {
-  transition: transform 260ms cubic-bezier(0.2, 0, 0, 1);
-}
-
-.grid-item.cdk-drag-animating {
-  transition: transform 260ms cubic-bezier(0.2, 0, 0, 1);
 }
 
 .single-view {
