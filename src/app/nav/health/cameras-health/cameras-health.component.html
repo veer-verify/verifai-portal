@@ -1,0 +1,364 @@
+<section class="camera-health-page">
+  <div *ngIf="loadingCameras" class="camera-health-state-card">
+    <!-- <div class="state-icon loading">⟳</div> -->
+    <h3>Loading camera health...</h3>
+    <p>Please wait while we Get the latest camera health details.</p>
+  </div>
+
+  <div
+    *ngIf="!loadingCameras && !filteredCameras.length"
+    class="camera-health-state-card"
+  >
+    <!-- <div class="state-icon">📷</div> -->
+
+    <h3>{{ cameraEmptyTitle }}</h3>
+    <p>{{ cameraEmptyMessage }}</p>
+
+    <div class="state-actions">
+      <!-- <button
+        type="button"
+        class="state-refresh-btn"
+        (click)="getCameras()"
+      >
+        Refresh
+      </button> -->
+    </div>
+  </div>
+
+  <section
+    *ngIf="!loadingCameras && filteredCameras.length"
+    class="camera-content-area"
+  >
+    <div class="camera-list-panel">
+      <div class="camera-site-group" *ngFor="let group of groupedCameras">
+        <div class="camera-list-group">
+          <article
+            *ngFor="let camera of group.cameras"
+            class="camera-list-item"
+            [class.offline]="camera.cameraStatus === 'offline'"
+            [class.selected]="selectedCamera?.cameraId === camera.cameraId"
+            (click)="openDrawer(camera)"
+          >
+            <div class="camera-list-main">
+              <div
+                class="camera-icon"
+                [class.online]="camera.cameraStatus === 'online'"
+                [class.offline]="camera.cameraStatus === 'offline'"
+              >
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M23 7L16 12L23 17V7Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <rect
+                    x="1"
+                    y="5"
+                    width="15"
+                    height="14"
+                    rx="2"
+                    ry="2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+
+              <div class="camera-list-text">
+                <div class="camera-id" [title]="camera.cameraId">
+                  {{ camera.cameraId }}
+                </div>
+                <div class="camera-name" [title]="camera.cameraName">
+                  {{ camera.cameraName }} · {{ camera.deviceName }}
+                </div>
+              </div>
+            </div>
+
+            <div class="camera-list-metrics">
+              <div
+                class="camera-status-pill"
+                [class.online]="camera.cameraStatus === 'online'"
+                [class.offline]="camera.cameraStatus === 'offline'"
+              >
+                <span class="camera-status-dot"></span>
+                {{ camera.cameraStatus === 'online' ? 'Online' : 'Offline' }}
+              </div>
+
+              <!-- <div class="camera-list-uptime">
+                <span>7-day uptime</span>
+                <strong>{{ getUptimePercentage(camera) }}%</strong>
+              </div> -->
+            </div>
+
+            <div class="camera-list-health">
+              <div class="camera-health-bar">
+                <div
+                  *ngFor="let segment of buildHealthSegments(camera)"
+                  class="camera-health-segment"
+                  [class.online]="segment.type === 'online'"
+                  [class.offline]="segment.type === 'offline'"
+                  [style.flex]="segment.width < 0.7 ? 0.7 : segment.width"
+                ></div>
+              </div>
+
+              <div
+                class="camera-offline-duration"
+                [class.good]="getTotalOfflineMs(camera) === 0"
+              >
+                {{
+                  getTotalOfflineMs(camera)
+                    ? formatDuration(getTotalOfflineMs(camera)) + ' offline'
+                    : 'No offline logs'
+                }}
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+     
+    <div *ngIf="loadingDeviceInfo" class="device-info-loading">
+      Loading device information...
+    </div>
+    <div
+      *ngIf="!loadingDeviceInfo && !selectedCamera"
+      class="empty-device-card"
+    >
+      Select a Camera to view health details.
+    </div>
+
+    <div class="camera-detail-panel" *ngIf="!loadingDeviceInfo && selectedCamera">
+      <div class="camera-detail-grid">
+        <div class="camera-chart-card">
+          <!-- <div class="camera-detail-header"> -->
+            <!-- <div>
+              <div class="camera-title-line">
+                <b>{{ selectedCamera.cameraId }}</b>
+                <label
+                  [ngClass]="
+                    selectedCamera.cameraStatus === 'online' ? 'online' : 'offline'
+                  "
+                >
+                  ● {{ selectedCamera.cameraStatus.toUpperCase() }}
+                </label>
+              </div>
+
+              <div class="camera-title-line">
+                <b>{{ selectedCamera.cameraName }}</b>
+              </div>
+
+              <div class="camera-subtitle">
+                {{ selectedCamera.siteName }}· {{ selectedCamera.deviceName }} 
+              </div>
+            </div> -->
+
+         
+          <!-- </div> -->
+
+          <div class="chart-box">
+            
+            <div class="chart-legend">
+              <div>
+                <span class="legend red"></span> Offline
+                <span class="legend green-light"></span> Online
+              </div>
+              <b>{{ chartPeriodLabel }}</b>
+               <div class="timeline-buttons">
+              <button
+                [class.active]="selectedRange === 'week'"
+                (click)="switchRange('week')"
+              >
+                Week
+              </button>
+              <button
+                [class.active]="selectedRange === 'month'"
+                (click)="switchRange('month')"
+              >
+                Month
+              </button>
+              <!-- <button
+                [class.active]="selectedRange === 'year'"
+                (click)="switchRange('year')"
+              >
+                Year
+              </button> -->
+            </div>
+            </div>
+
+            <div class="timeline-chart" [ngClass]="{'week-view': selectedRange === 'week'}">
+              <button class="arrow-btn" [disabled]="!canGoPreviousPeriod" (click)="goPreviousPeriod()">‹</button>
+
+              <div class="h-bars-area">
+                <div class="h-axis-x">
+                  <div
+                    class="h-grid-label"
+                    *ngFor="let label of timeAxisLabels; let i = index"
+                    [style.left.%]="(i / (timeAxisLabels.length - 1)) * 100"
+                  >
+                    {{ label }}
+                  </div>
+                </div>
+
+                <div class="h-grid-lines">
+                  <div
+                    class="h-grid-line"
+                    *ngFor="let label of timeAxisLabels; let i = index"
+                    [style.left.%]="(i / (timeAxisLabels.length - 1)) * 100"
+                  ></div>
+                </div>
+
+                <div class="h-bar-item" *ngFor="let bar of chartBars">
+                  <span class="h-bar-label">
+                    {{ bar.label }}<ng-container *ngIf="bar.subLabel"><br/>{{ bar.subLabel }}</ng-container>
+                  </span>
+                  
+                  <div class="h-bar-stack">
+                    <div
+                      *ngFor="let segment of bar.segments"
+                      class="h-bar-segment"
+                      [title]="segment.tooltip"
+                      [ngClass]="{
+                        'bar-green': segment.status === 'online',
+                        'bar-red': segment.status === 'offline',
+                        'bar-grey': segment.status === 'not_installed'
+                      }"
+                      [style.left.%]="segment.leftPct"
+                      [style.width.%]="segment.widthPct"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                class="arrow-btn"
+                [disabled]="!canGoNextPeriod"
+                (click)="goNextPeriod()"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="camera-side-cards">
+          <div class="camera-small-card">
+            <h4>Camera Info</h4>
+
+            <p>
+              <span>Device</span>
+              <b>{{ selectedCamera.deviceName }}</b>
+            </p>
+            <p>
+              <span>Host</span>
+              <b [title]="selectedCameraInfo?.cam_info?.host || selectedCamera.host">{{ selectedCameraInfo?.cam_info?.host || selectedCamera.host }}:{{ selectedCameraInfo?.cam_info?.port || selectedCamera.port }}</b>
+            </p>
+            <p>
+              <span>RTSP URL</span>
+              <b style="word-break: break-all;" [title]="selectedCameraInfo?.cam_info?.rtspUrl || '-'">{{ selectedCameraInfo?.cam_info?.rtspUrl || '-' }}</b>
+            </p>
+            <p>
+              <span>Last Checked</span>
+              <b>{{ formatInfoDate(selectedCameraInfo?.cam_info?.checkedAt) }}</b>
+            </p>
+            <p>
+              <span>Monitoring</span>
+              <b [ngClass]="selectedCamera.monitoring === 'T' ? 'green-text' : 'red-text'">
+                {{ selectedCamera.monitoring === 'T' ? 'Enabled' : 'Disabled' }}
+              </b>
+            </p>
+            <p>
+              <span>Total Offline</span>
+              <b [ngClass]="getTotalOfflineMs(selectedCamera) ? 'red-text' : 'green-text'">
+                {{
+                  getTotalOfflineMs(selectedCamera)
+                    ? formatDuration(getTotalOfflineMs(selectedCamera))
+                    : 'None'
+                }}
+              </b>
+            </p>
+            <p>
+              <span>Current Status</span>
+              <b
+                [ngClass]="
+                  selectedCamera.cameraStatus === 'online' ? 'green-text' : 'red-text'
+                "
+              >
+                {{ selectedCamera.cameraStatus.toUpperCase() }}
+              </b>
+            </p>
+          </div>
+
+          <div class="camera-small-card report-card">
+            <div class="report-tabs single">
+              <button class="active">Latest Summary</button>
+            </div>
+
+            <p>
+              <span>Remarks</span>
+              <b>{{ selectedCamera.remarks || '-' }}</b>
+            </p>
+            <p>
+              <span>Reason</span>
+              <b>{{ selectedCamera.reason || '-' }}</b>
+            </p>
+            <p>
+              <span>Offline Events</span>
+              <b
+                [ngClass]="
+                  selectedCameraInfo?.offline_logs?.length ? 'red-text' : 'green-text'
+                "
+              >
+                {{ selectedCameraInfo?.offline_logs?.length || 0 }}
+              </b>
+            </p>
+          </div>
+
+          <div class="camera-small-card logs-card">
+            <div class="logs-card-header">
+              <h4>Online / Offline Log</h4>
+            </div>
+
+            <!-- <div class="log-table-head">
+              <span>Offline</span>
+              <span>Online</span>
+            </div> -->
+
+            <div
+              *ngIf="!selectedCameraInfo?.offline_logs?.length"
+              class="camera-empty-events"
+            >
+              No offline events.
+            </div>
+
+            <div
+              *ngIf="selectedCameraInfo?.offline_logs?.length"
+              class="new-logs-list"
+            >
+              <div
+                class="new-log-row"
+                *ngFor="let log of selectedCameraInfo?.offline_logs"
+              >
+                <div>
+                  <b class="red-text">{{ formatInfoDate(log.offline_time || log.startTime || log.start_time) }}</b>
+                  <small>{{ formatDuration(durationMs(log.offline_time || log.startTime || log.start_time, log.online_time || log.endTime || log.end_time || now.toISOString())) }}</small>
+                </div>
+                <div>
+                  <b class="green-text">{{ formatInfoDate(log.online_time || log.endTime || log.end_time || now.toISOString()) }}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+<app-pagination
+  *ngIf="camerasList.length > 0"
+  [totalPages]="totalPages"
+  [pageSize]="10"
+  (changePSize)="onPageSizeChange($any($event))"
+  (changePageNumber)="onPageNumberChange($any($event))"
+></app-pagination>

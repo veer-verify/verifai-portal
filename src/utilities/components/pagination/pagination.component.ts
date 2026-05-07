@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class PaginationComponent {
 
-  pageSize: any = 25;
+  @Input() pageSize: any = 25;
   pageNumber: any = 1;
 
   @Input() totalPages!: number;

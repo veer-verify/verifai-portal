@@ -1,1 +1,401 @@
-<p>health works!</p>
+<!-- <main> -->
+
+<!-- Tab Bar -->
+<div class="tool-bar">
+  <div
+    class="hamburger"
+    (click)="storage_service.openSideNav()"
+    *ngIf="!(storage_service.showSideNav$ | async)"
+  >
+    ☰
+  </div>
+
+  <!--  status offine/online.  -->
+    <div class="health-tabs">
+    <button
+      *ngFor="let tab of tabs"
+      type="button"
+      class="health-tab-btn"
+      [ngClass]="{ active: selectedTab === tab }"
+      (click)="selectTab(tab)"
+    >
+      {{ tab }}
+    </button>
+  </div>
+
+  <div class="status-dropdown" *ngIf="selectedTab === 'Devices'">
+    <span class="status-label">Status</span>
+    <select
+      [(ngModel)]="selectedStatus"
+      (change)="changeStatus(selectedStatus)"
+    >
+      <option value="">All</option>
+      <option value="online">Online</option>
+      <option value="offline">Offline</option>
+    </select>
+  </div>
+</div>
+<div class="health-page">
+  <!-- Other Tabs Placeholder -->
+
+
+  <div
+    *ngIf="
+      selectedTab !== 'Dashboard' &&
+      selectedTab !== 'Devices' &&
+      selectedTab !== 'Cameras'
+    "
+    class="placeholder-view"
+  >
+    <div class="placeholder-box">
+      <h3>{{ selectedTab }}</h3>
+      <p>Upcoming features will be added next.</p>
+    </div>
+  </div>
+
+  <app-cameras-health *ngIf="selectedTab === 'Cameras'"></app-cameras-health>
+  <!-- Dashboard -->
+  <div *ngIf="selectedTab === 'Dashboard'" class="dashboard-view">
+    <div class="dashboard-grid">
+      <div class="summary-card" *ngFor="let card of dashboardCards">
+        <div class="card-header">
+          <h3>{{ card.title }}</h3>
+          <span class="card-total">{{ card.total }}</span>
+        </div>
+
+        <div class="card-footer">
+          <div class="status-item">
+            <span class="dot online"></span>
+            <span class="label">Online</span>
+            <span class="value">{{ card.online }}</span>
+          </div>
+
+          <div class="status-item">
+            <span class="dot offline"></span>
+            <span class="label">Offline</span>
+            <span class="value">{{ card.offline }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Devices -->
+  <!-- Devices New Card View -->
+  <div *ngIf="selectedTab === 'Devices'" class="devices-new-view">
+    <div class="devices-left-panel">
+      <div
+        class="device-card"
+        *ngFor="let device of devicesList"
+        [ngClass]="{ active: selectedDeviceId === device.deviceId }"
+        (click)="openDeviceInfo(device.deviceId)"
+      >
+        <div class="device-card-top">
+          <div>
+            <p class="device-label">Device</p>
+            <h4>{{ device.deviceId }}</h4>
+          </div>
+
+          <div
+            class="device-status-pill"
+            [ngClass]="{
+              online: device.currentStatus === 'ONLINE',
+              offline: device.currentStatus === 'OFFLINE',
+            }"
+          >
+            ● {{ device.currentStatus }}
+          </div>
+        </div>
+
+        <div class="device-card-row">
+          <span>NAME</span>
+          <b>{{ device.name }}</b>
+        </div>
+
+        <div class="device-card-row">
+          <span>Installation Date</span>
+          <b>{{ device.installationDateTime }}</b>
+        </div>
+
+        <div class="health-status-wrap">
+          <div class="health-bar">
+            <span
+              *ngFor="let segment of device.healthSegments"
+              class="health-segment"
+              [ngClass]="segment.color"
+              [style.width]="segment.width"
+              [attr.title]="segment.tooltip"
+            ></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="devices-right-panel">
+      <div *ngIf="loadingDeviceInfo" class="device-info-loading">
+        Loading device information...
+      </div>
+
+      <div
+        *ngIf="!loadingDeviceInfo && !selectedDeviceInfo"
+        class="empty-device-card"
+      >
+        Select a device to view health details.
+      </div>
+
+      <div
+        *ngIf="!loadingDeviceInfo && selectedDeviceInfo"
+        class="device-detail-grid"
+      >
+        <!-- LEFT CHART CARD -->
+        <div class="device-chart-card">
+          <div class="device-detail-header">
+            <div>
+              <div class="device-title-line">
+                <!-- <span>Device Id </span> -->
+                <b>{{ selectedDeviceInfo.device_info?.device_id }}</b>
+
+                <!-- <label
+                  [ngClass]="
+                    selectedDeviceInfo.device_info?.current_status === 'ONLINE'
+                      ? 'online'
+                      : 'offline'
+                  "
+                >
+                  ● {{ selectedDeviceInfo.device_info?.current_status }}
+                </label> -->
+              </div>
+
+              <div class="device-title-line">
+                <!-- <span>NAME </span> -->
+                <b>{{ selectedDeviceInfo.device_info?.device_name }}</b>
+              </div>
+            </div>
+
+            <div class="timeline-buttons">
+              <button
+                [class.active]="timelineRange === 'week'"
+                (click)="setTimelineRange('week')"
+              >
+                Week
+              </button>
+              <button
+                [class.active]="timelineRange === 'month'"
+                (click)="setTimelineRange('month')"
+              >
+                Month
+              </button>
+              <!-- <button
+                [class.active]="timelineRange === 'year'"
+                (click)="setTimelineRange('year')"
+              >
+                Year
+              </button> -->
+            </div>
+          </div>
+
+          <div class="chart-box">
+            <div class="chart-legend">
+              <div>
+                <span class="legend red"></span> Offline
+                <span class="legend green-light"></span> Online
+              </div>
+              <b>{{ timelinePeriodLabel }}</b>
+            </div>
+
+            <div class="timeline-chart">
+              <button class="arrow-btn" [disabled]="!canGoPreviousTimeline" (click)="goPreviousTimeline()">
+                ‹
+              </button>
+
+              <div class="bars-area">
+                <div class="grid-line time-00">00:00</div>
+                <div class="grid-line time-03">03:00</div>
+                <div class="grid-line time-06">06:00</div>
+                <div class="grid-line time-09">09:00</div>
+                <div class="grid-line time-12">12:00</div>
+                <div class="grid-line time-15">15:00</div>
+                <div class="grid-line time-18">18:00</div>
+                <div class="grid-line time-21">21:00</div>
+                <div class="grid-line time-24">23:59</div>
+
+                <div class="bar-item" *ngFor="let bar of timelineBars">
+                  <div class="bar-stack time-bar-stack">
+                    <div
+                      *ngFor="let segment of bar.segments"
+                      class="bar-segment"
+                      [title]="segment.tooltip"
+                      [ngClass]="{
+                        'bar-green': segment.status === 'online',
+                        'bar-red': segment.status === 'offline',
+                        'bar-grey': segment.status === 'not_installed',
+                      }"
+                      [style.top.%]="segment.topPct"
+                      [style.height.%]="segment.heightPct"
+                    ></div>
+                  </div>
+
+                  <span>
+                    {{ bar.label }}<ng-container *ngIf="bar.subLabel">
+                      {{ bar.subLabel }}
+                    </ng-container>
+                  </span>
+                </div>
+              </div>
+
+              <button
+                class="arrow-btn"
+                [disabled]="timelineOffset === 0"
+                (click)="goNextTimeline()"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT INFO CARD -->
+        <div class="device-side-cards">
+          <div class="device-small-card">
+            <h4>Device Info</h4>
+
+            <p>
+              <span>Installation Date & Time</span>
+              <b>{{
+                formatInfoDate(
+                  selectedDeviceInfo.device_info?.installation_date
+                )
+              }}</b>
+            </p>
+            <!-- <p>
+              <span>Current Status</span>
+              <b
+                [ngClass]="
+                  selectedDeviceInfo.device_info?.current_status === 'ONLINE'
+                    ? 'green-text'
+                    : 'red-text'
+                "
+              >
+                {{ selectedDeviceInfo.device_info?.current_status }}
+              </b>
+            </p> -->
+            <p>
+              <span>Live Time</span>
+              <b>{{
+                formatInfoDate(selectedDeviceInfo.device_info?.live_time)
+              }}</b>
+            </p>
+            <p>
+              <span>Last Online</span>
+              <b class="green-text">
+                {{
+                  formatInfoDate(
+                    selectedDeviceInfo.last_status?.last_online?.time
+                  )
+                }}
+              </b>
+            </p>
+            <p>
+              <span>Duration</span>
+              <b class="green-text">
+                {{
+                  shortDuration(
+                    selectedDeviceInfo.last_status?.last_online?.duration
+                  )
+                }}
+              </b>
+            </p>
+            <p>
+              <span>Last Offline</span>
+              <b class="red-text">
+                {{
+                  formatInfoDate(
+                    selectedDeviceInfo.last_status?.last_offline?.time
+                  )
+                }}
+              </b>
+            </p>
+            <p>
+              <span>Duration</span>
+              <b class="red-text">
+                {{
+                  shortDuration(
+                    selectedDeviceInfo.last_status?.last_offline?.duration
+                  )
+                }}
+              </b>
+            </p>
+          </div>
+
+          <div class="device-small-card report-card">
+            <div class="report-tabs">
+              <button
+                [class.active]="reportTab === 'online'"
+                (click)="reportTab = 'online'"
+              >
+                Online Report
+              </button>
+              <button
+                [class.active]="reportTab === 'offline'"
+                (click)="reportTab = 'offline'"
+              >
+                Offline Report
+              </button>
+            </div>
+
+            <ng-container *ngFor="let item of reportEntries">
+              <p>
+                <span>{{ item.key.replaceAll("_", " ") }}</span>
+                <b
+                  [ngClass]="reportTab === 'online' ? 'green-text' : 'red-text'"
+                >
+                  {{ item.value }}
+                </b>
+              </p>
+            </ng-container>
+          </div>
+
+          <div class="device-small-card logs-card">
+            <div class="logs-card-header">
+              <h4>Online / Offline Log</h4>
+              <!-- <label>{{
+                                selectedDeviceInfo.offline_logs?.length || 0
+                                }}
+                                events</label> -->
+            </div>
+
+            <!-- <div class="log-table-head">
+              <span>Offline</span>
+              <span>Online</span>
+            </div> -->
+
+            <div class="new-logs-list">
+              <div
+                class="new-log-row"
+                *ngFor="let log of selectedDeviceInfo.offline_logs"
+              >
+                <div>
+                  <b class="red-text">{{ formatInfoDate(log.offline_time) }}</b>
+                  <small>{{ shortDuration(log.duration) }}</small>
+                </div>
+                <div>
+                  <b class="green-text">{{
+                    formatInfoDate(log.online_time)
+                  }}</b>
+                  <!-- <small>{{ shortDuration(log.duration) }}</small> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-pagination
+  *ngIf="selectedTab === 'Devices'"
+  [totalPages]="totalPages"
+  [pageSize]="10"
+  (changePSize)="onPageSizeChange($any($event))"
+  (changePageNumber)="onPageNumberChange($any($event))"
+></app-pagination>

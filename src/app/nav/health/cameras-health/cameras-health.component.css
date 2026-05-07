@@ -1,0 +1,692 @@
+.camera-health-page {
+  width: 100%;
+  min-height: calc(100vh - 175px);
+  background: linear-gradient(to bottom, #ffffff 0%, #efefef 900px);
+  /* padding: 0 6px 14px; */
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.camera-health-state-card {
+  min-height: calc(100vh - 150px);
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 30px;
+  color: #1f2937;
+}
+
+.camera-health-state-card .state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fff1f2;
+  color: #ed3237;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.camera-health-state-card .state-icon.loading {
+  animation: stateSpin 1s linear infinite;
+}
+
+.camera-health-state-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.camera-health-state-card p {
+  margin: 0;
+  max-width: 520px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+.state-actions {
+  margin-top: 10px;
+}
+
+.state-refresh-btn {
+  border: 0;
+  background: #ed3237;
+  color: #ffffff;
+  padding: 9px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.state-refresh-btn:hover {
+  background: #d82127;
+}
+
+@keyframes stateSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.camera-content-area {
+  display: grid;
+  grid-template-columns: 280px minmax(900px, 1fr);
+  gap: 10px;
+  width: 100%;
+  margin-top: 5px;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding-bottom: 10px;
+}
+
+.camera-list-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: calc(100vh - 235px);
+  padding-right: 4px;
+  overflow: auto;
+}
+
+.camera-list-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.camera-list-item,
+/* .camera-chart-card, */
+.camera-small-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.camera-list-item {
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.camera-list-item:hover,
+.camera-list-item.selected {
+  border-color: #ef3b3b;
+  box-shadow: 0 2px 10px rgba(239, 59, 59, 0.12);
+}
+
+.camera-list-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.camera-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.camera-icon.online {
+  background: #e4f8ef;
+  color: #0a7a4f;
+}
+
+.camera-icon.offline {
+  background: #fdecea;
+  color: #a32d2d;
+}
+
+.camera-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.camera-list-text {
+  min-width: 0;
+}
+
+.camera-id {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111;
+}
+
+.camera-name {
+  margin-top: 2px;
+  font-size: 11px;
+  color: #777;
+}
+
+.camera-list-metrics {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.camera-status-pill {
+  height: fit-content;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.camera-status-pill.online {
+  background: #e4f8ef;
+  color: #0a7a4f;
+}
+
+.camera-status-pill.offline {
+  background: #fdecea;
+  color: #a32d2d;
+}
+
+.camera-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.camera-list-uptime {
+  text-align: right;
+}
+
+.camera-list-uptime span {
+  color: #999;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.camera-list-uptime strong {
+  display: block;
+  font-size: 12px;
+  color: #111;
+}
+
+.camera-health-bar {
+  width: 100%;
+  height: 12px;
+  display: flex;
+  overflow: hidden;
+  background: #dfe3e8;
+}
+
+.camera-health-segment {
+  height: 100%;
+  display: block;
+  min-width: 2px;
+}
+
+.camera-health-segment.online {
+  background: #57bc88;
+}
+
+.camera-health-segment.offline {
+  background: #ef3b3b;
+}
+
+.camera-offline-duration {
+  margin-top: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #a32d2d;
+}
+
+.camera-offline-duration.good {
+  color: #0a7a4f;
+}
+
+.camera-detail-panel {
+  min-width: 900px;
+  overflow: visible;
+}
+
+.camera-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(550px, 1fr) 300px;
+  gap: 8px;
+  min-width: 900px;
+}
+
+.camera-chart-card {
+  /* padding: 12px; */
+  /* height: 520px; */
+  /* display: flex; */
+  flex-direction: column;
+  min-width: 560px;
+}
+
+.camera-detail-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.camera-title-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.camera-title-line b {
+  font-size: 13px;
+  font-weight: 800;
+  color: #111;
+}
+
+.camera-title-line label {
+  font-size: 9px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.camera-title-line label.online {
+  background: #e4f8ef;
+  color: #0a7a4f;
+}
+
+.camera-title-line label.offline {
+  background: #fdecea;
+  color: #a32d2d;
+}
+
+.camera-subtitle {
+  padding-top: 2px;
+  font-size: 11px;
+  color: #888;
+}
+
+.timeline-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.timeline-buttons button {
+  height: 28px;
+  padding: 0 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.timeline-buttons button.active {
+  background: #ef3b3b;
+  border-color: #ef3b3b;
+  color: #fff;
+}
+
+.chart-box {
+  flex: 1;
+  border: 1px solid #e8e8e8;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #fafafa;
+}
+
+.chart-legend {
+  padding: 8px 14px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  font-size: 9px;
+  color: #666;
+}
+
+.chart-legend b {
+  font-size: 10px;
+}
+
+.legend {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+  margin-left: 12px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+
+.legend.red {
+  background: #e24b4a;
+}
+
+.legend.green-light {
+  background: #3ecf8e;
+}
+
+.timeline-chart {
+  min-height: 300px;
+  display: flex;
+  align-items: stretch;
+  padding-bottom: 20px;
+}
+
+.arrow-btn {
+  width: 34px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.arrow-btn:disabled {
+  color: #e0e0e0;
+  cursor: default;
+}
+
+.empty-device-card {
+  padding: 30px;
+  font-size: 12px;
+  color: #777;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.h-bars-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 10px 5px;
+}
+
+.h-axis-x {
+  position: relative;
+  height: 20px;
+  margin-left: 60px;
+  /* Space for Y-axis labels */
+  margin-bottom: 10px;
+}
+
+.h-grid-label {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: #9c9c9c;
+}
+
+.h-grid-lines {
+  position: absolute;
+  top: 30px;
+
+  /* Below X-axis labels */
+  bottom: 10px;
+  left: 60px;
+  right: 10px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.h-grid-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed #212529;
+}
+
+.h-bar-item {
+  display: flex;
+  align-items: center;
+  /* height: 35px; */
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.h-bar-label {
+  width: 50px;
+  text-align: right;
+  padding-right: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  color: #555;
+  flex-shrink: 0;
+}
+
+.h-bar-stack {
+  flex: 1;
+  height: 16px;
+  position: relative;
+  background: #f5f5f5;
+  left: 3px;
+
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.week-view .h-bar-stack {
+  height: 35px;
+}
+
+.week-view .h-bar-item {
+  margin-bottom: 15px;
+}
+
+.h-bar-segment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+}
+
+.bar-green {
+  background: #3ecf8e;
+}
+
+.bar-red {
+  background: #e24b4a;
+}
+
+.bar-grey {
+  background: #dfe3e8;
+}
+
+.camera-side-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 255px;
+}
+
+.camera-small-card {
+  padding: 10px 14px;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.camera-small-card h4,
+.logs-card-header h4 {
+  margin: 0 0 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.camera-small-card p {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 5px 0;
+  border-bottom: 1px solid #f7f7f7;
+}
+
+.camera-small-card p span {
+  color: #999;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.camera-small-card p b {
+  font-size: 10px;
+  color: #333;
+  text-align: right;
+  max-width: 145px;
+}
+
+.green-text {
+  color: #0a7a4f !important;
+}
+
+.red-text {
+  color: #a32d2d !important;
+}
+
+.report-tabs {
+  display: flex;
+  margin: -10px -14px 8px;
+  border-bottom: 1px solid #ececec;
+}
+
+.report-tabs.single button {
+  flex: 1;
+}
+
+.report-tabs button {
+  flex: 1;
+  padding: 6px 0;
+  border: none;
+  color: #bbb;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  background: transparent;
+}
+
+.report-tabs button.active {
+  background: #f5f5f5;
+  color: #333;
+  border-bottom: 2px solid #ef3b3b;
+}
+
+.logs-card {
+  max-height: 300px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.logs-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.log-table-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #3a3a3a;
+  padding: 5px 10px;
+  margin: 0 -14px;
+}
+
+.log-table-head span {
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.log-table-head span:first-child {
+  color: #e24b4a;
+}
+
+.log-table-head span:last-child {
+  color: #3ecf8e;
+}
+
+.new-logs-list {
+  overflow-y: auto;
+}
+
+.new-log-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid #f6f6f6;
+}
+
+.new-log-row b {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.new-log-row small {
+  display: block;
+  font-size: 8px;
+  color: #bbb;
+  margin-top: 2px;
+}
+
+.camera-empty-events {
+  padding: 16px 0;
+  text-align: center;
+  color: #888;
+  font-size: 11px;
+}
+
+@media (max-width: 1200px) {
+  .camera-content-area {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-list-panel {
+    max-height: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .camera-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .camera-list-panel {
+    grid-template-columns: 1fr;
+  }
+}

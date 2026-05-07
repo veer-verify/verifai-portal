@@ -1,4 +1,6 @@
-::ng-deep .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-text-field__input {
+::ng-deep
+  .mdc-text-field--outlined:not(.mdc-text-field--disabled)
+  .mdc-text-field__input {
   color: #716868 !important;
   caret-color: #514c4c !important;
 }
@@ -350,7 +352,7 @@
 
 .profile-cam-left {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   gap: 6px;
   min-width: 0;
   flex: 1;
@@ -416,6 +418,12 @@
   font-size: 15px;
 }
 
+.site-label {
+  color: #888;
+  font-size: 11px;
+  /* margin-right: 4px; */
+}
+
 .profile-delete-action:hover {
   border-color: #ed3237;
   background: #ed3237;
@@ -431,4 +439,3 @@
     transform: translateX(0);
   }
 }
-
