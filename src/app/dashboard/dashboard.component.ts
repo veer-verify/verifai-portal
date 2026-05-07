@@ -71,17 +71,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.storage_service.profilesData$.next([]);
       return;
     }
-
+    const siteMap = new Map(
+      this.sitesList.map((s: any) => [s.siteId, s.siteName])
+    );
+    
     this.config_service.getUserFavorites(userId).subscribe({
       next: (res: any) => {
         if (res?.statusCode === 200 && Array.isArray(res?.data)) {
-          this.profiles = res.data.map((folder: any) => ({
-            id: folder.folderId,
-            name: folder.folderName,
-            folderName: folder.folderName,
+     this.profiles = res.data.map((folder: any) => ({
+  id: folder.folderId,
+  name: folder.folderName,
+  cameras: (folder.favorites || []).map((cam: any) => {
+    console.log('CAM:', cam);
 
-            cameras: (folder.favorites || []),
-          }));
+    return {
+      ...cam,
+      siteName: cam.siteName || siteMap.get(cam.siteId) || 'Unknown Site',
+    };
+  }),
+}));
 
           this.storage_service.profilesData$.next(this.profiles);
         } else {

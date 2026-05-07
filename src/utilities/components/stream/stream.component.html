@@ -1,146 +1,89 @@
 <!--------stream component.html-------->
 
-<div
-  class="video-container"
-  [class.dot-disabled]="!dotEnabled"
-  (click)="placeDot($event)"
-  (dblclick)="onStreamDoubleClick($event)"
->
+<div class="video-container" [class.dot-disabled]="!dotEnabled" (click)="placeDot($event)"
+  (dblclick)="onStreamDoubleClick($event)">
   @if (showLoader) {
-    <div class="eye-logo">
-      <img src="gif/loading-gif.gif" alt="" width="200" />
-    </div>
+  <div class="eye-logo">
+    <img src="gif/loading-gif.gif" alt="" width="200" />
+  </div>
   }
   @if (hasVideoError) {
-    <div class="no-video-state">
-      <strong>Unable to load stream</strong>
-      <span>{{
-        videoData?.name || videoData?.cameraId || "Camera offline"
+  <div class="no-video-state">
+    <strong>Unable to load stream</strong>
+    <span>{{
+      videoData?.name || videoData?.cameraId || "Camera offline"
       }}</span>
-    </div>
+  </div>
   }
   @if (isChecked) {
-    <div class="info">
-      <span
-        ><img
-          src="icons/camera-grey.svg"
-          alt=""
-          width="16px"
-          class="me-2"
-          (click)="playSiren1(); $event.stopPropagation()"
-        />{{ videoData?.name }}</span
-      >
-      <span>
-        @if (isBookmarked) {
-          <span
-            class="material-symbols-outlined bookmark-icon"
-            style="color: #f5a623"
-            (click)="openBookmarkInput(); $event.stopPropagation()"
-            title="Bookmarked"
-          >
-            bookmark
-          </span>
-        } @else {
-          <span
-            class="material-symbols-outlined bookmark-icon"
-            style="color: #ffffff"
-            [matMenuTriggerFor]="bookmarkMenu"
-            #bookmarkTrigger="matMenuTrigger"
-            (menuClosed)="onBookmarkMenuClosed()"
-            (click)="prepareBookmarkMenu($event)"
-            title="Bookmark"
-          >
-            bookmark
-          </span>
-        }
+  <div class="info">
+    <span><img src="icons/camera-grey.svg" alt="" width="16px" class="me-2"
+        (click)="playSiren1(); $event.stopPropagation()" />{{ getCameraDisplayName() }}</span>
+    <span>
+      @if (isBookmarked) {
+      <span class="material-symbols-outlined bookmark-icon" style="color: #f5a623"
+        (click)="openBookmarkInput(); $event.stopPropagation()" title="Bookmarked">
+        bookmark
+      </span>
+      } @else {
+      <span class="material-symbols-outlined bookmark-icon" style="color: #ffffff" [matMenuTriggerFor]="bookmarkMenu"
+        #bookmarkTrigger="matMenuTrigger" (menuClosed)="onBookmarkMenuClosed()" (click)="prepareBookmarkMenu($event)"
+        title="Bookmark">
+        bookmark
+      </span>
+      }
 
-        <mat-menu #bookmarkMenu="matMenu" panelClass="bookmark-menu-panel">
-          @if (sortedProfiles.length) {
-            @for (profile of sortedProfiles; track profile.id) {
-              <button
-                mat-menu-item
-                [class.bookmark-profile-active]="isCameraInProfile(profile)"
-                (click)="saveToExistingProfile(profile, $event)"
-                [title]="
+      <mat-menu #bookmarkMenu="matMenu" panelClass="bookmark-menu-panel">
+        @if (sortedProfiles.length) {
+        @for (profile of sortedProfiles; track profile.id) {
+        <button mat-menu-item [class.bookmark-profile-active]="isCameraInProfile(profile)"
+          (click)="saveToExistingProfile(profile, $event)" [title]="
                   isCameraInProfile(profile)
                     ? 'Already added to this profile'
                     : 'Add to this profile'
-                "
-              >
-                <span class="material-symbols-outlined me-2">
-                  {{ isCameraInProfile(profile) ? "bookmark_added" : "folder" }}
-                </span>
-                <span>{{ profile.name }}</span>
-              </button>
-            }
-            <mat-divider></mat-divider>
-          }
-          @if (!showCreateProfileInput) {
-            <div
-              class="bookmark-create-trigger"
-              (click)="openCreateProfileInput($event)"
-            >
-              <span class="material-symbols-outlined me-2">add</span>
-              <span>Create New Profile</span>
-            </div>
-          } @else {
-            <div class="bookmark-create-box" (click)="$event.stopPropagation()">
-              <input
-                type="text"
-                [(ngModel)]="newProfileName"
-                placeholder="Profile name"
-                class="bookmark-create-input"
-                (click)="$event.stopPropagation()"
-                (keydown)="handleCreateProfileKey($event)"
-                autofocus
-              />
+                ">
+          <span class="material-symbols-outlined me-2">
+            {{ isCameraInProfile(profile) ? "bookmark_added" : "folder" }}
+          </span>
+          <span>{{ profile.name }}</span>
+        </button>
+        }
+        <mat-divider></mat-divider>
+        }
+        @if (!showCreateProfileInput) {
+        <div class="bookmark-create-trigger" (click)="openCreateProfileInput($event)">
+          <span class="material-symbols-outlined me-2">add</span>
+          <span>Create New Profile</span>
+        </div>
+        } @else {
+        <div class="bookmark-create-box" (click)="$event.stopPropagation()">
+          <input type="text" [(ngModel)]="newProfileName" placeholder="Profile name" class="bookmark-create-input"
+            (click)="$event.stopPropagation()" (keydown)="handleCreateProfileKey($event)" autofocus />
 
-              <span
-                class="material-symbols-outlined save-icon"
-                (click)="createAndSaveProfile($event)"
-              >
-                check
-              </span>
+          <span class="material-symbols-outlined save-icon" (click)="createAndSaveProfile($event)">
+            check
+          </span>
 
-              <span
-                class="material-symbols-outlined close-icon"
-                (click)="cancelCreateProfile($event)"
-              >
-                close
-              </span>
-            </div>
-          }
-        </mat-menu>
+          <span class="material-symbols-outlined close-icon" (click)="cancelCreateProfile($event)">
+            close
+          </span>
+        </div>
+        }
+      </mat-menu>
 
-        <a (click)="capture(); $event.stopPropagation()"
-          ><img
-            src="icons/screenshot.svg"
-            alt=""
-            title="Screenshot"
-            width="16px"
-            class="me-2"
-        /></a>
-        <a (click)="playSiren1(); $event.stopPropagation()"
-          ><img src="icons/siren.svg" alt="" title="Siren" width="16px"
-        /></a>
-      </span>
-    </div>
+      <a (click)="capture(); $event.stopPropagation()"><img src="icons/screenshot.svg" alt="" title="Screenshot"
+          width="16px" class="me-2" /></a>
+      <a (click)="playSiren1(); $event.stopPropagation()"><img src="icons/siren.svg" alt="" title="Siren"
+          width="16px" /></a>
+    </span>
+  </div>
   }
 
   @if (markerPositions.length) {
-    @for (marker of markerPositions; track marker.id) {
-      <span
-        class="click-marker"
-        [style.left.px]="marker.x"
-        [style.top.px]="marker.y"
-      ></span>
-    }
+  @for (marker of markerPositions; track marker.id) {
+  <span class="click-marker" [style.left.px]="marker.x" [style.top.px]="marker.y"></span>
+  }
   }
 
-  <video
-    #video
-    width="100%"
-    height="100%"
-    [class.video-hidden]="hasVideoError"
-  ></video>
+  <video #video width="100%" height="100%" [class.video-hidden]="hasVideoError"></video>
 </div>

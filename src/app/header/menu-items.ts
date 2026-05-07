@@ -63,10 +63,10 @@ export const menuItems = [
   //   routeLink: 'siteinfo',
   //   call: () => true,
   // },
-  // {
-  //     id: 'deviceHealth',
-  //     label: 'health',
-  //     routeLink: '/device-health',
-  //     call: (data: any) => data?.key !== 'F' && data?.admin ? true : false
-  // },
+  {
+    id: 'deviceHealth',
+    label: 'health',
+    routeLink: 'health',
+   call: () => true,
+  },
 ];

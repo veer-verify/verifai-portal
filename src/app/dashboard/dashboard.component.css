@@ -421,7 +421,7 @@
 
 .profile-cam-left {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   gap: 6px;
   min-width: 0;
   flex: 1;
@@ -493,6 +493,12 @@
 
 .profile-delete-action .material-symbols-outlined {
   font-size: 15px;
+}
+
+.site-label {
+  color: #888;
+  font-size: 11px;
+  /* margin-right: 4px; */
 }
 
 .profile-delete-action:hover {
