@@ -19,13 +19,6 @@
   font-size: 12px;
 }
 
-/* .site-info {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex: 0 0 auto;
-} */
-
 .interaction-controls {
   display: inline-flex;
   align-items: center;
@@ -118,17 +111,6 @@
   opacity: 0.45;
 }
 
-/* mat-form-field{
-  height: 30px;
-} */
-
-/* .camera-select .mat-mdc-select-trigger {
-  height: 30px;
-  min-height: 30px;
-  display: flex;
-  align-items: center;
-} */
-
 .grid-container {
   position: relative;
   height: calc(100vh - 100px);
@@ -139,84 +121,11 @@
   background:
     linear-gradient(rgb(255 255 255 / 4%) 1px, transparent 1px),
     linear-gradient(90deg, rgb(255 255 255 / 4%) 1px, transparent 1px), #050608;
-  /* background-size: 44px 44px; */
 }
 
 .grid-container.maximized-mode {
   grid-template-columns: 1fr !important;
   grid-template-rows: 1fr !important;
-}
-
-.live-empty-state {
-  grid-column: 1 / -1;
-  grid-row: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
-  padding: 32px;
-  color: #ffffff;
-  text-align: center;
-}
-
-.empty-icon-wrap {
-  width: 60px;
-  height: 50px;
-  margin-bottom: 12px;
-  border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: 8px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  /* background: rgb(255 255 255 / 8%); */
-  box-shadow: 0 18px 40px rgb(0 0 0 / 24%);
-}
-
-.empty-icon-wrap .material-symbols-outlined {
-  font-size: 34px;
-  color: #ed3237;
-}
-
-.live-empty-state h2 {
-  margin: 18px 0 6px;
-  font-size: 22px;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
-.live-empty-state p {
-  margin: 0;
-  max-width: 360px;
-  color: #cbd5e1;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.empty-drop-preview {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 12px;
-  padding: 12px 18px;
-  border: 1px dashed rgb(237 50 55 / 70%);
-  border-radius: 8px;
-  background: rgb(237 50 55 / 10%);
-  color: #ffffff;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.empty-drop-preview .material-symbols-outlined {
-  font-size: 18px;
-  color: #ed3237;
-}
-
-.grid-container.cdk-drop-list-receiving .empty-drop-preview,
-.grid-container.cdk-drop-list-dragging .empty-drop-preview {
-  background: rgb(237 50 55 / 18%);
-  border-color: #ed3237;
 }
 
 .grid-item {
@@ -261,11 +170,6 @@
   transform: translate(-50%, -50%);
 }
 
-.grid-slot-placeholder .material-symbols-outlined {
-  color: #ed3237;
-  font-size: 24px;
-}
-
 .grid-slot-placeholder div {
   display: flex;
   flex-direction: column;
@@ -273,8 +177,7 @@
   min-width: 0;
 }
 
-.grid-slot-placeholder strong,
-.grid-slot-placeholder small {
+.grid-slot-placeholder strong {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -283,11 +186,6 @@
 .grid-slot-placeholder strong {
   font-size: 12px;
   text-transform: uppercase;
-}
-
-.grid-slot-placeholder small {
-  color: #cbd5e1;
-  font-size: 11px;
 }
 
 .grid-container.cdk-drop-list-receiving .empty-grid-slot,
@@ -317,7 +215,6 @@
 }
 
 ::ng-deep .grid-item.tile-drag-enabled app-stream,
-::ng-deep .grid-item.tile-drag-enabled app-stream *,
 ::ng-deep .grid-item.tile-drag-enabled app-stream .video-container {
   cursor: grab !important;
 }
@@ -328,7 +225,6 @@
 }
 
 ::ng-deep .grid-item.tile-drag-enabled.cdk-drag-dragging app-stream,
-::ng-deep .grid-item.tile-drag-enabled.cdk-drag-dragging app-stream *,
 ::ng-deep
   .grid-item.tile-drag-enabled.cdk-drag-dragging
   app-stream
@@ -471,39 +367,12 @@
   transition: transform 260ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-.grid-item:hover .cam-info {
-  display: block;
-}
-
 .single-view {
   min-height: 100%;
 }
 
 .grid-container.maximized-mode .grid-item {
   border-color: #243046;
-}
-
-.cam-info {
-  display: none;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: #000 0% 0% no-repeat padding-box;
-  color: #ffffff;
-}
-
-.info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-  z-index: 99;
-  width: 100%;
-  color: #ffffff;
-  font-size: 12px;
-  background: rgb(27 24 24 / 60%);
-  padding: 4px 10px;
 }
 
 .grid-highlight {
@@ -515,117 +384,6 @@
   padding: 2px 6px;
   border: 0.5px solid #0000001a;
   border-radius: 4px;
-}
-
-.grid-inactive {
-  opacity: 0.7;
-}
-
-::placeholder {
-  font-style: normal;
-  font-size: 1em;
-  color: rgb(6, 21, 13);
-  /* background: thistle; */
-  padding: 5px;
-  content: "Search Site" !important;
-}
-
-::ng-deep .mat-mdc-menu-content {
-  padding: 6px !important;
-}
-
-::ng-deep .mat-mdc-menu-panel {
-  min-width: 60px !important;
-}
-
-.site-grid {
-  display: flex;
-  flex-direction: column;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.side-menu {
-  gap: 26px;
-}
-
-.first-arrow {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  padding: 16px;
-  text-align: center;
-  background-color: #ffffff;
-  rotate: 180deg;
-}
-
-.second-arrow {
-  height: 60px;
-  width: 60px;
-  border-radius: 50%;
-  /* padding: 18px; */
-  padding: 16px;
-  text-align: center;
-  background-color: #ffffff;
-}
-
-.camera-tile-list {
-  display: flex;
-  align-items: center;
-  width: 70vw;
-  overflow-x: scroll;
-  padding-top: 20px;
-}
-
-/* .camera-tile-list img{
-    height: 100px;
-    width: 80px;
-} */
-
-.camera-tile {
-  height: 100px;
-  width: 100px;
-  border-radius: 8px;
-  border-style: solid;
-  border-color: #989fb4;
-  background-color: #353638;
-  /* padding: 32px; */
-  cursor: pointer;
-  margin: 10px;
-}
-
-.camera-tile:hover {
-  scale: 1.1;
-  border: 2px solid #fff;
-  transition: all 200ms ease-in-out;
-}
-
-.tile-active {
-  border: 3px solid #e3610b;
-}
-
-.tile-name {
-  color: #fff;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100px;
-  font-size: 12px;
-}
-
-.iframe {
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  border: 1px solid #ffffff;
-}
-
-/* .site-info {
-  width: 300px;
-} */
-
-.close {
-  width: 30px;
 }
 
 @media (max-width: 1280px) {
@@ -669,26 +427,3 @@
   }
 }
 
-.exit {
-  animation: slideOut 0.3s forwards;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-100%);
-  }
-
-  to {
-    transform: translateX(0);
-  }
-}
-
-@keyframes slideOut {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-100%);
-  }
-}

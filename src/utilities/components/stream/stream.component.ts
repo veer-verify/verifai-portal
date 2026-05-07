@@ -916,8 +916,6 @@ getCameraDisplayName(): string {
   }
 
   ngOnDestroy(): void {
-    console.log('🧹 Cleaning up stream component...');
-
     this.destroy$.next();
     this.destroy$.complete();
 

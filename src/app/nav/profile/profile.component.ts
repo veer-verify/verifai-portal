@@ -2,7 +2,7 @@ import { Component, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { MediaPipe } from '../../../utilities/pipes/media.pipe';
-import { AsyncPipe, NgClass, TitleCasePipe, UpperCasePipe, NgIf } from '@angular/common';
+import { AsyncPipe, CommonModule, NgClass, TitleCasePipe, UpperCasePipe } from '@angular/common';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { FormsModule } from '@angular/forms';
 import { UpdateuserComponent } from './update-user/updateuser.component';
@@ -22,15 +22,13 @@ import { SearchPipe } from '../../../utilities/pipes/search.pipe';
     MediaPipe,
     AsyncPipe,
     UpperCasePipe,
-    TitleCasePipe,
     NgClass,
     FormsModule,
     SearchPipe,
     UpdateuserComponent,
     AddUserComponent,
-    MatDialogContent,
     MatDialogClose,
-    NgIf
+    CommonModule
   ],
   providers: [SearchPipe],
   templateUrl: './profile.component.html',

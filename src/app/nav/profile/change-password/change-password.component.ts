@@ -3,10 +3,11 @@ import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angula
 import { AuthService } from '../../../auth/auth.service';
 import { AlertService } from '../../../../utilities/services/alert.service';
 import { RouterLink, RouterModule } from "@angular/router";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-change-password',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
 })
