@@ -20,8 +20,7 @@ export const environment = {
     insightsUrl: `${dev_url}/insights`,
     timelapseUrl: `${dev_url}/timeLapse`,
     faqUrl: `${dev_url}/faq`,
-
-healthUrl: `${dev_url}/health`,
+    healthUrl: `${dev_url}/health`,
 
 
     // commonDownUrl: `${local_url}:3001/common`,
