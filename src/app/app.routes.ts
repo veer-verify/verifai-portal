@@ -58,6 +58,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'sites',
+        loadComponent: () =>
+          import('./nav/sites/sites.component').then(
+            (c) => c.SitesComponent,
+          ),
+      },
+      {
         path: 'insights',
         loadComponent: () =>
           import('./nav/insights/insights.component').then(

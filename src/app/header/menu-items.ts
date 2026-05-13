@@ -64,9 +64,16 @@ export const menuItems = [
   //   call: () => true,
   // },
   {
+    id: 'sites',
+    label: 'sites',
+    routeLink: 'sites',
+    // call: (data: any) => (data?.key !== 'F' ? true : false),
+    call: () => true,
+  },
+  {
     id: 'deviceHealth',
     label: 'health',
     routeLink: 'health',
-   call: () => true,
+    call: () => true,
   },
 ];
