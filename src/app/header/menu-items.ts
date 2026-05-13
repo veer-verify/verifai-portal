@@ -71,6 +71,20 @@ export const menuItems = [
     call: () => true,
   },
   {
+    id: 'devices',
+    label: 'devices',
+    routeLink: 'devices',
+    // call: (data: any) => (data?.key !== 'F' ? true : false),
+    call: () => true,
+  },
+  {
+    id: 'cameras',
+    label: 'cameras',
+    routeLink: 'cameras',
+    // call: (data: any) => (data?.key !== 'F' ? true : false),
+    call: () => true,
+  },
+  {
     id: 'deviceHealth',
     label: 'health',
     routeLink: 'health',

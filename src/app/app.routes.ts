@@ -58,13 +58,6 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'sites',
-        loadComponent: () =>
-          import('./nav/sites/sites.component').then(
-            (c) => c.SitesComponent,
-          ),
-      },
-      {
         path: 'insights',
         loadComponent: () =>
           import('./nav/insights/insights.component').then(
@@ -97,6 +90,27 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./nav/siteinfo/siteinfo.component').then(
             (c) => c.SiteinfoComponent,
+          ),
+      },
+      {
+        path: 'sites',
+        loadComponent: () =>
+          import('./nav/sites/sites.component').then(
+            (c) => c.SitesComponent,
+          ),
+      },
+      {
+        path: 'devices',
+        loadComponent: () =>
+          import('./nav/devices/devices.component').then(
+            (c) => c.DevicesComponent,
+          ),
+      },
+      {
+        path: 'cameras',
+        loadComponent: () =>
+          import('./nav/cameras/cameras.component').then(
+            (c) => c.CamerasComponent,
           ),
       },
       {
