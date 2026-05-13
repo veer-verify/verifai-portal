@@ -25,6 +25,11 @@ export class ConfigService {
     return this.http.get(url, { params });
   }
 
+  createSite(payload: any): Observable<any> {
+    const url = `${environment.sitesUrl}/addSite_1_0`;
+    return this.http.post(url, payload);
+  }
+
   public getCamerasForSiteId(payload: any): Observable<any> {
     const url = `${environment.sitesUrl}/getCamerasForSiteIdForPortal_1_0/${payload?.siteId}`;
     const user = this.storageSrvc.getData('user');

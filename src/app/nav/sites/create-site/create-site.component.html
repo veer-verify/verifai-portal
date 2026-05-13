@@ -1,1 +1,330 @@
-<p>create-site works!</p>
+<div class="drawer-backdrop" (click)="close()"></div>
+
+<aside class="create-site-panel">
+  <header class="drawer-header">
+    <h2>CREATE SITE</h2>
+    <button type="button" class="close-drawer" (click)="close()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <div class="drawer-body">
+    <nav class="form-tabs">
+      <button
+        type="button"
+        [class.active]="createSiteTab === 'general'"
+        (click)="createSiteTab = 'general'"
+      >
+        General Info
+      </button>
+      <button
+        type="button"
+        [class.active]="createSiteTab === 'services'"
+        (click)="createSiteTab = 'services'"
+      >
+        Services & Billing Info
+      </button>
+      <button
+        type="button"
+        [class.active]="createSiteTab === 'contact'"
+        (click)="createSiteTab = 'contact'"
+      >
+        Contact Info
+      </button>
+    </nav>
+
+    <form class="site-form" [formGroup]="createSiteForm" (ngSubmit)="submit()">
+      <div class="form-grid two">
+        <label [class.invalid]="isInvalid('busVerticalId')">
+          Vertical
+          <select formControlName="busVerticalId">
+            <option [ngValue]="null">Select</option>
+            <option *ngFor="let item of verticals" [ngValue]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </label>
+
+        <label>
+          Client
+          <select formControlName="customerId">
+            <option [ngValue]="null">Select</option>
+            <option *ngFor="let item of clients" [ngValue]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </label>
+
+        <label [class.invalid]="isInvalid('siteName')">
+          Site Name
+          <input type="text" placeholder="Enter" formControlName="siteName" />
+        </label>
+
+        <label [class.invalid]="isInvalid('siteShortName')">
+          Site Short Name
+          <input
+            type="text"
+            placeholder="Enter"
+            formControlName="siteShortName"
+          />
+        </label>
+
+        <label [class.invalid]="isInvalid('timezone')">
+          Timezone
+          <select formControlName="timezone">
+            <option value="">Select</option>
+            <option *ngFor="let item of timezones" [value]="item.value">
+              {{ item.value }}
+            </option>
+          </select>
+        </label>
+
+        <label [class.invalid]="isInvalid('accountId')">
+          Account
+          <select formControlName="accountId" multiple>
+            <option *ngFor="let item of accounts" [ngValue]="item.id">
+              {{ item.name }}
+            </option>
+          </select>
+        </label>
+      </div>
+
+      <ng-container *ngIf="createSiteTab === 'general'">
+        <h3>Site Address</h3>
+
+        <div class="client-address">
+          <div>
+            <strong>Do you accept below Client Address as Site Address?</strong>
+            <span
+              >TADEPALLY, Guntur District, Andhra Pradesh, INDIA - 500503</span
+            >
+          </div>
+          <label class="radio-inline">
+            <input
+              type="radio"
+              [value]="true"
+              formControlName="acceptClientAddress"
+            />
+            YES
+          </label>
+          <label class="radio-inline">
+            <input
+              type="radio"
+              [value]="false"
+              formControlName="acceptClientAddress"
+            />
+            NO
+          </label>
+        </div>
+
+        <div class="form-grid three">
+          <label>
+            Country
+            <select formControlName="country" (change)="onCountryChange()">
+              <option value="">Select</option>
+              <option *ngFor="let item of countries" [value]="item.isoCode">
+                {{ item.name }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            State
+            <select formControlName="state" (change)="onStateChange()">
+              <option value="">Select</option>
+              <option *ngFor="let item of states" [value]="item.isoCode">
+                {{ item.name }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            City
+            <select formControlName="district">
+              <option value="">Select</option>
+              <option *ngFor="let item of cities" [value]="item.name">
+                {{ item.name }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Address Line 1
+            <input type="text" placeholder="Enter" formControlName="line_1" />
+          </label>
+
+          <label>
+            Address Line 2
+            <input type="text" placeholder="Enter" formControlName="line_2" />
+          </label>
+
+          <label>
+            Area
+            <input type="text" placeholder="Enter" formControlName="area" />
+          </label>
+
+          <label>
+            Zipcode
+            <input type="text" placeholder="Select" formControlName="pin" />
+          </label>
+
+          <label>
+            Lattitude
+            <input type="text" placeholder="Enter" formControlName="latitude" />
+          </label>
+
+          <label>
+            Longitute
+            <input
+              type="text"
+              placeholder="Enter"
+              formControlName="longitude"
+            />
+          </label>
+
+          <button type="button" class="get-location">
+            GET
+            <span class="material-symbols-outlined">location_on</span>
+          </button>
+        </div>
+
+        <h3>Documents</h3>
+
+        <div class="documents-grid">
+          <div class="drop-zone">
+            <span class="material-symbols-outlined upload-icon">upload</span>
+            <p>Drag and Drop files here</p>
+            <strong>(OR)</strong>
+            <button type="button">Browse Files</button>
+          </div>
+
+          <section class="uploaded-files">
+            <h4>UPLOADED FILES</h4>
+            <div class="upload-row" *ngFor="let file of uploadedFiles">
+              <span class="material-symbols-outlined pdf-icon"
+                >picture_as_pdf</span
+              >
+              <div class="file-progress">
+                <span>{{ file.name }} ({{ file.progress }}%)</span>
+                <div class="progress-track">
+                  <div
+                    class="progress-fill"
+                    [style.width.%]="file.progress"
+                  ></div>
+                </div>
+              </div>
+              <span class="material-symbols-outlined remove-file">close</span>
+              <select>
+                <option>Select</option>
+                <option *ngFor="let item of documentTypes">{{ item }}</option>
+              </select>
+            </div>
+          </section>
+        </div>
+      </ng-container>
+
+      <section *ngIf="createSiteTab === 'services'">
+        <h3>Services & Billing Info</h3>
+        <div class="toggle-grid">
+          <label><input type="checkbox" formControlName="live" /> Live</label>
+          <label
+            ><input type="checkbox" formControlName="alerts" /> Alerts</label
+          >
+          <label
+            ><input type="checkbox" formControlName="timeLapse" /> Time
+            Lapse</label
+          >
+          <label
+            ><input type="checkbox" formControlName="insights" />
+            Insights</label
+          >
+          <label
+            ><input type="checkbox" formControlName="advertisements" />
+            Advertisements</label
+          >
+          <label
+            ><input type="checkbox" formControlName="safetyEscort" /> Safety
+            Escort</label
+          >
+          <label
+            ><input type="checkbox" formControlName="sensors" /> Sensors</label
+          >
+        </div>
+        <label>
+          Remarks
+          <input type="text" placeholder="Enter" formControlName="remarks" />
+        </label>
+      </section>
+
+      <section *ngIf="createSiteTab === 'contact'">
+        <h3>Contact Info</h3>
+        <div class="form-grid two">
+          <label [class.invalid]="isInvalid('phoneNo')">
+            Phone No
+            <input type="text" placeholder="Enter" formControlName="phoneNo" />
+          </label>
+          <label [class.invalid]="isInvalid('email')">
+            Email
+            <input type="email" placeholder="Enter" formControlName="email" />
+          </label>
+          <label>
+            Website
+            <input type="text" placeholder="Enter" formControlName="website" />
+          </label>
+          <label>
+            Contact Name
+            <input type="text" placeholder="Enter" formControlName="name" />
+          </label>
+          <label>
+            Contact No
+            <input
+              type="text"
+              placeholder="Enter"
+              formControlName="contactNo"
+            />
+          </label>
+          <label>
+            Email Id
+            <input type="email" placeholder="Enter" formControlName="emailId" />
+          </label>
+          <label>
+            Local LE Contact No
+            <input
+              type="text"
+              placeholder="Enter"
+              formControlName="localLEcontactNo"
+            />
+          </label>
+          <label>
+            Whatsapp
+            <input type="text" placeholder="Enter" formControlName="whatsapp" />
+          </label>
+          <label>
+            Dot Com Working
+            <input
+              type="text"
+              placeholder="Enter"
+              formControlName="dotComWorking"
+            />
+          </label>
+        </div>
+        <div class="toggle-grid compact">
+          <label
+            ><input type="checkbox" formControlName="contactCheck" /> Contact
+            Check</label
+          >
+          <label
+            ><input type="checkbox" formControlName="whatsappCheck" /> Whatsapp
+            Check</label
+          >
+        </div>
+      </section>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-outline" [disabled]="submitting">
+          {{ submitting ? "Submitting..." : "Submit" }}
+        </button>
+      </div>
+    </form>
+  </div>
+</aside>

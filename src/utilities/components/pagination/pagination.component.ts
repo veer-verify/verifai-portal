@@ -11,21 +11,23 @@ import { FormsModule } from '@angular/forms';
 export class PaginationComponent {
 
   @Input() pageSize: any = 25;
-  pageNumber: any = 1;
+  @Input() pageNumber: any = 1;
 
   @Input() totalPages!: number;
-  @Output() changePageNumber = new EventEmitter<void>();
-  @Output() changePSize = new EventEmitter<void>();
+  @Output() changePageNumber = new EventEmitter<number>();
+  @Output() changePSize = new EventEmitter<number>();
 
   ngOnInit() {
   }
 
   changePageSize(pSize: any) {
-    this.pageSize = pSize.target?.value;
+    this.pageSize = Number(pSize.target?.value);
     this.changePSize.emit(this.pageSize)
   }
 
   changePage(pNum: any) {
+    if (pNum < 1 || pNum > this.totalPages) return;
+
     this.pageNumber = pNum;
     this.changePageNumber.emit(this.pageNumber)
   }

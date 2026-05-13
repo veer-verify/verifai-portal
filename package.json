@@ -25,6 +25,7 @@
     "ag-grid-angular": "^34.3.1",
     "ag-grid-community": "^34.3.1",
     "bootstrap": "^5.3.3",
+    "country-state-city": "^3.2.1",
     "crypto-js": "^4.2.0",
     "highcharts": "^12.4.0",
     "highcharts-angular": "^5.2.0",

@@ -1,1 +1,81 @@
-<p>sites works!</p>
+<main class="sites-page">
+  <header class="sites-header">
+    <div class="title-row">
+      <div class="hamburger" (click)="storage_service.openSideNav()" *ngIf="!(storage_service.showSideNav$ | async)">
+        &#9776;
+      </div>
+      <h1>SITES</h1>
+      <button type="button" class="create-btn" (click)="createSite()">
+        <span class="material-symbols-outlined">add</span>
+        Create Site
+      </button>
+    </div>
+
+    <section class="summary-row">
+      <button
+        type="button"
+        class="summary-card"
+        *ngFor="let card of summaryCards"
+        [class.active]="card.tone === 'red'"
+        [class.selected]="
+          (card.key === 'online' && statusFilter === 'Online') ||
+          (card.key === 'offline' && statusFilter === 'Offline') ||
+          (card.key === 'unsubscribed' && statusFilter === 'Partial') ||
+          (card.key === 'upcoming' && statusFilter === 'Inprogress')
+        "
+        (click)="
+          card.key === 'online' ? toggleStatusFilter('Online') :
+          card.key === 'offline' ? toggleStatusFilter('Offline') :
+          card.key === 'unsubscribed' ? toggleStatusFilter('Partial') :
+          card.key === 'upcoming' ? toggleStatusFilter('Inprogress') :
+          toggleStatusFilter('')
+        "
+      >
+        <span class="summary-label">{{ card.label }}</span>
+        <span class="summary-count">{{ card.count }}</span>
+        <span class="summary-sub">
+          <span class="material-symbols-outlined">videocam</span>
+          {{ card.sub }}
+        </span>
+      </button>
+
+      <div class="search-panel">
+        <label class="search-box">
+          <input
+            type="search"
+            placeholder="Search here"
+            [(ngModel)]="searchText"
+            (ngModelChange)="onSearchChange()"
+          />
+          <span class="material-symbols-outlined">search</span>
+        </label>
+        <button type="button" class="filter-btn" (click)="toggleStatusFilter('')">
+          <span class="material-symbols-outlined">filter_list</span>
+        </button>
+      </div>
+    </section>
+  </header>
+
+  <section class="grid-wrap">
+    <ag-grid-angular
+      class="sites-grid"
+      [columnDefs]="columnDefs"
+      [gridOptions]="gridOptions"
+      [rowData]="rowData"
+      (gridReady)="onGridReady($event)"
+    ></ag-grid-angular>
+  </section>
+
+  <app-pagination
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    [totalPages]="totalPages"
+    (changePSize)="changePageSize($event)"
+    (changePageNumber)="changePage($event)"
+  ></app-pagination>
+</main>
+
+<app-create-site
+  *ngIf="showCreateSitePanel"
+  (closePanel)="closeCreateSite()"
+></app-create-site>
