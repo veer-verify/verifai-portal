@@ -156,7 +156,7 @@ export class SitesComponent implements OnInit, OnDestroy {
       minWidth: 90,
       maxWidth: 95,
       cellRenderer: () =>
-        '<span class="material-symbols-outlined more-info">info</span><span class="material-symbols-outlined more-menu">more_vert</span>',
+        '<span class="material-symbols-outlined more-info">info</span>',
     },
   ];
 

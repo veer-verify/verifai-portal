@@ -265,12 +265,6 @@ h1 {
 :host ::ng-deep .more-info {
   color: #777777;
   font-size: 18px;
-  margin-right: 14px;
-}
-
-:host ::ng-deep .more-menu {
-  color: #b9b9b9;
-  font-size: 18px;
 }
 
 :host ::ng-deep .add-circle {
