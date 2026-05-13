@@ -34,7 +34,7 @@
     </nav>
 
     <form class="site-form" [formGroup]="createSiteForm" (ngSubmit)="submit()">
-      <div class="form-grid two">
+      <div class="form-grid two" *ngIf="createSiteTab === 'general'">
         <label [class.invalid]="isInvalid('busVerticalId')">
           Vertical
           <select formControlName="busVerticalId">
@@ -168,24 +168,26 @@
             <input type="text" placeholder="Select" formControlName="pin" />
           </label>
 
-          <label>
-            Lattitude
-            <input type="text" placeholder="Enter" formControlName="latitude" />
-          </label>
+          <div class="location-row">
+            <label>
+              Lattitude
+              <input type="text" placeholder="Enter" formControlName="latitude" />
+            </label>
 
-          <label>
-            Longitute
-            <input
-              type="text"
-              placeholder="Enter"
-              formControlName="longitude"
-            />
-          </label>
+            <label>
+              Longitute
+              <input
+                type="text"
+                placeholder="Enter"
+                formControlName="longitude"
+              />
+            </label>
 
-          <button type="button" class="get-location">
-            GET
-            <span class="material-symbols-outlined">location_on</span>
-          </button>
+            <button type="button" class="get-location">
+              GET
+              <span class="material-symbols-outlined">location_on</span>
+            </button>
+          </div>
         </div>
 
         <h3>Documents</h3>
@@ -224,103 +226,22 @@
       </ng-container>
 
       <section *ngIf="createSiteTab === 'services'">
-        <h3>Services & Billing Info</h3>
-        <div class="toggle-grid">
-          <label><input type="checkbox" formControlName="live" /> Live</label>
-          <label
-            ><input type="checkbox" formControlName="alerts" /> Alerts</label
-          >
-          <label
-            ><input type="checkbox" formControlName="timeLapse" /> Time
-            Lapse</label
-          >
-          <label
-            ><input type="checkbox" formControlName="insights" />
-            Insights</label
-          >
-          <label
-            ><input type="checkbox" formControlName="advertisements" />
-            Advertisements</label
-          >
-          <label
-            ><input type="checkbox" formControlName="safetyEscort" /> Safety
-            Escort</label
-          >
-          <label
-            ><input type="checkbox" formControlName="sensors" /> Sensors</label
-          >
+        <div class="coming-soon">
+          <span class="material-symbols-outlined">construction</span>
+          <h3>Services & Billing Info</h3>
+          <p>Coming soon</p>
         </div>
-        <label>
-          Remarks
-          <input type="text" placeholder="Enter" formControlName="remarks" />
-        </label>
       </section>
 
       <section *ngIf="createSiteTab === 'contact'">
-        <h3>Contact Info</h3>
-        <div class="form-grid two">
-          <label [class.invalid]="isInvalid('phoneNo')">
-            Phone No
-            <input type="text" placeholder="Enter" formControlName="phoneNo" />
-          </label>
-          <label [class.invalid]="isInvalid('email')">
-            Email
-            <input type="email" placeholder="Enter" formControlName="email" />
-          </label>
-          <label>
-            Website
-            <input type="text" placeholder="Enter" formControlName="website" />
-          </label>
-          <label>
-            Contact Name
-            <input type="text" placeholder="Enter" formControlName="name" />
-          </label>
-          <label>
-            Contact No
-            <input
-              type="text"
-              placeholder="Enter"
-              formControlName="contactNo"
-            />
-          </label>
-          <label>
-            Email Id
-            <input type="email" placeholder="Enter" formControlName="emailId" />
-          </label>
-          <label>
-            Local LE Contact No
-            <input
-              type="text"
-              placeholder="Enter"
-              formControlName="localLEcontactNo"
-            />
-          </label>
-          <label>
-            Whatsapp
-            <input type="text" placeholder="Enter" formControlName="whatsapp" />
-          </label>
-          <label>
-            Dot Com Working
-            <input
-              type="text"
-              placeholder="Enter"
-              formControlName="dotComWorking"
-            />
-          </label>
-        </div>
-        <div class="toggle-grid compact">
-          <label
-            ><input type="checkbox" formControlName="contactCheck" /> Contact
-            Check</label
-          >
-          <label
-            ><input type="checkbox" formControlName="whatsappCheck" /> Whatsapp
-            Check</label
-          >
+        <div class="coming-soon">
+          <span class="material-symbols-outlined">contact_mail</span>
+          <h3>Contact Info</h3>
+          <p>Coming soon</p>
         </div>
       </section>
 
-      <div class="form-actions">
+      <div class="form-actions" *ngIf="createSiteTab === 'general'">
         <button type="submit" class="submit-outline" [disabled]="submitting">
           {{ submitting ? "Submitting..." : "Submit" }}
         </button>
