@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, DestroyRef, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { City, Country, ICity, ICountry, IState, State } from 'country-state-city';
 import { ConfigService } from '../../../../utilities/services/config.service';
 import { StorageService } from '../../../../utilities/services/storage.service';
 import { AlertService } from '../../../../utilities/services/alert.service';
+import { City, Country, LocationDataService, State } from './location-data.service';
 
 @Component({
   selector: 'app-create-site',
@@ -12,13 +13,15 @@ import { AlertService } from '../../../../utilities/services/alert.service';
   templateUrl: './create-site.component.html',
   styleUrl: './create-site.component.css'
 })
-export class CreateSiteComponent {
+export class CreateSiteComponent implements OnInit {
   @Output() closePanel = new EventEmitter<void>();
+  private readonly destroyRef = inject(DestroyRef);
 
   constructor(
     private configService: ConfigService,
     private storageService: StorageService,
     private alertService: AlertService,
+    private locationDataService: LocationDataService,
   ) { }
 
   createSiteTab: 'general' | 'services' | 'contact' = 'general';
@@ -258,9 +261,9 @@ export class CreateSiteComponent {
     { value: 'Pacific/Enderbury' },
     { value: 'Pacific/Kiritimati' },
   ];
-  countries: ICountry[] = Country.getAllCountries();
-  states: IState[] = [];
-  cities: ICity[] = [];
+  countries: Country[] = [];
+  states: State[] = [];
+  cities: City[] = [];
   documentTypes = ['Agreement', 'Floor Map', 'Monitoring Protocol'];
   uploadedFiles = [
     { name: 'Equipment Form.pdf', progress: 100 },
@@ -272,24 +275,54 @@ export class CreateSiteComponent {
     this.closePanel.emit();
   }
 
+  ngOnInit(): void {
+    this.locationDataService
+      .getAllCountries()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((countries) => {
+        this.countries = countries;
+      });
+  }
+
   onCountryChange(): void {
     const countryCode = this.createSiteForm.controls.country.value || '';
-    this.states = countryCode ? State.getStatesOfCountry(countryCode) : [];
     this.cities = [];
     this.createSiteForm.patchValue({
       state: '',
       district: '',
     });
+
+    if (!countryCode) {
+      this.states = [];
+      return;
+    }
+
+    this.locationDataService
+      .getStatesOfCountry(countryCode)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((states) => {
+        this.states = states;
+      });
   }
 
   onStateChange(): void {
     const countryCode = this.createSiteForm.controls.country.value || '';
     const stateCode = this.createSiteForm.controls.state.value || '';
-    this.cities =
-      countryCode && stateCode ? City.getCitiesOfState(countryCode, stateCode) : [];
     this.createSiteForm.patchValue({
       district: '',
     });
+
+    if (!countryCode || !stateCode) {
+      this.cities = [];
+      return;
+    }
+
+    this.locationDataService
+      .getCitiesOfState(countryCode, stateCode)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((cities) => {
+        this.cities = cities;
+      });
   }
 
   submit(): void {
