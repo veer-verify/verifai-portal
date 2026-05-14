@@ -1,0 +1,399 @@
+.drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.28);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.drawer {
+    height: 100vh;
+    background: #f7f7f7;
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.25);
+    animation: slideIn 0.22s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.details-drawer {
+    width: 900px;
+}
+
+.form-drawer {
+    width: 850px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(80px);
+        opacity: 0.8;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.drawer-header {
+    height: 50px;
+    background: #ed3237;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 19px;
+    flex-shrink: 0;
+}
+
+.drawer-header h3 {
+    margin: 0;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.close-btn {
+    width: 26px;
+    height: 26px;
+    border: none;
+    background: #fff;
+    color: #ed3237;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.close-btn span {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.drawer-body {
+    flex: 1;
+    overflow-y: auto;
+    background: #fff;
+}
+
+.details-drawer .drawer-body {
+    padding: 20px;
+    margin: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.form-drawer .drawer-body {
+    padding: 25px 30px;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+}
+
+.tabs button {
+    height: 32px;
+    padding: 0 20px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.tabs button.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
+}
+
+.status-badge {
+    height: 26px;
+    padding: 0 15px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    background: #e5e5e5;
+    color: #777;
+}
+
+.status-badge.active {
+    background: #49bd7f;
+    color: #fff;
+}
+
+.top-info {
+    display: grid;
+    margin-bottom: 25px;
+}
+
+.details-drawer .top-info {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-drawer .top-info {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+}
+
+.info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.form-drawer .info-group {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    align-items: center;
+    flex-direction: row;
+    gap: 0;
+}
+
+.info-group label {
+    font-size: 11px;
+    color: #777;
+    margin: 0;
+}
+
+.info-group span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 25px 0 15px;
+}
+
+.section-title span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #111;
+    text-transform: uppercase;
+}
+
+.section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 30px;
+}
+
+.info-item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+}
+
+.info-item label {
+    font-size: 12px;
+    color: #777;
+}
+
+.info-item span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #111;
+}
+
+.view-btn {
+    height: 22px;
+    width: 60px;
+    padding: 0 10px;
+    border: 1px solid #ccc;
+    background: #f9f9f9;
+    border-radius: 3px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.remarks-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+
+.remarks-text {
+    font-size: 12px;
+    color: #333;
+    flex: 1;
+}
+
+.edit-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 28px;
+    padding: 0 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.edit-btn span {
+    font-size: 14px;
+    color: #ed3237;
+}
+
+/* FORMS CSS */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-field.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-field label {
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.form-field input,
+.form-field select {
+    height: 36px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    border-radius: 4px;
+    padding: 0 10px;
+    font-size: 12px;
+    outline: none;
+}
+
+.form-field input::placeholder {
+    color: #cfcfcf;
+}
+
+.toggle-field {
+    display: grid;
+    grid-template-columns: 150px 50px;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+    gap: 0;
+}
+
+.toggle-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 32px;
+    height: 18px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #49bd7f;
+}
+
+input:checked+.slider:before {
+    transform: translateX(14px);
+}
+
+.footer-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 40px;
+}
+
+.cancel-btn,
+.save-btn {
+    height: 34px;
+    min-width: 200px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #fff;
+    border: 1px solid #ed3237;
+    color: #ed3237;
+}
+
+.save-btn {
+    background: #ed3237;
+    border: 1px solid #ed3237;
+    color: #fff;
+}

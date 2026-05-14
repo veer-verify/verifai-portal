@@ -1,0 +1,232 @@
+<div class="drawer-backdrop">
+  <!-- CAMERA DETAILS VIEW -->
+  <div class="drawer details-drawer" *ngIf="viewType === 'details'">
+    <div class="drawer-header">
+      <h3>{{ cameraData?.name || 'CAMERA' }} ({{ cameraData?.cameraId }})</h3>
+      <button class="close-btn" (click)="close()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="top-bar">
+        <div class="tabs">
+          <button [class.active]="activeTab === 'general'" (click)="activeTab = 'general'">General Info</button>
+          <button [class.active]="activeTab === 'event'" (click)="activeTab = 'event'">Event Config</button>
+          <button [class.active]="activeTab === 'analytics'" (click)="activeTab = 'analytics'">Analytics</button>
+        </div>
+        <div class="status-badge" [class.active]="cameraData?.status === 'Y'">
+          {{ cameraData?.status === 'Y' ? 'Active' : 'InActive' }}
+        </div>
+      </div>
+
+      <div class="tab-content" *ngIf="activeTab === 'general'">
+        <div class="info-row top-info">
+          <div class="info-group">
+            <label>Client Name</label>
+            <span>{{ cameraData?.clientName || '-' }}</span>
+          </div>
+          <div class="info-group">
+            <label>Device</label>
+            <span>{{ cameraData?.unitId || '-' }}</span>
+          </div>
+          <div class="info-group">
+            <label>Site Name</label>
+            <span>{{ cameraData?.siteName || '-' }}</span>
+          </div>
+        </div>
+
+        <div class="section-title"><span>BASIC INFO</span></div>
+        <div class="info-grid">
+          <div class="info-item"><label>Camera Name</label><span>{{ cameraData?.name || '-' }}</span></div>
+          <div class="info-item"><label>Serial Number</label><span>{{ cameraData?.serialNumber || '-' }}</span></div>
+          <div class="info-item"><label>Client Camera Name</label><span>{{ cameraData?.clientCameraName || '-' }}</span></div>
+          <div class="info-item"><label>Registration Code</label><span>{{ cameraData?.registrationCode || '-' }}</span></div>
+          <div class="info-item"><label>Camera Type</label><span>{{ cameraData?.ptz === 'T' ? 'PTZ' : 'Bullet' }}</span></div>
+          <div class="info-item"><label>QR Code</label><button class="view-btn">View</button></div>
+          <div class="info-item"><label>Make</label><span>{{ cameraData?.make || '-' }}</span></div>
+          <div class="info-item"><label>Position</label><span>{{ cameraData?.position || 'LEFT' }}</span></div>
+          <div class="info-item"><label>Model</label><span>{{ cameraData?.model || '-' }}</span></div>
+          <div class="info-item"><label>Camera Placement Image</label><button class="view-btn">View</button></div>
+        </div>
+
+        <div class="section-title"><span>CONFIGURATION</span></div>
+        <div class="info-grid">
+          <div class="info-item"><label>User Name</label><span>{{ cameraData?.userName || '-' }}</span></div>
+          <div class="info-item"><label>Recovery Email</label><span>{{ cameraData?.recoveryEmail || '-' }}</span></div>
+          <div class="info-item"><label>Password</label><span>{{ cameraData?.password ? '******' : '-' }}</span></div>
+          <div class="info-item"><label>Security Questions</label><span>{{ cameraData?.securityQuestions || '-' }}</span></div>
+          <div class="info-item"><label>Camera IP Address</label><span>{{ cameraData?.internalIp || '-' }}</span></div>
+          <div class="info-item"><label>Firmware Version</label><span>{{ cameraData?.firmwareVersion || '-' }}</span></div>
+          <div class="info-item"><label>Port</label><span>{{ cameraData?.portNo || '-' }}</span></div>
+          <div class="info-item"><label>Priority</label><span>{{ cameraData?.priority === 'T' ? 'High' : '-' }}</span></div>
+          <div class="info-item"><label>RTSP URL</label><span>{{ cameraData?.rtspUrl || '-' }}</span></div>
+          <div class="info-item"><label>Native App Name</label><span>{{ cameraData?.nativeAppName || '-' }}</span></div>
+          <div class="info-item"><label>Width</label><span>{{ cameraData?.width || '-' }}</span></div>
+          <div class="info-item"><label>Onivif</label><span>{{ cameraData?.onivif || '-' }}</span></div>
+          <div class="info-item"><label>Height</label><span>{{ cameraData?.height || '-' }}</span></div>
+          <div class="info-item"><label>FTP Server</label><span>{{ cameraData?.ftpServer || '-' }}</span></div>
+          <div class="info-item"><label>FPS</label><span>{{ cameraData?.fps || '-' }}</span></div>
+          <div class="info-item"></div>
+          <div class="info-item"><label>Resolution</label><span>{{ cameraData?.resolution || '-' }}</span></div>
+          <div class="info-item"></div>
+          <div class="info-item"><label>Bitrate</label><span>{{ cameraData?.bitrate || '-' }}</span></div>
+        </div>
+
+        <div class="section-title"><span>SERVICES</span></div>
+        <div class="info-grid">
+          <div class="info-item"><label>Monitoring</label><span>{{ cameraData?.monitoring === 'T' ? 'True' : 'False' }}</span></div>
+          <div class="info-item"><label>Events Where to Run</label><span>{{ cameraData?.eventsOnAWS === 'T' ? 'AWS' : 'CPE' }}</span></div>
+          <div class="info-item"><label>Events</label><span>{{ cameraData?.events === 'T' ? 'True' : 'False' }}</span></div>
+          <div class="info-item"><label>Events AWS Server</label><span>{{ cameraData?.eventsServerIp || '-' }}</span></div>
+          <div class="info-item"><label>Analytics</label><span>{{ cameraData?.analytics === 'T' ? 'True' : 'False' }}</span></div>
+          <div class="info-item"><label>Events AWS Port</label><span>{{ cameraData?.eventsAwsPort || '-' }}</span></div>
+          <div class="info-item"></div>
+          <div class="info-item"><label>Audio Device</label><span>{{ cameraData?.audioSpeakerType || '-' }}</span></div>
+          <div class="info-item"></div>
+          <div class="info-item"><label>Storage Path</label><span>{{ cameraData?.audioUrl || '-' }}</span></div>
+        </div>
+
+        <div class="section-title"><span>CAMERA DAY & NIGHT IMAGES</span></div>
+        
+        <div class="section-title"><span>REMARKS</span></div>
+        <div class="remarks-box">
+          <div class="remarks-text">{{ cameraData?.remarks || 'No remarks available.' }}</div>
+          <button class="edit-btn"><span class="material-symbols-outlined">edit</span> EDIT</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" *ngIf="activeTab === 'event'">
+        <ng-container *ngTemplateOutlet="eventFormTpl"></ng-container>
+      </div>
+      <div class="tab-content" *ngIf="activeTab === 'analytics'">
+        <ng-container *ngTemplateOutlet="analyticsFormTpl"></ng-container>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENT CONFIG VIEW (Standalone) -->
+  <div class="drawer form-drawer" *ngIf="viewType === 'event'">
+    <div class="drawer-header">
+      <h3>CAMERA EVENT CONFIGURATION</h3>
+      <button class="close-btn" (click)="close()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="top-info">
+        <div class="info-group"><label>Client Name</label><span>{{ cameraData?.clientName || '-' }}</span></div>
+        <div class="info-group"><label>Device</label><span>{{ cameraData?.unitId || '-' }}</span></div>
+        <div class="info-group"><label>Site Name</label><span>{{ cameraData?.siteName || '-' }}</span></div>
+        <div class="info-group"><label>Camera</label><span>{{ cameraData?.cameraId || '-' }}</span></div>
+        <div class="info-group"><label>Vertical</label><span>{{ cameraData?.vertical || 'Shopping Mall' }}</span></div>
+      </div>
+      <ng-container *ngTemplateOutlet="eventFormTpl"></ng-container>
+      <div class="footer-actions">
+        <button class="cancel-btn" (click)="close()">CANCEL</button>
+        <button class="save-btn" (click)="submit()">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANALYTICS VIEW (Standalone) -->
+  <div class="drawer form-drawer" *ngIf="viewType === 'analytics'">
+    <div class="drawer-header">
+      <h3>CAMERA ANALYTICS</h3>
+      <button class="close-btn" (click)="close()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="top-info">
+        <div class="info-group"><label>Client Name</label><span>{{ cameraData?.clientName || '-' }}</span></div>
+        <div class="info-group"><label>Device</label><span>{{ cameraData?.unitId || '-' }}</span></div>
+        <div class="info-group"><label>Site Name</label><span>{{ cameraData?.siteName || '-' }}</span></div>
+        <div class="info-group"><label>Camera</label><span>{{ cameraData?.cameraId || '-' }}</span></div>
+        <div class="info-group"><label>Vertical</label><span>{{ cameraData?.vertical || 'Shopping Mall' }}</span></div>
+      </div>
+      <ng-container *ngTemplateOutlet="analyticsFormTpl"></ng-container>
+      <div class="footer-actions">
+        <button class="cancel-btn" (click)="close()">CANCEL</button>
+        <button class="save-btn" (click)="submit()">SUBMIT</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #eventFormTpl>
+  <div class="form-grid" style="margin-top: 20px;">
+    <div class="form-field toggle-field">
+      <label>MOTION DETECTION</label>
+      <label class="toggle-switch">
+        <input type="checkbox" [(ngModel)]="form.motionDetection" />
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Motion Detection Area</label>
+      <select [(ngModel)]="form.motionArea"><option value="">Select</option></select>
+    </div>
+    <div class="form-field toggle-field">
+      <label>OBJECT DETECTION</label>
+      <label class="toggle-switch">
+        <input type="checkbox" [(ngModel)]="form.objectDetection" />
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Model FPS</label>
+      <input type="text" placeholder="Enter" [(ngModel)]="form.modelFps" />
+    </div>
+    <div class="form-field">
+      <label>Skip Frames</label>
+      <select [(ngModel)]="form.skipFrames"><option value="">Select</option></select>
+    </div>
+  </div>
+  <ng-container *ngTemplateOutlet="commonFormTpl"></ng-container>
+</ng-template>
+
+<ng-template #analyticsFormTpl>
+  <div class="form-grid" style="margin-top: 20px;">
+    <div class="form-field">
+      <label>Analytic Type</label>
+      <select [(ngModel)]="form.analyticType"><option value="">Select</option></select>
+    </div>
+  </div>
+  <div class="form-grid" style="margin-top: 15px;">
+    <div class="form-field">
+      <label>Model FPS</label>
+      <input type="text" placeholder="Enter" [(ngModel)]="form.modelFps" />
+    </div>
+    <div class="form-field">
+      <label>Skip Frames</label>
+      <select [(ngModel)]="form.skipFrames"><option value="">Select</option></select>
+    </div>
+  </div>
+  <ng-container *ngTemplateOutlet="commonFormTpl"></ng-container>
+</ng-template>
+
+<ng-template #commonFormTpl>
+  <div class="section-title"><span>EVENT PARAMETERS</span></div>
+  <div class="form-grid">
+    <div class="form-field"><label>Mask In</label><input type="text" placeholder="Enter" [(ngModel)]="form.maskIn" /></div>
+    <div class="form-field"><label>Mask Out</label><input type="text" placeholder="Enter" [(ngModel)]="form.maskOut" /></div>
+    <div class="form-field"><label>Dummy Event Time</label><select [(ngModel)]="form.dummyEventTime"><option value="">Select</option></select></div>
+    <div class="form-field"><label>Event Delay Time</label><select [(ngModel)]="form.eventDelayTime"><option value="">Select</option></select></div>
+    <div class="form-field"><label>Object Names</label><select [(ngModel)]="form.objectNames"><option value="">Select</option></select></div>
+    <div class="form-field"><label>Events Polygon Points</label><input type="text" placeholder="Enter" [(ngModel)]="form.eventsPolygonPoints" /></div>
+  </div>
+
+  <div class="section-title"><span>MODEL-INFO</span></div>
+  <div class="form-grid">
+    <div class="form-field"><label>Model Name</label><select [(ngModel)]="form.modelName"><option value="">Select</option></select></div>
+    <div class="form-field"><label>Model Path</label><input type="text" placeholder="Enter" [(ngModel)]="form.modelPath" /></div>
+    <div class="form-field"><label>Model Width</label><input type="text" placeholder="Enter" [(ngModel)]="form.modelWidth" /></div>
+    <div class="form-field"><label>Model Height</label><input type="text" placeholder="Enter" [(ngModel)]="form.modelHeight" /></div>
+    <div class="form-field"><label>Object Threshold</label><select [(ngModel)]="form.objectThreshold"><option value="">Select</option></select></div>
+  </div>
+
+  <div class="form-field full-width" style="margin-top: 15px;">
+    <label>Remarks</label>
+    <input type="text" placeholder="Enter" [(ngModel)]="form.remarks" />
+  </div>
+</ng-template>

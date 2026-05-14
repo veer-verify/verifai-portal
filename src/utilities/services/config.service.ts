@@ -46,6 +46,16 @@ export class ConfigService {
     return this.http.get(url);
   }
 
+  public getCamerasForSiteId_1_0(siteId: any): Observable<any> {
+    const url = `${environment.sitesUrl}/getCamerasForSiteId_1_0/${siteId}`;
+    return this.http.get(url);
+  }
+
+  public addCamera_1_0(payload: any): Observable<any> {
+    const url = `${environment.sitesUrl}/addCamera_1_0`;
+    return this.http.post(url, payload);
+  }
+
   listTimeLapseVideos(payload: any) {
     let url = `${environment.timelapseUrl}/listTimeLapseVideos_1_0`;
     let params = new HttpParams();

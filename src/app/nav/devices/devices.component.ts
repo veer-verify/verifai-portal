@@ -6,6 +6,7 @@ import { takeUntil, filter } from 'rxjs/operators';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { CreateDeviceComponent } from './create-device/create-device.component';
+import { CreateCameraComponent } from '../cameras/create-camera/create-camera.component';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 
 import { AgGridAngular } from 'ag-grid-angular';
@@ -19,6 +20,7 @@ import { gridOptions } from '../../../grid.config';
     CommonModule,
     FormsModule,
     CreateDeviceComponent,
+    CreateCameraComponent,
     PaginationComponent,
     AgGridAngular
   ],
@@ -37,6 +39,8 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   loading = false;
   showCreateDevice = false;
+  showCreateCamera = false;
+  selectedDeviceForCamera: any = null;
   activePopover: string | null = null;
 
   pageNumber = 1;
@@ -49,7 +53,7 @@ export class DevicesComponent implements OnInit, OnDestroy {
   gridOptions!: GridOptions;
 
   columnDefs: ColDef[] = [
-    { headerName: 'ID ⇵', field: 'unitId', cellClass: 'muted', width: 82 },
+    { headerName: 'ID', field: 'unitId', cellClass: 'muted', width: 82 },
     { headerName: 'DEVICE NAME', field: 'unitName', cellClass: 'device-name', width: 175 },
     { headerName: 'TYPE', valueGetter: () => 'Defender', width: 90 },
     { headerName: 'SITE NAME', valueGetter: (p) => p.data?.siteName || p.data?.SiteName || 'Selected Site', width: 150 },
@@ -69,7 +73,17 @@ export class DevicesComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.gridOptions = gridOptions;
+    this.gridOptions = {
+      ...gridOptions,
+      rowHeight: 27,
+      headerHeight: 29,
+      suppressCellFocus: true,
+      defaultColDef: {
+        ...gridOptions?.defaultColDef,
+        editable: false,
+        resizable: true,
+      },
+    };
     this.getSites();
 
     this.storageService.currentSite$
@@ -193,6 +207,24 @@ export class DevicesComponent implements OnInit, OnDestroy {
     this.showCreateDevice = false;
     if (refresh) {
       this.getDevices();
+    }
+  }
+
+  closeCreateCamera(refresh: boolean = false) {
+    this.showCreateCamera = false;
+    this.selectedDeviceForCamera = null;
+    if (refresh) {
+      this.getDevices();
+    }
+  }
+
+  onCellClicked(event: any): void {
+    if (
+      event.event?.target instanceof HTMLElement &&
+      event.event.target.classList.contains('add-circle')
+    ) {
+      this.selectedDeviceForCamera = event.data;
+      this.showCreateCamera = true;
     }
   }
 

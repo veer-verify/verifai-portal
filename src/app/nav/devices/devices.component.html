@@ -44,6 +44,7 @@
       [rowData]="loading ? undefined : paginatedDevices"
       [columnDefs]="columnDefs"
       [gridOptions]="gridOptions"
+      (cellClicked)="onCellClicked($event)"
     >
     </ag-grid-angular>
   </div>
@@ -65,3 +66,9 @@
   [selectedSiteId]="selectedSiteId"
   (closePanel)="closeCreateDevice($event)"
 ></app-create-device>
+
+<app-create-camera
+  *ngIf="showCreateCamera"
+  [deviceData]="selectedDeviceForCamera"
+  (closePanel)="closeCreateCamera($event)"
+></app-create-camera>

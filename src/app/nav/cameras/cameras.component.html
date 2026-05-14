@@ -1,1 +1,74 @@
-<p>cameras works!</p>
+<div class="devices-page">
+  <div class="page-header">
+    <div>
+      <h2>CAMERAS</h2>
+    </div>
+    <button class="create-btn" (click)="openCreateCamera()">
+      + CREATE CAMERA
+    </button>
+  </div>
+
+  <div class="top-filter-row">
+    <div class="cards">
+      <div class="count-card total">
+        <span>TOTAL</span>
+        <b>{{ totalCount }}</b>
+      </div>
+      <div class="count-card">
+        <span>ACTIVE</span>
+        <b>{{ activeCount }}</b>
+      </div>
+      <div class="count-card">
+        <span>INACTIVE</span>
+        <b>{{ inactiveCount }}</b>
+      </div>
+    </div>
+
+    <div class="right-filters">
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search here"
+          [(ngModel)]="searchText"
+          (input)="pageNumber = 1; applySearch()"
+        />
+        <span class="material-symbols-outlined">search</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <ag-grid-angular
+      class="ag-theme-alpine"
+      style="width: 100%; height: 100%"
+      [rowData]="loading ? undefined : paginatedCameras"
+      [columnDefs]="columnDefs"
+      [gridOptions]="gridOptions"
+      (cellClicked)="onCellClicked($event)"
+    >
+    </ag-grid-angular>
+  </div>
+
+  <div class="pagination-section">
+    <app-pagination
+      [pageSize]="pageSize"
+      [pageNumber]="pageNumber"
+      [totalPages]="totalPages"
+      (changePageNumber)="changePageNumber($event)"
+      (changePSize)="changePageSize($event)"
+    ></app-pagination>
+  </div>
+</div>
+
+<app-create-camera
+  *ngIf="showCreateCamera"
+  [deviceData]="selectedCameraData"
+  (closePanel)="closeCreateCamera($event)"
+></app-create-camera>
+
+<app-camera-info
+  *ngIf="showCameraInfo"
+  [cameraData]="selectedCameraData"
+  [viewType]="cameraInfoViewType"
+  (closePanel)="showCameraInfo = false"
+></app-camera-info>
