@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, filter, finalize, Observable, delay } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 import { LiveAiService } from '../../../utilities/services/live-ai.service';
 import { StorageService } from '../../../utilities/services/storage.service';
@@ -10,8 +11,6 @@ import { ViewChild, ElementRef } from '@angular/core';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MediaDialogComponent } from '../../../utilities/components/media-dialog/media-dialog.component';
-import { MediaPipe } from '../../../utilities/pipes/media.pipe';
-import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-live-ai',
   standalone: true,
@@ -20,7 +19,6 @@ import { environment } from '../../../environments/environment';
     FormsModule,
     ReactiveFormsModule,
     StreamComponent,
-    MediaPipe,
   ],
   providers: [LiveAiService],
   templateUrl: './live-ai.component.html',
@@ -49,14 +47,13 @@ export class LiveAiComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   // _sideNav!: Observable<any>;
-  http: any;
-
   constructor(
     private router: Router,
     private liveAiService: LiveAiService,
     private storageService: StorageService,
     private dialog: MatDialog,
     public storage_service: StorageService,
+    private http: HttpClient,
   ) { }
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
@@ -307,8 +304,6 @@ export class LiveAiComponent implements OnInit, OnDestroy {
       .getLatestCameraImage(this.selectedCamera.cameraId)
       .subscribe({
         next: (res: any) => {
-          this.imageLoader = false;
-
           if (res.statusCode === 200) {
             // if (res.latestImage) {
             //   const separator = res.latestImage.includes('?') ? '&' : '?';
@@ -316,8 +311,6 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             // } else {
             //   this.selectedCameraImage = 'icons/eyedisabled.svg';
             // }
-            this.selectedCameraImage = res.latestImage;
-
             this.monitoringStatus = res.monitoring === 'T';
             this.aiStatus = res.AI === 'T';
             this.subtitles = res.subtitles || [];
@@ -339,7 +332,15 @@ export class LiveAiComponent implements OnInit, OnDestroy {
             if (updatedCam) {
               this.selectedCamera = { ...updatedCam };
             }
+
+            if (res.latestImage) {
+              this.downloadCameraImage(res.latestImage);
+            } else {
+              this.selectedCameraImage = '';
+              this.imageLoader = false;
+            }
           } else {
+            this.imageLoader = false;
             this.resetCameraData();
           }
         },
@@ -347,6 +348,33 @@ export class LiveAiComponent implements OnInit, OnDestroy {
           this.imageLoader = false;
           console.error('❌ Image API Error:', err);
           this.resetCameraData();
+        },
+      });
+  }
+
+  private downloadCameraImage(imageUrl: string): void {
+    this.http
+      .get(imageUrl, { responseType: 'blob' })
+      .subscribe({
+        next: (blob) => {
+          const reader = new FileReader();
+
+          reader.onloadend = () => {
+            this.selectedCameraImage = reader.result as string;
+            this.imageLoader = false;
+          };
+
+          reader.onerror = () => {
+            this.selectedCameraImage = '';
+            this.imageLoader = false;
+          };
+
+          reader.readAsDataURL(blob);
+        },
+        error: (err) => {
+          console.error('âŒ Image Download Error:', err);
+          this.selectedCameraImage = '';
+          this.imageLoader = false;
         },
       });
   }

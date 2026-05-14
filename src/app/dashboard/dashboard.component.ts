@@ -264,7 +264,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     siteElement?.nativeElement.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',
+      block: 'start',
     });
   }
 

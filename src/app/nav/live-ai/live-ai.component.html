@@ -108,8 +108,8 @@
         <div class="camera-box">
           <img
             class="camera-feed"
-            [src]="selectedCameraImage | media | async"
-            *ngIf="!imageLoader"
+            [src]="selectedCameraImage"
+            *ngIf="!imageLoader && selectedCameraImage"
             onerror="this.src = 'icons/eye-disabled.png'"
           />
 
