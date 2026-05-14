@@ -42,7 +42,7 @@ type CityTuple = [string, string, string, string, string];
 @Injectable({ providedIn: 'root' })
 export class LocationDataService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'assets/location-data';
+  private readonly baseUrl = 'location-data';
 
   private readonly countries$ = this.http
     .get<Country[]>(`${this.baseUrl}/country.json`)
