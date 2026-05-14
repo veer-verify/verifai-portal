@@ -8,6 +8,10 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   const storage_service = inject(StorageService);
   const router = inject(Router);
 
+  if (req.url.includes('downloadFile_1_0')) {
+    return next(req);
+  }
+
   storage_service.incrementLoader();
   storage_service.info$.next('');
   return next(req).pipe(
