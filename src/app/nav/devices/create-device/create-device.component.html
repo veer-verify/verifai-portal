@@ -1,1 +1,167 @@
-<p>create-device works!</p>
+<div class="drawer-backdrop">
+  <div class="drawer">
+    <div class="drawer-header">
+      <h3>CREATE DEVICE</h3>
+      <button class="close-btn" (click)="close()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Client Name</label>
+          <select [(ngModel)]="deviceForm.clientName">
+            <option value="">Select</option>
+            <option value="Default Client">Default Client</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Site Name</label>
+          <select [(ngModel)]="deviceForm.siteId">
+            <option value="">Select</option>
+            <option
+              *ngFor="let site of sitesList"
+              [value]="site?.siteId || site?.SiteId || site?.id"
+            >
+              {{ site?.siteName || site?.SiteName || site?.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Device ID</label>
+          <input
+            type="text"
+            placeholder="Enter"
+            [(ngModel)]="deviceForm.unitId"
+          />
+        </div>
+        <div class="form-field">
+          <label>Device Name</label>
+          <input
+            type="text"
+            placeholder="Enter"
+            [(ngModel)]="deviceForm.unitName"
+          />
+        </div>
+        <div class="form-field">
+          <label>Device Type</label>
+          <select [(ngModel)]="deviceForm.deviceType">
+            <option value="">Select</option>
+            <option value="Defender">Defender</option>
+            <option value="Cloud">Cloud</option>
+            <option value="B&M">B&M</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Status</label>
+          <select [(ngModel)]="deviceForm.status">
+            <option value="">Select</option>
+            <option value="Installed">Installed</option>
+            <option value="Inactive">Inactive</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Remote Agent</label>
+          <input
+            type="text"
+            placeholder="Enter"
+            [(ngModel)]="deviceForm.remoteAgent"
+          />
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>URLS</span>
+      </div>
+      <div class="url-list">
+        <div class="url-row" *ngFor="let row of urls; let i = index">
+          <input
+            type="text"
+            placeholder="Enter URL"
+            [(ngModel)]="row.url"
+          />
+          <select [(ngModel)]="row.type">
+            <option value="">Select</option>
+            <option value="Audio URL">Audio URL</option>
+            <option value="Web URL">Web URL</option>
+            <option value="Config URL">Config URL</option>
+            <option value="Live Restart URL">Live Restart URL</option>
+          </select>
+          <button class="remove-url" (click)="removeUrlRow(i)">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          <button
+            class="add-url"
+            *ngIf="i === urls.length - 1"
+            (click)="addUrlRow()"
+          >
+            <span class="material-symbols-outlined">add</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <span>UPLOAD DEVICE INSTALLATION IMAGES</span>
+      </div>
+      <div class="upload-layout">
+        <div class="upload-box">
+          <div class="upload-icon">
+            <span class="material-symbols-outlined">upload</span>
+          </div>
+          <p>Drag and Drop files here</p>
+          <span>OR</span>
+          <label class="browse-btn">
+            Browse Files
+            <input
+              type="file"
+              multiple
+              hidden
+              (change)="onFilesSelected($event)"
+            />
+          </label>
+        </div>
+
+        <div class="uploaded-files">
+          <label class="uploaded-label">UPLOADED FILES</label>
+          <div class="file-row" *ngFor="let file of uploadedFiles; let i = index">
+            <div class="file-main">
+              <div class="file-info">
+                <span class="material-symbols-outlined file-icon">image</span>
+                <div class="file-data">
+                  <p>{{ file.name }} ({{ file.progress }}%)</p>
+                  <div class="progress">
+                    <div [style.width.%]="file.progress"></div>
+                  </div>
+                </div>
+                <button (click)="removeFile(i)">
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+            </div>
+            <select [(ngModel)]="file.type">
+              <option value="">Select</option>
+              <option value="Installation Image">Installation Image</option>
+              <option value="Device Image">Device Image</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title remarks-title">
+        <span>REMARKS</span>
+      </div>
+      <textarea
+        placeholder="Enter"
+        [(ngModel)]="deviceForm.remarks"
+      ></textarea>
+
+      <div class="footer-actions">
+        <button class="cancel-btn" (click)="close()">Cancel</button>
+        <button class="save-btn" (click)="saveDevice()" [disabled]="saving">
+          {{ saving ? 'Saving...' : 'Create' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
