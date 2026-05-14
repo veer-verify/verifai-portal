@@ -30,6 +30,16 @@ export class ConfigService {
     return this.http.post(url, payload);
   }
 
+  getCentralBoxes(siteId: any): Observable<any> {
+    const url = `${environment.sitesUrl}/getCentralBox_1_0/${siteId}`;
+    return this.http.get(url);
+  }
+
+  addCentralBox(payload: any): Observable<any> {
+    const url = `${environment.sitesUrl}/addCentralBox_1_0`;
+    return this.http.post(url, payload);
+  }
+
   public getCamerasForSiteId(payload: any): Observable<any> {
     const url = `${environment.sitesUrl}/getCamerasForSiteIdForPortal_1_0/${payload?.siteId}`;
     const user = this.storageSrvc.getData('user');

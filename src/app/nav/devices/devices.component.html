@@ -1,1 +1,67 @@
-<p>devices works!</p>
+<div class="devices-page">
+  <div class="page-header">
+    <div>
+      <h2>DEVICES</h2>
+    </div>
+    <button class="create-btn" (click)="openCreateDevice()">
+      + CREATE DEVICE
+    </button>
+  </div>
+
+  <div class="top-filter-row">
+    <div class="cards">
+      <div class="count-card total">
+        <span>TOTAL</span>
+        <b>{{ totalCount }}</b>
+      </div>
+      <div class="count-card">
+        <span>ACTIVE</span>
+        <b>{{ activeCount }}</b>
+      </div>
+      <div class="count-card">
+        <span>INACTIVE</span>
+        <b>{{ inactiveCount }}</b>
+      </div>
+    </div>
+
+    <div class="right-filters">
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Search here"
+          [(ngModel)]="searchText"
+          (input)="pageNumber = 1; applySearch()"
+        />
+        <span class="material-symbols-outlined">search</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <ag-grid-angular
+      class="ag-theme-alpine"
+      style="width: 100%; height: 100%"
+      [rowData]="loading ? undefined : paginatedDevices"
+      [columnDefs]="columnDefs"
+      [gridOptions]="gridOptions"
+    >
+    </ag-grid-angular>
+  </div>
+
+  <div class="pagination-section">
+    <app-pagination
+      [pageSize]="pageSize"
+      [pageNumber]="pageNumber"
+      [totalPages]="totalPages"
+      (changePageNumber)="changePageNumber($event)"
+      (changePSize)="changePageSize($event)"
+    ></app-pagination>
+  </div>
+</div>
+
+<app-create-device
+  *ngIf="showCreateDevice"
+  [sitesList]="sitesList"
+  [selectedSiteId]="selectedSiteId"
+  (closePanel)="closeCreateDevice($event)"
+></app-create-device>
