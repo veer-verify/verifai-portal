@@ -62,6 +62,7 @@
       [columnDefs]="columnDefs"
       [gridOptions]="gridOptions"
       [rowData]="rowData"
+      (cellClicked)="onCellClicked($event)"
       (gridReady)="onGridReady($event)"
     ></ag-grid-angular>
   </section>
@@ -79,3 +80,88 @@
   *ngIf="showCreateSitePanel"
   (closePanel)="closeCreateSite()"
 ></app-create-site>
+
+<div class="site-info-backdrop" *ngIf="selectedSiteInfo" (click)="closeSiteInfo()"></div>
+
+<aside class="site-info-panel" *ngIf="selectedSiteInfo">
+  <header class="site-info-header">
+    <div>
+      <h2>{{ selectedSiteInfo.site }}</h2>
+      <p>{{ selectedSiteInfo.id }}</p>
+    </div>
+    <button type="button" class="site-info-close" (click)="closeSiteInfo()">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  </header>
+
+  <section class="site-info-body">
+    <div class="site-info-status">
+      <span class="status-dot" [class]="selectedSiteInfo.status.toLowerCase()"></span>
+      {{ selectedSiteInfo.status }}
+    </div>
+
+    <div class="site-info-grid">
+      <div>
+        <span>Client</span>
+        <strong>{{ selectedSiteInfo.client }}</strong>
+      </div>
+      <div>
+        <span>Vertical</span>
+        <strong>{{ selectedSiteInfo.vertical }}</strong>
+      </div>
+      <div>
+        <span>Device</span>
+        <strong>{{ selectedSiteInfo.device || '-' }}</strong>
+      </div>
+      <div>
+        <span>Camera</span>
+        <strong>{{ selectedSiteInfo.camera || '-' }}</strong>
+      </div>
+      <div>
+        <span>Inventory</span>
+        <strong>{{ selectedSiteInfo.inventory || '-' }}</strong>
+      </div>
+      <div>
+        <span>Services</span>
+        <strong>{{ selectedSiteInfo.services || 0 }}</strong>
+      </div>
+      <div>
+        <span>Health</span>
+        <strong>{{ selectedSiteInfo.health }}</strong>
+      </div>
+      <div>
+        <span>Audio</span>
+        <strong>{{ selectedSiteInfo.audio }}</strong>
+      </div>
+    </div>
+
+    <section class="site-info-section">
+      <h3>Site Details</h3>
+      <div class="site-info-list">
+        <div>
+          <span>Site ID</span>
+          <strong>{{ selectedSiteInfo.raw?.siteId || selectedSiteInfo.raw?.site_id || selectedSiteInfo.id }}</strong>
+        </div>
+        <div>
+          <span>Short Name</span>
+          <strong>{{ selectedSiteInfo.raw?.siteShortName || selectedSiteInfo.raw?.shortName || '-' }}</strong>
+        </div>
+        <div>
+          <span>Timezone</span>
+          <strong>{{ selectedSiteInfo.raw?.timezone || '-' }}</strong>
+        </div>
+        <div>
+          <span>Address</span>
+          <strong>
+            {{
+              selectedSiteInfo.raw?.address ||
+              selectedSiteInfo.raw?.siteAddress ||
+              selectedSiteInfo.raw?.line_1 ||
+              '-'
+            }}
+          </strong>
+        </div>
+      </div>
+    </section>
+  </section>
+</aside>

@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
+  CellClickedEvent,
   ColDef,
   GridApi,
   GridOptions,
@@ -55,6 +56,7 @@ export class SitesComponent implements OnInit, OnDestroy {
   filteredRows: SiteRow[] = [];
   rowData: SiteRow[] = [];
   showCreateSitePanel = false;
+  selectedSiteInfo: SiteRow | null = null;
 
   summaryCards = [
     { key: 'total', label: 'Total', count: 0, sub: 0, tone: 'red' },
@@ -241,6 +243,19 @@ export class SitesComponent implements OnInit, OnDestroy {
 
   closeCreateSite(): void {
     this.showCreateSitePanel = false;
+  }
+
+  onCellClicked(event: CellClickedEvent): void {
+    if (
+      event.event?.target instanceof HTMLElement &&
+      event.event.target.classList.contains('more-info')
+    ) {
+      this.selectedSiteInfo = event.data;
+    }
+  }
+
+  closeSiteInfo(): void {
+    this.selectedSiteInfo = null;
   }
 
   private updateRows(): void {
