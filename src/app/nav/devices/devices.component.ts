@@ -5,9 +5,11 @@ import { Subject } from 'rxjs';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
+import { AlertService } from '../../../utilities/services/alert.service';
 import { CreateDeviceComponent } from './create-device/create-device.component';
 import { CreateCameraComponent } from '../cameras/create-camera/create-camera.component';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
+import { DeviceInfoComponent } from './device-info/device-info.component';
 
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridOptions } from 'ag-grid-community';
@@ -22,7 +24,8 @@ import { gridOptions } from '../../../grid.config';
     CreateDeviceComponent,
     CreateCameraComponent,
     PaginationComponent,
-    AgGridAngular
+    AgGridAngular,
+    DeviceInfoComponent
   ],
   templateUrl: './devices.component.html',
   styleUrl: './devices.component.css'
@@ -39,8 +42,10 @@ export class DevicesComponent implements OnInit, OnDestroy {
 
   loading = false;
   showCreateDevice = false;
+  showDeviceInfo = false;
   showCreateCamera = false;
   selectedDeviceForCamera: any = null;
+  selectedDeviceData: any = null;
   activePopover: string | null = null;
 
   pageNumber = 1;
@@ -219,12 +224,15 @@ export class DevicesComponent implements OnInit, OnDestroy {
   }
 
   onCellClicked(event: any): void {
-    if (
-      event.event?.target instanceof HTMLElement &&
-      event.event.target.classList.contains('add-circle')
-    ) {
+    const target = event.event?.target as HTMLElement;
+    if (!target) return;
+
+    if (target.classList.contains('add-circle')) {
       this.selectedDeviceForCamera = event.data;
       this.showCreateCamera = true;
+    } else if (target.classList.contains('more-info')) {
+      this.selectedDeviceData = event.data;
+      this.showDeviceInfo = true;
     }
   }
 

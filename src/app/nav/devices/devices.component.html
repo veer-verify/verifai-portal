@@ -72,3 +72,9 @@
   [deviceData]="selectedDeviceForCamera"
   (closePanel)="closeCreateCamera($event)"
 ></app-create-camera>
+
+<app-device-info
+  *ngIf="showDeviceInfo"
+  [deviceData]="selectedDeviceData"
+  (closePanel)="showDeviceInfo = false"
+></app-device-info>

@@ -14,6 +14,7 @@ import { gridOptions } from '../../../grid.config';
 import { PaginationComponent } from '../../../utilities/components/pagination/pagination.component';
 import { StorageService } from '../../../utilities/services/storage.service';
 import { CreateSiteComponent } from './create-site/create-site.component';
+import { CreateDeviceComponent } from '../devices/create-device/create-device.component';
 
 type SiteStatus = 'Online' | 'Offline' | 'Partial' | 'Inprogress';
 
@@ -34,7 +35,7 @@ interface SiteRow {
 
 @Component({
   selector: 'app-sites',
-  imports: [CommonModule, FormsModule, AgGridAngular, PaginationComponent, CreateSiteComponent],
+  imports: [CommonModule, FormsModule, AgGridAngular, PaginationComponent, CreateSiteComponent, CreateDeviceComponent],
   templateUrl: './sites.component.html',
   styleUrl: './sites.component.css'
 })
@@ -57,6 +58,8 @@ export class SitesComponent implements OnInit, OnDestroy {
   rowData: SiteRow[] = [];
   showCreateSitePanel = false;
   selectedSiteInfo: SiteRow | null = null;
+  showCreateDevice = false;
+  selectedSiteForDevice: any = null;
 
   summaryCards = [
     { key: 'total', label: 'Total', count: 0, sub: 0, tone: 'red' },
@@ -246,16 +249,36 @@ export class SitesComponent implements OnInit, OnDestroy {
   }
 
   onCellClicked(event: CellClickedEvent): void {
-    if (
-      event.event?.target instanceof HTMLElement &&
-      event.event.target.classList.contains('more-info')
-    ) {
+    const target = event.event?.target as HTMLElement;
+    if (!target) return;
+
+    if (target.classList.contains('more-info')) {
       this.selectedSiteInfo = event.data;
+    } else if (target.classList.contains('add-circle')) {
+      if (event.colDef.field === 'device') {
+        this.selectedSiteForDevice = event.data;
+        this.showCreateDevice = true;
+      }
     }
   }
 
   closeSiteInfo(): void {
     this.selectedSiteInfo = null;
+  }
+
+  closeCreateDevice(refresh: boolean = false): void {
+    this.showCreateDevice = false;
+    this.selectedSiteForDevice = null;
+    if (refresh) {
+      // Assuming a method to refresh the sites list or similar
+    }
+  }
+
+  getSitesList(): any[] {
+    return this.allRows.map(row => ({
+      siteId: row.id,
+      siteName: row.site
+    }));
   }
 
   private updateRows(): void {

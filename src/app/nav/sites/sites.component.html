@@ -165,3 +165,10 @@
     </section>
   </section>
 </aside>
+
+<app-create-device
+  *ngIf="showCreateDevice"
+  [sitesList]="getSitesList()"
+  [selectedSiteId]="selectedSiteForDevice?.id"
+  (closePanel)="closeCreateDevice($event)"
+></app-create-device>
