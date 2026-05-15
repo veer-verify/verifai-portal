@@ -34,8 +34,11 @@
             <span>{{ cameraData?.siteName || '-' }}</span>
           </div>
         </div>
+        <div class="section-header">
+          <span>BASIC INFO</span>
+          <div class="section-line"></div>
+        </div>
 
-        <div class="section-title"><span>BASIC INFO</span></div>
         <div class="info-grid">
           <div class="info-item"><label>Camera Name</label><span>{{ cameraData?.name || '-' }}</span></div>
           <div class="info-item"><label>Serial Number</label><span>{{ cameraData?.serialNumber || '-' }}</span></div>
@@ -49,11 +52,15 @@
           <div class="info-item"><label>Camera Placement Image</label><button class="view-btn">View</button></div>
         </div>
 
-        <div class="section-title"><span>CONFIGURATION</span></div>
+
+        <div class="section-header">
+          <span>CONFIGURATION</span>
+          <div class="section-line"></div>
+        </div>
         <div class="info-grid">
           <div class="info-item"><label>User Name</label><span>{{ cameraData?.userName || '-' }}</span></div>
           <div class="info-item"><label>Recovery Email</label><span>{{ cameraData?.recoveryEmail || '-' }}</span></div>
-          <div class="info-item"><label>Password</label><span>{{ cameraData?.password ? '******' : '-' }}</span></div>
+          <div class="info-item"><label>Password</label><span>{{ cameraData?.password || '-' }}</span></div>
           <div class="info-item"><label>Security Questions</label><span>{{ cameraData?.securityQuestions || '-' }}</span></div>
           <div class="info-item"><label>Camera IP Address</label><span>{{ cameraData?.internalIp || '-' }}</span></div>
           <div class="info-item"><label>Firmware Version</label><span>{{ cameraData?.firmwareVersion || '-' }}</span></div>
@@ -71,8 +78,10 @@
           <div class="info-item"></div>
           <div class="info-item"><label>Bitrate</label><span>{{ cameraData?.bitrate || '-' }}</span></div>
         </div>
-
-        <div class="section-title"><span>SERVICES</span></div>
+        <div class="section-header">
+          <span>SERVICES</span>
+          <div class="section-line"></div>
+        </div>
         <div class="info-grid">
           <div class="info-item"><label>Monitoring</label><span>{{ cameraData?.monitoring === 'T' ? 'True' : 'False' }}</span></div>
           <div class="info-item"><label>Events Where to Run</label><span>{{ cameraData?.eventsOnAWS === 'T' ? 'AWS' : 'CPE' }}</span></div>
@@ -86,9 +95,15 @@
           <div class="info-item"><label>Storage Path</label><span>{{ cameraData?.audioUrl || '-' }}</span></div>
         </div>
 
-        <div class="section-title"><span>CAMERA DAY & NIGHT IMAGES</span></div>
-        
-        <div class="section-title"><span>REMARKS</span></div>
+        <div class="section-header">
+          <span>CAMERA DAY & NIGHT IMAGES</span>
+          <div class="section-line"></div>
+        </div>
+
+        <div class="section-header">
+          <span>REMARKS</span>
+          <div class="section-line"></div>
+        </div>
         <div class="remarks-box">
           <div class="remarks-text">{{ cameraData?.remarks || 'No remarks available.' }}</div>
           <button class="edit-btn"><span class="material-symbols-outlined">edit</span> EDIT</button>
@@ -96,10 +111,10 @@
       </div>
       
       <div class="tab-content" *ngIf="activeTab === 'event'">
-        <ng-container *ngTemplateOutlet="eventFormTpl"></ng-container>
+        <ng-container *ngTemplateOutlet="eventReadonlyTpl"></ng-container>
       </div>
       <div class="tab-content" *ngIf="activeTab === 'analytics'">
-        <ng-container *ngTemplateOutlet="analyticsFormTpl"></ng-container>
+        <ng-container *ngTemplateOutlet="analyticsReadonlyTpl"></ng-container>
       </div>
     </div>
   </div>
@@ -206,7 +221,10 @@
 </ng-template>
 
 <ng-template #commonFormTpl>
-  <div class="section-title"><span>EVENT PARAMETERS</span></div>
+      <div class="section-header">
+          <span>EVENT PARAMETERS</span>
+          <div class="section-line"></div>
+        </div>
   <div class="form-grid">
     <div class="form-field"><label>Mask In</label><input type="text" placeholder="Enter" [(ngModel)]="form.maskIn" /></div>
     <div class="form-field"><label>Mask Out</label><input type="text" placeholder="Enter" [(ngModel)]="form.maskOut" /></div>
@@ -216,7 +234,10 @@
     <div class="form-field"><label>Events Polygon Points</label><input type="text" placeholder="Enter" [(ngModel)]="form.eventsPolygonPoints" /></div>
   </div>
 
-  <div class="section-title"><span>MODEL-INFO</span></div>
+      <div class="section-header">
+          <span>MODEL-INFO</span>
+          <div class="section-line"></div>
+        </div>
   <div class="form-grid">
     <div class="form-field"><label>Model Name</label><select [(ngModel)]="form.modelName"><option value="">Select</option></select></div>
     <div class="form-field"><label>Model Path</label><input type="text" placeholder="Enter" [(ngModel)]="form.modelPath" /></div>
@@ -228,5 +249,85 @@
   <div class="form-field full-width" style="margin-top: 15px;">
     <label>Remarks</label>
     <input type="text" placeholder="Enter" [(ngModel)]="form.remarks" />
+  </div>
+</ng-template>
+
+<ng-template #eventReadonlyTpl>
+  <div class="section-header">
+    <span>BASIC INFO</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="info-grid" style="margin-bottom: 20px;">
+    <div class="info-item"><label>Motion Detection</label><span>True</span></div>
+    <div class="info-item"><label>Motion Detection Area</label><span>a</span></div>
+    <div class="info-item"><label>Objection Detection</label><span>True</span></div>
+    <div class="info-item"><label>Model FPS</label><span>-</span></div>
+    <div class="info-item"></div>
+    <div class="info-item"><label>Skip Frames</label><span>-</span></div>
+  </div>
+  <ng-container *ngTemplateOutlet="commonReadonlyTpl"></ng-container>
+  <div class="footer-actions" style="justify-content: flex-end; margin-top:0;">
+    <button class="edit-btn"><span class="material-symbols-outlined" style="font-size:14px;">edit</span> EDIT</button>
+  </div>
+</ng-template>
+
+<ng-template #analyticsReadonlyTpl>
+  <div class="section-header" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 0;">
+    <span style="margin: 0;">BASIC INFO</span>
+    <button class="add-btn" (click)="addAnalyticField()">+ ADD</button>
+  </div>
+  <div class="section-line" style="margin-bottom: 15px;"></div>
+  
+  <div class="analytic-blocks">
+    <div class="a-block active">PEOPLE<br>COUNT</div>
+    <div class="a-block">VECHICLE<br>COUNT</div>
+    <div class="a-block">WAITING<br>COUNT</div>
+    <div class="a-block active" *ngFor="let field of customFields">{{field}}</div>
+  </div>
+
+  <div class="info-grid" style="margin-top: 20px; margin-bottom: 20px;">
+    <div class="info-item"><label>Model FPS</label><span>-</span></div>
+    <div class="info-item"><label>Skip Frames</label><span>-</span></div>
+  </div>
+
+  <ng-container *ngTemplateOutlet="commonReadonlyTpl"></ng-container>
+  
+  <div class="footer-actions" style="justify-content: flex-end; gap: 10px; margin-top:0;">
+    <button class="edit-btn"><span class="material-symbols-outlined" style="font-size:14px;">edit</span> EDIT</button>
+    <button class="edit-btn"><span class="material-symbols-outlined" style="font-size:14px;">close</span> REMOVE</button>
+  </div>
+</ng-template>
+
+<ng-template #commonReadonlyTpl>
+  <div class="split-sections">
+    <div class="split-left">
+      <div class="section-header" style="margin-top:0;"><span>POLYGON/ROI</span><div class="section-line"></div></div>
+      <div class="info-list">
+        <div class="info-item"><label>Maskin</label><span>-</span></div>
+        <div class="info-item"><label>Mask Out</label><span>-</span></div>
+        <div class="info-item"><label>Dummy Event Time</label><span>00:10</span></div>
+        <div class="info-item"><label>Event Delay Time</label><span>000:05</span></div>
+        <div class="info-item"><label>Object Names</label><span>Person</span></div>
+      </div>
+    </div>
+    <div class="split-right">
+      <div class="section-header" style="margin-top:0;"><span>MODEL-INFO</span><div class="section-line"></div></div>
+      <div class="info-list">
+        <div class="info-item"><label>Model Name</label><span>cvmodel.pt</span></div>
+        <div class="info-item"><label>Model Path</label><span>-</span></div>
+        <div class="info-item"><label>Model Width</label><span>0</span></div>
+        <div class="info-item"><label>Model Height</label><span>0</span></div>
+        <div class="info-item"><label>Object Threshold</label><span>0</span></div>
+        <div class="info-item"><label>Events Polygon Points</label><span>-</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header" style="margin-top:20px;">
+    <span>REMARKS</span>
+    <div class="section-line"></div>
+  </div>
+  <div style="margin-bottom: 20px;">
+    <div class="remarks-text">{{ cameraData?.remarks || '' }}</div>
   </div>
 </ng-template>

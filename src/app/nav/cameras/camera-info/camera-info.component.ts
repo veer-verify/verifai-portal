@@ -38,6 +38,8 @@ export class CameraInfoComponent implements OnInit {
     remarks: ''
   };
 
+  customFields: string[] = [];
+
   ngOnInit() {
     if (this.viewType === 'event') {
       this.activeTab = 'event';
@@ -52,5 +54,12 @@ export class CameraInfoComponent implements OnInit {
 
   submit() {
     this.closePanel.emit(true);
+  }
+
+  addAnalyticField() {
+    const name = window.prompt('Enter field name (e.g. MALE COUNT):');
+    if (name && name.trim()) {
+      this.customFields.push(name.trim().toUpperCase());
+    }
   }
 }

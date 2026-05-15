@@ -274,49 +274,52 @@ import { ICellRendererParams } from 'ag-grid-community';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="link-container">
-      <button class="icon-btn" (click)="toggle($event)" [disabled]="!url">
+    <div class="link-container" (mouseenter)="onEnter()" (mouseleave)="onLeave()">
+      <button class="icon-btn" (click)="copy($event)" [disabled]="!url">
         <span class="material-symbols-outlined">link</span>
       </button>
-      <div class="link-popover" *ngIf="isOpen" (click)="$event.stopPropagation()">
-        <span class="material-symbols-outlined copy-icon" title="Copy" (click)="copy($event)">file_copy</span>
+      <div class="link-popover" *ngIf="isOpen && url" (click)="copy($event)">
+        <span class="material-symbols-outlined copy-icon" title="Copy">file_copy</span>
         <span class="url-text">{{ url }}</span>
       </div>
     </div>
-  `
+  `,
+  styles: [`
+    .link-container { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
+    .icon-btn { border: none; outline: none; background: transparent; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+    .icon-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+    .icon-btn span { font-size: 18px; color: #111; transform: rotate(-35deg); }
+    .link-popover { position: absolute; top: calc(100% + 5px); left: 50%; transform: translateX(-50%); background: linear-gradient(to bottom, #ffffff, #f7f7f7); border: 1px solid #e1e1e1; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12); border-radius: 6px; padding: 8px 12px; display: flex; align-items: center; gap: 10px; z-index: 9999; width: max-content; max-width: 250px; cursor: pointer; }
+    .link-popover::after { content: ''; position: absolute; top: -6px; left: 50%; transform: translateX(-50%); border-width: 0 6px 6px; border-style: solid; border-color: transparent transparent #ffffff transparent; }
+    .link-popover::before { content: ''; position: absolute; top: -7px; left: 50%; transform: translateX(-50%); border-width: 0 7px 7px; border-style: solid; border-color: transparent transparent #e1e1e1 transparent; z-index: -1; }
+    .copy-icon { color: #ed3237; font-size: 20px; font-variation-settings: 'FILL' 1; }
+    .copy-icon:hover { opacity: 0.8; }
+    .url-text { font-size: 11px; color: #111; white-space: normal; word-break: break-all; font-weight: 500; line-height: 1.3; text-align: left; }
+  `]
 })
-export class LinkRenderer implements ICellRendererAngularComp, OnDestroy {
+export class LinkRenderer implements ICellRendererAngularComp {
   url: string = '';
-  type: string = '';
-  unitId: string = '';
   isOpen = false;
-  popoverId = '';
-  sub: any;
 
   agInit(params: any): void {
-    this.url = params.data?.[params.field];
-    this.type = params.type;
-    this.unitId = params.data?.unitId;
-    this.popoverId = this.unitId + '-' + this.type;
-    this.sub = globalPopoverSubject.subscribe(id => {
-      this.isOpen = (id === this.popoverId);
-    });
+    this.url = params.value || params.data?.[params.type || params.field];
   }
 
-  toggle(event: Event) {
-    event.stopPropagation();
-    if (!this.url) return;
-    globalPopoverSubject.next(this.isOpen ? null : this.popoverId);
+  onEnter() {
+    if (this.url) this.isOpen = true;
+  }
+
+  onLeave() {
+    this.isOpen = false;
   }
 
   copy(event: Event) {
     event.stopPropagation();
+    if (!this.url) return;
     navigator.clipboard.writeText(String(this.url));
-    globalPopoverSubject.next(null);
   }
 
   refresh() { return false; }
-  ngOnDestroy() { this.sub?.unsubscribe(); }
 }
 
 @Component({
@@ -327,7 +330,12 @@ export class LinkRenderer implements ICellRendererAngularComp, OnDestroy {
       <span class="material-symbols-outlined more-info" [title]="remarks">info</span>
       <span style="margin-left: 10px;" class="material-symbols-outlined dots">more_vert</span>
     </div>
-  `
+  `,
+  styles: [`
+    .actions-cell { display: flex; align-items: center; justify-content: center; height: 100%; }
+    .more-info, .dots { color: #8d8d8d; font-size: 18px; cursor: pointer; }
+    .more-info:hover, .dots:hover { opacity: 0.8; }
+  `]
 })
 export class MoreInfoRenderer implements ICellRendererAngularComp {
   remarks: string = '';

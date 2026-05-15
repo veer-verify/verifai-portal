@@ -454,3 +454,15 @@ app-pagination {
     align-items: stretch;
   }
 }
+
+:host ::ng-deep .add-circle {
+  color: #8d8d8d;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+:host ::ng-deep .more-info {
+  color: #8d8d8d;
+  font-size: 18px;
+  cursor: pointer;
+}

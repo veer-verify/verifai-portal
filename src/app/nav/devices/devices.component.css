@@ -374,3 +374,9 @@ th:nth-child(13),td:nth-child(13) {
   gap: 12px;
   height: 100%;
 }
+
+:host ::ng-deep .add-circle {
+  color: #8d8d8d;
+  font-size: 18px;
+  cursor: pointer;
+}
