@@ -625,8 +625,13 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   private async playSirenAndWriteDispatch(camera: any): Promise<void> {
     const user = this.storage_service.getData('user');
     const disabledHours = this.parseAudioHours(camera?.audioHours);
+    const disabledDays = this.parseAudioDays(camera?.audioDays);
     const currentHour = this.getHour(camera?.timezone);
-    const shouldPlaySiren = !!camera?.audioUrl && !disabledHours.includes(currentHour);
+    const currentDay = this.getDay(camera?.timezone);
+    const shouldPlaySiren =
+      !!camera?.audioUrl &&
+      !disabledDays.includes(currentDay) &&
+      !disabledHours.includes(currentHour);
     let audioData: any;
 
     if (shouldPlaySiren) {
@@ -744,6 +749,20 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  private parseAudioDays(audioDays: any): string[] {
+    if (Array.isArray(audioDays)) {
+      return audioDays.map((day) => String(day).toLowerCase());
+    }
+
+    try {
+      return JSON.parse(audioDays || '[]').map((day: any) =>
+        String(day).toLowerCase(),
+      );
+    } catch {
+      return [];
+    }
+  }
+
   private getHour(timezone?: string): number {
     const formatter = new Intl.DateTimeFormat('en-US', {
       timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -754,6 +773,15 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     const hour = Number(formatter.format(new Date()));
     return hour === 24 ? 0 : hour;
+  }
+
+  private getDay(timezone?: string): string {
+    return new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      weekday: 'long',
+    })
+      .format(new Date())
+      .toLowerCase();
   }
 
   private getTimeWithTimezone(timezone?: string): string {
