@@ -10,6 +10,7 @@ export const environment = {
     helpdeskUrl: `${dev_url}/supportRequests`,
     incidentsUrl: `${dev_url}/guard_monitoring`,
     eventDataUrl: `${dev_url}/events_data`,
+    queueManagementUrl: `https://stagingmq.ivisecurity.com/queueManagement`,
     verifaiInsightsUrl: `${dev_url}/bi_verifai`,
 
     inventoryUrl: `${dev_url}/inventory`,

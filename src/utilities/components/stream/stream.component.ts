@@ -802,15 +802,24 @@ getCameraDisplayName(): string {
 
     const screenshot = this.captureFrameDataUrl(true);
     const clickedAt = new Date().toISOString();
+    const screenshotFile = screenshot
+      ? this.dataUrlToFile(
+          screenshot,
+          `${this.videoData?.cameraId || 'camera'}-${clickedAt}.png`,
+        )
+      : null;
+
     if (screenshot) {
       this.downloadImage(screenshot, clickedAt);
     }
 
     this.dotPlaced.emit({
+      camera: this.videoData,
       cameraId: this.videoData?.cameraId,
       cameraName: this.videoData?.name,
       clickedAt,
       screenshot,
+      screenshotFile,
       markerId,
       dots: this.markerPositions,
       x,
@@ -819,6 +828,19 @@ getCameraDisplayName(): string {
       yPercent: Number(((y / rect.height) * 100).toFixed(2)),
       removeDot: () => this.removeMarker(markerId),
     });
+  }
+
+  private dataUrlToFile(dataUrl: string, fileName: string): File {
+    const [header, base64] = dataUrl.split(',');
+    const mime = header.match(/:(.*?);/)?.[1] || 'image/png';
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    return new File([bytes], fileName, { type: mime });
   }
 
   private removeMarker(markerId: number) {

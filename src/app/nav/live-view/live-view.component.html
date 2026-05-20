@@ -132,7 +132,9 @@
       [ngClass]="itemsPerPage === 1 || maximizedCamera ? 'single-view' : ''"
       [class.empty-grid-slot]="!slot.camera"
       [class.active-drop-slot]="activeDropSlotIndex === slot.slotIndex"
-      [class.tile-drag-enabled]="slot.camera && isDragEnabled && !maximizedCamera"
+      [class.tile-drag-enabled]="
+        slot.camera && isDragEnabled && !maximizedCamera
+      "
       cdkDrag
       [cdkDragData]="{ camera: slot.camera, slotIndex: slot.slotIndex }"
       [cdkDragDisabled]="!slot.camera || !isDragEnabled || !!maximizedCamera"

@@ -18,6 +18,7 @@ export const environment = {
     helpdeskUrl: `${prod_url}/supportRequests`,
     incidentsUrl: `${prod_url}/guard_monitoring`,
     eventDataUrl: `${prod_url}/events_data`,
+    queueManagementUrl: `https://prodmq.ivisecurity.com/queueManagement`,
     verifaiInsightsUrl: `${prod_url}/bi_verifai`,
     healthUrl: `${prod_url}/health`,
 };

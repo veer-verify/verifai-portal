@@ -13,6 +13,7 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,11 +23,12 @@ import { CommonModule } from '@angular/common';
 import { GlobalClickDirective } from '../../../utilities/directives/global-click.directive';
 import { ConfigService } from '../../../utilities/services/config.service';
 import { StorageService } from '../../../utilities/services/storage.service';
-import { catchError, delay, filter, forkJoin, map, of, Subject, take, takeUntil } from 'rxjs';
+import { catchError, delay, filter, firstValueFrom, forkJoin, map, of, Subject, switchMap, take, takeUntil } from 'rxjs';
 import { StreamComponent } from '../../../utilities/components/stream/stream.component';
 import { AlertService } from '../../../utilities/services/alert.service';
 import { MatSelectModule } from '@angular/material/select';
 import { gridTypes } from './grid-list';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-live-view',
   standalone: true,
@@ -49,7 +51,8 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public configSrvc: ConfigService,
     public storage_service: StorageService,
-    private alert_service: AlertService
+    private alert_service: AlertService,
+    private http: HttpClient,
   ) { }
 
   @ViewChild('gridContainer') gridContainer!: ElementRef;
@@ -97,7 +100,7 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.storage_service.camData$
       .pipe(delay(0), takeUntil(this.destroy$))
-      .subscribe((res) => {
+      .subscribe((res: any) => {
         this.camList = res ?? [];
         this.appendCamerasToLive(this.camList);
         this.maximizedCamera = null;
@@ -578,20 +581,202 @@ export class LiveViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onDotPlaced(payload: any) {
-    this.alert_service.checkLiveDummy(payload).subscribe({
-      next: (res: any) => {
-        if (res.statusCode === 200) {
-          console.log('Dummy live check payload:', res.data);
-          payload.removeDot?.();
-          this.alert_service.success(`${payload.cameraName} checked at ${payload.clickedAt}`);
-        } else {
-          this.alert_service.error(res.message || 'Dummy live check failed');
+    const camera = {
+      ...(payload?.camera ?? {}),
+      cameraId: payload?.cameraId,
+      name: payload?.cameraName,
+      color: 'green',
+      id: payload?.markerId,
+      time: this.getTimeWithTimezone(payload?.camera?.timezone),
+      eventTag: 'LIVE-VMS',
+      eventType: 'Manual_Wall',
+    };
+
+    if (!payload?.screenshotFile) {
+      this.alert_service.error('Screenshot capture failed');
+      return;
+    }
+
+    this.postScreenshot(camera, payload.screenshotFile).subscribe({
+      next: async (res: any) => {
+        if (res?.statusCode !== 200) {
+          this.alert_service.error(res?.message || 'Screenshot upload failed');
+          return;
         }
+
+        await this.playSirenAndWriteDispatch(camera);
+        payload.removeDot?.();
       },
-      error: () => {
-        this.alert_service.error('Dummy live check failed');
-      }
+      error: () => this.alert_service.error('Event generated failed!')
     });
+  }
+
+  private postScreenshot(camera: any, file: File) {
+    const formData = new FormData();
+    formData.append('screenshot', file);
+    formData.append('color', camera?.color);
+    formData.append('id', camera?.id);
+    formData.append('cameraId', camera?.cameraId);
+    formData.append('timeStamp', camera?.time);
+
+    return this.http.post(`${environment.incidentsUrl}/screenshots_1_0`, formData);
+  }
+
+  private async playSirenAndWriteDispatch(camera: any): Promise<void> {
+    const user = this.storage_service.getData('user');
+    const disabledHours = this.parseAudioHours(camera?.audioHours);
+    const currentHour = this.getHour(camera?.timezone);
+    const shouldPlaySiren = !!camera?.audioUrl && !disabledHours.includes(currentHour);
+    let audioData: any;
+
+    if (shouldPlaySiren) {
+      audioData = await firstValueFrom(
+        this.http.get(`${environment.sitesUrl}/play_1_0/${camera.cameraId}`),
+      );
+    }
+
+    const actionsTaken = [
+      {
+        name: 'Deterrent',
+        selected: !!camera?.audioUrl,
+        status: shouldPlaySiren && audioData?.statusCode === 200,
+        time: shouldPlaySiren ? this.getTimeWithTimezone(camera?.timezone) : null,
+      },
+    ];
+
+    const alarm = !camera?.audioUrl
+      ? 'N'
+      : shouldPlaySiren
+        ? audioData?.statusCode === 200
+          ? 'P'
+          : 'R'
+        : 'F';
+
+    this.alert_service.success(
+      !camera?.audioUrl
+        ? 'No Deterant Available'
+        : shouldPlaySiren
+          ? audioData?.statusCode === 200
+            ? 'Activated On-site Deterant'
+            : 'Deterant Activated No Response'
+          : 'Remote Deterant Disabled As Per Your Request',
+    );
+
+    this.write2Dispatch({
+      ...camera,
+      actionTag: 'suspicious',
+      userLevelAlarmInfo: [
+        {
+          level: 1,
+          user: user?.UserId || user?.userId,
+          actionTag: 2,
+          subActionTag: 23,
+          activityDetTime: shouldPlaySiren ? camera?.time : '',
+          alarm,
+          landingTime: camera?.time,
+          reviewStart: camera?.time,
+          reviewEnd: camera?.time,
+          notes: '',
+          userName: user?.UserName || user?.userName,
+          actionsTakenInfo: actionsTaken,
+        },
+      ],
+    });
+  }
+
+  private write2Dispatch(camera: any): void {
+    const params = new HttpParams()
+      .set('cameraId', camera?.cameraId)
+      .set('level', 1)
+      .set('callingSystemDetail', 'vms');
+
+    this.http
+      .get(`${environment.eventDataUrl}/getEventFlowForCamera_1_0`, { params })
+      .pipe(
+        map((res: any) => res?.data?.queueName ?? res?.data?.queue_name ?? ''),
+        switchMap((queueName: string) =>
+          this.http.post(
+            `${environment.queueManagementUrl}/writeVms_To_Console_1_0`,
+            this.buildDispatchPayload({ ...camera, queue_name: queueName }),
+          ),
+        ),
+        take(1),
+      )
+      .subscribe({
+        next: () => this.alert_service.success('Event generated successfully!'),
+        error: () => this.alert_service.error('Failed to generate event!'),
+      });
+  }
+
+  private buildDispatchPayload(payload: any): any {
+    const user = this.storage_service.getData('user');
+
+    return {
+      cameraId: payload?.cameraId,
+      color: payload?.color,
+      id: payload?.id,
+      timestamp: payload?.time,
+      eventType: payload?.eventType ?? 'Manual_Wall',
+      queue_name: payload?.queue_name,
+      timezone: payload?.timezone,
+      httpUrl: payload?.httpUrl,
+      siteId: payload?.siteId,
+      siteName: payload?.siteName,
+      userName: user?.UserName || user?.userName,
+      actionTag: payload?.actionTag ?? '',
+      nativeApp: payload?.nativeApp,
+      actionTime: this.getTimeWithTimezone(payload?.timezone),
+      eventTag: payload?.eventTag ?? '',
+      userLevelAlarmInfo: payload?.userLevelAlarmInfo,
+      userLevels: 0,
+    };
+  }
+
+  private parseAudioHours(audioHours: any): number[] {
+    if (Array.isArray(audioHours)) {
+      return audioHours.map((hour) => Number(hour));
+    }
+
+    try {
+      return JSON.parse(audioHours || '[]').map((hour: any) => Number(hour));
+    } catch {
+      return [];
+    }
+  }
+
+  private getHour(timezone?: string): number {
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      hour: '2-digit',
+      hour12: false,
+      hourCycle: 'h23',
+    });
+
+    const hour = Number(formatter.format(new Date()));
+    return hour === 24 ? 0 : hour;
+  }
+
+  private getTimeWithTimezone(timezone?: string): string {
+    const date = new Date();
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      hourCycle: 'h23',
+    })
+      .formatToParts(date)
+      .reduce((acc: any, part) => {
+        acc[part.type] = part.value;
+        return acc;
+      }, {});
+
+    const hour = parts.hour === '24' ? '00' : parts.hour;
+    return `${parts.year}-${parts.month}-${parts.day} ${hour}:${parts.minute}:${parts.second}`;
   }
 
   ngOnDestroy(): void {
