@@ -1,7 +1,6 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
-import { ConfigService } from './config.service';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { delay, of } from 'rxjs';
@@ -10,32 +9,32 @@ import { delay, of } from 'rxjs';
   providedIn: 'root',
 })
 export class AlertService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private snackBar: MatSnackBar,
+  ) { }
+
   warn(message: any) {
-    Swal.fire({
-      icon: 'warning',
-      title: 'Are you sure!',
-      text: message,
-      showCloseButton: true,
-    });
+    this.openSnack(message, 'warning');
   }
 
   error(message: any) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Failed!',
-      text: message,
-      showCloseButton: true,
-    });
+    this.openSnack(message, 'error');
   }
 
   success(message: any) {
-    Swal.fire({
-      icon: 'success',
-      title: `Done!`,
-      text: `${message}`,
-      showCloseButton: true,
-      timer: 3000,
+    this.openSnack(message, 'success');
+  }
+
+  private openSnack(
+    message: any,
+    type: 'success' | 'error' | 'warning',
+  ): void {
+    this.snackBar.open(String(message ?? ''), 'x', {
+      duration: type === 'error' ? 5000 : 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+      panelClass: ['app-snackbar', `app-snackbar-${type}`],
     });
   }
 

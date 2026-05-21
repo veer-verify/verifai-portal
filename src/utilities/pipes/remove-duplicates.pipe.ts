@@ -6,8 +6,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class RemoveDuplicatesPipe implements PipeTransform {
 
-  transform(array: any[], key: string): any[] {
-    const uniqueArray = [];
+  transform(array: any[], key: string) {
+    const uniqueArray: any = [];
     const seen = new Set();
 
     for (const item of array) {
@@ -18,6 +18,7 @@ export class RemoveDuplicatesPipe implements PipeTransform {
       }
     }
     return uniqueArray;
+
   }
 
 }

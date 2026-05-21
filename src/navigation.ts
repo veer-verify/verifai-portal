@@ -12,12 +12,12 @@ export const menuItems = [
     // call: (data: any) => (data?.key !== 'F' && data?.admin ? true : false),
     call: () => true,
   },
-  {
-    id: 'liveAI',
-    label: 'live ai',
-    routeLink: 'live-ai',
-    call: (data: any) => (data?.key !== 'F' ? true : false),
-  },
+  // {
+  //   id: 'liveAI',
+  //   label: 'live ai',
+  //   routeLink: 'live-ai',
+  //   call: (data: any) => (data?.key !== 'F' ? true : false),
+  // },
   {
     id: 'alerts',
     label: 'alerts',
@@ -25,13 +25,13 @@ export const menuItems = [
     // call: (data: any) => (data?.key !== 'F' ? true : false),
     call: () => true,
   },
-  {
-    id: 'insights',
-    label: 'insights',
-    routeLink: 'insights',
-    // call: (data: any) => (data?.key !== 'F' ? true : false),
-    call: () => true,
-  },
+  // {
+  //   id: 'insights',
+  //   label: 'insights',
+  //   routeLink: 'insights',
+  //   // call: (data: any) => (data?.key !== 'F' ? true : false),
+  //   call: () => true,
+  // },
 
   // {
   //   id: 'trends',
@@ -63,31 +63,31 @@ export const menuItems = [
   //   routeLink: 'siteinfo',
   //   call: () => true,
   // },
-  {
-    id: 'sites',
-    label: 'sites',
-    routeLink: 'sites',
-    // call: (data: any) => (data?.key !== 'F' ? true : false),
-    call: () => true,
-  },
-  {
-    id: 'devices',
-    label: 'devices',
-    routeLink: 'devices',
-    // call: (data: any) => (data?.key !== 'F' ? true : false),
-    call: () => true,
-  },
-  {
-    id: 'cameras',
-    label: 'cameras',
-    routeLink: 'cameras',
-    // call: (data: any) => (data?.key !== 'F' ? true : false),
-    call: () => true,
-  },
-  {
-    id: 'deviceHealth',
-    label: 'health',
-    routeLink: 'health',
-    call: () => true,
-  },
+  // {
+  //   id: 'sites',
+  //   label: 'sites',
+  //   routeLink: 'sites',
+  //   // call: (data: any) => (data?.key !== 'F' ? true : false),
+  //   call: () => true,
+  // },
+  // {
+  //   id: 'devices',
+  //   label: 'devices',
+  //   routeLink: 'devices',
+  //   // call: (data: any) => (data?.key !== 'F' ? true : false),
+  //   call: () => true,
+  // },
+  // {
+  //   id: 'cameras',
+  //   label: 'cameras',
+  //   routeLink: 'cameras',
+  //   // call: (data: any) => (data?.key !== 'F' ? true : false),
+  //   call: () => true,
+  // },
+  // {
+  //   id: 'deviceHealth',
+  //   label: 'health',
+  //   routeLink: 'health',
+  //   call: () => true,
+  // },
 ];

@@ -8,7 +8,12 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   const storage_service = inject(StorageService);
   const router = inject(Router);
 
-  if (req.url.includes('downloadFile_1_0')) {
+  if (req.url.includes('downloadFile_1_0') ||
+    req.url.includes('writeVms_To_Console_1_0') ||
+    req.url.includes('screenshots_1_0') ||
+    req.url.includes('play_1_0') ||
+    req.url.includes('getEventFlowForCamera_1_0')
+  ) {
     return next(req);
   }
 

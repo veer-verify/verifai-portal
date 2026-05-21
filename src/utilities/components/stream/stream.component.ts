@@ -141,34 +141,34 @@ export class StreamComponent implements OnChanges, OnDestroy {
     );
   }
   getProfilesForCurrentCamera(): string[] {
-  const cameraId = this.videoData?.cameraId;
+    const cameraId = this.videoData?.cameraId;
 
-  if (!cameraId || !this.profiles?.length) {
-    return [];
-  }
+    if (!cameraId || !this.profiles?.length) {
+      return [];
+    }
 
-  return this.profiles
-    .filter((profile: any) =>
-      (profile.cameras || []).some(
-        (cam: any) => String(cam.cameraId) === String(cameraId)
+    return this.profiles
+      .filter((profile: any) =>
+        (profile.cameras || []).some(
+          (cam: any) => String(cam.cameraId) === String(cameraId)
+        )
       )
-    )
-    .map((p: any) => p.name);
-}
-getCameraDisplayName(): string {
-  const cameraName =
-    this.videoData?.name || this.videoData?.cameraId || 'Camera';
-
-  const profileNames = this.getProfilesForCurrentCamera();
-
-  // If camera is from favorites → show profile names
-  if (profileNames.length) {
-    return `${profileNames.join(', ')}-${cameraName}`;
+      .map((p: any) => p.name);
   }
+  getCameraDisplayName(): string {
+    const cameraName =
+      this.videoData?.name || this.videoData?.cameraId || 'Camera';
 
-  // Normal site camera
-  return cameraName;
-}
+    const profileNames = this.getProfilesForCurrentCamera();
+
+    // If camera is from favorites → show profile names
+    if (profileNames.length) {
+      return `${profileNames.join(', ')}-${cameraName}`;
+    }
+
+    // Normal site camera
+    return cameraName;
+  }
   checkCurrentCameraBookmarked(): void {
     const cameraId = this.videoData?.cameraId;
 
@@ -804,9 +804,9 @@ getCameraDisplayName(): string {
     const clickedAt = new Date().toISOString();
     const screenshotFile = screenshot
       ? this.dataUrlToFile(
-          screenshot,
-          `${this.videoData?.cameraId || 'camera'}-${clickedAt}.png`,
-        )
+        screenshot,
+        `${this.videoData?.cameraId || 'camera'}-${clickedAt}.png`,
+      )
       : null;
 
     if (screenshot) {

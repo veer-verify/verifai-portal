@@ -45,6 +45,7 @@ export class ProfileComponent {
   ) { }
 
   profileImg: any;
+  selectedProfileImageFile: File | null = null;
   userData: any;
   showLoader = false;
   address: any = [];
@@ -105,7 +106,7 @@ export class ProfileComponent {
         this.userData?.country,
       ];
       this.address = this.raw_address.filter(Boolean);
-      this.profileImg = this.userData?.profileImage;
+      this.profileImg = this.getProfileImageSrc(this.userData?.profileImage);
     });
   }
 
@@ -142,14 +143,17 @@ export class ProfileComponent {
     const reader = new FileReader();
     if (event.target.files && event.target.files.length) {
       const [file] = event.target.files;
+      if (file.size >= 2048000) {
+        this.alert_service.error('Image size should not be more than 2mb');
+        event.target.value = '';
+        return;
+      }
+
+      this.selectedProfileImageFile = file;
       reader.readAsDataURL(file);
       reader.onload = () => {
-        if (file.size < 2048000) {
-          this.profileImg = file;
-          this.updateProfilePic();
-        } else {
-          this.alert_service.error('Image size should not be more than 2mb');
-        }
+        this.profileImg = reader.result;
+        this.updateProfilePic();
       };
     }
   }
@@ -158,7 +162,7 @@ export class ProfileComponent {
     var userUpdate = this.storage_service.getData('user');
 
     let obj = {
-      file: this.profileImg,
+      file: this.selectedProfileImageFile,
       userId: userUpdate.UserId,
     };
 
@@ -168,6 +172,7 @@ export class ProfileComponent {
           this.alert_service.success(
             `Profile image updated successfully for ${userUpdate.FirstName} ${userUpdate.LastName}`,
           );
+          this.getUserInfoForId();
           this.getUser();
         } else {
           this.alert_service.error(res?.message);
@@ -177,6 +182,15 @@ export class ProfileComponent {
         this.alert_service.error('Request Entity Too Large');
       },
     );
+  }
+
+  private getProfileImageSrc(src: any) {
+    if (!src || typeof src !== 'string' || src.startsWith('data:') || src.startsWith('blob:')) {
+      return src;
+    }
+
+    const separator = src.includes('?') ? '&' : '?';
+    return `${src}${separator}t=${Date.now()}`;
   }
 
   userinfo: any = null;

@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { SearchPipe } from '../../utilities/pipes/search.pipe';
 import { AsyncPipe, TitleCasePipe, UpperCasePipe, NgClass } from '@angular/common';
 import { ConfigService } from '../../utilities/services/config.service';
-import { menuItems } from './menu-items';
+import { menuItems } from '../../navigation';
 
 @Component({
   selector: 'app-header',

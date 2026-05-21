@@ -13,6 +13,7 @@ export class MediaPipe implements PipeTransform {
 
   async transform(src: string): Promise<any> {
     if (!src) return null;
+    if (src.startsWith('data:') || src.startsWith('blob:')) return src;
 
     try {
       const blob = await firstValueFrom(this.http.get(src, { responseType: 'blob' }));

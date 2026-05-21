@@ -545,6 +545,25 @@ input[type="date"] {
   color: #a32d2d !important;
 }
 
+.app-snackbar {
+  --mdc-snackbar-container-shape: 6px;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffffff;
+  font-family: "Neometric Regular" !important;
+}
+
+.app-snackbar-success {
+  --mdc-snackbar-container-color: #1ba038;
+}
+
+.app-snackbar-error {
+  --mdc-snackbar-container-color: #ca2727;
+}
+
+.app-snackbar-warning {
+  --mdc-snackbar-container-color: #df972b;
+}
+
 .report-tabs {
   display: flex;
   margin: -10px -14px 8px;
