@@ -6,18 +6,32 @@
     >
   </header>
 
-  @if (data?.files?.length) {
+  @if (mediaItems.length) {
     <main class="dialog">
-      @for (item of data?.files; track $index) {
-        @if (isVideo(item)) {
-          <video [src]="item | media | async" autoplay controls></video>
-        } @else {
-          <!-- <img src="gif/loading-gif.gif" /> -->
-          <img
-            *ngIf="item"
-            [src]="item | media | async"
-            onerror="this.src = 'gif/cam-loader.gif'"
-          />
+      @for (item of mediaItems; track item.source) {
+        @if (item.status === 'loading') {
+          <div class="media-state">
+            <span>Loading media...</span>
+          </div>
+        } @else if (item.status === 'error') {
+          <div class="media-state error-state">
+            <span class="material-symbols-outlined error-icon">
+              {{ item.isVideo ? "videocam_off" : "broken_image" }}
+            </span>
+            <strong>{{ item.isVideo ? "Video unavailable" : "Image unavailable" }}</strong>
+            <p>{{ item.errorMessage || "Unable to load media file." }}</p>
+          </div>
+        } @else if (item.displaySrc) {
+          @if (item.isVideo) {
+            <video
+              [src]="item.displaySrc"
+              autoplay
+              controls
+              (error)="onMediaRenderError(item)"
+            ></video>
+          } @else {
+            <img [src]="item.displaySrc" (error)="onMediaRenderError(item)" />
+          }
         }
       }
     </main>
